@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PACHINKO TACTICS - パチンコは、戦略で面白くなる。</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Jura:wght@400;600;700&family=Noto+Sans+JP:wght@400;500;700;900&display=swap"
+    rel="stylesheet">
+
+  <!-- Icons (FontAwesome) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    /* =========================================================
+       CSS Variables (Theme: Investigation Board)
+       ========================================================= */
+    :root {
+      /* Shared / Default variables */
+      --transition-speed: 0.3s;
+      --font-main: 'Noto Sans JP', sans-serif;
+      --font-eng: 'Jura', sans-serif;
+
+      /* Investigation Board (Corkboard & Chalk) variables */
+      --chalk-white: rgba(255, 255, 255, 0.9);
+      --chalk-pink: rgba(255, 182, 193, 0.8);
+      --chalk-blue: rgba(135, 206, 250, 0.8);
+      --board-bg: #1a2a24;
+
+      --bg-color: #d4a373;
+      /* Fallback wood/cork color */
+      --body-bg-image: url('corkboard_bg.png');
+      --body-bg-size: auto;
+
+      --bg-panel: #FFFFFF;
+      /* White paper for content cards */
+      --text-main: #333333;
+      /* Text on corkboard usually wrapped in panels, but default dark */
+      --text-panel: #1A1A1A;
+      --text-sub: #555555;
+
+      --accent-color: #b33939;
+      /* Red pin / marker color */
+      --accent-hover: #ff5252;
+      --accent-secondary: #227093;
+      /* Blue marker */
+      --border-color: rgba(0, 0, 0, 0.15);
+
+      --nav-bg: #1a2a24;
+      /* Extending blackboard color into nav */
+      --nav-active-bg: rgba(255, 255, 255, 0.1);
+      --nav-active-text: #ffffff;
+      --nav-border: #3d2b1f;
+      /* Wood frame color for border */
+
+      --shadow: 0 5px 15px rgba(0, 0, 0, 0.35);
+      /* Paper drop shadow */
+      --input-bg: rgba(255, 255, 255, 0.95);
+
+      --badge-bg: rgba(179, 57, 57, 0.1);
+      --badge-text: #b33939;
+
+      --header-bg: transparent;
+    }
+
+    /* =========================================================
+       Global Styles
+       ========================================================= */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      background-image: var(--body-bg-image);
+      background-size: var(--body-bg-size, auto);
+      background-attachment: fixed;
+      color: var(--text-main);
+      font-family: var(--font-main);
+      line-height: 1.6;
+      transition: background-color var(--transition-speed), color var(--transition-speed);
+      padding-bottom: 60px;
+    }
+
+    a {
+      color: var(--accent-color);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    a:hover {
+      color: var(--accent-hover);
+    }
+
+    ul {
+      list-style: none;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 0 15px;
+    }
+
+    /* =========================================================
+       Header Styles
+       ========================================================= */
+    .main-header {
+      background-color: var(--header-bg);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      transition: background-color var(--transition-speed), border-color var(--transition-speed);
+      padding: 0;
+      border-bottom: none;
+    }
+
+    /* ---------------------------------------------------------
+       Blackboard Header
+       --------------------------------------------------------- */
+    .blackboard-header {
+      position: relative;
+      width: 100%;
+      min-height: 140px;
+      background-color: var(--board-bg);
+      background-image:
+        radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.05) 0%, transparent 80%),
+        url('https://www.transparenttextures.com/patterns/dark-matter.png');
+      border-bottom: 8px solid #3d2b1f;
+      box-shadow: inset 0 0 50px rgba(0, 0, 0, 0.5), 0 4px 15px rgba(0, 0, 0, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .chalk-effect {
+      filter: url(#chalk-filter);
+    }
+
+    .header-center {
+      text-align: center;
+      z-index: 10;
+      pointer-events: none;
+      width: 100%;
+    }
+
+    .header-center h1 {
+      font-family: var(--font-eng);
+      font-size: clamp(2.5rem, 8vw, 4.5rem);
+      font-weight: 900;
+      color: var(--chalk-white);
+      letter-spacing: 0.15em;
+      margin: 0;
+      line-height: 1.1;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    .header-center .subtitle {
+      font-size: clamp(0.85rem, 3vw, 1.2rem);
+      font-weight: 700;
+      color: var(--chalk-white);
+      margin-top: 8px;
+      opacity: 0.8;
+      letter-spacing: 0.05em;
+    }
+
+    /* =========================================================
+       Content Filter / Machine Select (Global)
+       ========================================================= */
+    .machine-select-wrapper {
+      padding: 0;
+      background-color: transparent;
+      border-bottom: none;
+      position: sticky;
+      top: 15px;
+      /* スクロール時も少し浮かせる */
+      z-index: 100;
+      margin-top: 15px;
+      /* ナビボタンとの距離をあける */
+      margin-bottom: 25px;
+    }
+
+    .select-cyber-container {
+      position: relative;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .select-cyber-container::after {
+      content: '\f107';
+      /* FontAwesome angle-down */
+      font-family: 'Font Awesome 6 Free';
+      font-weight: 900;
+      position: absolute;
+      right: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--accent-color);
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    .select-cyber {
+      appearance: none;
+      -webkit-appearance: none;
+      width: 100%;
+      background-color: var(--input-bg);
+      color: var(--text-main);
+      font-size: 1rem;
+      font-weight: 600;
+      padding: 12px 40px 12px 15px;
+      border: 1px solid var(--border-color);
+      border-radius: 4px;
+      outline: none;
+      cursor: pointer;
+      font-family: var(--font-main);
+      transition: all 0.2s;
+    }
+
+    .select-cyber:hover,
+    .select-cyber:focus {
+      border-color: var(--accent-color);
+      box-shadow: var(--shadow);
+    }
+
+    /* =========================================================
+       Navigation / Tabs
+       ========================================================= */
+    .tab-nav {
+      background-color: var(--nav-bg);
+      border-bottom: 2px solid var(--nav-border);
+      padding-top: 10px;
+    }
+
+    .tab-nav ul {
+      display: flex;
+      justify-content: center;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .tab-nav li {
+      flex: 1;
+      text-align: center;
+    }
+
+    .tab-nav button {
+      width: 100%;
+      background: none;
+      border: none;
+      color: var(--text-sub);
+      font-family: var(--font-main);
+      font-size: 0.95rem;
+      font-weight: 700;
+      padding: 16px 5px;
+      /* スマホで押しやすいサイズに拡張（親指サイズ） */
+      cursor: pointer;
+      position: relative;
+      transition: all 0.3s;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .tab-nav button i {
+      font-size: 1.3rem;
+      /* アイコンも少し拡大 */
+    }
+
+    .tab-nav button:hover {
+      color: var(--nav-active-text);
+      background-color: rgba(255, 255, 255, 0.05);
+    }
+
+    .tab-nav button.active {
+      color: var(--nav-active-text);
+      background-color: var(--nav-active-bg);
+      border-top-left-radius: 4px;
+      border-top-right-radius: 4px;
+    }
+
+    /* Active Indicator Line */
+    .tab-nav button.active::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      /* cover nav border */
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background-color: var(--nav-active-bg);
+    }
+
+    /* =========================================================
+       Content Area
+       ========================================================= */
+    .content-area {
+      padding: 20px 0;
+    }
+
+    .tab-pane {
+      display: none;
+      animation: fadeIn 0.4s ease-out;
+    }
+
+    .tab-pane.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Panels & Lists */
+    .panel {
+      background-color: var(--bg-panel);
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      border-radius: 2px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow);
+      position: relative;
+      color: var(--text-panel);
+    }
+
+    .section-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      border-bottom: 2px solid var(--border-color);
+      padding-bottom: 10px;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .section-title i {
+      color: var(--accent-color);
+    }
+
+    /* Vertical List Styles */
+    .list-item {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      padding: 15px;
+      border: 1px solid transparent;
+      border-radius: 4px;
+      transition: background-color 0.2s, border-color 0.2s;
+    }
+
+    .list-item:hover {
+      background-color: rgba(0, 0, 0, 0.05);
+      border-color: var(--border-color);
+    }
+
+    .item-title {
+      font-weight: 700;
+      font-size: 1.3rem;
+      line-height: 1.4;
+      color: var(--accent-color);
+    }
+
+    /* Thumbnail container for 16:9 */
+    .item-thumb-container {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      background-color: var(--input-bg);
+      border: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 4px;
+      overflow: hidden;
+      color: var(--text-sub);
+    }
+
+    .item-desc {
+      font-size: 0.95rem;
+      /* 概要少し大きく読みやすく */
+      color: var(--text-sub);
+    }
+
+    .item-meta {
+      font-size: 0.85rem;
+      color: var(--text-sub);
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .badge {
+      background-color: var(--badge-bg);
+      color: var(--badge-text);
+      padding: 2px 6px;
+      border-radius: 2px;
+      font-weight: 700;
+      font-size: 0.7rem;
+      border: 1px solid rgba(179, 57, 57, 0.5);
+    }
+
+    .badge.badge-mind {
+      color: #227093;
+      background-color: rgba(34, 112, 147, 0.1);
+      border-color: rgba(34, 112, 147, 0.5);
+    }
+
+    .badge.badge-log {
+      color: #cd6133;
+      background-color: rgba(205, 97, 51, 0.1);
+      border-color: rgba(205, 97, 51, 0.5);
+    }
+
+    .badge.badge-recommend {
+      color: #218c74;
+      background-color: rgba(33, 140, 116, 0.1);
+      border-color: rgba(33, 140, 116, 0.5);
+    }
+
+    /* =========================================================
+       Content Card (for Tools, Info, Articles)
+       ========================================================= */
+    .content-card {
+      display: block;
+      border-radius: 2px;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      box-shadow: var(--shadow);
+      background-color: var(--bg-panel);
+      color: var(--text-panel);
+      position: relative;
+      margin-bottom: 25px;
+      /* cards separated by 25px */
+      overflow: visible;
+      /* Push pin needs this */
+      transition: box-shadow 0.2s, transform 0.2s, opacity 0.2s;
+    }
+
+    .content-card:hover {
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+    }
+
+    /* Push Pin */
+    .content-card::before {
+      content: '';
+      position: absolute;
+      top: 6px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, #ff5252, #b33939);
+      box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.3), inset -1px -2px 3px rgba(0, 0, 0, 0.2);
+      z-index: 5;
+    }
+
+    .card-header {
+      font-weight: 900;
+      font-size: 1.2rem;
+      line-height: 1.4;
+      color: var(--accent-color);
+      background-color: transparent;
+      padding: 20px 20px 12px 20px;
+      border-bottom: 2px dashed rgba(0, 0, 0, 0.1);
+      font-family: var(--font-main);
+    }
+
+    .card-body {
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    /* Thumbnail container for 16:9 */
+    .card-thumb-container {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      background-color: #E2E8F0;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.05);
+      color: #64748B;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .card-desc {
+      font-size: 0.95rem;
+      color: var(--text-sub);
+    }
+
+    .card-meta {
+      font-size: 0.85rem;
+      color: var(--text-sub);
+      display: flex;
+      justify-content: flex-end;
+      /* 右下に配置要求のため */
+      gap: 10px;
+      align-items: center;
+      margin-top: 5px;
+    }
+
+    .social-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      background-color: #000000;
+      color: #FFFFFF;
+      border-radius: 4px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- SVG Filter for Chalk Texture -->
+  <svg style="position: absolute; width: 0; height: 0;">
+    <filter id="chalk-filter">
+      <feTurbulence type="fractalNoise" baseFrequency="0.5" numOctaves="5" result="noise" />
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="2" />
+    </filter>
+  </svg>
+
+  <!-- ================= Header ================= -->
+  <header class="main-header">
+    <div class="container">
+
+      <!-- Blackboard Header (Corkboard Theme) -->
+      <div class="blackboard-header">
+        <!-- Center Content -->
+        <div class="header-center chalk-effect">
+          <h1>PACHINKO TACTICS</h1>
+          <div class="subtitle">パチンコは、戦略で面白くなる。</div>
+        </div>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ================= Navigation Tabs ================= -->
+  <nav class="tab-nav">
+    <ul>
+      <li>
+        <button class="tab-btn active" data-target="tab-top">
+          <i class="fa-solid fa-home"></i> TOP
+        </button>
+      </li>
+      <li>
+        <button class="tab-btn" data-target="tab-tool">
+          <i class="fa-solid fa-calculator"></i> 攻略ツール
+        </button>
+      </li>
+      <li>
+        <button class="tab-btn" data-target="tab-info">
+          <i class="fa-solid fa-lightbulb"></i> 攻略考察
+        </button>
+      </li>
+      <li>
+        <button class="tab-btn" data-target="tab-article">
+          <i class="fa-solid fa-pen-nib"></i> 記事
+        </button>
+      </li>
+    </ul>
+  </nav>
+
+  <!-- ================= Content Filter ================= -->
+  <div class="machine-select-wrapper" id="filter-wrapper" style="display: none;">
+    <div class="container select-cyber-container">
+      <select id="machine-filter" class="select-cyber filter-dropdown">
+        <option value="all">全機種</option>
+        <option value="famista">ハネモノファミスタ</option>
+        <option value="umi">PA大海物語5 With アグネス・ラム</option>
+        <option value="queen">PフィーバークィーンII</option>
+      </select>
+      <select id="genre-filter" class="select-cyber filter-dropdown" style="display: none;">
+        <option value="all">全て</option>
+        <option value="mind">マインド</option>
+        <option value="log">稼働録</option>
+        <option value="recommend">おすすめ</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- ================= Main Content Area ================= -->
+  <main class="content-area container">
+
+    <!-- 1. TOP SECITON -->
+    <section id="tab-top" class="tab-pane active">
+      <div class="panel">
+        <h2 class="section-title"><i class="fa-solid fa-bell"></i> 新着情報</h2>
+        <div class="vr-list">
+          <a href="#" class="list-item">
+            <div class="item-content">
+              <span class="badge">ツール更新</span>
+              <div class="item-title">ハネモノファミスタ 期待値計算ツール公開</div>
+              <div class="item-meta">2026/04/19</div>
+            </div>
+          </a>
+          <a href="#" class="list-item">
+            <div class="item-content">
+              <span class="badge" style="background:var(--accent-color); color:#fff;">サイト公開</span>
+              <div class="item-title">PACHINKO TACTICS ベータ版をリリースしました</div>
+              <div class="item-meta">2026/04/10</div>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2 class="section-title"><i class="fa-solid fa-shield-halved"></i> サイトポリシー</h2>
+        <p style="font-size:0.9rem; margin-bottom:10px;">当サイト「PACHINKO
+          TACTICS」は、論理的なデータ分析と期待値計算を用い、パチンコ遊技を戦略的に楽しむためのツール・情報を提供します。</p>
+        <p style="font-size:0.9rem;">※提供する数値は理論値であり、勝率や見込み利益を保証するものではありません。遊技は自己責任で行ってください。</p>
+      </div>
+
+      <div class="panel">
+        <h2 class="section-title"><i class="fa-solid fa-user-astronaut"></i> 管理人紹介・お問い合わせ</h2>
+        <p style="font-size:0.9rem; margin-bottom:15px;">
+          データ分析とUI/UX設計を愛するデベロッパー。皆様からのフィードバックや不具合報告、追加希望機種などはX(Twitter)アカウントまでお寄せください。</p>
+        <a href="https://twitter.com/YourAccount" target="_blank" class="social-link" rel="noopener">
+          <i class="fa-brands fa-x-twitter"></i> @YourAccount へ連絡する
+        </a>
+      </div>
+    </section>
+
+    <!-- 2. TOOL SECTION -->
+    <section id="tab-tool" class="tab-pane">
+      <a href="./tools/famista.html" class="content-card" data-machine="famista">
+        <div class="card-header">ハネモノファミスタ 期待値・データ管理ツール</div>
+        <div class="card-body">
+          <div class="card-thumb-container">NO IMAGE</div>
+          <div class="card-desc">V入賞率・ラウンド振り分けからリアルタイム期待値を算出し、収支ログを自動作成する最強の相棒。</div>
+          <div class="card-meta"><span class="badge">稼働中</span> Ver 1.2.0</div>
+        </div>
+      </a>
+      <a href="#" class="content-card" style="opacity: 0.6;" data-machine="umi">
+        <div class="card-header">P大海物語5 期待値シミュレーター</div>
+        <div class="card-body">
+          <div class="card-thumb-container">NO IMAGE</div>
+          <div class="card-desc">通常回転数・出玉増減から精緻なボーダーラインと時給を計算します。(Currently in development)</div>
+          <div class="card-meta"><span class="badge" style="background:#555;color:#ddd;">開発中</span> 準備中</div>
+        </div>
+      </a>
+    </section>
+
+    <!-- 3. INFO SECTION -->
+    <section id="tab-info" class="tab-pane">
+
+      <a href="#" class="content-card" data-machine="famista">
+        <div class="card-header">役物確率の暴れと収束値について</div>
+        <div class="card-body">
+          <div class="card-thumb-container">NO IMAGE</div>
+          <div class="card-desc">
+            実戦データ10万回転から紐解く、役物確率の上振れ・下振れの許容範囲について。ハネモノファミスタにおいて、1日の試行回数では役物確率は大きく荒れます。最低でも1週間単位での収束を見込むメンタルコントロールが必要です。
+          </div>
+          <div class="card-meta"><span class="badge">公開中</span> ハネモノファミスタ</div>
+        </div>
+      </a>
+
+      <a href="#" class="content-card" data-machine="common">
+        <div class="card-header">止め打ち基礎：無駄玉排除による収支変化</div>
+        <div class="card-body">
+          <div class="card-thumb-container">NO IMAGE</div>
+          <div class="card-desc">1日に100発の無駄玉を削ることが、1ヶ月（20日稼働）で2,000発（約8,000円）の差を生みます。アタッカーのオーバー入賞狙いと、電サポ中の止め打ちは必須スキルです。
+          </div>
+          <div class="card-meta"><span class="badge">公開中</span> 共通スキル</div>
+        </div>
+      </a>
+
+      <a href="#" class="content-card" data-machine="famista">
+        <div class="card-header">特定日における釘読みの優先順位</div>
+        <div class="card-body">
+          <div class="card-thumb-container">NO IMAGE</div>
+          <div class="card-desc">ヘソ・寄り・道釘、限られた時間でどこを見るべきか。ファミスタにおいては、鳴きだけでなく「拾い」に関わる寄り釘のマイナス調整を避けることが何よりも重要です。</div>
+          <div class="card-meta"><span class="badge">公開中</span> ハネモノファミスタ</div>
+        </div>
+      </a>
+
+      <a href="#" class="content-card" data-machine="common">
+        <div class="card-header">ボーダーライン理論の落とし穴</div>
+        <div class="card-body">
+          <div class="card-thumb-container">NO IMAGE</div>
+          <div class="card-desc">出玉削りを考慮しないメーカー発表のボーダー計算が招くリスク。常に実測の出玉（例えば1R=135発ではなく、1R=130発など）を基準にして自分のマイボーダーを算出しましょう。
+          </div>
+          <div class="card-meta"><span class="badge">公開中</span> 共通スキル</div>
+        </div>
+      </a>
+
+    </section>
+
+    <!-- 4. ARTICLE SECTION -->
+    <section id="tab-article" class="tab-pane">
+      <a href="#" class="content-card" data-genre="mind">
+        <div class="card-header">【コラム】パチンコは「運」ではなく「確率の収束」である</div>
+        <div class="card-body">
+          <div class="card-thumb-container">NO IMAGE</div>
+          <div class="card-desc">感情を排除し、マシーンとして台に向き合うためのメンタルコントロール術。</div>
+          <div class="card-meta"><span class="badge badge-mind">マインド</span> <i class="fa-regular fa-clock"></i>
+            2026/04/18</div>
+        </div>
+      </a>
+      <a href="#" class="content-card" data-genre="log">
+        <div class="card-header">開発記#1：SPAで攻略ツールを作る理由</div>
+        <div class="card-body">
+          <div class="card-thumb-container">NO IMAGE</div>
+          <div class="card-desc">動作の軽さとUIの使い心地を追求した裏話。</div>
+          <div class="card-meta"><span class="badge badge-log">稼働録</span> <i class="fa-regular fa-clock"></i> 2026/04/15
+          </div>
+        </div>
+      </a>
+      <a href="#" class="content-card" data-genre="recommend">
+        <div class="card-header">釘読み練習法：写真で見る「開け」「閉め」</div>
+        <div class="card-body">
+          <div class="card-thumb-container">NO IMAGE</div>
+          <div class="card-desc">実際のホールデータをもとにした視覚トレーニング。</div>
+          <div class="card-meta"><span class="badge badge-recommend">おすすめ</span> <i class="fa-regular fa-clock"></i>
+            2026/04/12</div>
+        </div>
+      </a>
+      <a href="#" class="content-card" data-genre="recommend">
+        <div class="card-header">データ収集自動化スクリプトの構想</div>
+        <div class="card-body">
+          <div class="card-thumb-container">NO IMAGE</div>
+          <div class="card-desc">サイトセブン等からのスクレイピングと倫理的問題についての考察。</div>
+          <div class="card-meta"><span class="badge badge-recommend">おすすめ</span> <i class="fa-regular fa-clock"></i>
+            2026/04/05</div>
+        </div>
+      </a>
+      <a href="#" class="content-card" data-genre="mind">
+        <div class="card-header">店長心理を読む：なぜその台を開けたのか</div>
+        <div class="card-body">
+          <div class="card-thumb-container">NO IMAGE</div>
+          <div class="card-desc">ホールの営業方針から逆算する台選び。</div>
+          <div class="card-meta"><span class="badge badge-mind">マインド</span> <i class="fa-regular fa-clock"></i>
+            2026/03/28</div>
+        </div>
+      </a>
+    </section>
+  </main>
+
+  <!-- ================= SCRIPTS ================= -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+
+      // --- Filter Elements ---
+      const filterWrapper = document.getElementById('filter-wrapper');
+      const machineFilter = document.getElementById('machine-filter');
+      const genreFilter = document.getElementById('genre-filter');
+
+      // --- Filter Logic (with Fade Animation) ---
+      function updateCards(selectEl, dataAttr) {
+        const val = selectEl.value;
+        const activePane = document.querySelector('.tab-pane.active');
+        if (!activePane) return;
+
+        const cards = activePane.querySelectorAll('.content-card');
+
+        // 1. まずすべてフェードアウトさせる
+        cards.forEach(card => {
+          card.style.opacity = '0';
+          card.style.transform = 'translateY(10px)';
+        });
+
+        // 2. 0.2秒後（フェードアウト完了後）に表示・非表示を切り替えフェードイン
+        setTimeout(() => {
+          cards.forEach(card => {
+            let shouldShow = false;
+            if (val === 'all') {
+              shouldShow = true;
+            } else {
+              const cardVal = card.getAttribute(dataAttr);
+              if (cardVal === val || cardVal === 'common') {
+                shouldShow = true;
+              }
+            }
+
+            if (shouldShow) {
+              card.style.display = 'block';
+              // 確実な描画（Reflow）を促す
+              void card.offsetWidth;
+              card.style.opacity = '1';
+              card.style.transform = 'translateY(0)';
+            } else {
+              card.style.display = 'none';
+            }
+          });
+        }, 200);
+      }
+
+      if (machineFilter) {
+        machineFilter.addEventListener('change', () => updateCards(machineFilter, 'data-machine'));
+      }
+      if (genreFilter) {
+        genreFilter.addEventListener('change', () => updateCards(genreFilter, 'data-genre'));
+      }
+
+      // --- Tab Switching Logic (SPA) ---
+      const tabBtns = document.querySelectorAll('.tab-btn');
+      const tabPanes = document.querySelectorAll('.tab-pane');
+
+      tabBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          // Remove active class from all buttons and panes
+          tabBtns.forEach(b => b.classList.remove('active'));
+          tabPanes.forEach(p => p.classList.remove('active'));
+
+          // Add active class to clicked button
+          btn.classList.add('active');
+
+          // Show corresponding pane
+          const targetId = btn.getAttribute('data-target');
+          const targetPane = document.getElementById(targetId);
+          if (targetPane) {
+            targetPane.classList.add('active');
+          }
+
+          // === Update Filter Visibility ===
+          if (filterWrapper) {
+            if (targetId === 'tab-top') {
+              filterWrapper.style.display = 'none';
+            } else if (targetId === 'tab-article') {
+              filterWrapper.style.display = 'block';
+              if (machineFilter) machineFilter.style.display = 'none';
+              if (genreFilter) {
+                genreFilter.style.display = 'block';
+                genreFilter.value = 'all'; // タブ切り替え時はリセット
+                updateCards(genreFilter, 'data-genre');
+              }
+            } else {
+              // 攻略ツール または 攻略考察 タブ
+              filterWrapper.style.display = 'block';
+              if (genreFilter) genreFilter.style.display = 'none';
+              if (machineFilter) {
+                machineFilter.style.display = 'block';
+                machineFilter.value = 'all'; // タブ切り替え時はリセット
+                updateCards(machineFilter, 'data-machine');
+              }
+            }
+          }
+        });
+      });
+
+    });
+  </script>
+</body>
+
+</html>

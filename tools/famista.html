@@ -1,0 +1,1171 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>PACHINKO TACTICS - ファミスタ攻略ツール</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Jura:wght@400;600;700&family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            /* Theme E variables (Investigation Board) */
+            --font-main: 'Noto Sans JP', sans-serif;
+            --font-eng: 'Jura', sans-serif;
+            
+            --bg-color: #d4a373;
+            --body-bg-image: url('../corkboard_bg.png');
+            --bg-panel: #FFFFFF;
+            
+            --text-main: #333333;
+            --text-sub: #555555;
+            
+            --accent-color: #b33939; /* Red pin/marker */
+            --accent-secondary: #227093; /* Blue marker */
+            --border-color: rgba(0, 0, 0, 0.15);
+            
+            --board-bg: #1a2a24;
+            --chalk-white: rgba(255, 255, 255, 0.9);
+            
+            --shadow: 0 5px 15px rgba(0, 0, 0, 0.35);
+            
+            --plus-red: #b33939;
+            --minus-blue: #227093;
+        }
+
+        body {
+            margin: 0;
+            background-color: var(--bg-color);
+            background-image: var(--body-bg-image);
+            background-attachment: fixed;
+            font-family: var(--font-main);
+            color: var(--text-main);
+            font-size: 16px;
+            padding-bottom: 40px;
+        }
+
+        /* Blackboard Header */
+        .blackboard-header {
+            position: relative;
+            width: 100%;
+            min-height: 140px; 
+            background-color: var(--board-bg);
+            background-image: 
+                radial-gradient(circle at 50% 50%, rgba(255,255,255,0.05) 0%, transparent 80%),
+                url('https://www.transparenttextures.com/patterns/dark-matter.png'); 
+            border-bottom: 8px solid #3d2b1f; 
+            box-shadow: inset 0 0 50px rgba(0,0,0,0.5), 0 4px 15px rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            padding: 20px 0;
+        }
+
+        .chalk-effect {
+            filter: url(#chalk-filter);
+        }
+
+        .header-center {
+            text-align: center;
+            z-index: 10;
+            width: 100%;
+        }
+
+        .header-center h1 {
+            font-family: var(--font-eng);
+            font-size: clamp(2rem, 6vw, 3rem);
+            font-weight: 900;
+            color: var(--chalk-white);
+            letter-spacing: 0.15em;
+            margin: 0;
+            line-height: 1.1;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header-center .subtitle {
+            font-size: clamp(0.85rem, 3vw, 1rem);
+            font-weight: 700;
+            color: var(--chalk-white);
+            margin-top: 5px; 
+            opacity: 0.8;
+            letter-spacing: 0.05em;
+        }
+
+        .header-actions {
+            margin-top: 15px;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .header-actions a {
+            color: #fff;
+            font-weight: bold;
+            text-decoration: underline;
+            font-size: 0.9rem;
+        }
+
+        .reset-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: var(--font-main);
+            font-size: 0.9rem;
+        }
+        .reset-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Container (Paper with Pin) */
+        .container {
+            width: 95%;
+            max-width: 800px;
+            margin: 30px auto;
+            background: var(--bg-panel);
+            border: 1px solid rgba(0,0,0,0.1);
+            border-radius: 2px;
+            box-shadow: var(--shadow);
+            position: relative;
+            min-height: 70vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 6px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, #ff5252, #b33939);
+            box-shadow: 1px 2px 3px rgba(0,0,0,0.3), inset -1px -2px 3px rgba(0,0,0,0.2);
+            z-index: 5;
+        }
+
+        .tabs {
+            display: flex;
+            background: rgba(0,0,0,0.03);
+            border-bottom: 2px dashed rgba(0,0,0,0.1);
+            padding-top: 20px; /* space for pin */
+        }
+
+        .tab {
+            flex: 1;
+            padding: 15px 5px;
+            text-align: center;
+            font-size: 14px;
+            font-weight: bold;
+            color: var(--text-sub);
+            border-bottom: 3px solid transparent;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .tab:hover {
+            color: var(--accent-color);
+        }
+
+        .tab.active {
+            background: var(--bg-panel);
+            color: var(--accent-color);
+            border-bottom: 3px solid var(--accent-color);
+        }
+
+        .content-section {
+            display: none;
+            padding: 20px;
+        }
+
+        .content-section.active {
+            display: block;
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+            border-bottom: 1px dashed var(--border-color);
+            padding-bottom: 10px;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 5px;
+            line-height: 1.4;
+            color: var(--text-main);
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            text-align: left;
+            font-size: 18px;
+            box-sizing: border-box;
+            font-family: var(--font-eng);
+            background-color: #fafafa;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            background-color: #fff;
+        }
+
+        .input-error {
+            background-color: #ffeaea !important;
+            border: 2px solid var(--plus-red) !important;
+        }
+
+        .result-card {
+            background: #fafafa;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            padding: 20px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .val-plus { color: var(--plus-red); font-weight: bold; }
+        .val-minus { color: var(--minus-blue); font-weight: bold; }
+
+        .main-val {
+            font-family: var(--font-eng);
+            font-size: 32px;
+            font-weight: 900;
+            margin: 10px 0;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+
+        .data-table th,
+        .data-table td {
+            border: 1px solid var(--border-color);
+            padding: 10px;
+            text-align: left;
+        }
+
+        .data-table th {
+            background: rgba(0,0,0,0.03);
+            width: 60%;
+            color: var(--text-main);
+            font-weight: 700;
+        }
+
+        .btn-primary {
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+            transition: background 0.2s;
+            font-family: var(--font-main);
+        }
+
+        .btn-primary:hover {
+            background: #ff5252;
+        }
+
+        .section-header {
+            font-weight: 900;
+            margin-bottom: 10px;
+            padding: 8px 12px;
+            background: var(--accent-secondary);
+            color: white;
+            border-radius: 2px;
+            font-size: 1.1rem;
+            display: inline-block;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        
+        .box-info {
+            background: #f1f3f5;
+            border: 1px solid var(--border-color);
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        .box-info span {
+            font-weight: bold;
+            font-size: 16px;
+            color: var(--text-main);
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- SVG Filter for Chalk Texture -->
+    <svg style="position: absolute; width: 0; height: 0;">
+        <filter id="chalk-filter">
+            <feTurbulence type="fractalNoise" baseFrequency="0.5" numOctaves="5" result="noise" />
+            <feDisplacementMap in="SourceGraphic" in2="noise" scale="2" />
+        </filter>
+    </svg>
+
+    <header class="blackboard-header">
+        <div class="header-center chalk-effect">
+            <h1>FAMISTA TOOL</h1>
+            <div class="subtitle">ハネモノファミスタ 期待値・データ管理ツール</div>
+            <div class="header-actions">
+                <a href="../index.html">TOPへ戻る</a>
+                <button class="reset-btn" onclick="app.resetAll()">データをリセット</button>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="tabs">
+            <div class="tab active" onclick="app.showTab('input')">数値入力</div>
+            <div class="tab" onclick="app.showTab('calc')">算出結果</div>
+            <div class="tab" onclick="app.showTab('compare')">区間分析</div>
+            <div class="tab" onclick="app.showTab('settings')">詳細設定</div>
+        </div>
+
+        <div id="input" class="content-section active">
+            <div id="fields-container"></div>
+        </div>
+
+        <div id="calc" class="content-section">
+            <div class="result-card">
+                <div style="font-size: 16px; color: var(--text-sub);">総期待値</div>
+                <div id="res-total-exp" class="main-val">±0円</div>
+            </div>
+
+            <div class="result-card">
+                <div style="font-size: 16px; color: var(--text-sub);">1回転あたりの期待値</div>
+                <div id="res-unit-exp" style="font-size: 24px; font-weight: bold; margin: 5px 0;">±0.0円</div>
+                <div id="res-unit-detail" style="font-size: 13px; color: var(--text-sub);">[現金: -円 | 持ち玉: -円]</div>
+            </div>
+
+            <div class="result-card">
+                <div style="font-size: 16px; color: var(--text-sub);">千円あたりのボーダーライン</div>
+                <div id="res-border" style="font-size: 24px; font-weight: bold;">0.0回転</div>
+            </div>
+
+            <div class="result-card">
+                <div style="font-size: 16px; color: var(--text-sub);">推定確率</div>
+                <div id="res-probs" style="margin-top: 5px;"></div>
+            </div>
+
+            <div class="result-card">
+                <div style="font-size: 16px; color: var(--text-sub);">欠損 / 余剰</div>
+                <div id="res-gap" style="margin-top: 5px;"></div>
+            </div>
+
+            <div style="margin-top: 20px;">
+                <div style="font-weight: bold; margin-bottom: 10px; color: var(--accent-secondary);">■ 詳細分析データ</div>
+                <table class="data-table">
+                    <tbody id="res-details-table"></tbody>
+                </table>
+            </div>
+            <button onclick="app.saveHistory()" class="btn-primary" style="margin-top:20px;">区間データを保存</button>
+        </div>
+
+        <div id="compare" class="content-section">
+            <div class="section-header">■ 区間比較（時系列推移）</div>
+            
+            <select id="compare-metric-select" onchange="app.updateCompareView()"
+                style="width:100%; padding: 10px; font-size: 16px; margin-bottom: 15px; border-radius: 4px; border: 1px solid #ccc; font-family: var(--font-main);">
+            </select>
+            <div style="margin-bottom: 20px;">
+                <table class="data-table" style="table-layout: fixed; text-align: center;">
+                    <thead>
+                        <tr>
+                            <th style="width: 33.3%; text-align: center;">区間(拾い)</th>
+                            <th style="width: 33.3%; text-align: center;">数値</th>
+                            <th style="width: 33.3%; text-align: center;">累計との比較</th>
+                        </tr>
+                    </thead>
+                    <tbody id="compare-list" style="text-align: center;"></tbody>
+                </table>
+            </div>
+            <div style="background: white; padding: 10px; border-radius: 4px; border: 1px solid var(--border-color); margin-bottom: 30px;">
+                <canvas id="compareChart"></canvas>
+            </div>
+
+            <div class="section-header">■ 区間詳細（特定の区間データ）</div>
+            
+            <select id="interval-detail-select" onchange="app.updateIntervalDetailView()"
+                style="width:100%; padding: 10px; font-size: 16px; margin-bottom: 15px; border-radius: 4px; border: 1px solid #ccc; font-family: var(--font-main);">
+            </select>
+            
+            <div style="margin-top: 15px;">
+                <div style="font-weight: bold; margin-bottom: 10px; color: var(--accent-secondary);">■ 推定確率・欠損/余剰</div>
+                <div id="interval-probs" style="margin-bottom: 20px;"></div>
+                
+                <div style="font-weight: bold; margin-bottom: 10px; color: var(--accent-secondary);">■ 詳細分析データ</div>
+                <table class="data-table">
+                    <tbody id="interval-details-table"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="settings" class="content-section">
+            <div style="font-weight: bold; margin-bottom: 10px; color: var(--accent-secondary);">■ 基本設定</div>
+            <div class="input-group"><label>SP入賞率<br>(1/〇)</label><input type="number" id="set-sp-rate" value="3"
+                    onchange="app.calc()"></div>
+            <div class="input-group"><label>ノーマル入賞率<br>(1/〇)</label><input type="number" id="set-nm-rate" value="8"
+                    onchange="app.calc()"></div>
+            <div class="input-group"><label>平均ラウンド数<br>(理論上の振り分け)</label><input type="number" id="set-avg-r" value="5.0"
+                    onchange="app.calc()"></div>
+            <div class="input-group"><label>貸玉<br>(1000円あたりの玉数)</label><input type="number" id="set-kasi" value="250"
+                    onchange="app.calc()"></div>
+            <div class="input-group"><label>換金率<br>(1玉あたりの換金額)</label><input type="number" id="set-exchange" value="4.0"
+                    onchange="app.calc()"></div>
+
+            <div style="font-weight: bold; margin-top: 25px; margin-bottom: 10px; color: var(--accent-secondary);">■
+                各種項目の基準値設定</div>
+            <div id="settings-targets-container"></div>
+        </div>
+    </div>
+
+    <script>
+        const app = {
+            fields: [
+                { id: "total_rot", name: "1. 通常回転数" },
+                { id: "rot_per_k", name: "2. 千円あたりの回転数" },
+                { id: "holding_rate", name: "3. 持ち玉比率(%)" },
+                { id: "r_out", name: "4. 1Rあたりの出玉" },
+                { id: "v_2r", name: "5-1. 2R回数" },
+                { id: "v_4r", name: "5-2. 4R回数" },
+                { id: "v_9r", name: "5-3. 9R回数" },
+                { id: "total_pick", name: "6. 拾い個数" },
+                { id: "sp_select", name: "7. SPルート選択個数" },
+                { id: "sp_v_in", name: "8. SPルート選択時回転体V入賞個数", parent: "sp_select" },
+                { id: "st_select", name: "9. ストレート選択個数" },
+                { id: "st_rot_in", name: "10. ストレート選択時回転体突入個数", parent: "st_select" },
+                { id: "st_hr_in", name: "11. ストレート選択時HR個数", parent: "st_select" },
+                { id: "ch_strong", name: "12. 変化球選択時強打個数" },
+                { id: "ch_rot_in", name: "13. 変化球強打時回転体突入個数", parent: "ch_strong" },
+                { id: "ch_hr_in", name: "14. 変化球選択時HR個数" },
+                { id: "nm_total_v", name: "15. ノーマルルート選択時回転体総V入賞個数" }
+            ],
+
+            metricsConfig: [
+                { id: "pickRate", name: "拾い率", type: "pct", lowerIsBetter: false },
+                { id: "spSelectRate", name: "SPルート選択率", type: "pct", lowerIsBetter: false },
+                { id: "straightSelectRate", name: "ストレート選択率", type: "pct", lowerIsBetter: false },
+                { id: "straightRotInRate", name: "ストレート選択時回転体突入率", type: "pct", lowerIsBetter: false },
+                { id: "curveStrongRate", name: "変化球選択時強打率", type: "pct", lowerIsBetter: false },
+                { id: "curveRotInRate", name: "変化球強打時回転体突入率", type: "pct", lowerIsBetter: false },
+                { id: "nmTotalRotInRate", name: "ノーマルルート選択時総回転体突入率", type: "pct", lowerIsBetter: false },
+                { id: "spWinRate", name: "SPルート選択時回転体当選率", type: "prob", lowerIsBetter: true },
+                { id: "nmWinRate", name: "ノーマルルート選択時回転体当選率", type: "prob", lowerIsBetter: true },
+                { id: "estYakuProb", name: "推定役モノ確率", type: "prob", lowerIsBetter: true },
+                { id: "estProb", name: "推定大当り確率", type: "prob", lowerIsBetter: true },
+                { id: "comment", name: "コメント", type: "text" }
+            ],
+            history: [],
+            chartInstance: null,
+
+            init() {
+                const container = document.getElementById('fields-container');
+                this.fields.forEach(f => {
+                    const div = document.createElement('div');
+                    div.className = 'input-group';
+                    div.innerHTML = `<label>${f.name}</label><input type="number" id="${f.id}" pattern="\\d*" oninput="app.calc()">`;
+                    container.appendChild(div);
+                });
+
+                const sel = document.getElementById('compare-metric-select');
+                this.metricsConfig.forEach(m => {
+                    const opt = document.createElement('option');
+                    opt.value = m.id;
+                    opt.innerText = m.name;
+                    sel.appendChild(opt);
+                });
+
+                this.initTargetSettings();
+                this.loadDataAndHistory();
+            },
+
+            initTargetSettings() {
+                const container = document.getElementById('settings-targets-container');
+                let html = '';
+                this.metricsConfig.forEach(m => {
+                    if (m.type === 'text') return;
+                    const unit = m.type === 'pct' ? '%' : '分母';
+                    html += `<div class="input-group"><label>${m.name}<br>(${unit})</label>
+                             <input type="number" id="target-${m.id}" value="" step="0.1" onchange="app.saveDataAndHistory(); app.updateCompareView();" placeholder="目標値"></div>`;
+                });
+                container.innerHTML = html;
+            },
+
+            showTab(id) {
+                document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                document.getElementById(id).classList.add('active');
+                event.currentTarget.classList.add('active');
+                if (id === 'compare') this.updateCompareView();
+            },
+
+            formatVal(val, isYen = true) {
+                const sign = val > 0 ? "+" : "";
+                const colorClass = val > 0 ? "val-plus" : (val < 0 ? "val-minus" : "");
+                const text = isYen ? `${sign}${Math.floor(val).toLocaleString()}円` : `${sign}${val.toFixed(1)}円`;
+                return `<span class="${colorClass}">${text}</span>`;
+            },
+
+            getSettings() {
+                return {
+                    sp: parseFloat(document.getElementById('set-sp-rate').value) || 3,
+                    nm: parseFloat(document.getElementById('set-nm-rate').value) || 8,
+                    avgR: parseFloat(document.getElementById('set-avg-r').value) || 5,
+                    exch: parseFloat(document.getElementById('set-exchange').value) || 4,
+                    kasi: 1000 / (parseFloat(document.getElementById('set-kasi').value) || 250)
+                };
+            },
+
+            calcMetricsObject(v, s) {
+                const safeDiv = (num, den) => den > 0 ? num / den : 0;
+
+                const rotInSum = v.st_rot_in + v.ch_rot_in;
+                const expVCount = (v.sp_select / s.sp) + (rotInSum / s.nm);
+                const estProbDenom = expVCount > 0 ? (v.total_rot / expVCount) : 0;
+                const pickRateVal = safeDiv(v.total_pick, v.total_rot);
+                const estYakuProbDenom = pickRateVal > 0 ? (estProbDenom * pickRateVal) : 0;
+
+                const nmRouteCount = v.total_pick - v.sp_select;
+                const curveSelectCount = nmRouteCount - v.st_select;
+
+                return {
+                    pickRate: pickRateVal,
+                    spSelectRate: safeDiv(v.sp_select, v.total_pick),
+                    straightSelectRate: safeDiv(v.st_select, nmRouteCount),
+                    straightRotInRate: safeDiv(v.st_rot_in, v.st_select - v.st_hr_in),
+                    curveStrongRate: safeDiv(v.ch_strong, curveSelectCount),
+                    curveRotInRate: safeDiv(v.ch_rot_in, v.ch_strong - v.ch_hr_in),
+                    nmTotalRotInRate: safeDiv(v.st_rot_in + v.ch_rot_in, v.total_pick - v.sp_select - v.st_hr_in - v.ch_hr_in),
+                    estYakuProb: estYakuProbDenom,
+                    spWinRate: safeDiv(v.sp_select, v.sp_v_in),
+                    nmWinRate: safeDiv(v.st_rot_in + v.ch_rot_in, v.nm_total_v),
+                    estProb: estProbDenom
+                };
+            },
+
+            calc() {
+                const v = {};
+                this.fields.forEach(f => {
+                    v[f.id] = parseFloat(document.getElementById(f.id).value) || 0;
+                    if (f.parent) {
+                        const pVal = parseFloat(document.getElementById(f.parent).value) || 0;
+                        document.getElementById(f.id).classList.toggle('input-error', v[f.id] > pVal);
+                    }
+                });
+
+                const s = this.getSettings();
+
+                // 1. 推定大当り期待個数の算出
+                const rotInSum = v.st_rot_in + v.ch_rot_in;
+                const expVCount = (v.sp_select / s.sp) + (rotInSum / s.nm);
+                const estProbDenom = expVCount > 0 ? (v.total_rot / expVCount) : 0;
+
+                // 2. 出玉と消費の算出
+                const avgOutJade = s.avgR * v.r_out;
+                const totalExpJade = expVCount * avgOutJade;
+                const jadeUsed = v.rot_per_k > 0 ? (v.total_rot / v.rot_per_k * 250) : 0;
+                const totalInvestYen = v.rot_per_k > 0 ? (v.total_rot / v.rot_per_k * 1000) : 0;
+
+                // 3. 換金率と持ち玉比率を考慮した期待値 (円)
+                const yenHold = (totalExpJade * s.exch) - (jadeUsed * s.exch);
+                const yenCash = (totalExpJade * s.exch) - (totalInvestYen);
+                const holdRate = v.holding_rate / 100;
+                const totalExpYen = (yenHold * holdRate) + (yenCash * (1 - holdRate));
+
+                // 反映
+                document.getElementById('res-total-exp').innerHTML = this.formatVal(totalExpYen);
+                document.getElementById('res-unit-exp').innerHTML = this.formatVal(v.total_rot > 0 ? totalExpYen / v.total_rot : 0, false);
+
+                const unitCash = (yenCash / (v.total_rot || 1)).toFixed(1);
+                const unitHold = (yenHold / (v.total_rot || 1)).toFixed(1);
+                document.getElementById('res-unit-detail').innerHTML = `
+                    <div style="display: flex; justify-content: center; gap: 8px; margin-top: 8px; flex-wrap: wrap;">
+                        <div class="box-info">現金<br><span style="font-family:var(--font-eng);">${unitCash}円</span></div>
+                        <div class="box-info">持ち玉<br><span style="font-family:var(--font-eng);">${unitHold}円</span></div>
+                    </div>
+                `;
+
+                // ボーダー
+                const borderHold = (avgOutJade > 0 && estProbDenom > 0) ? (250 * estProbDenom / avgOutJade) : 0;
+                const borderCash = (avgOutJade > 0 && estProbDenom > 0 && s.exch > 0) ? (1000 * estProbDenom / (avgOutJade * s.exch)) : 0;
+
+                document.getElementById('res-border').innerHTML = `
+                    <div style="display: flex; justify-content: center; gap: 8px; margin-top: 8px; flex-wrap: wrap;">
+                        <div class="box-info">持ち玉<br><span style="font-family:var(--font-eng);">${borderHold.toFixed(1)}<span style="font-size:12px; font-weight:normal; font-family:var(--font-main);"> 回転</span></span></div>
+                        <div class="box-info">現金<br><span style="font-family:var(--font-eng);">${borderCash.toFixed(1)}<span style="font-size:12px; font-weight:normal; font-family:var(--font-main);"> 回転</span></span></div>
+                    </div>
+                `;
+
+                // 推定確率・欠損余剰の算出
+                const pickRate = v.total_rot > 0 ? (v.total_pick / v.total_rot) : 0;
+                const estYakuProbDenom = pickRate > 0 ? (estProbDenom * pickRate) : 0;
+
+                const totalV = v.v_2r + v.v_4r + v.v_9r;
+                const totalR = (v.v_2r * 2) + (v.v_4r * 4) + (v.v_9r * 9);
+                const actAvgR = totalV > 0 ? totalR / totalV : 0;
+                const gapJade = (totalR * v.r_out) - (totalV * avgOutJade);
+
+                document.getElementById('res-probs').innerHTML = `
+                    <div style="display: flex; justify-content: center; gap: 8px; flex-wrap: wrap;">
+                        <div class="box-info">役モノ<br><span style="font-family:var(--font-eng);">1/${estYakuProbDenom.toFixed(1)}</span></div>
+                        <div class="box-info">大当り<br><span style="font-family:var(--font-eng);">1/${estProbDenom.toFixed(1)}</span></div>
+                    </div>
+                `;
+
+                const avgRColor = actAvgR >= s.avgR ? 'var(--plus-red)' : 'var(--minus-blue)';
+                const gapJadeColor = gapJade >= 0 ? 'var(--plus-red)' : 'var(--minus-blue)';
+
+                document.getElementById('res-gap').innerHTML = `
+                    <div style="display: flex; justify-content: center; gap: 8px; flex-wrap: wrap;">
+                        <div class="box-info">平均R数<br><span style="font-family:var(--font-eng); color:${avgRColor};">${actAvgR.toFixed(2)}</span></div>
+                        <div class="box-info">玉数<br><span style="font-family:var(--font-eng); color:${gapJadeColor};">${gapJade >= 0 ? '+' : ''}${Math.floor(gapJade)}<span style="font-size:12px; font-weight:normal; font-family:var(--font-main);"> 玉</span></span></div>
+                    </div>
+                `;
+
+                const safeDivPct = (num, den) => den > 0 ? `${(num / den * 100).toFixed(1)}%` : "0.0%";
+                const safeDivProb = (num, den) => den > 0 ? `1 / ${(num / den).toFixed(1)}` : "-";
+
+                const nmRouteCount = v.total_pick - v.sp_select;
+                const curveSelectCount = nmRouteCount - v.st_select;
+
+                const details = [
+                    ["拾い率", safeDivPct(v.total_pick, v.total_rot)],
+                    ["SPルート選択率", safeDivPct(v.sp_select, v.total_pick)],
+                    ["ストレート選択率", safeDivPct(v.st_select, nmRouteCount)],
+                    ["ストレート選択時<br>回転体突入率", safeDivPct(v.st_rot_in, v.st_select - v.st_hr_in)],
+                    ["変化球選択時<br>強打率", safeDivPct(v.ch_strong, curveSelectCount)],
+                    ["変化球強打時<br>回転体突入率", safeDivPct(v.ch_rot_in, v.ch_strong - v.ch_hr_in)],
+                    ["ノーマルルート選択時<br>総回転体突入率", safeDivPct(v.st_rot_in + v.ch_rot_in, v.total_pick - v.sp_select - v.st_hr_in - v.ch_hr_in)],
+                    ["SPルート選択時<br>回転体当選率", safeDivProb(v.sp_select, v.sp_v_in)],
+                    ["ノーマルルート選択時<br>回転体当選率", safeDivProb(v.st_rot_in + v.ch_rot_in, v.nm_total_v)]
+                ];
+                document.getElementById('res-details-table').innerHTML = details.map(d => `<tr><th>${d[0]}</th><td style="font-family:var(--font-eng); font-weight:bold;">${d[1]}</td></tr>`).join('');
+
+                this.saveDataAndHistory();
+            },
+
+            formatF(val, type) {
+                if (type === 'pct') return `${(val * 100).toFixed(1)}%`;
+                if (type === 'prob') return val > 0 ? `1 / ${val.toFixed(1)}` : "-";
+                return val;
+            },
+
+            getCompareStr(val, avg, type, lowerIsBetter) {
+                if (avg === 0 || val === 0) return "-";
+                let delta = val - avg;
+                let isGood = lowerIsBetter ? (val < avg) : (val > avg);
+
+                if (type === 'pct') {
+                    const deltaPct = delta * 100;
+                    if (Math.abs(deltaPct) < 0.05) return "-";
+                    const icon = isGood ? '↑' : '↓';
+                    const color = isGood ? 'var(--plus-red)' : 'var(--minus-blue)';
+                    const sign = deltaPct > 0 ? '+' : '';
+                    return `<span style="color:${color}; font-weight:bold;">${icon} (${sign}${deltaPct.toFixed(1)}%)</span>`;
+                }
+                if (type === 'prob') {
+                    if (Math.abs(delta) < 0.05) return "-";
+                    const icon = isGood ? '↑' : '↓';
+                    const color = isGood ? 'var(--plus-red)' : 'var(--minus-blue)';
+                    const sign = delta > 0 ? '+' : '';
+                    return `<span style="color:${color}; font-weight:bold;">${icon} (${sign}${delta.toFixed(1)})</span>`;
+                }
+                return "-";
+            },
+
+            updateCompareView() {
+                const metricId = document.getElementById('compare-metric-select').value;
+                const metric = this.metricsConfig.find(m => m.id === metricId);
+                const tbody = document.getElementById('compare-list');
+                const theadTr = document.querySelector('#compare .data-table thead tr');
+                const s = this.getSettings();
+
+                if (metric.type === 'text') {
+                    if (theadTr) {
+                        theadTr.innerHTML = `
+                            <th style="width: 33.3%; text-align: center;">区間(拾い)</th>
+                            <th style="width: 66.7%; text-align: center;">コメント</th>
+                        `;
+                    }
+                    let html = '';
+                    this.history.forEach((h, i) => {
+                        const prevPick = i === 0 ? 0 : this.history[i - 1].totalPick;
+                        const label = prevPick === h.totalPick ? `${h.totalPick}個` : `${prevPick + 1}個～${h.totalPick}個`;
+                        html += `<tr><td style="text-align:center;">${label}</td><td style="text-align:center;">${h.comment || '-'}</td></tr>`;
+                    });
+                    tbody.innerHTML = html;
+                    if (this.chartInstance) { this.chartInstance.destroy(); this.chartInstance = null; }
+                    document.getElementById('compareChart').style.display = 'none';
+                    return;
+                }
+                
+                if (theadTr) {
+                    theadTr.innerHTML = `
+                        <th style="width: 33.3%; text-align: center;">区間(拾い)</th>
+                        <th style="width: 33.3%; text-align: center;">数値</th>
+                        <th style="width: 33.3%; text-align: center;">累計との比較</th>
+                    `;
+                }
+
+                document.getElementById('compareChart').style.display = 'block';
+
+                if (this.history.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="3" style="text-align:center; padding: 20px;">区間データが保存されていません。<br>「算出結果」画面から保存してください。</td></tr>';
+                    if (this.chartInstance) { this.chartInstance.destroy(); this.chartInstance = null; }
+                    return;
+                }
+
+                const latestV = this.history[this.history.length - 1].v;
+                const cumulativeRes = this.calcMetricsObject(latestV, s);
+                const cumulativeVal = cumulativeRes[metricId];
+
+                const labels = [];
+                const dataPoints = [];
+                const tableRows = [];
+
+                let prevV = null;
+                let prevPick = 0;
+
+                for (let i = 0; i < this.history.length; i++) {
+                    const h = this.history[i];
+                    const deltaV = {};
+                    this.fields.forEach(f => {
+                        deltaV[f.id] = h.v[f.id] - (prevV ? prevV[f.id] : 0);
+                    });
+
+                    const res = this.calcMetricsObject(deltaV, s);
+                    const val = res[metricId];
+                    const label = prevPick === h.totalPick ? `${h.totalPick}個` : `${prevPick + 1}個～${h.totalPick}個`;
+
+                    tableRows.push(`<tr>
+                        <td style="text-align:center;">${label}</td>
+                        <td style="text-align:center; font-family:var(--font-eng); font-weight:bold;">${this.formatF(val, metric.type)}</td>
+                        <td style="text-align:center; font-family:var(--font-eng);">${this.getCompareStr(val, cumulativeVal, metric.type, metric.lowerIsBetter)}</td>
+                    </tr>`);
+
+                    labels.push(label);
+                    dataPoints.push(val === 0 && metric.type === 'prob' ? null : (metric.type === 'pct' ? val * 100 : val));
+
+                    prevV = h.v;
+                    prevPick = h.totalPick;
+                }
+
+                while (labels.length < 5) {
+                    labels.push("");
+                }
+
+                tableRows.push(`<tr style="background:rgba(0,0,0,0.03); font-weight:bold;">
+                    <td style="text-align:center;">累計平均</td>
+                    <td style="text-align:center; font-family:var(--font-eng);">${this.formatF(cumulativeVal, metric.type)}</td>
+                    <td style="text-align:center;">-</td>
+                </tr>`);
+
+                tbody.innerHTML = tableRows.join('');
+
+                this.drawChart(labels, dataPoints, cumulativeVal, metric);
+            },
+
+            drawChart(labels, dataPoints, cumVal, metric) {
+                const ctx = document.getElementById('compareChart').getContext('2d');
+                if (this.chartInstance) this.chartInstance.destroy();
+
+                const targetInput = document.getElementById(`target-${metric.id}`);
+                const targetVal = targetInput && targetInput.value !== "" ? parseFloat(targetInput.value) : null;
+
+                const mult = metric.type === 'pct' ? 100 : 1;
+                const cumLineData = labels.map(() => cumVal * mult);
+
+                const datasets = [
+                    {
+                        label: metric.name,
+                        data: dataPoints,
+                        borderColor: '#227093', // blue marker
+                        borderWidth: 2,
+                        tension: 0.1,
+                        fill: false
+                    },
+                    {
+                        label: '累計平均',
+                        data: cumLineData,
+                        borderColor: '#b33939', // red marker
+                        borderDash: [5, 5],
+                        borderWidth: 2,
+                        pointRadius: 0
+                    }
+                ];
+
+                if (targetVal !== null) {
+                    datasets.push({
+                        label: '任意基準ライン',
+                        data: labels.map(() => targetVal),
+                        borderColor: '#218c74',
+                        borderDash: [10, 5],
+                        borderWidth: 2,
+                        pointRadius: 0
+                    });
+                }
+
+                Chart.defaults.font.family = "'Noto Sans JP', sans-serif";
+
+                this.chartInstance = new Chart(ctx, {
+                    type: 'line',
+                    data: { labels, datasets },
+                    options: {
+                        responsive: true,
+                        scales: {
+                            y: {
+                                reverse: metric.lowerIsBetter,
+                                beginAtZero: metric.type === 'pct'
+                            },
+                            x: {
+                                offset: true
+                            }
+                        }
+                    }
+                });
+            },
+
+            updateIntervalDropdown() {
+                const detailSelect = document.getElementById('interval-detail-select');
+                if (!detailSelect) return;
+                const previousDetailValue = detailSelect.value;
+                detailSelect.innerHTML = '';
+                
+                for (let i = 0; i < this.history.length; i++) {
+                    const h = this.history[i];
+                    const prevPick = i === 0 ? 0 : this.history[i - 1].totalPick;
+                    const label = prevPick === h.totalPick ? `${h.totalPick}個` : `${prevPick + 1}個～${h.totalPick}個`;
+                    const opt = document.createElement('option');
+                    opt.value = i;
+                    opt.innerText = label;
+                    detailSelect.appendChild(opt);
+                }
+                
+                if (previousDetailValue && detailSelect.querySelector(`option[value="${previousDetailValue}"]`)) {
+                    detailSelect.value = previousDetailValue;
+                } else if (this.history.length > 0) {
+                    detailSelect.value = this.history.length - 1;
+                }
+                
+                this.updateIntervalDetailView();
+            },
+
+            updateIntervalDetailView() {
+                const select = document.getElementById('interval-detail-select');
+                const tBody = document.getElementById('interval-details-table');
+                const probsDiv = document.getElementById('interval-probs');
+                
+                if (!select || !tBody || !probsDiv) return;
+                
+                if (this.history.length === 0 || select.options.length === 0) {
+                    tBody.innerHTML = '<tr><td colspan="2" style="text-align:center; padding: 20px;">区間データがありません。</td></tr>';
+                    probsDiv.innerHTML = '';
+                    return;
+                }
+                
+                const index = parseInt(select.value, 10);
+                const currentH = this.history[index];
+                const prevH = index > 0 ? this.history[index - 1] : null;
+                
+                const deltaV = {};
+                this.fields.forEach(f => {
+                    deltaV[f.id] = currentH.v[f.id] - (prevH ? prevH.v[f.id] : 0);
+                });
+                
+                const s = this.getSettings();
+                
+                const safeDivPct = (num, den) => den > 0 ? ((num / den) * 100).toFixed(1) + "%" : "0.0%";
+                const safeDivProb = (num, den) => den > 0 ? `1 / ${(num / den).toFixed(1)}` : "-";
+                
+                const nmRouteCount = deltaV.total_pick - deltaV.sp_select;
+                const curveSelectCount = nmRouteCount - deltaV.st_select;
+                
+                const details = [
+                    ["拾い率", safeDivPct(deltaV.total_pick, deltaV.total_rot)],
+                    ["SPルート選択率", safeDivPct(deltaV.sp_select, deltaV.total_pick)],
+                    ["ストレート選択率", safeDivPct(deltaV.st_select, nmRouteCount)],
+                    ["ストレート選択時<br>回転体突入率", safeDivPct(deltaV.st_rot_in, deltaV.st_select - deltaV.st_hr_in)],
+                    ["変化球選択時<br>強打率", safeDivPct(deltaV.ch_strong, curveSelectCount)],
+                    ["変化球強打時<br>回転体突入率", safeDivPct(deltaV.ch_rot_in, deltaV.ch_strong - deltaV.ch_hr_in)],
+                    ["ノーマルルート選択時<br>総回転体突入率", safeDivPct(deltaV.st_rot_in + deltaV.ch_rot_in, deltaV.total_pick - deltaV.sp_select - deltaV.st_hr_in - deltaV.ch_hr_in)],
+                    ["SPルート選択時<br>回転体当選率", safeDivProb(deltaV.sp_select, deltaV.sp_v_in)],
+                    ["ノーマルルート選択時<br>回転体当選率", safeDivProb(deltaV.st_rot_in + deltaV.ch_rot_in, deltaV.nm_total_v)]
+                ];
+                
+                tBody.innerHTML = details.map(d => `<tr><th style="width: 50%;">${d[0]}</th><td style="width: 50%; font-family:var(--font-eng); font-weight:bold;">${d[1]}</td></tr>`).join('');
+                
+                const resObj = this.calcMetricsObject(deltaV, s);
+                
+                const totalV = deltaV.v_2r + deltaV.v_4r + deltaV.v_9r;
+                const totalR = (deltaV.v_2r * 2) + (deltaV.v_4r * 4) + (deltaV.v_9r * 9);
+                const actAvgR = totalV > 0 ? totalR / totalV : 0;
+                
+                const avgOutJade = s.avgR * deltaV.r_out;
+                const gapJade = (totalR * deltaV.r_out) - (totalV * avgOutJade);
+                
+                const gapColor = gapJade > 0 ? 'var(--plus-red)' : (gapJade < 0 ? 'var(--minus-blue)' : 'var(--text-main)');
+                const gapSign = gapJade > 0 ? '+' : '';
+                
+                probsDiv.innerHTML = `
+                    <div style="display: flex; justify-content: center; gap: 8px; flex-wrap: wrap;">
+                        <div class="box-info">役モノ<br><span style="font-family:var(--font-eng);">1/${resObj.estYakuProb > 0 ? resObj.estYakuProb.toFixed(1) : '-'}</span></div>
+                        <div class="box-info">大当り<br><span style="font-family:var(--font-eng);">1/${resObj.estProb > 0 ? resObj.estProb.toFixed(1) : '-'}</span></div>
+                        <div class="box-info">平均R数<br><span style="font-family:var(--font-eng);">${actAvgR > 0 ? actAvgR.toFixed(2) : '-'}R</span></div>
+                        <div class="box-info">玉数<br><span style="font-family:var(--font-eng); color:${gapColor};">${gapSign}${gapJade.toFixed(0)}玉</span></div>
+                    </div>
+                `;
+            },
+
+            saveHistory() {
+                const memo = prompt('この区間のメモ・コメントを入力してください（空でもOK）');
+                if (memo === null) return;
+
+                const v = {};
+                this.fields.forEach(f => v[f.id] = parseFloat(document.getElementById(f.id).value) || 0);
+
+                this.history.push({
+                    ts: Date.now(),
+                    comment: memo,
+                    v: v,
+                    totalPick: v.total_pick
+                });
+
+                this.saveDataAndHistory();
+                this.updateCompareView();
+                this.updateIntervalDropdown();
+                alert('区間データを保存しました！');
+            },
+
+            saveDataAndHistory() {
+                const data = {};
+                this.fields.forEach(f => data[f.id] = document.getElementById(f.id).value);
+
+                const targets = {};
+                this.metricsConfig.forEach(m => {
+                    if (m.type !== 'text') {
+                        const el = document.getElementById(`target-${m.id}`);
+                        if (el && el.value !== "") targets[m.id] = el.value;
+                    }
+                });
+
+                const settings = {
+                    sp: document.getElementById('set-sp-rate').value,
+                    nm: document.getElementById('set-nm-rate').value,
+                    avgR: document.getElementById('set-avg-r').value,
+                    kasi: document.getElementById('set-kasi').value,
+                    exchange: document.getElementById('set-exchange').value
+                };
+
+                const saveObj = {
+                    current: data,
+                    targets,
+                    settings,
+                    history: this.history
+                };
+                localStorage.setItem('pachitaku_v6_data_v2', JSON.stringify(saveObj));
+                localStorage.setItem('pachitaku_v6', JSON.stringify(data));
+            },
+
+            loadDataAndHistory() {
+                let saved = JSON.parse(localStorage.getItem('pachitaku_v6_data_v2'));
+                if (!saved) {
+                    const old = JSON.parse(localStorage.getItem('pachitaku_v6'));
+                    if (old) saved = { current: old, history: [], targets: {}, settings: {} };
+                }
+
+                if (saved) {
+                    if (saved.current) {
+                        this.fields.forEach(f => {
+                            const el = document.getElementById(f.id);
+                            if (el && saved.current[f.id] !== undefined) el.value = saved.current[f.id];
+                        });
+                    }
+                    if (saved.targets) {
+                        for (let id in saved.targets) {
+                            const el = document.getElementById(`target-${id}`);
+                            if (el) el.value = saved.targets[id];
+                        }
+                    }
+                    if (saved.settings) {
+                        const sMap = { sp: 'set-sp-rate', nm: 'set-nm-rate', avgR: 'set-avg-r', kasi: 'set-kasi', exchange: 'set-exchange' };
+                        for (let key in sMap) {
+                            if (saved.settings[key] !== undefined) {
+                                document.getElementById(sMap[key]).value = saved.settings[key];
+                            }
+                        }
+                    }
+                    if (saved.history) {
+                        this.history = saved.history;
+                    }
+                }
+                this.calc();
+                this.updateIntervalDropdown();
+            },
+
+            downloadBackup(memo) {
+                const dataStr = localStorage.getItem('pachitaku_v6_data_v2');
+                let masterDataText = "========================================\n" +
+                                     " ファミスタ攻略ツール - 稼働マスターデータ\n" +
+                                     "========================================\n\n";
+
+                masterDataText += "【① 最終累計入力数値】\n";
+                const v = {};
+                this.fields.forEach(f => v[f.id] = parseFloat(document.getElementById(f.id).value) || 0);
+                this.fields.forEach(f => {
+                    masterDataText += `${f.name}: ${v[f.id]}\n`;
+                });
+                masterDataText += "\n";
+
+                masterDataText += "【② 最終算出データ】\n";
+                const s = this.getSettings();
+                const totalV = v.v_2r + v.v_4r + v.v_9r;
+                const totalR = (v.v_2r * 2) + (v.v_4r * 4) + (v.v_9r * 9);
+                const actAvgR = totalV > 0 ? totalR / totalV : 0;
+                const avgOutJade = s.avgR * v.r_out;
+                const gapJade = (totalR * v.r_out) - (totalV * avgOutJade);
+                const finalRes = this.calcMetricsObject(v, s);
+
+                const safeDivPct = (num, den) => den > 0 ? ((num / den) * 100).toFixed(1) + "%" : "0.0%";
+                const safeDivProb = (num, den) => den > 0 ? `1 / ${(num / den).toFixed(1)}` : "-";
+
+                const nmRouteCount = v.total_pick - v.sp_select;
+                const curveSelectCount = nmRouteCount - v.st_select;
+
+                masterDataText += `拾い率: ${safeDivPct(v.total_pick, v.total_rot)}\n`;
+                masterDataText += `SPルート選択率: ${safeDivPct(v.sp_select, v.total_pick)}\n`;
+                masterDataText += `ストレート選択率: ${safeDivPct(v.st_select, nmRouteCount)}\n`;
+                masterDataText += `ストレート選択時回転体突入率: ${safeDivPct(v.st_rot_in, v.st_select - v.st_hr_in)}\n`;
+                masterDataText += `変化球選択時強打率: ${safeDivPct(v.ch_strong, curveSelectCount)}\n`;
+                masterDataText += `変化球強打時回転体突入率: ${safeDivPct(v.ch_rot_in, v.ch_strong - v.ch_hr_in)}\n`;
+                masterDataText += `ノーマルルート選択時総回転体突入率: ${safeDivPct(v.st_rot_in + v.ch_rot_in, v.total_pick - v.sp_select - v.st_hr_in - v.ch_hr_in)}\n`;
+                masterDataText += `SPルート選択時回転体当選率: ${safeDivProb(v.sp_select, v.sp_v_in)}\n`;
+                masterDataText += `ノーマルルート選択時回転体当選率: ${safeDivProb(v.st_rot_in + v.ch_rot_in, v.nm_total_v)}\n`;
+                masterDataText += `推定役モノ確率: ${finalRes.estYakuProb > 0 ? "1/" + finalRes.estYakuProb.toFixed(1) : "-"}\n`;
+                masterDataText += `推定大当り確率: ${finalRes.estProb > 0 ? "1/" + finalRes.estProb.toFixed(1) : "-"}\n`;
+                masterDataText += `平均ラウンド数: ${actAvgR > 0 ? actAvgR.toFixed(2) + "R" : "-"}\n`;
+                masterDataText += `欠損/余剰: ${gapJade > 0 ? "+" : ""}${gapJade.toFixed(0)}玉\n\n`;
+
+                masterDataText += "【③ 区間別詳細データ】\n";
+                if (this.history && this.history.length > 0) {
+                    let prevV = null;
+                    this.history.forEach((h, i) => {
+                        const prevPick = i === 0 ? 0 : this.history[i - 1].totalPick;
+                        const label = prevPick === h.totalPick ? `${h.totalPick}個` : `${prevPick + 1}個～${h.totalPick}個`;
+                        masterDataText += `--- 区間${i+1} (${label}) ---\n`;
+                        masterDataText += `[コメント] ${h.comment || "なし"}\n`;
+                        const deltaV = {};
+                        this.fields.forEach(f => {
+                            deltaV[f.id] = h.v[f.id] - (prevV ? prevV[f.id] : 0);
+                        });
+                        const iRes = this.calcMetricsObject(deltaV, s);
+                        const iNmRouteCount = deltaV.total_pick - deltaV.sp_select;
+                        const iCurveSelectCount = iNmRouteCount - deltaV.st_select;
+
+                        masterDataText += `[拾い率] ${safeDivPct(deltaV.total_pick, deltaV.total_rot)} | [推定役モノ確率] ${iRes.estYakuProb > 0 ? "1/" + iRes.estYakuProb.toFixed(1) : "-"} | [推定大当り確率] ${iRes.estProb > 0 ? "1/" + iRes.estProb.toFixed(1) : "-"}\n`;
+                        masterDataText += `SP選択率: ${safeDivPct(deltaV.sp_select, deltaV.total_pick)} | ストレート選択率: ${safeDivPct(deltaV.st_select, iNmRouteCount)}\n`;
+                        masterDataText += `ストレート突入率: ${safeDivPct(deltaV.st_rot_in, deltaV.st_select - deltaV.st_hr_in)} | 変化球強打率: ${safeDivPct(deltaV.ch_strong, iCurveSelectCount)}\n`;
+                        masterDataText += `変化球突入率: ${safeDivPct(deltaV.ch_rot_in, deltaV.ch_strong - deltaV.ch_hr_in)} | ノーマル突入率: ${safeDivPct(deltaV.st_rot_in + deltaV.ch_rot_in, deltaV.total_pick - deltaV.sp_select - deltaV.st_hr_in - deltaV.ch_hr_in)}\n`;
+                        masterDataText += `SP当選率: ${safeDivProb(deltaV.sp_select, deltaV.sp_v_in)} | ノーマル当選率: ${safeDivProb(deltaV.st_rot_in + deltaV.ch_rot_in, deltaV.nm_total_v)}\n\n`;
+
+                        prevV = h.v;
+                    });
+                } else {
+                    masterDataText += "保存された区間データはありません。\n\n";
+                }
+
+                masterDataText += "【④ 本日の稼働メモ】\n";
+                masterDataText += (memo || "（入力なし）") + "\n\n";
+
+                masterDataText += "【⑤ 生データ（JSON）】\n";
+                if (dataStr) {
+                    try {
+                        const parsed = JSON.parse(dataStr);
+                        masterDataText += JSON.stringify(parsed, null, 2);
+                    } catch(e) {
+                        masterDataText += dataStr;
+                    }
+                } else {
+                    masterDataText += "生データなし";
+                }
+
+                const blob = new Blob([new Uint8Array([0xEF, 0xBB, 0xBF]), masterDataText], { type: 'text/plain;charset=utf-8' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                
+                const d = new Date();
+                const timeStr = `${d.getFullYear()}${(d.getMonth()+1).toString().padStart(2,'0')}${d.getDate().toString().padStart(2,'0')}_${d.getHours().toString().padStart(2,'0')}${d.getMinutes().toString().padStart(2,'0')}`;
+                a.download = `パチンコタクティクス_マスターデータ_${timeStr}.txt`;
+                
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            },
+
+            resetAll() {
+                const doBackup = confirm("ここまでのデータをバックアップしてリセットしますか？\n※「キャンセル」でバックアップなしのリセットに進みます");
+                if (doBackup) {
+                    const todayMemo = prompt("本日の稼働メモ（台の挙動、ネカセ、現場状況など）を入力してください", "") || "";
+                    this.downloadBackup(todayMemo);
+                    this.executeReset();
+                } else {
+                    if (confirm("バックアップせずにデータをリセットしてよろしいですか？\n※詳細設定は保持されます")) {
+                        this.executeReset();
+                    }
+                }
+            },
+            
+            executeReset() {
+                this.history = [];
+                this.fields.forEach(f => {
+                    const el = document.getElementById(f.id);
+                    if (el) el.value = "";
+                });
+                this.saveDataAndHistory();
+                this.calc();
+                this.updateCompareView();
+                this.updateIntervalDropdown();
+            }
+        };
+
+        app.init();
+    </script>
+</body>
+
+</html>
