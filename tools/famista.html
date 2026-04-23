@@ -9,35 +9,39 @@
     <link rel="icon" href="../favicon.png">
     <link rel="apple-touch-icon" href="../apple-touch-icon.png">
 
-    
+
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Jura:wght@400;600;700&family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
-    
+    <link
+        href="https://fonts.googleapis.com/css2?family=Jura:wght@400;600;700&family=Noto+Sans+JP:wght@400;500;700;900&display=swap"
+        rel="stylesheet">
+
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
             /* Theme E variables (Investigation Board) */
             --font-main: 'Noto Sans JP', sans-serif;
             --font-eng: 'Jura', sans-serif;
-            
+
             --bg-color: #d4a373;
             --body-bg-image: url('../corkboard_bg.png');
             --bg-panel: #FFFFFF;
-            
+
             --text-main: #333333;
             --text-sub: #555555;
-            
-            --accent-color: #b33939; /* Red pin/marker */
-            --accent-secondary: #227093; /* Blue marker */
+
+            --accent-color: #b33939;
+            /* Red pin/marker */
+            --accent-secondary: #227093;
+            /* Blue marker */
             --border-color: rgba(0, 0, 0, 0.15);
-            
+
             --board-bg: #1a2a24;
             --chalk-white: rgba(255, 255, 255, 0.9);
-            
+
             --shadow: 0 5px 15px rgba(0, 0, 0, 0.35);
-            
+
             --plus-red: #b33939;
             --minus-blue: #227093;
         }
@@ -57,13 +61,13 @@
         .blackboard-header {
             position: relative;
             width: 100%;
-            min-height: 140px; 
+            min-height: 140px;
             background-color: var(--board-bg);
-            background-image: 
-                radial-gradient(circle at 50% 50%, rgba(255,255,255,0.05) 0%, transparent 80%),
-                url('https://www.transparenttextures.com/patterns/dark-matter.png'); 
-            border-bottom: 8px solid #3d2b1f; 
-            box-shadow: inset 0 0 50px rgba(0,0,0,0.5), 0 4px 15px rgba(0,0,0,0.5);
+            background-image:
+                radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.05) 0%, transparent 80%),
+                url('https://www.transparenttextures.com/patterns/dark-matter.png');
+            border-bottom: 8px solid #3d2b1f;
+            box-shadow: inset 0 0 50px rgba(0, 0, 0, 0.5), 0 4px 15px rgba(0, 0, 0, 0.5);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -89,14 +93,14 @@
             letter-spacing: 0.15em;
             margin: 0;
             line-height: 1.1;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
         }
 
         .header-center .subtitle {
             font-size: clamp(0.9rem, 3.5vw, 1.2rem);
             font-weight: 700;
             color: var(--chalk-white);
-            margin-top: 5px; 
+            margin-top: 5px;
             opacity: 0.8;
             letter-spacing: 0.05em;
         }
@@ -120,6 +124,7 @@
             font-weight: bold;
             opacity: 0.8;
         }
+
         .back-to-top:hover {
             background: rgba(255, 255, 255, 0.2);
             opacity: 1;
@@ -142,10 +147,12 @@
             font-size: 0.7rem;
             opacity: 0.8;
         }
+
         .reset-btn:hover {
             background: rgba(179, 57, 57, 0.3);
             opacity: 1;
         }
+
         .reset-btn:hover {
             background: rgba(255, 255, 255, 0.3);
         }
@@ -156,7 +163,7 @@
             max-width: 800px;
             margin: 30px auto;
             background: var(--bg-panel);
-            border: 1px solid rgba(0,0,0,0.1);
+            border: 1px solid rgba(0, 0, 0, 0.1);
             border-radius: 2px;
             box-shadow: var(--shadow);
             position: relative;
@@ -175,15 +182,16 @@
             height: 10px;
             border-radius: 50%;
             background: radial-gradient(circle at 30% 30%, #ff5252, #b33939);
-            box-shadow: 1px 2px 3px rgba(0,0,0,0.3), inset -1px -2px 3px rgba(0,0,0,0.2);
+            box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.3), inset -1px -2px 3px rgba(0, 0, 0, 0.2);
             z-index: 5;
         }
 
         .tabs {
             display: flex;
-            background: rgba(0,0,0,0.03);
-            border-bottom: 2px dashed rgba(0,0,0,0.1);
-            padding-top: 20px; /* space for pin */
+            background: rgba(0, 0, 0, 0.03);
+            border-bottom: 2px dashed rgba(0, 0, 0, 0.1);
+            padding-top: 20px;
+            /* space for pin */
         }
 
         .tab {
@@ -219,8 +227,15 @@
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(5px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(5px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .input-group {
@@ -270,8 +285,15 @@
             text-align: center;
         }
 
-        .val-plus { color: var(--plus-red); font-weight: bold; }
-        .val-minus { color: var(--minus-blue); font-weight: bold; }
+        .val-plus {
+            color: var(--plus-red);
+            font-weight: bold;
+        }
+
+        .val-minus {
+            color: var(--minus-blue);
+            font-weight: bold;
+        }
 
         .main-val {
             font-family: var(--font-eng);
@@ -295,7 +317,7 @@
         }
 
         .data-table th {
-            background: rgba(0,0,0,0.03);
+            background: rgba(0, 0, 0, 0.03);
             width: 60%;
             color: var(--text-main);
             font-weight: 700;
@@ -331,7 +353,7 @@
             width: 100%;
             box-sizing: border-box;
         }
-        
+
         .box-info {
             background: #f1f3f5;
             border: 1px solid var(--border-color);
@@ -361,10 +383,10 @@
 
     <header class="blackboard-header">
         <a href="../index.html" class="back-to-top">TOPへ戻る</a>
-        
+
         <div class="header-center chalk-effect">
             <h1>FAMISTA TOOL</h1>
-            <div class="subtitle">ハネモノファミスタ 期待値・データ管理ツール</div>
+            <div class="subtitle">ハネモノファミスタ 期待値計算/攻略ツール</div>
         </div>
 
         <button class="reset-btn" onclick="app.resetAll()">データをリセット</button>
@@ -420,7 +442,7 @@
 
         <div id="compare" class="content-section">
             <div class="section-header">■ 区間比較（時系列推移）</div>
-            
+
             <select id="compare-metric-select" onchange="app.updateCompareView()"
                 style="width:100%; padding: 10px; font-size: 16px; margin-bottom: 15px; border-radius: 4px; border: 1px solid #ccc; font-family: var(--font-main);">
             </select>
@@ -436,20 +458,21 @@
                     <tbody id="compare-list" style="text-align: center;"></tbody>
                 </table>
             </div>
-            <div style="background: white; padding: 10px; border-radius: 4px; border: 1px solid var(--border-color); margin-bottom: 30px;">
+            <div
+                style="background: white; padding: 10px; border-radius: 4px; border: 1px solid var(--border-color); margin-bottom: 30px;">
                 <canvas id="compareChart"></canvas>
             </div>
 
             <div class="section-header">■ 区間詳細（特定の区間データ）</div>
-            
+
             <select id="interval-detail-select" onchange="app.updateIntervalDetailView()"
                 style="width:100%; padding: 10px; font-size: 16px; margin-bottom: 15px; border-radius: 4px; border: 1px solid #ccc; font-family: var(--font-main);">
             </select>
-            
+
             <div style="margin-top: 15px;">
                 <div style="font-weight: bold; margin-bottom: 10px; color: var(--accent-secondary);">■ 推定確率・欠損/余剰</div>
                 <div id="interval-probs" style="margin-bottom: 20px;"></div>
-                
+
                 <div style="font-weight: bold; margin-bottom: 10px; color: var(--accent-secondary);">■ 詳細分析データ</div>
                 <table class="data-table">
                     <tbody id="interval-details-table"></tbody>
@@ -755,7 +778,7 @@
                     document.getElementById('compareChart').style.display = 'none';
                     return;
                 }
-                
+
                 if (theadTr) {
                     theadTr.innerHTML = `
                         <th style="width: 33.3%; text-align: center;">区間(拾い)</th>
@@ -887,7 +910,7 @@
                 if (!detailSelect) return;
                 const previousDetailValue = detailSelect.value;
                 detailSelect.innerHTML = '';
-                
+
                 for (let i = 0; i < this.history.length; i++) {
                     const h = this.history[i];
                     const prevPick = i === 0 ? 0 : this.history[i - 1].totalPick;
@@ -897,13 +920,13 @@
                     opt.innerText = label;
                     detailSelect.appendChild(opt);
                 }
-                
+
                 if (previousDetailValue && detailSelect.querySelector(`option[value="${previousDetailValue}"]`)) {
                     detailSelect.value = previousDetailValue;
                 } else if (this.history.length > 0) {
                     detailSelect.value = this.history.length - 1;
                 }
-                
+
                 this.updateIntervalDetailView();
             },
 
@@ -911,32 +934,32 @@
                 const select = document.getElementById('interval-detail-select');
                 const tBody = document.getElementById('interval-details-table');
                 const probsDiv = document.getElementById('interval-probs');
-                
+
                 if (!select || !tBody || !probsDiv) return;
-                
+
                 if (this.history.length === 0 || select.options.length === 0) {
                     tBody.innerHTML = '<tr><td colspan="2" style="text-align:center; padding: 20px;">区間データがありません。</td></tr>';
                     probsDiv.innerHTML = '';
                     return;
                 }
-                
+
                 const index = parseInt(select.value, 10);
                 const currentH = this.history[index];
                 const prevH = index > 0 ? this.history[index - 1] : null;
-                
+
                 const deltaV = {};
                 this.fields.forEach(f => {
                     deltaV[f.id] = currentH.v[f.id] - (prevH ? prevH.v[f.id] : 0);
                 });
-                
+
                 const s = this.getSettings();
-                
+
                 const safeDivPct = (num, den) => den > 0 ? ((num / den) * 100).toFixed(1) + "%" : "0.0%";
                 const safeDivProb = (num, den) => den > 0 ? `1 / ${(num / den).toFixed(1)}` : "-";
-                
+
                 const nmRouteCount = deltaV.total_pick - deltaV.sp_select;
                 const curveSelectCount = nmRouteCount - deltaV.st_select;
-                
+
                 const details = [
                     ["拾い率", safeDivPct(deltaV.total_pick, deltaV.total_rot)],
                     ["SPルート選択率", safeDivPct(deltaV.sp_select, deltaV.total_pick)],
@@ -948,21 +971,21 @@
                     ["SPルート選択時<br>回転体当選率", safeDivProb(deltaV.sp_select, deltaV.sp_v_in)],
                     ["ノーマルルート選択時<br>回転体当選率", safeDivProb(deltaV.st_rot_in + deltaV.ch_rot_in, deltaV.nm_total_v)]
                 ];
-                
+
                 tBody.innerHTML = details.map(d => `<tr><th style="width: 50%;">${d[0]}</th><td style="width: 50%; font-family:var(--font-eng); font-weight:bold;">${d[1]}</td></tr>`).join('');
-                
+
                 const resObj = this.calcMetricsObject(deltaV, s);
-                
+
                 const totalV = deltaV.v_2r + deltaV.v_4r + deltaV.v_9r;
                 const totalR = (deltaV.v_2r * 2) + (deltaV.v_4r * 4) + (deltaV.v_9r * 9);
                 const actAvgR = totalV > 0 ? totalR / totalV : 0;
-                
+
                 const avgOutJade = s.avgR * deltaV.r_out;
                 const gapJade = (totalR * deltaV.r_out) - (totalV * avgOutJade);
-                
+
                 const gapColor = gapJade > 0 ? 'var(--plus-red)' : (gapJade < 0 ? 'var(--minus-blue)' : 'var(--text-main)');
                 const gapSign = gapJade > 0 ? '+' : '';
-                
+
                 probsDiv.innerHTML = `
                     <div style="display: flex; justify-content: center; gap: 8px; flex-wrap: wrap;">
                         <div class="box-info">役モノ<br><span style="font-family:var(--font-eng);">1/${resObj.estYakuProb > 0 ? resObj.estYakuProb.toFixed(1) : '-'}</span></div>
@@ -1062,8 +1085,8 @@
             downloadBackup(memo) {
                 const dataStr = localStorage.getItem('pachitaku_v6_data_v2');
                 let masterDataText = "========================================\n" +
-                                     " ファミスタ攻略ツール - 稼働マスターデータ\n" +
-                                     "========================================\n\n";
+                    " ファミスタ攻略ツール - 稼働マスターデータ\n" +
+                    "========================================\n\n";
 
                 masterDataText += "【① 最終累計入力数値】\n";
                 const v = {};
@@ -1108,7 +1131,7 @@
                     this.history.forEach((h, i) => {
                         const prevPick = i === 0 ? 0 : this.history[i - 1].totalPick;
                         const label = prevPick === h.totalPick ? `${h.totalPick}個` : `${prevPick + 1}個～${h.totalPick}個`;
-                        masterDataText += `--- 区間${i+1} (${label}) ---\n`;
+                        masterDataText += `--- 区間${i + 1} (${label}) ---\n`;
                         masterDataText += `[コメント] ${h.comment || "なし"}\n`;
                         const deltaV = {};
                         this.fields.forEach(f => {
@@ -1138,7 +1161,7 @@
                     try {
                         const parsed = JSON.parse(dataStr);
                         masterDataText += JSON.stringify(parsed, null, 2);
-                    } catch(e) {
+                    } catch (e) {
                         masterDataText += dataStr;
                     }
                 } else {
@@ -1149,11 +1172,11 @@
                 const url = URL.createObjectURL(blob);
                 const a = document.createElement('a');
                 a.href = url;
-                
+
                 const d = new Date();
-                const timeStr = `${d.getFullYear()}${(d.getMonth()+1).toString().padStart(2,'0')}${d.getDate().toString().padStart(2,'0')}_${d.getHours().toString().padStart(2,'0')}${d.getMinutes().toString().padStart(2,'0')}`;
+                const timeStr = `${d.getFullYear()}${(d.getMonth() + 1).toString().padStart(2, '0')}${d.getDate().toString().padStart(2, '0')}_${d.getHours().toString().padStart(2, '0')}${d.getMinutes().toString().padStart(2, '0')}`;
                 a.download = `パチンコタクティクス_マスターデータ_${timeStr}.txt`;
-                
+
                 document.body.appendChild(a);
                 a.click();
                 document.body.removeChild(a);
@@ -1172,7 +1195,7 @@
                     }
                 }
             },
-            
+
             executeReset() {
                 this.history = [];
                 this.fields.forEach(f => {
