@@ -5,6 +5,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>PACHINKO TACTICS - ファミスタ攻略ツール</title>
+    <link rel="canonical" href="https://pachinko-tactics.com/tools/famista.html">
+    <link rel="icon" href="../favicon.png">
+    <link rel="apple-touch-icon" href="../apple-touch-icon.png">
+
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -79,7 +83,7 @@
 
         .header-center h1 {
             font-family: var(--font-eng);
-            font-size: clamp(2rem, 6vw, 3rem);
+            font-size: clamp(2.2rem, 8vw, 3.8rem);
             font-weight: 900;
             color: var(--chalk-white);
             letter-spacing: 0.15em;
@@ -89,7 +93,7 @@
         }
 
         .header-center .subtitle {
-            font-size: clamp(0.85rem, 3vw, 1rem);
+            font-size: clamp(0.9rem, 3.5vw, 1.2rem);
             font-weight: 700;
             color: var(--chalk-white);
             margin-top: 5px; 
@@ -97,32 +101,50 @@
             letter-spacing: 0.05em;
         }
 
-        .header-actions {
-            margin-top: 15px;
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            align-items: center;
-        }
-
-        .header-actions a {
+        .back-to-top {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            z-index: 20;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
             color: #fff;
+            padding: 4px 8px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            transition: all 0.2s;
             font-weight: bold;
-            text-decoration: underline;
-            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        .back-to-top:hover {
+            background: rgba(255, 255, 255, 0.2);
+            opacity: 1;
         }
 
         .reset-btn {
-            background: rgba(255, 255, 255, 0.2);
+            position: absolute;
+            bottom: 8px;
+            right: 10px;
+            z-index: 20;
+            background: rgba(179, 57, 57, 0.15);
             color: #fff;
-            border: 1px solid rgba(255, 255, 255, 0.4);
-            padding: 6px 12px;
+            border: 1px solid rgba(179, 57, 57, 0.4);
+            padding: 4px 8px;
             border-radius: 4px;
             font-weight: bold;
             cursor: pointer;
             transition: all 0.2s;
             font-family: var(--font-main);
-            font-size: 0.9rem;
+            font-size: 0.7rem;
+            opacity: 0.8;
+        }
+        .reset-btn:hover {
+            background: rgba(179, 57, 57, 0.3);
+            opacity: 1;
         }
         .reset-btn:hover {
             background: rgba(255, 255, 255, 0.3);
@@ -338,14 +360,14 @@
     </svg>
 
     <header class="blackboard-header">
+        <a href="../index.html" class="back-to-top">TOPへ戻る</a>
+        
         <div class="header-center chalk-effect">
             <h1>FAMISTA TOOL</h1>
             <div class="subtitle">ハネモノファミスタ 期待値・データ管理ツール</div>
-            <div class="header-actions">
-                <a href="../index.html">TOPへ戻る</a>
-                <button class="reset-btn" onclick="app.resetAll()">データをリセット</button>
-            </div>
         </div>
+
+        <button class="reset-btn" onclick="app.resetAll()">データをリセット</button>
     </header>
 
     <div class="container">
