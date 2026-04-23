@@ -5,6 +5,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>PACHINKO TACTICS - パチンコは、戦略で面白くなる。</title>
+  <link rel="canonical" href="https://pachinko-tactics.com/">
+  <link rel="icon" href="favicon.png">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -250,6 +254,31 @@
     .tab-nav li {
       flex: 1;
       text-align: center;
+      position: relative;
+    }
+
+    .tab-nav button.disabled {
+      cursor: default;
+      opacity: 0.4;
+      pointer-events: none;
+    }
+
+    .coming-soon-badge {
+      position: absolute;
+      top: 4px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: var(--accent-color);
+      color: #fff;
+      font-size: 0.55rem;
+      padding: 1px 4px;
+      border-radius: 2px;
+      white-space: nowrap;
+      font-weight: 900;
+      z-index: 5;
+      pointer-events: none;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+      font-family: var(--font-eng);
     }
 
     .tab-nav button {
@@ -504,6 +533,12 @@
       overflow: hidden;
     }
 
+    .card-thumb-container img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
     .card-desc {
       font-size: 0.95rem;
       color: var(--text-sub);
@@ -552,7 +587,7 @@
         <!-- Center Content -->
         <div class="header-center chalk-effect">
           <h1>PACHINKO TACTICS</h1>
-          <div class="subtitle">パチンコは、戦略で面白くなる。</div>
+          <div class="subtitle">～パチンコ タクティクス～</div>
         </div>
       </div>
 
@@ -573,12 +608,14 @@
         </button>
       </li>
       <li>
-        <button class="tab-btn" data-target="tab-info">
+        <span class="coming-soon-badge">Coming soon</span>
+        <button class="tab-btn disabled" data-target="tab-info">
           <i class="fa-solid fa-lightbulb"></i> 攻略考察
         </button>
       </li>
       <li>
-        <button class="tab-btn" data-target="tab-article">
+        <span class="coming-soon-badge">Coming soon</span>
+        <button class="tab-btn disabled" data-target="tab-article">
           <i class="fa-solid fa-pen-nib"></i> 記事
         </button>
       </li>
@@ -591,8 +628,6 @@
       <select id="machine-filter" class="select-cyber filter-dropdown">
         <option value="all">全機種</option>
         <option value="famista">ハネモノファミスタ</option>
-        <option value="umi">PA大海物語5 With アグネス・ラム</option>
-        <option value="queen">PフィーバークィーンII</option>
       </select>
       <select id="genre-filter" class="select-cyber filter-dropdown" style="display: none;">
         <option value="all">全て</option>
@@ -613,15 +648,15 @@
         <div class="vr-list">
           <a href="#" class="list-item">
             <div class="item-content">
-              <span class="badge">ツール更新</span>
-              <div class="item-title">ハネモノファミスタ 期待値計算ツール公開</div>
-              <div class="item-meta">2026/04/19</div>
+              <span class="badge">攻略ツール更新</span>
+              <div class="item-title">「ハネモノファミスタ 期待値計算/攻略ツール」を公開しました。</div>
+              <div class="item-meta">2026/04/24</div>
             </div>
           </a>
           <a href="#" class="list-item">
             <div class="item-content">
               <span class="badge" style="background:var(--accent-color); color:#fff;">サイト公開</span>
-              <div class="item-title">PACHINKO TACTICS ベータ版をリリースしました</div>
+              <div class="item-title">PACHINKO TACTICS をリリースしました。</div>
               <div class="item-meta">2026/04/10</div>
             </div>
           </a>
@@ -629,18 +664,49 @@
       </div>
 
       <div class="panel">
-        <h2 class="section-title"><i class="fa-solid fa-shield-halved"></i> サイトポリシー</h2>
-        <p style="font-size:0.9rem; margin-bottom:10px;">当サイト「PACHINKO
-          TACTICS」は、論理的なデータ分析と期待値計算を用い、パチンコ遊技を戦略的に楽しむためのツール・情報を提供します。</p>
-        <p style="font-size:0.9rem;">※提供する数値は理論値であり、勝率や見込み利益を保証するものではありません。遊技は自己責任で行ってください。</p>
+        <h2 class="section-title"><i class="fa-solid fa-shield-halved"></i> PACHINKO TACTICSの理念</h2>
+        <p style="font-size:0.95rem; font-weight:700; margin-bottom:15px; color:var(--accent-color);">
+          「パチンコは、戦略（タクティクス）で面白くなる。」</p>
+
+        <p style="font-size:0.9rem; margin-bottom:15px;">
+          現在のパチンコは、美しい映像とギミックによる最高峰のアトラクション体験を提供してくれます。しかし、パチンコ本来の面白さは「自分の力（技術介入）と知恵（戦略）でお金を増やすこと」にあると私は考えています。</p>
+        <p style="font-size:0.9rem; margin-bottom:15px;">PACHINKO
+          TACTICS（パチタク）では、その後押しをするべく、ハネモノを中心とした攻略ツールや、実戦の経験・データから導き出した攻略考察を提供します。</p>
+
+        <h3 style="font-size:1rem; margin-bottom:8px;">■ 発信のスタンス</h3>
+        <p style="font-size:0.9rem; margin-bottom:15px;">
+          当サイトが発信するのは、メーカー公表値のような無機質で「完璧な正解」ではありません。実戦経験と蓄積したデータを根拠に、「100%の正解ではないかもしれないが、私はこう睨んでいる」という、現場の熱量を持った独自の考察をぶつけていきます。
+        </p>
+
+        <h3 style="font-size:1rem; margin-bottom:8px;">■ ツールの役割と「区間」へのこだわり</h3>
+        <p style="font-size:0.9rem; margin-bottom:15px;">
+          当サイトの攻略ツールは、実戦から導き出した独自ロジックに基づいています。累計の平均値だけでは見抜けない台の「ムラ」や「真の実力」を、中央値である「区間データ」を可視化することで判別します。記憶や直感という曖昧なものに頼らず、数値による確かな「根拠」を提供することがツールの役割です。
+        </p>
+
+        <h3 style="font-size:1rem; margin-bottom:8px;">■ 最終判断は「あなた自身」に</h3>
+        <p style="font-size:0.9rem; margin-bottom:15px;">
+          当サイトが提供するツールや考察は、あくまであなたの実戦をサポートするためのものです。最終的にその数値を見て「粘るか、引くか」の判断を下すのはユーザー自身であり、当サイトが勝率や利益を絶対的に保証するものではありません。遊技は自己責任のもと、ご自身の戦略で楽しんでください。
+        </p>
+
+        <h3 style="font-size:1rem; margin-bottom:8px;">■ 運営スタンス</h3>
+        <p style="font-size:0.9rem;">
+          当サイトは、パチンコ攻略をより多くの人により楽しんでもらうことを目的としているため、すべて無料で提供しています。今後、サイトの維持と開発のために広告を配置する予定ではおりますが、皆様の攻略体験を邪魔しない範囲にとどめますので、ご理解いただけますと幸いです。
+        </p>
       </div>
 
       <div class="panel">
-        <h2 class="section-title"><i class="fa-solid fa-user-astronaut"></i> 管理人紹介・お問い合わせ</h2>
-        <p style="font-size:0.9rem; margin-bottom:15px;">
-          データ分析とUI/UX設計を愛するデベロッパー。皆様からのフィードバックや不具合報告、追加希望機種などはX(Twitter)アカウントまでお寄せください。</p>
-        <a href="https://twitter.com/YourAccount" target="_blank" class="social-link" rel="noopener">
-          <i class="fa-brands fa-x-twitter"></i> @YourAccount へ連絡する
+        <h2 class="section-title"><i class="fa-solid fa-user-astronaut"></i> サイト管理人【ワオ(wow)】のプロフィール</h2>
+        <div style="display:flex; gap:20px; align-items:flex-start; margin-bottom:20px;">
+          <img src="twitter_icon_themeE.png" alt="管理人アイコン"
+            style="width:80px; height:80px; border-radius:50%; border:2px solid var(--accent-color); flex-shrink:0;">
+          <div>
+            <p style="font-size:0.9rem; margin-bottom:10px;">
+              ハネモノ・海物語・甘デジを主戦場とする歴15年のパチンコ攻略好き。実戦経験を詰め込んだ攻略ツールと、現場のリアルな考察情報を発信中。少しでも皆様の立ち回りの手がかりになれば嬉しいです。</p>
+            <p style="font-size:0.9rem;">皆様からのフィードバックや不具合報告、追加希望機種などは下記Xアカウントまでお寄せください。</p>
+          </div>
+        </div>
+        <a href="https://x.com/wow_pachi_122" target="_blank" class="social-link" rel="noopener">
+          <i class="fa-brands fa-x-twitter"></i> @wow_pachi_122 へ連絡する
         </a>
       </div>
     </section>
@@ -648,19 +714,16 @@
     <!-- 2. TOOL SECTION -->
     <section id="tab-tool" class="tab-pane">
       <a href="./tools/famista.html" class="content-card" data-machine="famista">
-        <div class="card-header">ハネモノファミスタ 期待値・データ管理ツール</div>
+        <div class="card-header">ハネモノファミスタ 期待値計算/攻略ツール</div>
         <div class="card-body">
-          <div class="card-thumb-container">NO IMAGE</div>
-          <div class="card-desc">V入賞率・ラウンド振り分けからリアルタイム期待値を算出し、収支ログを自動作成する最強の相棒。</div>
+          <div class="card-thumb-container">
+            <img src="famisuta.tool-1.png" alt="ハネモノファミスタ 期待値計算/攻略ツール">
+          </div>
+
+          <div class="card-desc">回転体突入率などの数値を入力すれば、リアルタイムで期待値と優秀台を見抜く為の数値を算出!
+            更に上ブレ、下ブレを判定するのに役立つ『区間分析』を完備。メモ機能も充実してるので、稼働後の振り返りにもご活用いただけます。
+          </div>
           <div class="card-meta"><span class="badge">稼働中</span> Ver 1.2.0</div>
-        </div>
-      </a>
-      <a href="#" class="content-card" style="opacity: 0.6;" data-machine="umi">
-        <div class="card-header">P大海物語5 期待値シミュレーター</div>
-        <div class="card-body">
-          <div class="card-thumb-container">NO IMAGE</div>
-          <div class="card-desc">通常回転数・出玉増減から精緻なボーダーラインと時給を計算します。(Currently in development)</div>
-          <div class="card-meta"><span class="badge" style="background:#555;color:#ddd;">開発中</span> 準備中</div>
         </div>
       </a>
     </section>
