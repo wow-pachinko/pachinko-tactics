@@ -739,8 +739,8 @@
                     ["変化球選択時<br>強打率", safeDivPct(v.ch_strong, curveSelectCount)],
                     ["変化球強打時<br>回転体突入率", safeDivPct(v.ch_rot_in, v.ch_strong - v.ch_hr_in)],
                     ["ノーマルルート選択時<br>総回転体突入率", safeDivPct(v.st_rot_in + v.ch_rot_in, v.total_pick - v.sp_select - v.st_hr_in - v.ch_hr_in)],
-                    ["SPルート選択時<br>回転体当選率", safeDivProb(v.sp_select, v.sp_v_in)],
-                    ["ノーマルルート選択時<br>回転体当選率", safeDivProb(v.st_rot_in + v.ch_rot_in, v.nm_total_v)]
+                    ["SPルート<br>回転体当選率", safeDivProb(v.sp_select, v.sp_v_in)],
+                    ["ノーマルルート<br>回転体当選率", safeDivProb(v.st_rot_in + v.ch_rot_in, v.nm_total_v)]
                 ];
                 document.getElementById('res-details-table').innerHTML = details.map(d => `<tr><th>${d[0]}</th><td style="font-family:var(--font-eng); font-weight:bold;">${d[1]}</td></tr>`).join('');
 
@@ -1141,8 +1141,8 @@
                 masterDataText += `変化球選択時強打率: ${safeDivPct(v.ch_strong, curveSelectCount)}\n`;
                 masterDataText += `変化球強打時回転体突入率: ${safeDivPct(v.ch_rot_in, v.ch_strong - v.ch_hr_in)}\n`;
                 masterDataText += `ノーマルルート選択時総回転体突入率: ${safeDivPct(v.st_rot_in + v.ch_rot_in, v.total_pick - v.sp_select - v.st_hr_in - v.ch_hr_in)}\n`;
-                masterDataText += `SPルート選択時回転体当選率: ${safeDivProb(v.sp_select, v.sp_v_in)}\n`;
-                masterDataText += `ノーマルルート選択時回転体当選率: ${safeDivProb(v.st_rot_in + v.ch_rot_in, v.nm_total_v)}\n`;
+                masterDataText += `SPルート回転体当選率: ${safeDivProb(v.sp_select, v.sp_v_in)}\n`;
+                masterDataText += `ノーマルルート回転体当選率: ${safeDivProb(v.st_rot_in + v.ch_rot_in, v.nm_total_v)}\n`;
                 masterDataText += `推定役モノ確率: ${finalRes.estYakuProb > 0 ? "1/" + finalRes.estYakuProb.toFixed(1) : "-"}\n`;
                 masterDataText += `推定大当り確率: ${finalRes.estProb > 0 ? "1/" + finalRes.estProb.toFixed(1) : "-"}\n`;
                 masterDataText += `平均ラウンド数: ${actAvgR > 0 ? actAvgR.toFixed(2) + "R" : "-"}\n`;
