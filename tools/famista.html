@@ -368,6 +368,22 @@
             font-size: 16px;
             color: var(--text-main);
         }
+
+        .reset-defaults-btn {
+            background: #fff;
+            color: var(--accent-color);
+            border: 1px solid var(--accent-color);
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .reset-defaults-btn:hover {
+            background: rgba(179, 57, 57, 0.1);
+        }
     </style>
 </head>
 
@@ -481,20 +497,26 @@
         </div>
 
         <div id="settings" class="content-section">
-            <div style="font-weight: bold; margin-bottom: 10px; color: var(--accent-secondary);">■ 基本設定</div>
-            <div class="input-group"><label>SP入賞率<br>(1/〇)</label><input type="number" id="set-sp-rate" value="3"
-                    onchange="app.calc()"></div>
-            <div class="input-group"><label>ノーマル入賞率<br>(1/〇)</label><input type="number" id="set-nm-rate" value="8"
-                    onchange="app.calc()"></div>
-            <div class="input-group"><label>平均ラウンド数<br>(理論上の振り分け)</label><input type="number" id="set-avg-r" value="5.0"
-                    onchange="app.calc()"></div>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                <div style="font-weight: bold; color: var(--accent-secondary);">■ 基本設定</div>
+                <button class="reset-defaults-btn" onclick="app.resetBasicSettings()">デフォルトに戻す</button>
+            </div>
+            <div class="input-group"><label>SPルート回転体当選率<br>(1/〇)</label><input type="number" id="set-sp-rate"
+                    value="3.1" onchange="app.calc()"></div>
+            <div class="input-group"><label>ノーマルルート回転体当選率<br>(1/〇)</label><input type="number" id="set-nm-rate"
+                    value="4.1" onchange="app.calc()"></div>
+            <div class="input-group"><label>平均ラウンド数<br>(理論上の振り分け)</label><input type="number" id="set-avg-r"
+                    value="5.16" onchange="app.calc()"></div>
             <div class="input-group"><label>貸玉<br>(1000円あたりの玉数)</label><input type="number" id="set-kasi" value="250"
                     onchange="app.calc()"></div>
             <div class="input-group"><label>換金率<br>(1玉あたりの換金額)</label><input type="number" id="set-exchange" value="4.0"
                     onchange="app.calc()"></div>
 
-            <div style="font-weight: bold; margin-top: 25px; margin-bottom: 10px; color: var(--accent-secondary);">■
-                各種項目の基準値設定</div>
+            <div
+                style="display: flex; justify-content: space-between; align-items: center; margin-top: 25px; margin-bottom: 10px;">
+                <div style="font-weight: bold; color: var(--accent-secondary);">■ 各種項目の基準値設定</div>
+                <button class="reset-defaults-btn" onclick="app.resetTargetSettings()">デフォルトに戻す</button>
+            </div>
             <div id="settings-targets-container"></div>
         </div>
     </div>
@@ -522,17 +544,17 @@
             ],
 
             metricsConfig: [
-                { id: "pickRate", name: "拾い率", type: "pct", lowerIsBetter: false },
-                { id: "spSelectRate", name: "SPルート選択率", type: "pct", lowerIsBetter: false },
-                { id: "straightSelectRate", name: "ストレート選択率", type: "pct", lowerIsBetter: false },
-                { id: "straightRotInRate", name: "ストレート選択時回転体突入率", type: "pct", lowerIsBetter: false },
-                { id: "curveStrongRate", name: "変化球選択時強打率", type: "pct", lowerIsBetter: false },
-                { id: "curveRotInRate", name: "変化球強打時回転体突入率", type: "pct", lowerIsBetter: false },
-                { id: "nmTotalRotInRate", name: "ノーマルルート選択時総回転体突入率", type: "pct", lowerIsBetter: false },
-                { id: "spWinRate", name: "SPルート選択時回転体当選率", type: "prob", lowerIsBetter: true },
-                { id: "nmWinRate", name: "ノーマルルート選択時回転体当選率", type: "prob", lowerIsBetter: true },
-                { id: "estYakuProb", name: "推定役モノ確率", type: "prob", lowerIsBetter: true },
-                { id: "estProb", name: "推定大当り確率", type: "prob", lowerIsBetter: true },
+                { id: "pickRate", name: "拾い率", type: "pct", lowerIsBetter: false, defaultVal: 45 },
+                { id: "spSelectRate", name: "SPルート選択率", type: "pct", lowerIsBetter: false, defaultVal: 10 },
+                { id: "straightSelectRate", name: "ストレート選択率", type: "pct", lowerIsBetter: false, defaultVal: 20 },
+                { id: "straightRotInRate", name: "ストレート選択時回転体突入率", type: "pct", lowerIsBetter: false, defaultVal: 35 },
+                { id: "curveStrongRate", name: "変化球選択時強打率", type: "pct", lowerIsBetter: false, defaultVal: 28 },
+                { id: "curveRotInRate", name: "変化球強打時回転体突入率", type: "pct", lowerIsBetter: false, defaultVal: 40 },
+                { id: "nmTotalRotInRate", name: "ノーマルルート選択時総回転体突入率", type: "pct", lowerIsBetter: false, defaultVal: 17 },
+                { id: "spWinRate", name: "SPルート回転体当選率", type: "prob", lowerIsBetter: true, defaultVal: 3.1 },
+                { id: "nmWinRate", name: "ノーマルルート回転体当選率", type: "prob", lowerIsBetter: true, defaultVal: 4.1 },
+                { id: "estYakuProb", name: "推定役モノ確率", type: "prob", lowerIsBetter: true, defaultVal: 13 },
+                { id: "estProb", name: "推定大当り確率", type: "prob", lowerIsBetter: true, defaultVal: 29 },
                 { id: "comment", name: "コメント", type: "text" }
             ],
             history: [],
@@ -565,8 +587,9 @@
                 this.metricsConfig.forEach(m => {
                     if (m.type === 'text') return;
                     const unit = m.type === 'pct' ? '%' : '分母';
+                    const defVal = m.defaultVal !== undefined ? m.defaultVal : '';
                     html += `<div class="input-group"><label>${m.name}<br>(${unit})</label>
-                             <input type="number" id="target-${m.id}" value="" step="0.1" onchange="app.saveDataAndHistory(); app.updateCompareView();" placeholder="目標値"></div>`;
+                             <input type="number" id="target-${m.id}" value="${defVal}" step="0.1" onchange="app.saveDataAndHistory(); app.updateCompareView();" placeholder="目標値"></div>`;
                 });
                 container.innerHTML = html;
             },
@@ -588,9 +611,9 @@
 
             getSettings() {
                 return {
-                    sp: parseFloat(document.getElementById('set-sp-rate').value) || 3,
-                    nm: parseFloat(document.getElementById('set-nm-rate').value) || 8,
-                    avgR: parseFloat(document.getElementById('set-avg-r').value) || 5,
+                    sp: parseFloat(document.getElementById('set-sp-rate').value) || 3.1,
+                    nm: parseFloat(document.getElementById('set-nm-rate').value) || 4.1,
+                    avgR: parseFloat(document.getElementById('set-avg-r').value) || 5.16,
                     exch: parseFloat(document.getElementById('set-exchange').value) || 4,
                     kasi: 1000 / (parseFloat(document.getElementById('set-kasi').value) || 250)
                 };
@@ -1181,6 +1204,29 @@
                 a.click();
                 document.body.removeChild(a);
                 URL.revokeObjectURL(url);
+            },
+
+            resetBasicSettings() {
+                if (!confirm("基本設定をデフォルト値に戻しますか？")) return;
+                document.getElementById('set-sp-rate').value = "3.1";
+                document.getElementById('set-nm-rate').value = "4.1";
+                document.getElementById('set-avg-r').value = "5.16";
+                document.getElementById('set-kasi').value = "250";
+                document.getElementById('set-exchange').value = "4.0";
+                this.saveDataAndHistory();
+                this.calc();
+            },
+
+            resetTargetSettings() {
+                if (!confirm("各種項目の基準値設定をデフォルト値に戻しますか？")) return;
+                this.metricsConfig.forEach(m => {
+                    if (m.type !== 'text') {
+                        const el = document.getElementById(`target-${m.id}`);
+                        if (el) el.value = m.defaultVal !== undefined ? m.defaultVal : "";
+                    }
+                });
+                this.saveDataAndHistory();
+                this.updateCompareView();
             },
 
             resetAll() {
