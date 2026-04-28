@@ -14,7 +14,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Jura:wght@400;600;700&family=Noto+Sans+JP:wght@400;500;700;900&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Noto+Sans+JP:wght@400;500;700;900&display=swap"
         rel="stylesheet">
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -22,7 +22,7 @@
         :root {
             /* Theme E variables (Investigation Board) */
             --font-main: 'Noto Sans JP', sans-serif;
-            --font-eng: 'Jura', sans-serif;
+            --font-eng: 'Inter', sans-serif;
 
             --bg-color: #d4a373;
             --body-bg-image: url('../corkboard_bg.png');
@@ -130,6 +130,29 @@
             opacity: 1;
         }
 
+        .strategy-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            z-index: 20;
+            background: #f1c40f;
+            color: #333;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: var(--font-main);
+            font-size: 0.7rem;
+            opacity: 0.9;
+        }
+
+        .strategy-btn:hover {
+            background: #f39c12;
+            opacity: 1;
+        }
+
         .reset-btn {
             position: absolute;
             bottom: 8px;
@@ -155,6 +178,29 @@
 
         .reset-btn:hover {
             background: rgba(255, 255, 255, 0.3);
+        }
+
+        .settings-btn {
+            position: absolute;
+            bottom: 8px;
+            left: 10px;
+            z-index: 20;
+            background: var(--accent-secondary);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: var(--font-main);
+            font-size: 0.7rem;
+            opacity: 0.9;
+        }
+
+        .settings-btn:hover {
+            background: #1a5b78;
+            opacity: 1;
         }
 
         /* Container (Paper with Pin) */
@@ -200,20 +246,29 @@
             text-align: center;
             font-size: 14px;
             font-weight: bold;
-            color: var(--text-sub);
-            border-bottom: 3px solid transparent;
             cursor: pointer;
-            transition: color 0.2s;
+            transition: all 0.2s;
+            border-bottom: 3px solid transparent;
         }
 
-        .tab:hover {
-            color: var(--accent-color);
+        .tab-group-blue {
+            background-color: rgba(34, 112, 147, 0.05);
+            color: var(--accent-secondary);
+        }
+        .tab-group-blue.active {
+            background-color: var(--accent-secondary);
+            color: #fff;
+            border-bottom: 3px solid #1a5b78;
         }
 
-        .tab.active {
-            background: var(--bg-panel);
+        .tab-group-red {
+            background-color: rgba(179, 57, 57, 0.05);
             color: var(--accent-color);
-            border-bottom: 3px solid var(--accent-color);
+        }
+        .tab-group-red.active {
+            background-color: var(--accent-color);
+            color: #fff;
+            border-bottom: 3px solid #8e2b2b;
         }
 
         .content-section {
@@ -384,6 +439,45 @@
         .reset-defaults-btn:hover {
             background: rgba(179, 57, 57, 0.1);
         }
+
+        /* Modal Styles */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: var(--bg-panel);
+            width: 90%;
+            max-width: 500px;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 28px;
+            cursor: pointer;
+            color: var(--text-sub);
+            line-height: 1;
+        }
+        .modal-close:hover {
+            color: var(--accent-color);
+        }
     </style>
 </head>
 
@@ -398,25 +492,80 @@
     </svg>
 
     <header class="blackboard-header">
-        <a href="../index.html" class="back-to-top">TOPへ戻る</a>
+        <a href="../index.html" class="back-to-top">⇐ TOPへ戻る</a>
+        <button class="strategy-btn" onclick="alert('カミングスーン！')">💡 攻略考察</button>
 
         <div class="header-center chalk-effect">
             <h1>FAMISTA TOOL</h1>
             <div class="subtitle">ハネモノファミスタ 期待値計算/攻略ツール</div>
         </div>
 
-        <button class="reset-btn" onclick="app.resetAll()">データをリセット</button>
+        <button class="settings-btn" onclick="app.openSettings()">⚙ 詳細設定</button>
+        <button class="reset-btn" onclick="app.resetAll()">⚠ データをリセット</button>
     </header>
 
     <div class="container">
         <div class="tabs">
-            <div class="tab active" onclick="app.showTab('input')">数値入力</div>
-            <div class="tab" onclick="app.showTab('calc')">算出結果</div>
-            <div class="tab" onclick="app.showTab('compare')">区間分析</div>
-            <div class="tab" onclick="app.showTab('settings')">詳細設定</div>
+            <div class="tab tab-group-blue active" onclick="app.showTab('log')">実戦ログ</div>
+            <div class="tab tab-group-blue" onclick="app.showTab('input')">数値入力</div>
+            <div class="tab tab-group-red" onclick="app.showTab('calc')">算出結果</div>
+            <div class="tab tab-group-red" onclick="app.showTab('compare')">区間分析</div>
         </div>
 
-        <div id="input" class="content-section active">
+        <div id="log" class="content-section active">
+            <div class="section-header" style="display:flex; justify-content: space-between; align-items: center;">
+                <span>■現在の稼働状況</span>
+                <span style="font-size: 0.9rem;">大当り回数 <span id="jackpot-count-display">0</span>回</span>
+            </div>
+            <div id="log-fields">
+                <div class="input-group"><label>現在の持ち玉数</label><input type="number" id="log-hold" oninput="app.checkLogForm()"></div>
+                <div class="input-group"><label>残玉数</label><input type="number" id="log-remain" oninput="app.checkLogForm()"></div>
+                <div class="input-group"><label>再プレイ玉数</label><input type="number" id="log-replay" oninput="app.checkLogForm()"></div>
+                <div class="input-group"><label>追加投資(円)</label><input type="number" id="log-invest" oninput="app.checkLogForm()"></div>
+                <div class="input-group">
+                    <label>当選契機</label>
+                    <select id="log-trigger" onchange="app.checkLogForm()" style="width:100%; padding: 10px; font-size: 16px; border-radius: 4px; border: 1px solid #ccc; font-family: var(--font-main);">
+                        <option value="">未選択</option>
+                        <option value="ノーマルルート">ノーマルルート</option>
+                        <option value="SPルート">SPルート</option>
+                        <option value="ストレートコース選択後HR">ストレートコース選択後HR</option>
+                        <option value="変化球選択後HR">変化球選択後HR</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>当選R数</label>
+                    <select id="log-round" onchange="app.checkLogForm()" style="width:100%; padding: 10px; font-size: 16px; border-radius: 4px; border: 1px solid #ccc; font-family: var(--font-main);">
+                        <option value="">未選択</option>
+                        <option value="2R">2R</option>
+                        <option value="4R">4R</option>
+                        <option value="9R">9R</option>
+                    </select>
+                </div>
+                <div id="log-modify-record-container" style="display:none; margin-top: 15px;">
+                    <button class="btn-primary" onclick="app.recordLogFromModify()">この修正内容で記録</button>
+                </div>
+            </div>
+
+            <div class="section-header" style="margin-top: 30px;">■履歴</div>
+            <div style="max-height: 300px; overflow-y: auto; border: 1px solid var(--border-color); border-radius: 4px;">
+                <table class="data-table" style="margin-top: 0; border: none;">
+                    <thead style="position: sticky; top: 0; z-index: 10;">
+                        <tr>
+                            <th style="width: 10%; text-align: center;">No</th>
+                            <th style="width: 25%; text-align: center;">使用玉数</th>
+                            <th style="width: 25%; text-align: center;">獲得出玉</th>
+                            <th style="width: 25%; text-align: center;">当選契機</th>
+                            <th style="width: 15%; text-align: center;">R数</th>
+                        </tr>
+                    </thead>
+                    <tbody id="log-history-table" style="text-align: center;">
+                        <tr><td colspan="4" style="padding: 15px;">履歴がありません</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="input" class="content-section">
             <div id="fields-container"></div>
         </div>
 
@@ -495,25 +644,25 @@
                 </table>
             </div>
         </div>
+    </div>
 
-        <div id="settings" class="content-section">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+    <!-- Settings Modal -->
+    <div id="settings-modal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-close" onclick="app.closeSettings()">×</div>
+            <h2 style="margin-top: 0; border-bottom: 2px solid var(--accent-secondary); padding-bottom: 10px; color: var(--accent-secondary);">⚙ 詳細設定</h2>
+            
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; margin-top: 20px;">
                 <div style="font-weight: bold; color: var(--accent-secondary);">■ 基本設定</div>
                 <button class="reset-defaults-btn" onclick="app.resetBasicSettings()">デフォルトに戻す</button>
             </div>
-            <div class="input-group"><label>SPルート回転体当選率<br>(1/〇)</label><input type="number" id="set-sp-rate"
-                    value="3.1" onchange="app.calc()"></div>
-            <div class="input-group"><label>ノーマルルート回転体当選率<br>(1/〇)</label><input type="number" id="set-nm-rate"
-                    value="4.1" onchange="app.calc()"></div>
-            <div class="input-group"><label>平均ラウンド数<br>(理論上の振り分け)</label><input type="number" id="set-avg-r"
-                    value="5.16" onchange="app.calc()"></div>
-            <div class="input-group"><label>貸玉<br>(1000円あたりの玉数)</label><input type="number" id="set-kasi" value="250"
-                    onchange="app.calc()"></div>
-            <div class="input-group"><label>換金率<br>(1玉あたりの換金額)</label><input type="number" id="set-exchange" value="4.0"
-                    onchange="app.calc()"></div>
+            <div class="input-group"><label>SPルート回転体当選率<br>(1/〇)</label><input type="number" id="set-sp-rate" value="3.1" onchange="app.calc()"></div>
+            <div class="input-group"><label>ノーマルルート回転体当選率<br>(1/〇)</label><input type="number" id="set-nm-rate" value="4.1" onchange="app.calc()"></div>
+            <div class="input-group"><label>平均ラウンド数<br>(理論上の振り分け)</label><input type="number" id="set-avg-r" value="5.16" onchange="app.calc()"></div>
+            <div class="input-group"><label>貸玉<br>(1000円あたりの玉数)</label><input type="number" id="set-kasi" value="250" onchange="app.calc()"></div>
+            <div class="input-group"><label>換金率<br>(1玉あたりの換金額)</label><input type="number" id="set-exchange" value="4.0" onchange="app.calc()"></div>
 
-            <div
-                style="display: flex; justify-content: space-between; align-items: center; margin-top: 25px; margin-bottom: 10px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 25px; margin-bottom: 10px;">
                 <div style="font-weight: bold; color: var(--accent-secondary);">■ 各種項目の基準値設定</div>
                 <button class="reset-defaults-btn" onclick="app.resetTargetSettings()">デフォルトに戻す</button>
             </div>
@@ -521,29 +670,106 @@
         </div>
     </div>
 
+    <!-- Log Edit Modal -->
+    <div id="log-edit-modal" class="modal-overlay">
+        <div class="modal-content" style="max-width: 400px;">
+            <div class="modal-close" onclick="app.closeEditLogModal()">×</div>
+            <h3 style="margin-top: 0; border-bottom: 2px solid var(--accent-secondary); padding-bottom: 10px; color: var(--accent-secondary);">履歴の修正 (No.<span id="edit-log-no"></span>)</h3>
+            <input type="hidden" id="edit-log-index">
+            <div class="input-group"><label>現在の持ち玉数</label><input type="number" id="edit-log-hold"></div>
+            <div class="input-group"><label>残玉数</label><input type="number" id="edit-log-remain"></div>
+            <div class="input-group"><label>再プレイ玉数</label><input type="number" id="edit-log-replay"></div>
+            <div class="input-group"><label>追加投資(円)</label><input type="number" id="edit-log-invest"></div>
+            <div class="input-group">
+                <label>当選契機</label>
+                <select id="edit-log-trigger" style="width:100%; padding: 10px; font-size: 16px; border-radius: 4px; border: 1px solid #ccc; font-family: var(--font-main);">
+                    <option value="ノーマルルート">ノーマルルート</option>
+                    <option value="SPルート">SPルート</option>
+                    <option value="ストレートコース選択後HR">ストレートコース選択後HR</option>
+                    <option value="変化球選択後HR">変化球選択後HR</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label>当選R数</label>
+                <select id="edit-log-round" style="width:100%; padding: 10px; font-size: 16px; border-radius: 4px; border: 1px solid #ccc; font-family: var(--font-main);">
+                    <option value="2R">2R</option>
+                    <option value="4R">4R</option>
+                    <option value="9R">9R</option>
+                </select>
+            </div>
+            <button class="btn-primary" onclick="app.saveEditLog()" style="margin-top: 10px;">修正を保存</button>
+        </div>
+    </div>
+
+    <div id="log-confirm-modal" class="modal-overlay">
+        <div class="modal-content" style="max-width: 400px; text-align: center;">
+            <div class="modal-close" onclick="app.closeLogConfirm()">×</div>
+            <h3 style="margin-top: 0; color: var(--accent-secondary);">記録の確認</h3>
+            <p>すべての項目が入力されました。<br>この内容で記録しますか？</p>
+            <div style="display: flex; gap: 10px; margin-top: 20px;">
+                <button class="btn-primary" style="background: var(--text-sub);" onclick="app.modifyLog()">修正する</button>
+                <button class="btn-primary" onclick="app.recordLog()">記録する</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Interval Save Modal -->
+    <div id="interval-save-modal" class="modal-overlay">
+        <div class="modal-content" style="max-width: 500px;">
+            <div class="modal-close" onclick="document.getElementById('interval-save-modal').style.display='none'">×</div>
+            <h3 style="margin-top: 0; color: var(--accent-secondary); border-bottom: 2px solid var(--accent-secondary); padding-bottom: 10px;">区間データの保存</h3>
+            
+            <div class="input-group">
+                <label>この区間のメモ・コメント（空でもOK）</label>
+                <textarea id="interval-save-memo" rows="4" style="width:100%; padding:10px; border:1px solid #ccc; border-radius:4px; font-size:14px; font-family:var(--font-main); box-sizing:border-box;"></textarea>
+            </div>
+
+            <div style="display:flex; flex-direction:column; gap:10px; margin-top:20px;">
+                <button class="btn-primary" onclick="app.executeSaveHistory()" style="background:#227093;">保存する</button>
+                <button class="btn-primary" onclick="document.getElementById('interval-save-modal').style.display='none'" style="background:#7f8c8d;">キャンセル</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Reset & Backup Modal -->
+    <div id="reset-modal" class="modal-overlay">
+        <div class="modal-content" style="max-width: 500px;">
+            <div class="modal-close" onclick="document.getElementById('reset-modal').style.display='none'">×</div>
+            <h3 style="margin-top: 0; color: var(--accent-secondary); border-bottom: 2px solid var(--accent-secondary); padding-bottom: 10px;">データのバックアップとリセット</h3>
+            
+            <div class="input-group">
+                <label>台番</label>
+                <input type="text" id="reset-daiban" placeholder="例: 123番台" style="font-size:16px;">
+            </div>
+
+            <div class="input-group">
+                <label>本日の稼働メモ（台の挙動、ネカセなど）</label>
+                <textarea id="reset-memo" rows="4" style="width:100%; padding:10px; border:1px solid #ccc; border-radius:4px; font-size:14px; font-family:var(--font-main); box-sizing:border-box;"></textarea>
+            </div>
+
+            <div style="display:flex; flex-direction:column; gap:10px; margin-top:20px;">
+                <button class="btn-primary" onclick="app.executeBackupAndReset()" style="background:#227093;">バックアップしてリセット</button>
+                <button class="btn-primary" onclick="app.executeResetOnly()" style="background:#b33939;">バックアップせずにリセット</button>
+                <button class="btn-primary" onclick="document.getElementById('reset-modal').style.display='none'" style="background:#7f8c8d;">キャンセル</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         const app = {
             fields: [
                 { id: "total_rot", name: "1. 通常回転数" },
-                { id: "rot_per_k", name: "2. 千円あたりの回転数" },
-                { id: "holding_rate", name: "3. 持ち玉比率(%)" },
-                { id: "r_out", name: "4. 1Rあたりの出玉" },
-                { id: "v_2r", name: "5-1. 2R回数" },
-                { id: "v_4r", name: "5-2. 4R回数" },
-                { id: "v_9r", name: "5-3. 9R回数" },
-                { id: "total_pick", name: "6. 拾い個数" },
-                { id: "sp_select", name: "7. SPルート選択個数" },
-                { id: "sp_v_in", name: "8. SPルート選択時回転体V入賞個数", parent: "sp_select" },
-                { id: "st_select", name: "9. ストレート選択個数" },
-                { id: "st_rot_in", name: "10. ストレート選択時回転体突入個数", parent: "st_select" },
-                { id: "st_hr_in", name: "11. ストレート選択時HR個数", parent: "st_select" },
-                { id: "ch_strong", name: "12. 変化球選択時強打個数" },
-                { id: "ch_rot_in", name: "13. 変化球強打時回転体突入個数", parent: "ch_strong" },
-                { id: "ch_hr_in", name: "14. 変化球選択時HR個数" },
-                { id: "nm_total_v", name: "15. ノーマルルート選択時回転体総V入賞個数" }
+                { id: "total_pick", name: "2. 拾い個数" },
+                { id: "sp_select", name: "3. SPルート選択個数" },
+                { id: "st_select", name: "4. ストレート選択個数" },
+                { id: "st_rot_in", name: "5. ストレート選択時回転体突入個数", parent: "st_select" },
+                { id: "ch_strong", name: "6. 変化球選択時強打個数" },
+                { id: "ch_rot_in", name: "7. 変化球強打時回転体突入個数", parent: "ch_strong" }
             ],
 
             metricsConfig: [
+                { id: "rotPerK", name: "千円あたりの回転数", type: "rot", lowerIsBetter: false, defaultVal: "" },
+                { id: "rOut", name: "1Rあたりの出玉", type: "ball", lowerIsBetter: false, defaultVal: "" },
                 { id: "pickRate", name: "拾い率", type: "pct", lowerIsBetter: false, defaultVal: 45 },
                 { id: "spSelectRate", name: "SPルート選択率", type: "pct", lowerIsBetter: false, defaultVal: 10 },
                 { id: "straightSelectRate", name: "ストレート選択率", type: "pct", lowerIsBetter: false, defaultVal: 20 },
@@ -558,7 +784,11 @@
                 { id: "comment", name: "コメント", type: "text" }
             ],
             history: [],
+            logHistory: [],
+            jackpotCount: 0,
             chartInstance: null,
+            isModifying: false,
+            confirmShown: false,
 
             init() {
                 const container = document.getElementById('fields-container');
@@ -598,8 +828,194 @@
                 document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
                 document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
                 document.getElementById(id).classList.add('active');
-                event.currentTarget.classList.add('active');
+                
+                // Find the tab that triggered this
+                if(event && event.currentTarget) {
+                    event.currentTarget.classList.add('active');
+                }
+                
                 if (id === 'compare') this.updateCompareView();
+            },
+
+            openSettings() {
+                document.getElementById('settings-modal').style.display = 'flex';
+            },
+
+            closeSettings() {
+                document.getElementById('settings-modal').style.display = 'none';
+            },
+
+            checkLogForm() {
+                const hold = document.getElementById('log-hold').value;
+                const remain = document.getElementById('log-remain').value;
+                const invest = document.getElementById('log-invest').value;
+                const trigger = document.getElementById('log-trigger').value;
+                const round = document.getElementById('log-round').value;
+
+                const isComplete = hold !== "" && remain !== "" && trigger !== "" && round !== "";
+
+                if (isComplete && !this.isModifying && !this.confirmShown) {
+                    this.confirmShown = true;
+                    document.getElementById('log-confirm-modal').style.display = 'flex';
+                } else if (!isComplete) {
+                    this.confirmShown = false;
+                }
+                
+                this.updateLogHistoryView();
+                this.calc();
+                this.saveDataAndHistory();
+            },
+
+            closeLogConfirm() {
+                document.getElementById('log-confirm-modal').style.display = 'none';
+                this.confirmShown = false;
+            },
+
+            modifyLog() {
+                document.getElementById('log-confirm-modal').style.display = 'none';
+                this.isModifying = true;
+                document.getElementById('log-modify-record-container').style.display = 'block';
+            },
+
+            recordLogFromModify() {
+                this.recordLog();
+            },
+
+            recordLog() {
+                document.getElementById('log-confirm-modal').style.display = 'none';
+                this.isModifying = false;
+                this.confirmShown = false;
+                document.getElementById('log-modify-record-container').style.display = 'none';
+
+                const hold = parseFloat(document.getElementById('log-hold').value) || 0;
+                const remain = parseFloat(document.getElementById('log-remain').value) || 0;
+                const replay = parseFloat(document.getElementById('log-replay').value) || 0;
+                const invest = parseFloat(document.getElementById('log-invest').value) || 0;
+                const trigger = document.getElementById('log-trigger').value;
+                const round = document.getElementById('log-round').value;
+
+                const kasi = parseFloat(document.getElementById('set-kasi').value) || 250;
+                const usedBalls = hold - remain + replay + (invest / 1000) * kasi;
+
+                this.jackpotCount++;
+                this.logHistory.push({
+                    no: this.jackpotCount,
+                    usedBalls: usedBalls,
+                    trigger: trigger,
+                    round: round,
+                    inputs: { hold, remain, replay, invest }
+                });
+
+                // Clear all log fields after record to allow new entry
+                ['log-hold', 'log-remain', 'log-replay', 'log-invest', 'log-trigger', 'log-round'].forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) el.value = "";
+                });
+
+                this.updateLogHistoryView();
+                this.calc();
+
+                this.saveDataAndHistory();
+                alert('実戦ログを記録しました。');
+            },
+
+            updateLogHistoryView() {
+                document.getElementById('jackpot-count-display').innerText = this.jackpotCount;
+                const tbody = document.getElementById('log-history-table');
+                
+                if (this.logHistory.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="4" style="padding: 15px;">履歴がありません</td></tr>';
+                    return;
+                }
+
+                // Sort by No ascending (1, 2, 3...)
+                this.logHistory.sort((a, b) => a.no - b.no);
+
+                let html = '';
+                const triggerMap = {
+                    "ノーマルルート": "ノーマル",
+                    "SPルート": "SP",
+                    "ストレートコース選択後HR": "STHR",
+                    "変化球選択後HR": "変化HR"
+                };
+
+                this.logHistory.forEach((h, index) => {
+                    let nextHoldStr = "";
+                    if (index + 1 < this.logHistory.length) {
+                        nextHoldStr = this.logHistory[index+1].inputs ? this.logHistory[index+1].inputs.hold : "";
+                    } else {
+                        nextHoldStr = document.getElementById('log-hold').value;
+                    }
+                    let gainedBallsDisplay = "-";
+                    if (nextHoldStr !== "" && nextHoldStr !== undefined && !isNaN(parseFloat(nextHoldStr)) && h.inputs) {
+                        const gainedBalls = parseFloat(nextHoldStr) - h.inputs.remain;
+                        gainedBallsDisplay = `${Math.floor(gainedBalls)}玉`;
+                    }
+
+                    const shortTrigger = triggerMap[h.trigger] || h.trigger;
+
+                    html += `<tr>
+                        <td>${h.no}</td>
+                        <td style="font-family:var(--font-eng); font-weight:bold; cursor:pointer; color:var(--accent-secondary); text-decoration:underline;" onclick="app.openEditLogModal(${index})">${Math.floor(h.usedBalls)}玉</td>
+                        <td style="font-family:var(--font-eng); font-weight:bold; color:var(--plus-red);">${gainedBallsDisplay}</td>
+                        <td style="font-size:0.9em;">${shortTrigger}</td>
+                        <td style="font-family:var(--font-eng); font-weight:bold;">${h.round}</td>
+                    </tr>`;
+                });
+                tbody.innerHTML = html;
+            },
+
+            openEditLogModal(index) {
+                const h = this.logHistory[index];
+                if (!h) return;
+                document.getElementById('edit-log-index').value = index;
+                document.getElementById('edit-log-no').innerText = h.no;
+                
+                if (h.inputs) {
+                    document.getElementById('edit-log-hold').value = h.inputs.hold;
+                    document.getElementById('edit-log-remain').value = h.inputs.remain;
+                    document.getElementById('edit-log-replay').value = h.inputs.replay;
+                    document.getElementById('edit-log-invest').value = h.inputs.invest;
+                } else {
+                    document.getElementById('edit-log-hold').value = "";
+                    document.getElementById('edit-log-remain').value = "";
+                    document.getElementById('edit-log-replay').value = "";
+                    document.getElementById('edit-log-invest').value = "";
+                }
+                document.getElementById('edit-log-trigger').value = h.trigger;
+                document.getElementById('edit-log-round').value = h.round;
+                
+                document.getElementById('log-edit-modal').style.display = 'flex';
+            },
+
+            closeEditLogModal() {
+                document.getElementById('log-edit-modal').style.display = 'none';
+            },
+
+            saveEditLog() {
+                const index = document.getElementById('edit-log-index').value;
+                const h = this.logHistory[index];
+                if (!h) return;
+
+                const hold = parseFloat(document.getElementById('edit-log-hold').value) || 0;
+                const remain = parseFloat(document.getElementById('edit-log-remain').value) || 0;
+                const replay = parseFloat(document.getElementById('edit-log-replay').value) || 0;
+                const invest = parseFloat(document.getElementById('edit-log-invest').value) || 0;
+                const trigger = document.getElementById('edit-log-trigger').value;
+                const round = document.getElementById('edit-log-round').value;
+
+                const kasi = parseFloat(document.getElementById('set-kasi').value) || 250;
+                const usedBalls = hold - remain + replay + (invest / 1000) * kasi;
+
+                h.usedBalls = usedBalls;
+                h.trigger = trigger;
+                h.round = round;
+                h.inputs = { hold, remain, replay, invest };
+
+                this.updateLogHistoryView();
+                this.calc();
+                this.saveDataAndHistory();
+                this.closeEditLogModal();
             },
 
             formatVal(val, isYen = true) {
@@ -657,6 +1073,72 @@
                 });
 
                 const s = this.getSettings();
+
+                // 実戦ログからの自動算出
+                let v2r = 0, v4r = 0, v9r = 0;
+                let sp_v_in = 0, st_hr_in = 0, ch_hr_in = 0, nm_total_v = 0;
+                let totalUsedBalls = 0;
+                let totalInvest = 0;
+                let totalGained = 0;
+                const rawKasi = parseFloat(document.getElementById('set-kasi').value) || 250;
+                
+                this.logHistory.forEach((h, index) => {
+                    if (h.round === "2R") v2r++;
+                    else if (h.round === "4R") v4r++;
+                    else if (h.round === "9R") v9r++;
+
+                    if (h.trigger === "SPルート") sp_v_in++;
+                    else if (h.trigger === "ストレートコース選択後HR") st_hr_in++;
+                    else if (h.trigger === "変化球選択後HR") ch_hr_in++;
+                    else if (h.trigger === "ノーマルルート") nm_total_v++;
+
+                    totalUsedBalls += (h.usedBalls || 0);
+                    if (h.inputs) {
+                        totalInvest += (h.inputs.invest || 0);
+                        let nextHoldStr = "";
+                        if (index + 1 < this.logHistory.length) {
+                            nextHoldStr = this.logHistory[index+1].inputs ? this.logHistory[index+1].inputs.hold : "";
+                        } else {
+                            nextHoldStr = document.getElementById('log-hold').value;
+                        }
+                        if (nextHoldStr !== "") {
+                            totalGained += (parseFloat(nextHoldStr) - h.inputs.remain);
+                        }
+                    }
+                });
+
+                // リアルタイム（未記録分）の使用玉数と投資を合算
+                const unHoldStr = document.getElementById('log-hold').value;
+                const unRemainStr = document.getElementById('log-remain').value;
+                const unReplayStr = document.getElementById('log-replay').value;
+                const unInvestStr = document.getElementById('log-invest').value;
+                if (unHoldStr !== "" || unRemainStr !== "" || unReplayStr !== "" || unInvestStr !== "") {
+                    const unHold = parseFloat(unHoldStr) || 0;
+                    const unRemain = parseFloat(unRemainStr) || 0;
+                    const unReplay = parseFloat(unReplayStr) || 0;
+                    const unInvest = parseFloat(unInvestStr) || 0;
+                    totalUsedBalls += (unHold - unRemain + unReplay + (unInvest / 1000) * rawKasi);
+                    totalInvest += unInvest;
+                }
+
+                // 算出結果の代入
+                v.v_2r = v2r;
+                v.v_4r = v4r;
+                v.v_9r = v9r;
+                v.sp_v_in = sp_v_in;
+                v.st_hr_in = st_hr_in;
+                v.ch_hr_in = ch_hr_in;
+                v.nm_total_v = nm_total_v;
+                v.totalUsedBalls = totalUsedBalls;
+                v.totalInvest = totalInvest;
+                v.totalGained = totalGained;
+
+                const cashUsedBalls = (totalInvest / 1000) * rawKasi;
+                v.holding_rate = totalUsedBalls > 0 ? ((totalUsedBalls - cashUsedBalls) / totalUsedBalls) * 100 : 0;
+                v.rot_per_k = (totalUsedBalls / rawKasi) > 0 ? v.total_rot / (totalUsedBalls / rawKasi) : 0;
+
+                const totalRounds = (v2r * 2) + (v4r * 4) + (v9r * 9);
+                v.r_out = totalRounds > 0 ? (totalGained / totalRounds) : 0;
 
                 // 1. 推定大当り期待個数の算出
                 const rotInSum = v.st_rot_in + v.ch_rot_in;
@@ -720,7 +1202,7 @@
 
                 document.getElementById('res-gap').innerHTML = `
                     <div style="display: flex; justify-content: center; gap: 8px; flex-wrap: wrap;">
-                        <div class="box-info">平均R数<br><span style="font-family:var(--font-eng); color:${avgRColor};">${actAvgR.toFixed(2)}</span></div>
+                        <div class="box-info">平均R数<br><span style="font-family:var(--font-eng); color:${avgRColor};">${actAvgR.toFixed(1)}</span></div>
                         <div class="box-info">玉数<br><span style="font-family:var(--font-eng); color:${gapJadeColor};">${gapJade >= 0 ? '+' : ''}${Math.floor(gapJade)}<span style="font-size:12px; font-weight:normal; font-family:var(--font-main);"> 玉</span></span></div>
                     </div>
                 `;
@@ -732,6 +1214,11 @@
                 const curveSelectCount = nmRouteCount - v.st_select;
 
                 const details = [
+                    ["千円あたりの回転数", `<span style="font-family:var(--font-eng); font-weight:bold; font-size:18px;">${v.rot_per_k.toFixed(1)} 回転</span>`],
+                    ["持ち玉比率", `<span style="font-family:var(--font-eng); font-weight:bold; font-size:18px;">${v.holding_rate.toFixed(1)} %</span>`],
+                    ["1Rあたりの出玉", `<span style="font-family:var(--font-eng); font-weight:bold; font-size:18px;">${v.r_out.toFixed(1)} 玉</span>`],
+                    ["R別当選回数", `<span style="font-size:13px; font-weight:bold; color:var(--text-main);">2R: ${v.v_2r}回 / 4R: ${v.v_4r}回 / 9R: ${v.v_9r}回</span>`],
+                    ["当選契機別回数", `<span style="font-size:13px; font-weight:bold; color:var(--text-main);">SP: ${v.sp_v_in}回 / ﾉｰﾏﾙ: ${v.nm_total_v}回 / HR: ${v.st_hr_in + v.ch_hr_in}回</span>`],
                     ["拾い率", safeDivPct(v.total_pick, v.total_rot)],
                     ["SPルート選択率", safeDivPct(v.sp_select, v.total_pick)],
                     ["ストレート選択率", safeDivPct(v.st_select, nmRouteCount)],
@@ -744,12 +1231,26 @@
                 ];
                 document.getElementById('res-details-table').innerHTML = details.map(d => `<tr><th>${d[0]}</th><td style="font-family:var(--font-eng); font-weight:bold;">${d[1]}</td></tr>`).join('');
 
+                this.lastCalcRes = {
+                    totalExpYen,
+                    unitExpYen: v.total_rot > 0 ? totalExpYen / v.total_rot : 0,
+                    borderHold,
+                    borderCash,
+                    estYakuProbDenom,
+                    estProbDenom,
+                    actAvgR,
+                    gapJade
+                };
+                this.lastCalcV = { ...v };
+
                 this.saveDataAndHistory();
             },
 
             formatF(val, type) {
                 if (type === 'pct') return `${(val * 100).toFixed(1)}%`;
                 if (type === 'prob') return val > 0 ? `1 / ${val.toFixed(1)}` : "-";
+                if (type === 'rot') return `${val.toFixed(1)} 回転`;
+                if (type === 'ball') return `${val.toFixed(1)} 玉`;
                 return val;
             },
 
@@ -767,6 +1268,13 @@
                     return `<span style="color:${color}; font-weight:bold;">${icon} (${sign}${deltaPct.toFixed(1)}%)</span>`;
                 }
                 if (type === 'prob') {
+                    if (Math.abs(delta) < 0.05) return "-";
+                    const icon = isGood ? '↑' : '↓';
+                    const color = isGood ? 'var(--plus-red)' : 'var(--minus-blue)';
+                    const sign = delta > 0 ? '+' : '';
+                    return `<span style="color:${color}; font-weight:bold;">${icon} (${sign}${delta.toFixed(1)})</span>`;
+                }
+                if (type === 'rot' || type === 'ball') {
                     if (Math.abs(delta) < 0.05) return "-";
                     const icon = isGood ? '↑' : '↓';
                     const color = isGood ? 'var(--plus-red)' : 'var(--minus-blue)';
@@ -971,11 +1479,15 @@
                 const prevH = index > 0 ? this.history[index - 1] : null;
 
                 const deltaV = {};
-                this.fields.forEach(f => {
-                    deltaV[f.id] = currentH.v[f.id] - (prevH ? prevH.v[f.id] : 0);
+                Object.keys(currentH.v).forEach(k => {
+                    deltaV[k] = (currentH.v[k] || 0) - (prevH && prevH.v[k] ? prevH.v[k] : 0);
+                });
+                ['st_hr_in', 'ch_hr_in', 'sp_v_in', 'nm_total_v', 'v_2r', 'v_4r', 'v_9r', 'totalUsedBalls', 'totalInvest', 'totalGained'].forEach(k => {
+                    if (deltaV[k] === undefined || isNaN(deltaV[k])) deltaV[k] = 0;
                 });
 
                 const s = this.getSettings();
+                const resObj = this.calcMetricsObject(deltaV, s);
 
                 const safeDivPct = (num, den) => den > 0 ? ((num / den) * 100).toFixed(1) + "%" : "0.0%";
                 const safeDivProb = (num, den) => den > 0 ? `1 / ${(num / den).toFixed(1)}` : "-";
@@ -984,6 +1496,8 @@
                 const curveSelectCount = nmRouteCount - deltaV.st_select;
 
                 const details = [
+                    ["千円あたりの回転数", `<span style="font-family:var(--font-eng); font-weight:bold; font-size:18px;">${resObj.rotPerK.toFixed(1)} 回転</span>`],
+                    ["1Rあたりの出玉", `<span style="font-family:var(--font-eng); font-weight:bold; font-size:18px;">${resObj.rOut.toFixed(1)} 玉</span>`],
                     ["拾い率", safeDivPct(deltaV.total_pick, deltaV.total_rot)],
                     ["SPルート選択率", safeDivPct(deltaV.sp_select, deltaV.total_pick)],
                     ["ストレート選択率", safeDivPct(deltaV.st_select, nmRouteCount)],
@@ -997,14 +1511,12 @@
 
                 tBody.innerHTML = details.map(d => `<tr><th style="width: 50%;">${d[0]}</th><td style="width: 50%; font-family:var(--font-eng); font-weight:bold;">${d[1]}</td></tr>`).join('');
 
-                const resObj = this.calcMetricsObject(deltaV, s);
-
-                const totalV = deltaV.v_2r + deltaV.v_4r + deltaV.v_9r;
-                const totalR = (deltaV.v_2r * 2) + (deltaV.v_4r * 4) + (deltaV.v_9r * 9);
+                const totalV = (deltaV.v_2r || 0) + (deltaV.v_4r || 0) + (deltaV.v_9r || 0);
+                const totalR = ((deltaV.v_2r || 0) * 2) + ((deltaV.v_4r || 0) * 4) + ((deltaV.v_9r || 0) * 9);
                 const actAvgR = totalV > 0 ? totalR / totalV : 0;
 
-                const avgOutJade = s.avgR * deltaV.r_out;
-                const gapJade = (totalR * deltaV.r_out) - (totalV * avgOutJade);
+                const avgOutJade = s.avgR * resObj.rOut;
+                const gapJade = (totalR * resObj.rOut) - (totalV * avgOutJade);
 
                 const gapColor = gapJade > 0 ? 'var(--plus-red)' : (gapJade < 0 ? 'var(--minus-blue)' : 'var(--text-main)');
                 const gapSign = gapJade > 0 ? '+' : '';
@@ -1020,11 +1532,15 @@
             },
 
             saveHistory() {
-                const memo = prompt('この区間のメモ・コメントを入力してください（空でもOK）');
-                if (memo === null) return;
+                document.getElementById('interval-save-memo').value = "";
+                document.getElementById('interval-save-modal').style.display = 'flex';
+            },
 
-                const v = {};
-                this.fields.forEach(f => v[f.id] = parseFloat(document.getElementById(f.id).value) || 0);
+            executeSaveHistory() {
+                const memo = document.getElementById('interval-save-memo').value;
+                document.getElementById('interval-save-modal').style.display = 'none';
+
+                const v = { ...this.lastCalcV };
 
                 this.history.push({
                     ts: Date.now(),
@@ -1059,11 +1575,23 @@
                     exchange: document.getElementById('set-exchange').value
                 };
 
+                const logData = {
+                    hold: document.getElementById('log-hold').value,
+                    remain: document.getElementById('log-remain').value,
+                    replay: document.getElementById('log-replay').value,
+                    invest: document.getElementById('log-invest').value,
+                    trigger: document.getElementById('log-trigger').value,
+                    round: document.getElementById('log-round').value
+                };
+
                 const saveObj = {
                     current: data,
                     targets,
                     settings,
-                    history: this.history
+                    history: this.history,
+                    logData: logData,
+                    logHistory: this.logHistory,
+                    jackpotCount: this.jackpotCount
                 };
                 localStorage.setItem('pachitaku_v6_data_v2', JSON.stringify(saveObj));
                 localStorage.setItem('pachitaku_v6', JSON.stringify(data));
@@ -1100,37 +1628,59 @@
                     if (saved.history) {
                         this.history = saved.history;
                     }
+                    if (saved.logData) {
+                        if(saved.logData.hold !== undefined) document.getElementById('log-hold').value = saved.logData.hold;
+                        if(saved.logData.remain !== undefined) document.getElementById('log-remain').value = saved.logData.remain;
+                        if(saved.logData.replay !== undefined) document.getElementById('log-replay').value = saved.logData.replay;
+                        if(saved.logData.invest !== undefined) document.getElementById('log-invest').value = saved.logData.invest;
+                        if(saved.logData.trigger !== undefined) document.getElementById('log-trigger').value = saved.logData.trigger;
+                        if(saved.logData.round !== undefined) document.getElementById('log-round').value = saved.logData.round;
+                    }
+                    if (saved.logHistory) {
+                        this.logHistory = saved.logHistory;
+                    }
+                    if (saved.jackpotCount !== undefined) {
+                        this.jackpotCount = saved.jackpotCount;
+                    }
                 }
+                this.updateLogHistoryView();
                 this.calc();
                 this.updateIntervalDropdown();
             },
 
-            downloadBackup(memo) {
-                const dataStr = localStorage.getItem('pachitaku_v6_data_v2');
+            downloadBackup(daiban, memo) {
+                const titleDaiban = daiban ? ` 台番: ${daiban}` : "";
                 let masterDataText = "========================================\n" +
-                    " ファミスタ攻略ツール - 稼働マスターデータ\n" +
+                    ` ファミスタ${titleDaiban}\n` +
                     "========================================\n\n";
 
-                masterDataText += "【① 最終累計入力数値】\n";
-                const v = {};
-                this.fields.forEach(f => v[f.id] = parseFloat(document.getElementById(f.id).value) || 0);
+                masterDataText += "【稼働メモ】\n";
+                masterDataText += (memo || "（入力なし）") + "\n\n";
+
+                const v = { ...this.lastCalcV };
+                const res = this.lastCalcRes;
+                const s = this.getSettings();
+
+                masterDataText += "【最終結果】\n";
+                masterDataText += `総期待値: ${Math.floor(res.totalExpYen)}円\n`;
+                masterDataText += `1回転あたりの期待値: ${res.unitExpYen.toFixed(1)}円\n`;
+                masterDataText += `持ち玉比率: ${v.holding_rate.toFixed(1)}%\n`;
+                masterDataText += `千円あたりの回転数: ${v.rot_per_k.toFixed(1)} 回/k (ボーダー 持ち玉:${res.borderHold.toFixed(1)} / 現金:${res.borderCash.toFixed(1)})\n`;
+                masterDataText += `1R出玉: ${v.r_out.toFixed(1)}玉\n`;
+                masterDataText += `推定確率: 役モノ 1/${res.estYakuProbDenom.toFixed(1)} / 大当り 1/${res.estProbDenom.toFixed(1)}\n`;
+                masterDataText += `平均R数: ${res.actAvgR.toFixed(1)}R (2R:${v.v_2r}回 / 4R:${v.v_4r}回 / 9R:${v.v_9r}回)\n`;
+                masterDataText += `余剰玉数: ${res.gapJade > 0 ? "+" : ""}${res.gapJade.toFixed(0)}玉\n`;
+                masterDataText += `当選契機別回数: SP:${v.sp_v_in}回 / ノーマル:${v.nm_total_v}回 / HR:${v.st_hr_in + v.ch_hr_in}回\n\n`;
+
+                masterDataText += "【最終累計入力数値】\n";
                 this.fields.forEach(f => {
                     masterDataText += `${f.name}: ${v[f.id]}\n`;
                 });
                 masterDataText += "\n";
 
-                masterDataText += "【② 最終算出データ】\n";
-                const s = this.getSettings();
-                const totalV = v.v_2r + v.v_4r + v.v_9r;
-                const totalR = (v.v_2r * 2) + (v.v_4r * 4) + (v.v_9r * 9);
-                const actAvgR = totalV > 0 ? totalR / totalV : 0;
-                const avgOutJade = s.avgR * v.r_out;
-                const gapJade = (totalR * v.r_out) - (totalV * avgOutJade);
-                const finalRes = this.calcMetricsObject(v, s);
-
+                masterDataText += "【最終算出データ】\n";
                 const safeDivPct = (num, den) => den > 0 ? ((num / den) * 100).toFixed(1) + "%" : "0.0%";
                 const safeDivProb = (num, den) => den > 0 ? `1 / ${(num / den).toFixed(1)}` : "-";
-
                 const nmRouteCount = v.total_pick - v.sp_select;
                 const curveSelectCount = nmRouteCount - v.st_select;
 
@@ -1142,13 +1692,9 @@
                 masterDataText += `変化球強打時回転体突入率: ${safeDivPct(v.ch_rot_in, v.ch_strong - v.ch_hr_in)}\n`;
                 masterDataText += `ノーマルルート選択時総回転体突入率: ${safeDivPct(v.st_rot_in + v.ch_rot_in, v.total_pick - v.sp_select - v.st_hr_in - v.ch_hr_in)}\n`;
                 masterDataText += `SPルート回転体当選率: ${safeDivProb(v.sp_select, v.sp_v_in)}\n`;
-                masterDataText += `ノーマルルート回転体当選率: ${safeDivProb(v.st_rot_in + v.ch_rot_in, v.nm_total_v)}\n`;
-                masterDataText += `推定役モノ確率: ${finalRes.estYakuProb > 0 ? "1/" + finalRes.estYakuProb.toFixed(1) : "-"}\n`;
-                masterDataText += `推定大当り確率: ${finalRes.estProb > 0 ? "1/" + finalRes.estProb.toFixed(1) : "-"}\n`;
-                masterDataText += `平均ラウンド数: ${actAvgR > 0 ? actAvgR.toFixed(2) + "R" : "-"}\n`;
-                masterDataText += `欠損/余剰: ${gapJade > 0 ? "+" : ""}${gapJade.toFixed(0)}玉\n\n`;
+                masterDataText += `ノーマルルート回転体当選率: ${safeDivProb(v.st_rot_in + v.ch_rot_in, v.nm_total_v)}\n\n`;
 
-                masterDataText += "【③ 区間別詳細データ】\n";
+                masterDataText += "【区間別詳細データ】\n";
                 if (this.history && this.history.length > 0) {
                     let prevV = null;
                     this.history.forEach((h, i) => {
@@ -1157,13 +1703,18 @@
                         masterDataText += `--- 区間${i + 1} (${label}) ---\n`;
                         masterDataText += `[コメント] ${h.comment || "なし"}\n`;
                         const deltaV = {};
-                        this.fields.forEach(f => {
-                            deltaV[f.id] = h.v[f.id] - (prevV ? prevV[f.id] : 0);
+                        Object.keys(h.v).forEach(k => {
+                            deltaV[k] = (h.v[k] || 0) - (prevV && prevV[k] ? prevV[k] : 0);
                         });
+                        ['st_hr_in', 'ch_hr_in', 'sp_v_in', 'nm_total_v', 'v_2r', 'v_4r', 'v_9r', 'totalUsedBalls', 'totalInvest', 'totalGained'].forEach(k => {
+                            if (deltaV[k] === undefined || isNaN(deltaV[k])) deltaV[k] = 0;
+                        });
+
                         const iRes = this.calcMetricsObject(deltaV, s);
                         const iNmRouteCount = deltaV.total_pick - deltaV.sp_select;
                         const iCurveSelectCount = iNmRouteCount - deltaV.st_select;
 
+                        masterDataText += `[千円あたりの回転数] ${iRes.rotPerK.toFixed(1)} 回転 | [1Rあたりの出玉] ${iRes.rOut.toFixed(1)} 玉\n`;
                         masterDataText += `[拾い率] ${safeDivPct(deltaV.total_pick, deltaV.total_rot)} | [推定役モノ確率] ${iRes.estYakuProb > 0 ? "1/" + iRes.estYakuProb.toFixed(1) : "-"} | [推定大当り確率] ${iRes.estProb > 0 ? "1/" + iRes.estProb.toFixed(1) : "-"}\n`;
                         masterDataText += `SP選択率: ${safeDivPct(deltaV.sp_select, deltaV.total_pick)} | ストレート選択率: ${safeDivPct(deltaV.st_select, iNmRouteCount)}\n`;
                         masterDataText += `ストレート突入率: ${safeDivPct(deltaV.st_rot_in, deltaV.st_select - deltaV.st_hr_in)} | 変化球強打率: ${safeDivPct(deltaV.ch_strong, iCurveSelectCount)}\n`;
@@ -1174,21 +1725,6 @@
                     });
                 } else {
                     masterDataText += "保存された区間データはありません。\n\n";
-                }
-
-                masterDataText += "【④ 本日の稼働メモ】\n";
-                masterDataText += (memo || "（入力なし）") + "\n\n";
-
-                masterDataText += "【⑤ 生データ（JSON）】\n";
-                if (dataStr) {
-                    try {
-                        const parsed = JSON.parse(dataStr);
-                        masterDataText += JSON.stringify(parsed, null, 2);
-                    } catch (e) {
-                        masterDataText += dataStr;
-                    }
-                } else {
-                    masterDataText += "生データなし";
                 }
 
                 const blob = new Blob([new Uint8Array([0xEF, 0xBB, 0xBF]), masterDataText], { type: 'text/plain;charset=utf-8' });
@@ -1230,28 +1766,50 @@
             },
 
             resetAll() {
-                const doBackup = confirm("ここまでのデータをバックアップしてリセットしますか？\n※「キャンセル」でバックアップなしのリセットに進みます");
-                if (doBackup) {
-                    const todayMemo = prompt("本日の稼働メモ（台の挙動、ネカセ、現場状況など）を入力してください", "") || "";
-                    this.downloadBackup(todayMemo);
+                document.getElementById('reset-daiban').value = "";
+                document.getElementById('reset-memo').value = "";
+                document.getElementById('reset-modal').style.display = 'flex';
+            },
+
+            executeBackupAndReset() {
+                const daiban = document.getElementById('reset-daiban').value;
+                const memo = document.getElementById('reset-memo').value;
+                this.downloadBackup(daiban, memo);
+                this.executeReset();
+                document.getElementById('reset-modal').style.display = 'none';
+            },
+
+            executeResetOnly() {
+                if (confirm("バックアップせずにデータをリセットしてよろしいですか？\n※詳細設定は保持されます")) {
                     this.executeReset();
-                } else {
-                    if (confirm("バックアップせずにデータをリセットしてよろしいですか？\n※詳細設定は保持されます")) {
-                        this.executeReset();
-                    }
+                    document.getElementById('reset-modal').style.display = 'none';
                 }
             },
 
             executeReset() {
                 this.history = [];
+                this.logHistory = [];
+                this.jackpotCount = 0;
+                this.isModifying = false;
+                this.confirmShown = false;
+                
                 this.fields.forEach(f => {
                     const el = document.getElementById(f.id);
                     if (el) el.value = "";
                 });
+                
+                ['log-hold', 'log-remain', 'log-replay', 'log-invest', 'log-trigger', 'log-round'].forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) el.value = "";
+                });
+                
+                document.getElementById('log-modify-record-container').style.display = 'none';
+
                 this.saveDataAndHistory();
                 this.calc();
                 this.updateCompareView();
                 this.updateIntervalDropdown();
+                this.updateLogHistoryView();
             }
         };
 
