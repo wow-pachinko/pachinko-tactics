@@ -546,7 +546,12 @@
                 </div>
             </div>
 
-            <div class="section-header" style="margin-top: 30px;">■履歴</div>
+            <div class="section-header" style="margin-top: 30px; display:flex; justify-content: space-between; align-items: center;">
+                <span>■履歴</span>
+                <label style="font-size: 0.8rem; cursor: pointer; display: flex; align-items: center; gap: 4px; font-weight: normal;">
+                    <input type="checkbox" id="log-delete-mode" onchange="app.updateLogHistoryView()"> 削除モード
+                </label>
+            </div>
             <div style="max-height: 300px; overflow-y: auto; border: 1px solid var(--border-color); border-radius: 4px;">
                 <table class="data-table" style="margin-top: 0; border: none;">
                     <thead style="position: sticky; top: 0; z-index: 10;">
@@ -606,7 +611,12 @@
         </div>
 
         <div id="compare" class="content-section">
-            <div class="section-header">■ 区間比較（時系列推移）</div>
+            <div class="section-header" style="display:flex; justify-content: space-between; align-items: center;">
+                <span>■ 区間比較（時系列推移）</span>
+                <label style="font-size: 0.8rem; cursor: pointer; display: flex; align-items: center; gap: 4px; font-weight: normal;">
+                    <input type="checkbox" id="history-delete-mode" onchange="app.updateCompareView()"> 削除モード
+                </label>
+            </div>
 
             <select id="compare-metric-select" onchange="app.updateCompareView()"
                 style="width:100%; padding: 10px; font-size: 16px; margin-bottom: 15px; border-radius: 4px; border: 1px solid #ccc; font-family: var(--font-main);">
@@ -676,8 +686,8 @@
             <div class="modal-close" onclick="app.closeEditLogModal()">×</div>
             <h3 style="margin-top: 0; border-bottom: 2px solid var(--accent-secondary); padding-bottom: 10px; color: var(--accent-secondary);">履歴の修正 (No.<span id="edit-log-no"></span>)</h3>
             <input type="hidden" id="edit-log-index">
-            <div class="input-group"><label>現在の持ち玉数</label><input type="number" id="edit-log-hold"></div>
-            <div class="input-group"><label>残玉数</label><input type="number" id="edit-log-remain"></div>
+            <div class="input-group"><label>現在の持ち玉数</label><input type="number" id="edit-log-hold" oninput="app.checkEditLogForm()"></div>
+            <div class="input-group"><label>残玉数</label><input type="number" id="edit-log-remain" oninput="app.checkEditLogForm()"></div>
             <div class="input-group"><label>再プレイ玉数</label><input type="number" id="edit-log-replay"></div>
             <div class="input-group"><label>追加投資(円)</label><input type="number" id="edit-log-invest"></div>
             <div class="input-group">
@@ -751,6 +761,18 @@
                 <button class="btn-primary" onclick="app.executeBackupAndReset()" style="background:#227093;">バックアップしてリセット</button>
                 <button class="btn-primary" onclick="app.executeResetOnly()" style="background:#b33939;">バックアップせずにリセット</button>
                 <button class="btn-primary" onclick="document.getElementById('reset-modal').style.display='none'" style="background:#7f8c8d;">キャンセル</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Save Complete Modal -->
+    <div id="save-complete-modal" class="modal-overlay">
+        <div class="modal-content" style="max-width: 400px; text-align: center;">
+            <div class="modal-close" onclick="document.getElementById('save-complete-modal').style.display='none'">×</div>
+            <h3 style="margin-top: 0; color: var(--accent-secondary);">保存完了</h3>
+            <p style="font-size: 16px; font-weight: bold;">区間データを無事に保存しました！</p>
+            <div style="margin-top: 20px;">
+                <button class="btn-primary" onclick="document.getElementById('save-complete-modal').style.display='none'">閉じる</button>
             </div>
         </div>
     </div>
@@ -846,11 +868,19 @@
             },
 
             checkLogForm() {
-                const hold = document.getElementById('log-hold').value;
-                const remain = document.getElementById('log-remain').value;
+                const holdEl = document.getElementById('log-hold');
+                const remainEl = document.getElementById('log-remain');
+                const hold = holdEl.value;
+                const remain = remainEl.value;
                 const invest = document.getElementById('log-invest').value;
                 const trigger = document.getElementById('log-trigger').value;
                 const round = document.getElementById('log-round').value;
+
+                if (hold !== "" && remain !== "" && parseFloat(remain) > parseFloat(hold)) {
+                    remainEl.classList.add('input-error');
+                } else {
+                    remainEl.classList.remove('input-error');
+                }
 
                 const isComplete = hold !== "" && remain !== "" && trigger !== "" && round !== "";
 
@@ -919,12 +949,35 @@
                 alert('実戦ログを記録しました。');
             },
 
+            deleteLog(index) {
+                if (confirm('この履歴を削除してよろしいですか？')) {
+                    this.logHistory.splice(index, 1);
+                    this.logHistory.forEach((h, i) => h.no = i + 1);
+                    this.jackpotCount = this.logHistory.length;
+                    this.calc();
+                    this.saveDataAndHistory();
+                    this.updateLogHistoryView();
+                }
+            },
+
             updateLogHistoryView() {
                 document.getElementById('jackpot-count-display').innerText = this.jackpotCount;
                 const tbody = document.getElementById('log-history-table');
+                const thead = tbody.previousElementSibling;
+                const delMode = document.getElementById('log-delete-mode') && document.getElementById('log-delete-mode').checked;
+
+                if (thead) {
+                    thead.innerHTML = `<tr>
+                        <th style="width: 10%; text-align: center;">No</th>
+                        <th style="width: 25%; text-align: center;">使用玉数</th>
+                        <th style="width: 25%; text-align: center;">獲得出玉</th>
+                        <th style="width: 25%; text-align: center;">当選契機</th>
+                        ${delMode ? '<th style="width: 15%; text-align: center; color: var(--plus-red);">削除</th>' : '<th style="width: 15%; text-align: center;">R数</th>'}
+                    </tr>`;
+                }
                 
                 if (this.logHistory.length === 0) {
-                    tbody.innerHTML = '<tr><td colspan="4" style="padding: 15px;">履歴がありません</td></tr>';
+                    tbody.innerHTML = '<tr><td colspan="5" style="padding: 15px;">履歴がありません</td></tr>';
                     return;
                 }
 
@@ -953,13 +1006,17 @@
                     }
 
                     const shortTrigger = triggerMap[h.trigger] || h.trigger;
+                    
+                    const lastCol = delMode ? 
+                        `<button style="background:var(--plus-red); color:white; border:none; border-radius:4px; padding:2px 8px; cursor:pointer;" onclick="app.deleteLog(${index})">×</button>` :
+                        `<span style="font-family:var(--font-eng); font-weight:bold;">${h.round}</span>`;
 
                     html += `<tr>
                         <td>${h.no}</td>
                         <td style="font-family:var(--font-eng); font-weight:bold; cursor:pointer; color:var(--accent-secondary); text-decoration:underline;" onclick="app.openEditLogModal(${index})">${Math.floor(h.usedBalls)}玉</td>
                         <td style="font-family:var(--font-eng); font-weight:bold; color:var(--plus-red);">${gainedBallsDisplay}</td>
                         <td style="font-size:0.9em;">${shortTrigger}</td>
-                        <td style="font-family:var(--font-eng); font-weight:bold;">${h.round}</td>
+                        <td>${lastCol}</td>
                     </tr>`;
                 });
                 tbody.innerHTML = html;
@@ -1018,6 +1075,20 @@
                 this.closeEditLogModal();
             },
 
+            checkEditLogForm() {
+                const holdEl = document.getElementById('edit-log-hold');
+                const remainEl = document.getElementById('edit-log-remain');
+                if (holdEl && remainEl) {
+                    const hold = holdEl.value;
+                    const remain = remainEl.value;
+                    if (hold !== "" && remain !== "" && parseFloat(remain) > parseFloat(hold)) {
+                        remainEl.classList.add('input-error');
+                    } else {
+                        remainEl.classList.remove('input-error');
+                    }
+                }
+            },
+
             formatVal(val, isYen = true) {
                 const sign = val > 0 ? "+" : "";
                 const colorClass = val > 0 ? "val-plus" : (val < 0 ? "val-minus" : "");
@@ -1038,26 +1109,35 @@
             calcMetricsObject(v, s) {
                 const safeDiv = (num, den) => den > 0 ? num / den : 0;
 
-                const rotInSum = v.st_rot_in + v.ch_rot_in;
-                const expVCount = (v.sp_select / s.sp) + (rotInSum / s.nm);
-                const estProbDenom = expVCount > 0 ? (v.total_rot / expVCount) : 0;
-                const pickRateVal = safeDiv(v.total_pick, v.total_rot);
+                const rotInSum = (v.st_rot_in || 0) + (v.ch_rot_in || 0);
+                const expVCount = ((v.sp_select || 0) / s.sp) + (rotInSum / s.nm);
+                const estProbDenom = expVCount > 0 ? ((v.total_rot || 0) / expVCount) : 0;
+                const pickRateVal = safeDiv(v.total_pick || 0, v.total_rot || 0);
                 const estYakuProbDenom = pickRateVal > 0 ? (estProbDenom * pickRateVal) : 0;
 
-                const nmRouteCount = v.total_pick - v.sp_select;
-                const curveSelectCount = nmRouteCount - v.st_select;
+                const nmRouteCount = (v.total_pick || 0) - (v.sp_select || 0);
+                const curveSelectCount = nmRouteCount - (v.st_select || 0);
+
+                const kasiBalls = s.kasi > 0 ? (1000 / s.kasi) : 250;
+                const usedK = (v.totalUsedBalls || 0) > 0 ? (v.totalUsedBalls / kasiBalls) : 0;
+                const rotPerK = usedK > 0 ? ((v.total_rot || 0) / usedK) : 0;
+
+                const totalRounds = (v.v_2r || 0) * 2 + (v.v_4r || 0) * 4 + (v.v_9r || 0) * 9;
+                const rOut = totalRounds > 0 ? ((v.totalGained || 0) / totalRounds) : 0;
 
                 return {
+                    rotPerK: rotPerK,
+                    rOut: rOut,
                     pickRate: pickRateVal,
-                    spSelectRate: safeDiv(v.sp_select, v.total_pick),
-                    straightSelectRate: safeDiv(v.st_select, nmRouteCount),
-                    straightRotInRate: safeDiv(v.st_rot_in, v.st_select - v.st_hr_in),
-                    curveStrongRate: safeDiv(v.ch_strong, curveSelectCount),
-                    curveRotInRate: safeDiv(v.ch_rot_in, v.ch_strong - v.ch_hr_in),
-                    nmTotalRotInRate: safeDiv(v.st_rot_in + v.ch_rot_in, v.total_pick - v.sp_select - v.st_hr_in - v.ch_hr_in),
+                    spSelectRate: safeDiv(v.sp_select || 0, v.total_pick || 0),
+                    straightSelectRate: safeDiv(v.st_select || 0, nmRouteCount),
+                    straightRotInRate: safeDiv(v.st_rot_in || 0, (v.st_select || 0) - (v.st_hr_in || 0)),
+                    curveStrongRate: safeDiv(v.ch_strong || 0, curveSelectCount),
+                    curveRotInRate: safeDiv(v.ch_rot_in || 0, (v.ch_strong || 0) - (v.ch_hr_in || 0)),
+                    nmTotalRotInRate: safeDiv((v.st_rot_in || 0) + (v.ch_rot_in || 0), (v.total_pick || 0) - (v.sp_select || 0) - (v.st_hr_in || 0) - (v.ch_hr_in || 0)),
                     estYakuProb: estYakuProbDenom,
-                    spWinRate: safeDiv(v.sp_select, v.sp_v_in),
-                    nmWinRate: safeDiv(v.st_rot_in + v.ch_rot_in, v.nm_total_v),
+                    spWinRate: safeDiv(v.sp_select || 0, v.sp_v_in || 0),
+                    nmWinRate: safeDiv((v.st_rot_in || 0) + (v.ch_rot_in || 0), v.nm_total_v || 0),
                     estProb: estProbDenom
                 };
             },
@@ -1284,12 +1364,22 @@
                 return "-";
             },
 
+            deleteHistory(index) {
+                if (confirm('この区間データを削除してよろしいですか？\n※この操作は元に戻せません。\n※該当区間の区間詳細も合わせて削除されます。')) {
+                    this.history.splice(index, 1);
+                    this.saveDataAndHistory();
+                    this.updateCompareView();
+                    this.updateIntervalDropdown();
+                }
+            },
+
             updateCompareView() {
                 const metricId = document.getElementById('compare-metric-select').value;
                 const metric = this.metricsConfig.find(m => m.id === metricId);
                 const tbody = document.getElementById('compare-list');
                 const theadTr = document.querySelector('#compare .data-table thead tr');
                 const s = this.getSettings();
+                const delMode = document.getElementById('history-delete-mode') && document.getElementById('history-delete-mode').checked;
 
                 if (metric.type === 'text') {
                     if (theadTr) {
@@ -1302,7 +1392,9 @@
                     this.history.forEach((h, i) => {
                         const prevPick = i === 0 ? 0 : this.history[i - 1].totalPick;
                         const label = prevPick === h.totalPick ? `${h.totalPick}個` : `${prevPick + 1}個～${h.totalPick}個`;
-                        html += `<tr><td style="text-align:center;">${label}</td><td style="text-align:center;">${h.comment || '-'}</td></tr>`;
+                        const actionCol = delMode ? 
+                            `<button style="background:var(--plus-red); color:white; border:none; border-radius:4px; padding:2px 8px; cursor:pointer; float:right;" onclick="app.deleteHistory(${i})">×</button>` : '';
+                        html += `<tr><td style="text-align:center;">${label}</td><td style="text-align:left;">${h.comment || '-'}${actionCol}</td></tr>`;
                     });
                     tbody.innerHTML = html;
                     if (this.chartInstance) { this.chartInstance.destroy(); this.chartInstance = null; }
@@ -1314,7 +1406,7 @@
                     theadTr.innerHTML = `
                         <th style="width: 33.3%; text-align: center;">区間(拾い)</th>
                         <th style="width: 33.3%; text-align: center;">数値</th>
-                        <th style="width: 33.3%; text-align: center;">累計との比較</th>
+                        ${delMode ? '<th style="width: 33.3%; text-align: center; color: var(--plus-red);">削除</th>' : '<th style="width: 33.3%; text-align: center;">累計との比較</th>'}
                     `;
                 }
 
@@ -1351,7 +1443,9 @@
                     tableRows.push(`<tr>
                         <td style="text-align:center;">${label}</td>
                         <td style="text-align:center; font-family:var(--font-eng); font-weight:bold;">${this.formatF(val, metric.type)}</td>
-                        <td style="text-align:center; font-family:var(--font-eng);">${this.getCompareStr(val, cumulativeVal, metric.type, metric.lowerIsBetter)}</td>
+                        <td style="text-align:center; font-family:var(--font-eng);">
+                            ${delMode ? `<button style="background:var(--plus-red); color:white; border:none; border-radius:4px; padding:2px 8px; cursor:pointer;" onclick="app.deleteHistory(${i})">×</button>` : this.getCompareStr(val, cumulativeVal, metric.type, metric.lowerIsBetter)}
+                        </td>
                     </tr>`);
 
                     labels.push(label);
@@ -1426,7 +1520,7 @@
                         scales: {
                             y: {
                                 reverse: metric.lowerIsBetter,
-                                beginAtZero: metric.type === 'pct'
+                                beginAtZero: false
                             },
                             x: {
                                 offset: true
@@ -1482,7 +1576,7 @@
                 Object.keys(currentH.v).forEach(k => {
                     deltaV[k] = (currentH.v[k] || 0) - (prevH && prevH.v[k] ? prevH.v[k] : 0);
                 });
-                ['st_hr_in', 'ch_hr_in', 'sp_v_in', 'nm_total_v', 'v_2r', 'v_4r', 'v_9r', 'totalUsedBalls', 'totalInvest', 'totalGained'].forEach(k => {
+                ['st_select', 'st_rot_in', 'ch_strong', 'ch_rot_in', 'sp_select', 'total_pick', 'total_rot', 'st_hr_in', 'ch_hr_in', 'sp_v_in', 'nm_total_v', 'v_2r', 'v_4r', 'v_9r', 'totalUsedBalls', 'totalInvest', 'totalGained'].forEach(k => {
                     if (deltaV[k] === undefined || isNaN(deltaV[k])) deltaV[k] = 0;
                 });
 
@@ -1552,7 +1646,7 @@
                 this.saveDataAndHistory();
                 this.updateCompareView();
                 this.updateIntervalDropdown();
-                alert('区間データを保存しました！');
+                document.getElementById('save-complete-modal').style.display = 'flex';
             },
 
             saveDataAndHistory() {
@@ -1648,7 +1742,7 @@
                 this.updateIntervalDropdown();
             },
 
-            downloadBackup(daiban, memo) {
+            async copyBackupToClipboard(daiban, memo) {
                 const titleDaiban = daiban ? ` 台番: ${daiban}` : "";
                 let masterDataText = "========================================\n" +
                     ` ファミスタ${titleDaiban}\n` +
@@ -1727,19 +1821,20 @@
                     masterDataText += "保存された区間データはありません。\n\n";
                 }
 
-                const blob = new Blob([new Uint8Array([0xEF, 0xBB, 0xBF]), masterDataText], { type: 'text/plain;charset=utf-8' });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-
-                const d = new Date();
-                const timeStr = `${d.getFullYear()}${(d.getMonth() + 1).toString().padStart(2, '0')}${d.getDate().toString().padStart(2, '0')}_${d.getHours().toString().padStart(2, '0')}${d.getMinutes().toString().padStart(2, '0')}`;
-                a.download = `パチンコタクティクス_マスターデータ_${timeStr}.txt`;
-
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                URL.revokeObjectURL(url);
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    try {
+                        await navigator.clipboard.writeText(masterDataText);
+                    } catch(e) {}
+                } else {
+                    const textArea = document.createElement("textarea");
+                    textArea.value = masterDataText;
+                    document.body.appendChild(textArea);
+                    textArea.select();
+                    try {
+                        document.execCommand('copy');
+                    } catch(e) {}
+                    document.body.removeChild(textArea);
+                }
             },
 
             resetBasicSettings() {
@@ -1771,18 +1866,23 @@
                 document.getElementById('reset-modal').style.display = 'flex';
             },
 
-            executeBackupAndReset() {
+            async executeBackupAndReset() {
+                if (!confirm("クリップボードに今回の実戦データをコピーし、リセットしてもよろしいですか。\n\n※詳細設定は保持されます。")) {
+                    return;
+                }
                 const daiban = document.getElementById('reset-daiban').value;
                 const memo = document.getElementById('reset-memo').value;
-                this.downloadBackup(daiban, memo);
+                await this.copyBackupToClipboard(daiban, memo);
                 this.executeReset();
                 document.getElementById('reset-modal').style.display = 'none';
+                alert("クリップボードに今回の実戦データをコピーしました。\n\nメモ帳アプリ等にペーストしてご確認下さい。");
             },
 
             executeResetOnly() {
-                if (confirm("バックアップせずにデータをリセットしてよろしいですか？\n※詳細設定は保持されます")) {
+                if (confirm("バックアップせずにデータをリセットしてよろしいですか?\n\n※詳細設定は保持されます。")) {
                     this.executeReset();
                     document.getElementById('reset-modal').style.display = 'none';
+                    alert("リセットが完了しました。");
                 }
             },
 
