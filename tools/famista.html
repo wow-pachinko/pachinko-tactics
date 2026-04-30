@@ -255,6 +255,7 @@
             background-color: rgba(34, 112, 147, 0.05);
             color: var(--accent-secondary);
         }
+
         .tab-group-blue.active {
             background-color: var(--accent-secondary);
             color: #fff;
@@ -265,6 +266,7 @@
             background-color: rgba(179, 57, 57, 0.05);
             color: var(--accent-color);
         }
+
         .tab-group-red.active {
             background-color: var(--accent-color);
             color: #fff;
@@ -475,8 +477,55 @@
             color: var(--text-sub);
             line-height: 1;
         }
+
         .modal-close:hover {
             color: var(--accent-color);
+        }
+
+        .btn-sim {
+            background: #8e44ad;
+            /* Purple */
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 95%;
+            max-width: 800px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin: 30px auto;
+            font-family: var(--font-main);
+            font-size: 16px;
+            transition: background 0.2s;
+            box-shadow: var(--shadow);
+        }
+
+        .btn-sim:hover {
+            background: #9b59b6;
+        }
+
+        .sim-result-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            font-size: 14px;
+        }
+
+        .sim-result-table th,
+        .sim-result-table td {
+            border: 1px solid var(--border-color);
+            padding: 10px;
+            text-align: left;
+        }
+
+        .sim-result-table th {
+            background: rgba(142, 68, 173, 0.05);
+            color: #8e44ad;
+            width: 40%;
         }
     </style>
 </head>
@@ -518,13 +567,18 @@
                 <span style="font-size: 0.9rem;">大当り回数 <span id="jackpot-count-display">0</span>回</span>
             </div>
             <div id="log-fields">
-                <div class="input-group"><label>現在の持ち玉数</label><input type="number" id="log-hold" oninput="app.checkLogForm()"></div>
-                <div class="input-group"><label>残玉数</label><input type="number" id="log-remain" oninput="app.checkLogForm()"></div>
-                <div class="input-group"><label>再プレイ玉数</label><input type="number" id="log-replay" oninput="app.checkLogForm()"></div>
-                <div class="input-group"><label>追加投資(円)</label><input type="number" id="log-invest" oninput="app.checkLogForm()"></div>
+                <div class="input-group"><label>現在の持ち玉数</label><input type="number" id="log-hold"
+                        oninput="app.checkLogForm()"></div>
+                <div class="input-group"><label>残玉数</label><input type="number" id="log-remain"
+                        oninput="app.checkLogForm()"></div>
+                <div class="input-group"><label>再プレイ玉数</label><input type="number" id="log-replay"
+                        oninput="app.checkLogForm()"></div>
+                <div class="input-group"><label>追加投資(円)</label><input type="number" id="log-invest"
+                        oninput="app.checkLogForm()"></div>
                 <div class="input-group">
                     <label>当選契機</label>
-                    <select id="log-trigger" onchange="app.checkLogForm()" style="width:100%; padding: 10px; font-size: 16px; border-radius: 4px; border: 1px solid #ccc; font-family: var(--font-main);">
+                    <select id="log-trigger" onchange="app.checkLogForm()"
+                        style="width:100%; padding: 10px; font-size: 16px; border-radius: 4px; border: 1px solid #ccc; font-family: var(--font-main);">
                         <option value="">未選択</option>
                         <option value="ノーマルルート">ノーマルルート</option>
                         <option value="SPルート">SPルート</option>
@@ -534,7 +588,8 @@
                 </div>
                 <div class="input-group">
                     <label>当選R数</label>
-                    <select id="log-round" onchange="app.checkLogForm()" style="width:100%; padding: 10px; font-size: 16px; border-radius: 4px; border: 1px solid #ccc; font-family: var(--font-main);">
+                    <select id="log-round" onchange="app.checkLogForm()"
+                        style="width:100%; padding: 10px; font-size: 16px; border-radius: 4px; border: 1px solid #ccc; font-family: var(--font-main);">
                         <option value="">未選択</option>
                         <option value="2R">2R</option>
                         <option value="4R">4R</option>
@@ -546,13 +601,16 @@
                 </div>
             </div>
 
-            <div class="section-header" style="margin-top: 30px; display:flex; justify-content: space-between; align-items: center;">
+            <div class="section-header"
+                style="margin-top: 30px; display:flex; justify-content: space-between; align-items: center;">
                 <span>■履歴</span>
-                <label style="font-size: 0.8rem; cursor: pointer; display: flex; align-items: center; gap: 4px; font-weight: normal;">
+                <label
+                    style="font-size: 0.8rem; cursor: pointer; display: flex; align-items: center; gap: 4px; font-weight: normal;">
                     <input type="checkbox" id="log-delete-mode" onchange="app.updateLogHistoryView()"> 削除モード
                 </label>
             </div>
-            <div style="max-height: 300px; overflow-y: auto; border: 1px solid var(--border-color); border-radius: 4px;">
+            <div
+                style="max-height: 300px; overflow-y: auto; border: 1px solid var(--border-color); border-radius: 4px;">
                 <table class="data-table" style="margin-top: 0; border: none;">
                     <thead style="position: sticky; top: 0; z-index: 10;">
                         <tr>
@@ -564,7 +622,9 @@
                         </tr>
                     </thead>
                     <tbody id="log-history-table" style="text-align: center;">
-                        <tr><td colspan="4" style="padding: 15px;">履歴がありません</td></tr>
+                        <tr>
+                            <td colspan="4" style="padding: 15px;">履歴がありません</td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
@@ -613,7 +673,8 @@
         <div id="compare" class="content-section">
             <div class="section-header" style="display:flex; justify-content: space-between; align-items: center;">
                 <span>■ 区間比較（時系列推移）</span>
-                <label style="font-size: 0.8rem; cursor: pointer; display: flex; align-items: center; gap: 4px; font-weight: normal;">
+                <label
+                    style="font-size: 0.8rem; cursor: pointer; display: flex; align-items: center; gap: 4px; font-weight: normal;">
                     <input type="checkbox" id="history-delete-mode" onchange="app.updateCompareView()"> 削除モード
                 </label>
             </div>
@@ -660,19 +721,28 @@
     <div id="settings-modal" class="modal-overlay">
         <div class="modal-content">
             <div class="modal-close" onclick="app.closeSettings()">×</div>
-            <h2 style="margin-top: 0; border-bottom: 2px solid var(--accent-secondary); padding-bottom: 10px; color: var(--accent-secondary);">⚙ 詳細設定</h2>
-            
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; margin-top: 20px;">
+            <h2
+                style="margin-top: 0; border-bottom: 2px solid var(--accent-secondary); padding-bottom: 10px; color: var(--accent-secondary);">
+                ⚙ 詳細設定</h2>
+
+            <div
+                style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; margin-top: 20px;">
                 <div style="font-weight: bold; color: var(--accent-secondary);">■ 基本設定</div>
                 <button class="reset-defaults-btn" onclick="app.resetBasicSettings()">デフォルトに戻す</button>
             </div>
-            <div class="input-group"><label>SPルート回転体当選率<br>(1/〇)</label><input type="number" id="set-sp-rate" value="3.1" onchange="app.calc()"></div>
-            <div class="input-group"><label>ノーマルルート回転体当選率<br>(1/〇)</label><input type="number" id="set-nm-rate" value="4.1" onchange="app.calc()"></div>
-            <div class="input-group"><label>平均ラウンド数<br>(理論上の振り分け)</label><input type="number" id="set-avg-r" value="5.16" onchange="app.calc()"></div>
-            <div class="input-group"><label>貸玉<br>(1000円あたりの玉数)</label><input type="number" id="set-kasi" value="250" onchange="app.calc()"></div>
-            <div class="input-group"><label>換金率<br>(1玉あたりの換金額)</label><input type="number" id="set-exchange" value="4.0" onchange="app.calc()"></div>
+            <div class="input-group"><label>SPルート回転体当選率<br>(1/〇)</label><input type="number" id="set-sp-rate"
+                    value="3.1" onchange="app.calc()"></div>
+            <div class="input-group"><label>ノーマルルート回転体当選率<br>(1/〇)</label><input type="number" id="set-nm-rate"
+                    value="4.1" onchange="app.calc()"></div>
+            <div class="input-group"><label>平均ラウンド数<br>(理論上の振り分け)</label><input type="number" id="set-avg-r"
+                    value="5.16" onchange="app.calc()"></div>
+            <div class="input-group"><label>貸玉<br>(1000円あたりの玉数)</label><input type="number" id="set-kasi" value="250"
+                    onchange="app.calc()"></div>
+            <div class="input-group"><label>換金率<br>(1玉あたりの換金額)</label><input type="number" id="set-exchange" value="4.0"
+                    onchange="app.calc()"></div>
 
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 25px; margin-bottom: 10px;">
+            <div
+                style="display: flex; justify-content: space-between; align-items: center; margin-top: 25px; margin-bottom: 10px;">
                 <div style="font-weight: bold; color: var(--accent-secondary);">■ 各種項目の基準値設定</div>
                 <button class="reset-defaults-btn" onclick="app.resetTargetSettings()">デフォルトに戻す</button>
             </div>
@@ -684,15 +754,20 @@
     <div id="log-edit-modal" class="modal-overlay">
         <div class="modal-content" style="max-width: 400px;">
             <div class="modal-close" onclick="app.closeEditLogModal()">×</div>
-            <h3 style="margin-top: 0; border-bottom: 2px solid var(--accent-secondary); padding-bottom: 10px; color: var(--accent-secondary);">履歴の修正 (No.<span id="edit-log-no"></span>)</h3>
+            <h3
+                style="margin-top: 0; border-bottom: 2px solid var(--accent-secondary); padding-bottom: 10px; color: var(--accent-secondary);">
+                履歴の修正 (No.<span id="edit-log-no"></span>)</h3>
             <input type="hidden" id="edit-log-index">
-            <div class="input-group"><label>現在の持ち玉数</label><input type="number" id="edit-log-hold" oninput="app.checkEditLogForm()"></div>
-            <div class="input-group"><label>残玉数</label><input type="number" id="edit-log-remain" oninput="app.checkEditLogForm()"></div>
+            <div class="input-group"><label>現在の持ち玉数</label><input type="number" id="edit-log-hold"
+                    oninput="app.checkEditLogForm()"></div>
+            <div class="input-group"><label>残玉数</label><input type="number" id="edit-log-remain"
+                    oninput="app.checkEditLogForm()"></div>
             <div class="input-group"><label>再プレイ玉数</label><input type="number" id="edit-log-replay"></div>
             <div class="input-group"><label>追加投資(円)</label><input type="number" id="edit-log-invest"></div>
             <div class="input-group">
                 <label>当選契機</label>
-                <select id="edit-log-trigger" style="width:100%; padding: 10px; font-size: 16px; border-radius: 4px; border: 1px solid #ccc; font-family: var(--font-main);">
+                <select id="edit-log-trigger"
+                    style="width:100%; padding: 10px; font-size: 16px; border-radius: 4px; border: 1px solid #ccc; font-family: var(--font-main);">
                     <option value="ノーマルルート">ノーマルルート</option>
                     <option value="SPルート">SPルート</option>
                     <option value="ストレートコース選択後HR">ストレートコース選択後HR</option>
@@ -701,7 +776,8 @@
             </div>
             <div class="input-group">
                 <label>当選R数</label>
-                <select id="edit-log-round" style="width:100%; padding: 10px; font-size: 16px; border-radius: 4px; border: 1px solid #ccc; font-family: var(--font-main);">
+                <select id="edit-log-round"
+                    style="width:100%; padding: 10px; font-size: 16px; border-radius: 4px; border: 1px solid #ccc; font-family: var(--font-main);">
                     <option value="2R">2R</option>
                     <option value="4R">4R</option>
                     <option value="9R">9R</option>
@@ -726,17 +802,23 @@
     <!-- Interval Save Modal -->
     <div id="interval-save-modal" class="modal-overlay">
         <div class="modal-content" style="max-width: 500px;">
-            <div class="modal-close" onclick="document.getElementById('interval-save-modal').style.display='none'">×</div>
-            <h3 style="margin-top: 0; color: var(--accent-secondary); border-bottom: 2px solid var(--accent-secondary); padding-bottom: 10px;">区間データの保存</h3>
-            
+            <div class="modal-close" onclick="document.getElementById('interval-save-modal').style.display='none'">×
+            </div>
+            <h3
+                style="margin-top: 0; color: var(--accent-secondary); border-bottom: 2px solid var(--accent-secondary); padding-bottom: 10px;">
+                区間データの保存</h3>
+
             <div class="input-group">
                 <label>この区間のメモ・コメント（空でもOK）</label>
-                <textarea id="interval-save-memo" rows="4" style="width:100%; padding:10px; border:1px solid #ccc; border-radius:4px; font-size:14px; font-family:var(--font-main); box-sizing:border-box;"></textarea>
+                <textarea id="interval-save-memo" rows="4"
+                    style="width:100%; padding:10px; border:1px solid #ccc; border-radius:4px; font-size:14px; font-family:var(--font-main); box-sizing:border-box;"></textarea>
             </div>
 
             <div style="display:flex; flex-direction:column; gap:10px; margin-top:20px;">
                 <button class="btn-primary" onclick="app.executeSaveHistory()" style="background:#227093;">保存する</button>
-                <button class="btn-primary" onclick="document.getElementById('interval-save-modal').style.display='none'" style="background:#7f8c8d;">キャンセル</button>
+                <button class="btn-primary"
+                    onclick="document.getElementById('interval-save-modal').style.display='none'"
+                    style="background:#7f8c8d;">キャンセル</button>
             </div>
         </div>
     </div>
@@ -745,8 +827,10 @@
     <div id="reset-modal" class="modal-overlay">
         <div class="modal-content" style="max-width: 500px;">
             <div class="modal-close" onclick="document.getElementById('reset-modal').style.display='none'">×</div>
-            <h3 style="margin-top: 0; color: var(--accent-secondary); border-bottom: 2px solid var(--accent-secondary); padding-bottom: 10px;">データのバックアップとリセット</h3>
-            
+            <h3
+                style="margin-top: 0; color: var(--accent-secondary); border-bottom: 2px solid var(--accent-secondary); padding-bottom: 10px;">
+                データのバックアップとリセット</h3>
+
             <div class="input-group">
                 <label>台番</label>
                 <input type="text" id="reset-daiban" placeholder="例: 123番台" style="font-size:16px;">
@@ -754,13 +838,17 @@
 
             <div class="input-group">
                 <label>本日の稼働メモ（台の挙動、ネカセなど）</label>
-                <textarea id="reset-memo" rows="4" style="width:100%; padding:10px; border:1px solid #ccc; border-radius:4px; font-size:14px; font-family:var(--font-main); box-sizing:border-box;"></textarea>
+                <textarea id="reset-memo" rows="4"
+                    style="width:100%; padding:10px; border:1px solid #ccc; border-radius:4px; font-size:14px; font-family:var(--font-main); box-sizing:border-box;"></textarea>
             </div>
 
             <div style="display:flex; flex-direction:column; gap:10px; margin-top:20px;">
-                <button class="btn-primary" onclick="app.executeBackupAndReset()" style="background:#227093;">バックアップしてリセット</button>
-                <button class="btn-primary" onclick="app.executeResetOnly()" style="background:#b33939;">バックアップせずにリセット</button>
-                <button class="btn-primary" onclick="document.getElementById('reset-modal').style.display='none'" style="background:#7f8c8d;">キャンセル</button>
+                <button class="btn-primary" onclick="app.executeBackupAndReset()"
+                    style="background:#227093;">バックアップしてリセット</button>
+                <button class="btn-primary" onclick="app.executeResetOnly()"
+                    style="background:#b33939;">バックアップせずにリセット</button>
+                <button class="btn-primary" onclick="document.getElementById('reset-modal').style.display='none'"
+                    style="background:#7f8c8d;">キャンセル</button>
             </div>
         </div>
     </div>
@@ -768,14 +856,67 @@
     <!-- Save Complete Modal -->
     <div id="save-complete-modal" class="modal-overlay">
         <div class="modal-content" style="max-width: 400px; text-align: center;">
-            <div class="modal-close" onclick="document.getElementById('save-complete-modal').style.display='none'">×</div>
+            <div class="modal-close" onclick="document.getElementById('save-complete-modal').style.display='none'">×
+            </div>
             <h3 style="margin-top: 0; color: var(--accent-secondary);">保存完了</h3>
             <p style="font-size: 16px; font-weight: bold;">区間データを無事に保存しました！</p>
             <div style="margin-top: 20px;">
-                <button class="btn-primary" onclick="document.getElementById('save-complete-modal').style.display='none'">閉じる</button>
+                <button class="btn-primary"
+                    onclick="document.getElementById('save-complete-modal').style.display='none'">閉じる</button>
             </div>
         </div>
     </div>
+
+    <!-- Simulation Modal -->
+    <div id="sim-modal" class="modal-overlay">
+        <div class="modal-content" style="max-width: 500px;">
+            <div class="modal-close" onclick="app.closeSim()">×</div>
+            <h3 style="margin-top: 0; color: #8e44ad; border-bottom: 2px solid #8e44ad; padding-bottom: 10px;">📊
+                期待値シミュレーション</h3>
+            <p style="font-size: 0.85rem; color: var(--text-sub); margin-bottom: 20px;">※この数値は実戦データには保存されません。</p>
+
+            <div class="input-group">
+                <label>千円あたりの回転数 (回)</label>
+                <input type="number" id="sim-rot" value="" step="0.1" oninput="app.runSim()">
+            </div>
+            <div class="input-group">
+                <label>1Rあたりの出玉 (玉)</label>
+                <input type="number" id="sim-rout" value="" step="1" oninput="app.runSim()">
+            </div>
+            <div class="input-group">
+                <label>拾い率 (%)</label>
+                <input type="number" id="sim-pick" value="" step="0.1" oninput="app.runSim()">
+            </div>
+            <div class="input-group">
+                <label>SPルート選択率 (%)</label>
+                <input type="number" id="sim-sp-rate" value="" step="0.1" oninput="app.runSim()">
+            </div>
+            <div class="input-group">
+                <label>ノーマルルート選択時総回転体突入率 (%)</label>
+                <input type="number" id="sim-nm-in" value="" step="0.1" oninput="app.runSim()">
+            </div>
+
+            <div id="sim-result-container" style="margin-top: 25px;">
+                <div style="font-weight: bold; color: #8e44ad;">■ シミュレーション結果</div>
+                <table class="sim-result-table">
+                    <tr>
+                        <th>期待値(1回転)</th>
+                        <td id="sim-res-unit">-</td>
+                    </tr>
+                    <tr>
+                        <th>ボーダー(千円)</th>
+                        <td id="sim-res-border">-</td>
+                    </tr>
+                    <tr>
+                        <th>推定確率</th>
+                        <td id="sim-res-prob">-</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <button class="btn-sim" onclick="app.openSim()">📊 シミュレーションを起動する</button>
 
     <script>
         const app = {
@@ -850,12 +991,12 @@
                 document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
                 document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
                 document.getElementById(id).classList.add('active');
-                
+
                 // Find the tab that triggered this
-                if(event && event.currentTarget) {
+                if (event && event.currentTarget) {
                     event.currentTarget.classList.add('active');
                 }
-                
+
                 if (id === 'compare') this.updateCompareView();
             },
 
@@ -890,7 +1031,7 @@
                 } else if (!isComplete) {
                     this.confirmShown = false;
                 }
-                
+
                 this.updateLogHistoryView();
                 this.calc();
                 this.saveDataAndHistory();
@@ -975,7 +1116,7 @@
                         ${delMode ? '<th style="width: 15%; text-align: center; color: var(--plus-red);">削除</th>' : '<th style="width: 15%; text-align: center;">R数</th>'}
                     </tr>`;
                 }
-                
+
                 if (this.logHistory.length === 0) {
                     tbody.innerHTML = '<tr><td colspan="5" style="padding: 15px;">履歴がありません</td></tr>';
                     return;
@@ -995,7 +1136,7 @@
                 this.logHistory.forEach((h, index) => {
                     let nextHoldStr = "";
                     if (index + 1 < this.logHistory.length) {
-                        nextHoldStr = this.logHistory[index+1].inputs ? this.logHistory[index+1].inputs.hold : "";
+                        nextHoldStr = this.logHistory[index + 1].inputs ? this.logHistory[index + 1].inputs.hold : "";
                     } else {
                         nextHoldStr = document.getElementById('log-hold').value;
                     }
@@ -1006,8 +1147,8 @@
                     }
 
                     const shortTrigger = triggerMap[h.trigger] || h.trigger;
-                    
-                    const lastCol = delMode ? 
+
+                    const lastCol = delMode ?
                         `<button style="background:var(--plus-red); color:white; border:none; border-radius:4px; padding:2px 8px; cursor:pointer;" onclick="app.deleteLog(${index})">×</button>` :
                         `<span style="font-family:var(--font-eng); font-weight:bold;">${h.round}</span>`;
 
@@ -1027,7 +1168,7 @@
                 if (!h) return;
                 document.getElementById('edit-log-index').value = index;
                 document.getElementById('edit-log-no').innerText = h.no;
-                
+
                 if (h.inputs) {
                     document.getElementById('edit-log-hold').value = h.inputs.hold;
                     document.getElementById('edit-log-remain').value = h.inputs.remain;
@@ -1041,7 +1182,7 @@
                 }
                 document.getElementById('edit-log-trigger').value = h.trigger;
                 document.getElementById('edit-log-round').value = h.round;
-                
+
                 document.getElementById('log-edit-modal').style.display = 'flex';
             },
 
@@ -1161,7 +1302,7 @@
                 let totalInvest = 0;
                 let totalGained = 0;
                 const rawKasi = parseFloat(document.getElementById('set-kasi').value) || 250;
-                
+
                 this.logHistory.forEach((h, index) => {
                     if (h.round === "2R") v2r++;
                     else if (h.round === "4R") v4r++;
@@ -1177,7 +1318,7 @@
                         totalInvest += (h.inputs.invest || 0);
                         let nextHoldStr = "";
                         if (index + 1 < this.logHistory.length) {
-                            nextHoldStr = this.logHistory[index+1].inputs ? this.logHistory[index+1].inputs.hold : "";
+                            nextHoldStr = this.logHistory[index + 1].inputs ? this.logHistory[index + 1].inputs.hold : "";
                         } else {
                             nextHoldStr = document.getElementById('log-hold').value;
                         }
@@ -1392,7 +1533,7 @@
                     this.history.forEach((h, i) => {
                         const prevPick = i === 0 ? 0 : this.history[i - 1].totalPick;
                         const label = prevPick === h.totalPick ? `${h.totalPick}個` : `${prevPick + 1}個～${h.totalPick}個`;
-                        const actionCol = delMode ? 
+                        const actionCol = delMode ?
                             `<button style="background:var(--plus-red); color:white; border:none; border-radius:4px; padding:2px 8px; cursor:pointer; float:right;" onclick="app.deleteHistory(${i})">×</button>` : '';
                         html += `<tr><td style="text-align:center;">${label}</td><td style="text-align:left;">${h.comment || '-'}${actionCol}</td></tr>`;
                     });
@@ -1432,8 +1573,11 @@
                 for (let i = 0; i < this.history.length; i++) {
                     const h = this.history[i];
                     const deltaV = {};
-                    this.fields.forEach(f => {
-                        deltaV[f.id] = h.v[f.id] - (prevV ? prevV[f.id] : 0);
+                    Object.keys(h.v).forEach(k => {
+                        deltaV[k] = (h.v[k] || 0) - (prevV && prevV[k] ? prevV[k] : 0);
+                    });
+                    ['st_select', 'st_rot_in', 'ch_strong', 'ch_rot_in', 'sp_select', 'total_pick', 'total_rot', 'st_hr_in', 'ch_hr_in', 'sp_v_in', 'nm_total_v', 'v_2r', 'v_4r', 'v_9r', 'totalUsedBalls', 'totalInvest', 'totalGained'].forEach(k => {
+                        if (deltaV[k] === undefined || isNaN(deltaV[k])) deltaV[k] = 0;
                     });
 
                     const res = this.calcMetricsObject(deltaV, s);
@@ -1723,12 +1867,12 @@
                         this.history = saved.history;
                     }
                     if (saved.logData) {
-                        if(saved.logData.hold !== undefined) document.getElementById('log-hold').value = saved.logData.hold;
-                        if(saved.logData.remain !== undefined) document.getElementById('log-remain').value = saved.logData.remain;
-                        if(saved.logData.replay !== undefined) document.getElementById('log-replay').value = saved.logData.replay;
-                        if(saved.logData.invest !== undefined) document.getElementById('log-invest').value = saved.logData.invest;
-                        if(saved.logData.trigger !== undefined) document.getElementById('log-trigger').value = saved.logData.trigger;
-                        if(saved.logData.round !== undefined) document.getElementById('log-round').value = saved.logData.round;
+                        if (saved.logData.hold !== undefined) document.getElementById('log-hold').value = saved.logData.hold;
+                        if (saved.logData.remain !== undefined) document.getElementById('log-remain').value = saved.logData.remain;
+                        if (saved.logData.replay !== undefined) document.getElementById('log-replay').value = saved.logData.replay;
+                        if (saved.logData.invest !== undefined) document.getElementById('log-invest').value = saved.logData.invest;
+                        if (saved.logData.trigger !== undefined) document.getElementById('log-trigger').value = saved.logData.trigger;
+                        if (saved.logData.round !== undefined) document.getElementById('log-round').value = saved.logData.round;
                     }
                     if (saved.logHistory) {
                         this.logHistory = saved.logHistory;
@@ -1824,7 +1968,7 @@
                 if (navigator.clipboard && navigator.clipboard.writeText) {
                     try {
                         await navigator.clipboard.writeText(masterDataText);
-                    } catch(e) {}
+                    } catch (e) { }
                 } else {
                     const textArea = document.createElement("textarea");
                     textArea.value = masterDataText;
@@ -1832,7 +1976,7 @@
                     textArea.select();
                     try {
                         document.execCommand('copy');
-                    } catch(e) {}
+                    } catch (e) { }
                     document.body.removeChild(textArea);
                 }
             },
@@ -1892,17 +2036,17 @@
                 this.jackpotCount = 0;
                 this.isModifying = false;
                 this.confirmShown = false;
-                
+
                 this.fields.forEach(f => {
                     const el = document.getElementById(f.id);
                     if (el) el.value = "";
                 });
-                
+
                 ['log-hold', 'log-remain', 'log-replay', 'log-invest', 'log-trigger', 'log-round'].forEach(id => {
                     const el = document.getElementById(id);
                     if (el) el.value = "";
                 });
-                
+
                 document.getElementById('log-modify-record-container').style.display = 'none';
 
                 this.saveDataAndHistory();
@@ -1910,6 +2054,112 @@
                 this.updateCompareView();
                 this.updateIntervalDropdown();
                 this.updateLogHistoryView();
+            },
+
+            openSim() {
+                document.getElementById('sim-modal').style.display = 'flex';
+
+                // 現在の実戦データを取得（データがある場合のみ）
+                if (this.lastCalcV && this.lastCalcV.total_rot > 0) {
+                    const v = this.lastCalcV;
+                    const s = this.getSettings();
+                    const metrics = this.calcMetricsObject(v, s);
+
+                    document.getElementById('sim-rot').value = v.rot_per_k ? v.rot_per_k.toFixed(1) : "";
+                    document.getElementById('sim-rout').value = v.r_out ? v.r_out.toFixed(1) : "";
+                    document.getElementById('sim-pick').value = metrics.pickRate ? (metrics.pickRate * 100).toFixed(1) : "";
+                    document.getElementById('sim-sp-rate').value = metrics.spSelectRate ? (metrics.spSelectRate * 100).toFixed(1) : "";
+                    document.getElementById('sim-nm-in').value = metrics.nmTotalRotInRate ? (metrics.nmTotalRotInRate * 100).toFixed(1) : "";
+                } else {
+                    // データがない場合は空欄にする
+                    ['sim-rot', 'sim-rout', 'sim-pick', 'sim-sp-rate', 'sim-nm-in'].forEach(id => {
+                        document.getElementById(id).value = "";
+                    });
+                }
+
+                this.runSim();
+            },
+
+            closeSim() {
+                document.getElementById('sim-modal').style.display = 'none';
+            },
+
+            runSim() {
+                const s = this.getSettings();
+                const rotInput = document.getElementById('sim-rot').value;
+                const routInput = document.getElementById('sim-rout').value;
+                const pickInput = document.getElementById('sim-pick').value;
+                const spInput = document.getElementById('sim-sp-rate').value;
+                const nmInputRaw = document.getElementById('sim-nm-in').value;
+
+                // 入力が一つでも空の場合は結果をクリア
+                if (rotInput === "" || routInput === "" || pickInput === "" || spInput === "" || nmInputRaw === "") {
+                    document.getElementById('sim-res-unit').innerHTML = "-";
+                    document.getElementById('sim-res-border').innerHTML = "-";
+                    document.getElementById('sim-res-prob').innerHTML = "-";
+                    return;
+                }
+
+                const rot = parseFloat(rotInput);
+                const rout = parseFloat(routInput);
+                const pick = parseFloat(pickInput) / 100;
+                const spRate = parseFloat(spInput) / 100;
+                const nmIn = parseFloat(nmInputRaw) / 100;
+
+                // 仮想的な1000回転での計算
+                const totalRot = 1000;
+                const picks = totalRot * pick;
+                const spSelects = picks * spRate;
+                const nmSelects = picks - spSelects;
+                const rotInSum = nmSelects * nmIn;
+
+                // calcMetricsObject 用の仮想データ
+                const v = {
+                    total_rot: totalRot,
+                    total_pick: picks,
+                    sp_select: spSelects,
+                    st_rot_in: rotInSum,
+                    ch_rot_in: 0,
+                    totalUsedBalls: (totalRot / rot) * (1000 / s.kasi),
+                    totalGained: 0 // rOut計算には使わず直接routを使用するため
+                };
+
+                // 推定大当り期待個数
+                const expVCount = (spSelects / s.sp) + (rotInSum / s.nm);
+                const estProbDenom = expVCount > 0 ? (totalRot / expVCount) : 0;
+                const estYakuProbDenom = pick > 0 ? (estProbDenom * pick) : 0;
+
+                // 期待値計算
+                const avgOutJade = s.avgR * rout;
+                const totalExpJade = expVCount * avgOutJade;
+                const jadeUsed = (totalRot / rot) * 250;
+                const totalInvestYen = (totalRot / rot) * 1000;
+
+                const yenHold = (totalExpJade * s.exch) - (jadeUsed * s.exch);
+                const yenCash = (totalExpJade * s.exch) - (totalInvestYen);
+
+                const unitHold = yenHold / totalRot;
+                const unitCash = yenCash / totalRot;
+
+                // ボーダー
+                const borderHold = (avgOutJade > 0 && estProbDenom > 0) ? (250 * estProbDenom / avgOutJade) : 0;
+                const borderCash = (avgOutJade > 0 && estProbDenom > 0 && s.exch > 0) ? (1000 * estProbDenom / (avgOutJade * s.exch)) : 0;
+
+                // 反映
+                const formatSimVal = (val) => {
+                    const color = val > 0 ? 'var(--plus-red)' : (val < 0 ? 'var(--minus-blue)' : 'inherit');
+                    return `<span style="color:${color}; font-weight:bold;">${val.toFixed(1)}円</span>`;
+                };
+
+                document.getElementById('sim-res-unit').innerHTML = `
+                    持ち玉: ${formatSimVal(unitHold)} / 現金: ${formatSimVal(unitCash)}
+                `;
+                document.getElementById('sim-res-border').innerHTML = `
+                    持ち玉: <span style="font-weight:bold;">${borderHold.toFixed(1)}回</span> / 現金: <span style="font-weight:bold;">${borderCash.toFixed(1)}回</span>
+                `;
+                document.getElementById('sim-res-prob').innerHTML = `
+                    役モノ: <span style="font-weight:bold;">1/${estYakuProbDenom.toFixed(1)}</span> / 大当り: <span style="font-weight:bold;">1/${estProbDenom.toFixed(1)}</span>
+                `;
             }
         };
 
