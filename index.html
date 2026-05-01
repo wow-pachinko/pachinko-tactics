@@ -395,6 +395,12 @@
       transition: background-color 0.2s, border-color 0.2s;
     }
 
+    /* 新着情報向けの特別スタイル */
+    #tab-top .vr-list .list-item {
+      padding: 10px 12px;
+      gap: 6px;
+    }
+
     .list-item:hover {
       background-color: rgba(0, 0, 0, 0.05);
       border-color: var(--border-color);
@@ -405,6 +411,11 @@
       font-size: 1.3rem;
       line-height: 1.4;
       color: var(--accent-color);
+    }
+
+    #tab-top .vr-list .item-title {
+      font-size: 1rem;
+      line-height: 1.3;
     }
 
     /* Thumbnail container for 16:9 */
@@ -565,6 +576,37 @@
       border-radius: 4px;
       font-weight: bold;
     }
+
+    /* さらに表示ボタン */
+    .more-btn-container {
+      text-align: center;
+      margin-top: 15px;
+    }
+
+    .more-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 24px;
+      background-color: var(--input-bg);
+      color: var(--accent-color);
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .more-btn:hover {
+      background-color: var(--accent-color);
+      color: #fff;
+      border-color: var(--accent-color);
+    }
+
+    .hidden-item {
+      display: none !important;
+    }
   </style>
 </head>
 
@@ -647,6 +689,13 @@
         <h2 class="section-title"><i class="fa-solid fa-bell"></i> 新着情報</h2>
         <div class="vr-list">
           <a href="./tools/famista.html" class="list-item">
+            <div class="item-content">
+              <span class="badge">攻略ツール更新</span>
+              <div class="item-title">「ハネモノファミスタ期待値計算/攻略ツール」をver2.0にアップデートしました。</div>
+              <div class="item-meta">2026/05/02</div>
+            </div>
+          </a>
+          <a href="./tools/famista.html" class="list-item">
 
             <div class="item-content">
               <span class="badge">攻略ツール更新</span>
@@ -724,7 +773,7 @@
           <div class="card-desc">回転体突入率などの数値を入力すれば、リアルタイムで期待値と優秀台を見抜く為の数値を算出!
             更に上ブレ、下ブレを判定するのに役立つ『区間分析』を完備。メモ機能も充実してるので、稼働後の振り返りにもご活用いただけます。
           </div>
-          <div class="card-meta"><span class="badge">稼働中</span> Ver 1.2.0</div>
+          <div class="card-meta"><span class="badge">稼働中</span> Ver 2.0.0</div>
         </div>
       </a>
     </section>
@@ -925,6 +974,31 @@
           }
         });
       });
+
+      // --- News "See More" Logic ---
+      const newsList = document.querySelector('#tab-top .vr-list');
+      if (newsList) {
+        const items = newsList.querySelectorAll('.list-item');
+        if (items.length > 5) {
+          for (let i = 5; i < items.length; i++) {
+            items[i].classList.add('hidden-item');
+          }
+          const moreBtnContainer = document.createElement('div');
+          moreBtnContainer.className = 'more-btn-container';
+          moreBtnContainer.innerHTML = `
+            <button class="more-btn">
+              <span>さらに表示</span>
+              <i class="fa-solid fa-chevron-down"></i>
+            </button>
+          `;
+          newsList.after(moreBtnContainer);
+
+          moreBtnContainer.querySelector('.more-btn').addEventListener('click', () => {
+            items.forEach(item => item.classList.remove('hidden-item'));
+            moreBtnContainer.remove();
+          });
+        }
+      }
 
     });
   </script>
