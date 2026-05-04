@@ -508,6 +508,40 @@
             background: #9b59b6;
         }
 
+        .btn-memo {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 95%;
+            max-width: 800px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin: 30px auto -15px auto;
+            font-family: var(--font-main);
+            font-size: 16px;
+            transition: background 0.2s;
+            box-shadow: var(--shadow);
+        }
+
+        .btn-memo:hover {
+            background: #2980b9;
+        }
+
+        .memo-modal-content {
+            background-color: #e3f2fd !important;
+        }
+
+        .memo-title {
+            color: #1976d2 !important;
+            border-bottom: 2px solid #1976d2 !important;
+        }
+
         .sim-result-table {
             width: 100%;
             border-collapse: collapse;
@@ -567,16 +601,16 @@
                 <span style="font-size: 0.9rem;">大当り回数 <span id="jackpot-count-display">0</span>回</span>
             </div>
             <div id="log-fields">
-                <div class="input-group"><label>現在の持ち玉数</label><input type="number" id="log-hold"
+                <div class="input-group"><label>現在の持ち玉数(※)</label><input type="number" id="log-hold"
                         oninput="app.checkLogForm()"></div>
-                <div class="input-group"><label>残玉数</label><input type="number" id="log-remain"
+                <div class="input-group"><label>残玉数(※)</label><input type="number" id="log-remain"
                         oninput="app.checkLogForm()"></div>
                 <div class="input-group"><label>再プレイ玉数</label><input type="number" id="log-replay"
                         oninput="app.checkLogForm()"></div>
                 <div class="input-group"><label>追加投資(円)</label><input type="number" id="log-invest"
                         oninput="app.checkLogForm()"></div>
                 <div class="input-group">
-                    <label>当選契機</label>
+                    <label>当選契機(※)</label>
                     <select id="log-trigger" onchange="app.checkLogForm()"
                         style="width:100%; padding: 10px; font-size: 16px; border-radius: 4px; border: 1px solid #ccc; font-family: var(--font-main);">
                         <option value="">未選択</option>
@@ -587,7 +621,7 @@
                     </select>
                 </div>
                 <div class="input-group">
-                    <label>当選R数</label>
+                    <label>当選R数(※)</label>
                     <select id="log-round" onchange="app.checkLogForm()"
                         style="width:100%; padding: 10px; font-size: 16px; border-radius: 4px; border: 1px solid #ccc; font-family: var(--font-main);">
                         <option value="">未選択</option>
@@ -758,14 +792,16 @@
                 style="margin-top: 0; border-bottom: 2px solid var(--accent-secondary); padding-bottom: 10px; color: var(--accent-secondary);">
                 履歴の修正 (No.<span id="edit-log-no"></span>)</h3>
             <input type="hidden" id="edit-log-index">
-            <div class="input-group"><label>現在の持ち玉数</label><input type="number" id="edit-log-hold"
+            <div class="input-group"><label>現在の持ち玉数(※)</label><input type="number" id="edit-log-hold"
                     oninput="app.checkEditLogForm()"></div>
-            <div class="input-group"><label>残玉数</label><input type="number" id="edit-log-remain"
+            <div class="input-group"><label>残玉数(※)</label><input type="number" id="edit-log-remain"
                     oninput="app.checkEditLogForm()"></div>
-            <div class="input-group"><label>再プレイ玉数</label><input type="number" id="edit-log-replay"></div>
-            <div class="input-group"><label>追加投資(円)</label><input type="number" id="edit-log-invest"></div>
+            <div class="input-group"><label>再プレイ玉数</label><input type="number" id="edit-log-replay"
+                    oninput="app.checkEditLogForm()"></div>
+            <div class="input-group"><label>追加投資(円)</label><input type="number" id="edit-log-invest"
+                    oninput="app.checkEditLogForm()"></div>
             <div class="input-group">
-                <label>当選契機</label>
+                <label>当選契機(※)</label>
                 <select id="edit-log-trigger"
                     style="width:100%; padding: 10px; font-size: 16px; border-radius: 4px; border: 1px solid #ccc; font-family: var(--font-main);">
                     <option value="ノーマルルート">ノーマルルート</option>
@@ -775,7 +811,7 @@
                 </select>
             </div>
             <div class="input-group">
-                <label>当選R数</label>
+                <label>当選R数(※)</label>
                 <select id="edit-log-round"
                     style="width:100%; padding: 10px; font-size: 16px; border-radius: 4px; border: 1px solid #ccc; font-family: var(--font-main);">
                     <option value="2R">2R</option>
@@ -867,6 +903,33 @@
         </div>
     </div>
 
+    <!-- Memo Modal -->
+    <div id="memo-modal" class="modal-overlay">
+        <div class="modal-content memo-modal-content" style="max-width: 500px;">
+            <div class="modal-close" onclick="app.closeMemo()">×</div>
+            <h3 class="memo-title" style="margin-top: 0; padding-bottom: 10px;">📝 稼働メモ</h3>
+            <p style="font-size: 0.85rem; color: var(--text-sub); margin-bottom: 20px;">稼働前や稼働中のメモを自由に入力してください。</p>
+
+            <div class="input-group">
+                <label>【稼働前メモ】</label>
+                <textarea id="memo-before" rows="5"
+                    style="width:100%; padding:10px; border:1px solid #ccc; border-radius:4px; font-size:14px; font-family:var(--font-main); box-sizing:border-box;"
+                    placeholder="稼働前の状況や狙い台の根拠など" oninput="app.saveMemo()"></textarea>
+            </div>
+
+            <div class="input-group" style="margin-top: 20px;">
+                <label>【稼働中メモ】</label>
+                <textarea id="memo-during" rows="5"
+                    style="width:100%; padding:10px; border:1px solid #ccc; border-radius:4px; font-size:14px; font-family:var(--font-main); box-sizing:border-box;"
+                    placeholder="稼働中の挙動や周囲の状況など" oninput="app.saveMemo()"></textarea>
+            </div>
+
+            <div style="margin-top: 20px;">
+                <button class="btn-primary" onclick="app.closeMemo()" style="background:#1976d2;">閉じる</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Simulation Modal -->
     <div id="sim-modal" class="modal-overlay">
         <div class="modal-content" style="max-width: 500px;">
@@ -916,6 +979,7 @@
         </div>
     </div>
 
+    <button class="btn-memo" onclick="app.openMemo()">📝 稼働前/稼働中メモを更新する</button>
     <button class="btn-sim" onclick="app.openSim()">📊 シミュレーションを起動する</button>
 
     <script>
@@ -1008,16 +1072,31 @@
                 document.getElementById('settings-modal').style.display = 'none';
             },
 
+            openMemo() {
+                document.getElementById('memo-modal').style.display = 'flex';
+            },
+
+            closeMemo() {
+                document.getElementById('memo-modal').style.display = 'none';
+            },
+
+            saveMemo() {
+                this.saveDataAndHistory();
+            },
+
             checkLogForm() {
                 const holdEl = document.getElementById('log-hold');
                 const remainEl = document.getElementById('log-remain');
                 const hold = holdEl.value;
                 const remain = remainEl.value;
-                const invest = document.getElementById('log-invest').value;
+                const investVal = document.getElementById('log-invest').value;
                 const trigger = document.getElementById('log-trigger').value;
                 const round = document.getElementById('log-round').value;
 
-                if (hold !== "" && remain !== "" && parseFloat(remain) > parseFloat(hold)) {
+                const replay = parseFloat(document.getElementById('log-replay').value) || 0;
+                const invest = parseFloat(investVal) || 0;
+
+                if (hold !== "" && remain !== "" && parseFloat(remain) > parseFloat(hold) && replay === 0 && invest === 0) {
                     remainEl.classList.add('input-error');
                 } else {
                     remainEl.classList.remove('input-error');
@@ -1222,7 +1301,10 @@
                 if (holdEl && remainEl) {
                     const hold = holdEl.value;
                     const remain = remainEl.value;
-                    if (hold !== "" && remain !== "" && parseFloat(remain) > parseFloat(hold)) {
+                    const replay = parseFloat(document.getElementById('edit-log-replay').value) || 0;
+                    const invest = parseFloat(document.getElementById('edit-log-invest').value) || 0;
+
+                    if (hold !== "" && remain !== "" && parseFloat(remain) > parseFloat(hold) && replay === 0 && invest === 0) {
                         remainEl.classList.add('input-error');
                     } else {
                         remainEl.classList.remove('input-error');
@@ -1829,7 +1911,9 @@
                     history: this.history,
                     logData: logData,
                     logHistory: this.logHistory,
-                    jackpotCount: this.jackpotCount
+                    jackpotCount: this.jackpotCount,
+                    memoBefore: document.getElementById('memo-before').value,
+                    memoDuring: document.getElementById('memo-during').value
                 };
                 localStorage.setItem('pachitaku_v6_data_v2', JSON.stringify(saveObj));
                 localStorage.setItem('pachitaku_v6', JSON.stringify(data));
@@ -1880,6 +1964,8 @@
                     if (saved.jackpotCount !== undefined) {
                         this.jackpotCount = saved.jackpotCount;
                     }
+                    if (saved.memoBefore !== undefined) document.getElementById('memo-before').value = saved.memoBefore;
+                    if (saved.memoDuring !== undefined) document.getElementById('memo-during').value = saved.memoDuring;
                 }
                 this.updateLogHistoryView();
                 this.calc();
@@ -1887,12 +1973,18 @@
             },
 
             async copyBackupToClipboard(daiban, memo) {
-                const titleDaiban = daiban ? ` 台番: ${daiban}` : "";
+                const daibanText = daiban || "";
                 let masterDataText = "========================================\n" +
-                    ` ファミスタ${titleDaiban}\n` +
+                    ` ファミスタ 台番: ${daibanText}\n` +
                     "========================================\n\n";
 
-                masterDataText += "【稼働メモ】\n";
+                masterDataText += "【稼働前メモ】\n";
+                masterDataText += (document.getElementById('memo-before').value || "（入力なし）") + "\n\n";
+
+                masterDataText += "【稼働中メモ】\n";
+                masterDataText += (document.getElementById('memo-during').value || "（入力なし）") + "\n\n";
+
+                masterDataText += "【稼働終了後メモ】\n";
                 masterDataText += (memo || "（入力なし）") + "\n\n";
 
                 const v = { ...this.lastCalcV };
@@ -2048,6 +2140,9 @@
                 });
 
                 document.getElementById('log-modify-record-container').style.display = 'none';
+
+                document.getElementById('memo-before').value = "";
+                document.getElementById('memo-during').value = "";
 
                 this.saveDataAndHistory();
                 this.calc();
