@@ -1,0 +1,2318 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>PACHINKO TACTICS - はねものファインプレー攻略ツール</title>
+    <link rel="icon" href="../favicon.png">
+    <link rel="apple-touch-icon" href="../apple-touch-icon.png">
+
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Noto+Sans+JP:wght@400;500;700;900&display=swap"
+        rel="stylesheet">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            /* Theme E variables (Investigation Board) */
+            --font-main: 'Noto Sans JP', sans-serif;
+            --font-eng: 'Inter', sans-serif;
+
+            --bg-color: #d4a373;
+            --body-bg-image: url('../corkboard_bg.png');
+            --bg-panel: #FFFFFF;
+
+            --text-main: #333333;
+            --text-sub: #555555;
+
+            --accent-color: #b33939;
+            /* Red pin/marker */
+            --accent-secondary: #227093;
+            /* Blue marker */
+            --border-color: rgba(0, 0, 0, 0.15);
+
+            --board-bg: #1a2a24;
+            --chalk-white: rgba(255, 255, 255, 0.9);
+
+            --shadow: 0 5px 15px rgba(0, 0, 0, 0.35);
+
+            --plus-red: #b33939;
+            --minus-blue: #227093;
+        }
+
+        body {
+            margin: 0;
+            background-color: var(--bg-color);
+            background-image: var(--body-bg-image);
+            background-attachment: fixed;
+            font-family: var(--font-main);
+            color: var(--text-main);
+            font-size: 16px;
+            padding-bottom: 40px;
+        }
+
+        /* Blackboard Header */
+        .blackboard-header {
+            position: relative;
+            width: 100%;
+            min-height: 140px;
+            background-color: var(--board-bg);
+            background-image:
+                radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.05) 0%, transparent 80%),
+                url('https://www.transparenttextures.com/patterns/dark-matter.png');
+            border-bottom: 8px solid #3d2b1f;
+            box-shadow: inset 0 0 50px rgba(0, 0, 0, 0.5), 0 4px 15px rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            padding: 20px 0;
+        }
+
+        .chalk-effect {
+            filter: url(#chalk-filter);
+        }
+
+        .header-center {
+            text-align: center;
+            z-index: 10;
+            width: 100%;
+        }
+
+        .header-center h1 {
+            font-family: var(--font-eng);
+            font-size: clamp(2.2rem, 8vw, 3.8rem);
+            font-weight: 900;
+            color: var(--chalk-white);
+            letter-spacing: 0.15em;
+            margin: 0;
+            line-height: 1.1;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .header-center .subtitle {
+            font-size: clamp(0.9rem, 3.5vw, 1.2rem);
+            font-weight: 700;
+            color: var(--chalk-white);
+            margin-top: 5px;
+            opacity: 0.8;
+            letter-spacing: 0.05em;
+        }
+
+        .back-to-top {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            z-index: 20;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: #fff;
+            padding: 4px 8px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            transition: all 0.2s;
+            font-weight: bold;
+            opacity: 0.8;
+        }
+
+        .back-to-top:hover {
+            background: rgba(255, 255, 255, 0.2);
+            opacity: 1;
+        }
+
+        .strategy-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            z-index: 20;
+            background: #f1c40f;
+            color: #333;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: var(--font-main);
+            font-size: 0.7rem;
+            opacity: 0.9;
+        }
+
+        .strategy-btn:hover {
+            background: #f39c12;
+            opacity: 1;
+        }
+
+        .reset-btn {
+            position: absolute;
+            bottom: 8px;
+            right: 10px;
+            z-index: 20;
+            background: rgba(179, 57, 57, 0.15);
+            color: #fff;
+            border: 1px solid rgba(179, 57, 57, 0.4);
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: var(--font-main);
+            font-size: 0.7rem;
+            opacity: 0.8;
+        }
+
+        .reset-btn:hover {
+            background: rgba(179, 57, 57, 0.3);
+            opacity: 1;
+        }
+
+        .settings-btn {
+            position: absolute;
+            bottom: 8px;
+            left: 10px;
+            z-index: 20;
+            background: var(--accent-secondary);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: var(--font-main);
+            font-size: 0.7rem;
+            opacity: 0.9;
+        }
+
+        .settings-btn:hover {
+            background: #1a5b78;
+            opacity: 1;
+        }
+
+        /* Container (Paper with Pin) */
+        .container {
+            width: 95%;
+            max-width: 800px;
+            margin: 30px auto;
+            background: var(--bg-panel);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 2px;
+            box-shadow: var(--shadow);
+            position: relative;
+            min-height: 70vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 6px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, #ff5252, #b33939);
+            box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.3), inset -1px -2px 3px rgba(0, 0, 0, 0.2);
+            z-index: 5;
+        }
+
+        .tabs {
+            display: flex;
+            background: rgba(0, 0, 0, 0.03);
+            border-bottom: 2px dashed rgba(0, 0, 0, 0.1);
+            padding-top: 20px;
+            /* space for pin */
+        }
+
+        .tab {
+            flex: 1;
+            padding: 15px 5px;
+            text-align: center;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+            border-bottom: 3px solid transparent;
+        }
+
+        .tab-group-blue {
+            background-color: rgba(34, 112, 147, 0.05);
+            color: var(--accent-secondary);
+        }
+
+        .tab-group-blue.active {
+            background-color: var(--accent-secondary);
+            color: #fff;
+            border-bottom: 3px solid #1a5b78;
+        }
+
+        .tab-group-red {
+            background-color: rgba(179, 57, 57, 0.05);
+            color: var(--accent-color);
+        }
+
+        .tab-group-red.active {
+            background-color: var(--accent-color);
+            color: #fff;
+            border-bottom: 3px solid #8e2b2b;
+        }
+
+        .content-section {
+            display: none;
+            padding: 20px;
+        }
+
+        .content-section.active {
+            display: block;
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(5px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+            border-bottom: 1px dashed var(--border-color);
+            padding-bottom: 10px;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 5px;
+            line-height: 1.4;
+            color: var(--text-main);
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            text-align: left;
+            font-size: 18px;
+            box-sizing: border-box;
+            font-family: var(--font-eng);
+            background-color: #fafafa;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            background-color: #fff;
+        }
+
+        .input-error {
+            background-color: #ffeaea !important;
+            border: 2px solid var(--plus-red) !important;
+        }
+
+        .result-card {
+            background: #fafafa;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            padding: 20px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .val-plus {
+            color: var(--plus-red);
+            font-weight: bold;
+        }
+
+        .val-minus {
+            color: var(--minus-blue);
+            font-weight: bold;
+        }
+
+        .main-val {
+            font-family: var(--font-eng);
+            font-size: 32px;
+            font-weight: 900;
+            margin: 10px 0;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+
+        .data-table th,
+        .data-table td {
+            border: 1px solid var(--border-color);
+            padding: 10px;
+            text-align: left;
+        }
+
+        .data-table th {
+            background: rgba(0, 0, 0, 0.03);
+            width: 60%;
+            color: var(--text-main);
+            font-weight: 700;
+        }
+
+        .btn-primary {
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+            transition: background 0.2s;
+            font-family: var(--font-main);
+        }
+
+        .btn-primary:hover {
+            background: #ff5252;
+        }
+
+        .section-header {
+            font-weight: 900;
+            margin-bottom: 10px;
+            padding: 8px 12px;
+            background: var(--accent-secondary);
+            color: white;
+            border-radius: 2px;
+            font-size: 1.1rem;
+            display: inline-block;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .box-info {
+            background: #f1f3f5;
+            border: 1px solid var(--border-color);
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        .box-info span {
+            font-weight: bold;
+            font-size: 16px;
+            color: var(--text-main);
+        }
+
+        .reset-defaults-btn {
+            background: #fff;
+            color: var(--accent-color);
+            border: 1px solid var(--accent-color);
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .reset-defaults-btn:hover {
+            background: rgba(179, 57, 57, 0.1);
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: var(--bg-panel);
+            width: 90%;
+            max-width: 500px;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 28px;
+            cursor: pointer;
+            color: var(--text-sub);
+            line-height: 1;
+        }
+
+        .modal-close:hover {
+            color: var(--accent-color);
+        }
+
+        .btn-sim {
+            background: #8e44ad;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 95%;
+            max-width: 800px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin: 30px auto;
+            font-family: var(--font-main);
+            font-size: 16px;
+            transition: background 0.2s;
+            box-shadow: var(--shadow);
+        }
+
+        .btn-sim:hover {
+            background: #9b59b6;
+        }
+
+        .btn-memo {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 95%;
+            max-width: 800px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin: 30px auto -15px auto;
+            font-family: var(--font-main);
+            font-size: 16px;
+            transition: background 0.2s;
+            box-shadow: var(--shadow);
+        }
+
+        .btn-memo:hover {
+            background: #2980b9;
+        }
+
+        .memo-modal-content {
+            background-color: #e3f2fd !important;
+        }
+
+        .memo-title {
+            color: #1976d2 !important;
+            border-bottom: 2px solid #1976d2 !important;
+        }
+
+        /* Custom Select Styles */
+        .custom-select-container {
+            position: relative;
+            width: 100%;
+            margin-bottom: 15px;
+            font-family: var(--font-main);
+        }
+
+        .custom-select-trigger {
+            padding: 12px;
+            background: white;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 16px;
+        }
+
+        .custom-select-options {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 1px solid #ccc;
+            border-top: none;
+            border-radius: 0 0 4px 4px;
+            z-index: 1000;
+            display: none;
+            max-height: 300px;
+            overflow-y: auto;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .custom-select-options.open {
+            display: block;
+        }
+
+        .custom-option {
+            padding: 10px 12px;
+            cursor: pointer;
+            transition: background 0.2s;
+            border-bottom: 1px solid #eee;
+        }
+
+        .custom-option:hover {
+            background: #f8f9fa;
+        }
+
+        .custom-option.selected {
+            background: #e3f2fd;
+            color: #1976d2;
+            font-weight: bold;
+        }
+        .sim-result-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            font-size: 14px;
+        }
+
+        .sim-result-table th,
+        .sim-result-table td {
+            border: 1px solid var(--border-color);
+            padding: 10px;
+            text-align: left;
+        }
+
+        .sim-result-table th {
+            background: rgba(142, 68, 173, 0.05);
+            color: #8e44ad;
+            width: 40%;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- SVG Filter for Chalk Texture -->
+    <svg style="position: absolute; width: 0; height: 0;">
+        <filter id="chalk-filter">
+            <feTurbulence type="fractalNoise" baseFrequency="0.5" numOctaves="5" result="noise" />
+            <feDisplacementMap in="SourceGraphic" in2="noise" scale="2" />
+        </filter>
+    </svg>
+
+    <header class="blackboard-header">
+        <a href="../index.html" class="back-to-top">⇐ TOPへ戻る</a>
+        <button class="strategy-btn" onclick="alert('カミングスーン！')">💡 攻略考察</button>
+
+        <div class="header-center chalk-effect">
+            <h1>FINE PLAY TOOL</h1>
+            <div class="subtitle">はねものファインプレー 期待値計算/攻略ツール</div>
+        </div>
+
+        <button class="settings-btn" onclick="app.openSettings()">⚙ 詳細設定</button>
+        <button class="reset-btn" onclick="app.resetAll()">⚠ データをリセット</button>
+    </header>
+
+    <div class="container">
+        <div class="tabs">
+            <div class="tab tab-group-blue active" onclick="app.showTab('log')">実戦ログ</div>
+            <div class="tab tab-group-blue" onclick="app.showTab('input')">数値入力</div>
+            <div class="tab tab-group-red" onclick="app.showTab('calc')">算出結果</div>
+            <div class="tab tab-group-red" onclick="app.showTab('compare')">区間分析</div>
+        </div>
+
+        <div id="log" class="content-section active">
+            <div class="section-header" style="display:flex; justify-content: space-between; align-items: center;">
+                <span>■現在の稼働状況</span>
+                <span style="font-size: 0.9rem;">大当り回数 <span id="jackpot-count-display">0</span>回</span>
+            </div>
+            <div id="log-fields">
+                <div class="input-group"><label>現在の持ち玉数(※)</label><input type="number" id="log-hold"
+                        oninput="app.checkLogForm()"></div>
+                <div class="input-group"><label>残玉数(※)</label><input type="number" id="log-remain"
+                        oninput="app.checkLogForm()"></div>
+                <div class="input-group"><label>再プレイ玉数</label><input type="number" id="log-replay"
+                        oninput="app.checkLogForm()"></div>
+                <div class="input-group"><label>追加投資(円)</label><input type="number" id="log-invest"
+                        oninput="app.checkLogForm()"></div>
+                <div class="input-group">
+                    <label>当選契機(※)</label>
+                    <div class="custom-select-container" id="log-trigger-custom-container">
+                        <div class="custom-select-trigger" id="log-trigger-trigger">
+                            <span id="log-trigger-label">未選択</span>
+                            <span style="font-size: 0.8rem;">▼</span>
+                        </div>
+                        <div class="custom-select-options" id="log-trigger-options"></div>
+                        <input type="hidden" id="log-trigger" value="">
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label>当選R数(※)</label>
+                    <div class="custom-select-container" id="log-round-custom-container">
+                        <div class="custom-select-trigger" id="log-round-trigger">
+                            <span id="log-round-label">未選択</span>
+                            <span style="font-size: 0.8rem;">▼</span>
+                        </div>
+                        <div class="custom-select-options" id="log-round-options"></div>
+                        <input type="hidden" id="log-round" value="">
+                    </div>
+                </div>
+                <div id="log-modify-record-container" style="display:none; margin-top: 15px;">
+                    <button class="btn-primary" onclick="app.recordLogFromModify()">この修正内容で記録</button>
+                </div>
+            </div>
+
+            <div class="section-header"
+                style="margin-top: 30px; display:flex; justify-content: space-between; align-items: center;">
+                <span>■履歴</span>
+                <label
+                    style="font-size: 0.8rem; cursor: pointer; display: flex; align-items: center; gap: 4px; font-weight: normal;">
+                    <input type="checkbox" id="log-delete-mode" onchange="app.updateLogHistoryView()"> 削除モード
+                </label>
+            </div>
+            <div
+                style="max-height: 300px; overflow-y: auto; border: 1px solid var(--border-color); border-radius: 4px;">
+                <table class="data-table" style="margin-top: 0; border: none;">
+                    <thead style="position: sticky; top: 0; z-index: 10;">
+                        <tr>
+                            <th style="width: 10%; text-align: center;">No</th>
+                            <th style="width: 25%; text-align: center;">使用玉数</th>
+                            <th style="width: 25%; text-align: center;">獲得出玉</th>
+                            <th style="width: 25%; text-align: center;">当選契機</th>
+                            <th style="width: 15%; text-align: center;">R数</th>
+                        </tr>
+                    </thead>
+                    <tbody id="log-history-table" style="text-align: center;">
+                        <tr>
+                            <td colspan="5" style="padding: 15px;">履歴がありません</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="input" class="content-section">
+            <div id="fields-container"></div>
+        </div>
+
+        <div id="calc" class="content-section">
+            <div class="result-card">
+                <div style="font-size: 16px; color: var(--text-sub);">総期待値</div>
+                <div id="res-total-exp" class="main-val">±0円</div>
+            </div>
+
+            <div class="result-card">
+                <div style="font-size: 16px; color: var(--text-sub);">1回転あたりの期待値</div>
+                <div id="res-unit-exp" style="font-size: 24px; font-weight: bold; margin: 5px 0;">±0.0円</div>
+                <div id="res-unit-detail" style="font-size: 13px; color: var(--text-sub);">[現金: -円 | 持ち玉: -円]</div>
+            </div>
+
+            <div class="result-card">
+                <div style="font-size: 16px; color: var(--text-sub);">千円あたりのボーダーライン</div>
+                <div id="res-border" style="font-size: 24px; font-weight: bold;">0.0回転</div>
+            </div>
+
+            <div class="result-card">
+                <div style="font-size: 16px; color: var(--text-sub);">推定確率</div>
+                <div id="res-probs" style="margin-top: 5px;"></div>
+            </div>
+
+            <div class="result-card">
+                <div style="font-size: 16px; color: var(--text-sub);">欠損 / 余剰</div>
+                <div id="res-gap" style="margin-top: 5px;"></div>
+            </div>
+
+            <div style="margin-top: 20px;">
+                <div style="font-weight: bold; margin-bottom: 10px; color: var(--accent-secondary);">■ 詳細分析データ</div>
+                <table class="data-table">
+                    <tbody id="res-details-table"></tbody>
+                </table>
+            </div>
+            <button onclick="app.saveHistory()" class="btn-primary" style="margin-top:20px;">区間データを保存</button>
+        </div>
+
+        <div id="compare" class="content-section">
+            <div class="section-header" style="display:flex; justify-content: space-between; align-items: center;">
+                <span>■ 区間比較（時系列推移）</span>
+                <label
+                    style="font-size: 0.8rem; cursor: pointer; display: flex; align-items: center; gap: 4px; font-weight: normal;">
+                    <input type="checkbox" id="history-delete-mode" onchange="app.updateCompareView()"> 削除モード
+                </label>
+            </div>
+
+            <div class="custom-select-container" id="compare-metric-custom-container">
+                <div class="custom-select-trigger" id="compare-metric-trigger">
+                    <span id="compare-metric-label">項目を選択してください</span>
+                    <span style="font-size: 0.8rem;">▼</span>
+                </div>
+                <div class="custom-select-options" id="compare-metric-options"></div>
+                <input type="hidden" id="compare-metric-select" value="total_rot">
+            </div>
+            <div style="margin-bottom: 20px;">
+                <table class="data-table" style="table-layout: fixed; text-align: center;">
+                    <thead>
+                        <tr>
+                            <th style="width: 33.3%; text-align: center;">区間(拾い)</th>
+                            <th style="width: 33.3%; text-align: center;" id="compare-metric-header">数値</th>
+                            <th style="width: 33.3%; text-align: center;">累計との比較</th>
+                        </tr>
+                    </thead>
+                    <tbody id="compare-list" style="text-align: center;"></tbody>
+                </table>
+            </div>
+            <div
+                style="background: white; padding: 10px; border-radius: 4px; border: 1px solid var(--border-color); margin-bottom: 30px;">
+                <canvas id="compareChart"></canvas>
+            </div>
+
+            <div class="section-header">■ 区間詳細（特定の区間データ）</div>
+
+            <div class="custom-select-container" id="interval-detail-custom-container">
+                <div class="custom-select-trigger" id="interval-detail-trigger">
+                    <span id="interval-detail-label">区間を選択してください</span>
+                    <span style="font-size: 0.8rem;">▼</span>
+                </div>
+                <div class="custom-select-options" id="interval-detail-options"></div>
+                <input type="hidden" id="interval-detail-select" value="">
+            </div>
+
+            <div style="margin-top: 15px;">
+                <div style="font-weight: bold; margin-bottom: 10px; color: var(--accent-secondary);">■ 推定確率・欠損/余剰</div>
+                <div id="interval-probs" style="margin-bottom: 20px;"></div>
+
+                <div style="font-weight: bold; margin-bottom: 10px; color: var(--accent-secondary);">■ 詳細分析データ</div>
+                <table class="data-table">
+                    <tbody id="interval-details-table"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div id="settings-modal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-close" onclick="app.closeSettings()">×</div>
+            <h2
+                style="margin-top: 0; border-bottom: 2px solid var(--accent-secondary); padding-bottom: 10px; color: var(--accent-secondary);">
+                ⚙ 詳細設定</h2>
+
+            <div
+                style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; margin-top: 20px;">
+                <div style="font-weight: bold; color: var(--accent-secondary);">■ 基本設定</div>
+                <button class="reset-defaults-btn" onclick="app.resetBasicSettings()">デフォルトに戻す</button>
+            </div>
+            <div class="input-group"><label>SPルート選択時当選率<br>(1/〇)</label><input type="number" id="set-sp-rate"
+                    value="3" onchange="app.calc()"></div>
+            <div class="input-group"><label>チャンス吸着時当選率<br>(%)</label><input type="number" id="set-nm-rate"
+                    value="19.1" onchange="app.calc()"></div>
+            <div class="input-group"><label>平均ラウンド数<br>(理論上の振り分け)</label><input type="number" id="set-avg-r"
+                    value="4.9" onchange="app.calc()"></div>
+            <div class="input-group"><label>貸玉<br>(1000円あたりの玉数)</label><input type="number" id="set-kasi" value="250"
+                    onchange="app.calc()"></div>
+            <div class="input-group"><label>換金率<br>(1玉あたりの換金額)</label><input type="number" id="set-exchange" value="4.0"
+                    onchange="app.calc()"></div>
+
+            <div
+                style="display: flex; justify-content: space-between; align-items: center; margin-top: 25px; margin-bottom: 10px;">
+                <div style="font-weight: bold; color: var(--accent-secondary);">■ 各種項目の基準値設定</div>
+                <button class="reset-defaults-btn" onclick="app.resetTargetSettings()">デフォルトに戻す</button>
+            </div>
+            <div id="settings-targets-container"></div>
+        </div>
+    </div>
+
+    <!-- Log Edit Modal -->
+    <div id="log-edit-modal" class="modal-overlay">
+        <div class="modal-content" style="max-width: 400px;">
+            <div class="modal-close" onclick="app.closeEditLogModal()">×</div>
+            <h3
+                style="margin-top: 0; border-bottom: 2px solid var(--accent-secondary); padding-bottom: 10px; color: var(--accent-secondary);">
+                履歴の修正 (No.<span id="edit-log-no"></span>)</h3>
+            <input type="hidden" id="edit-log-index">
+            <div class="input-group"><label>現在の持ち玉数(※)</label><input type="number" id="edit-log-hold"
+                    oninput="app.checkEditLogForm()"></div>
+            <div class="input-group"><label>残玉数(※)</label><input type="number" id="edit-log-remain"
+                    oninput="app.checkEditLogForm()"></div>
+            <div class="input-group"><label>再プレイ玉数</label><input type="number" id="edit-log-replay"
+                    oninput="app.checkEditLogForm()"></div>
+            <div class="input-group"><label>追加投資(円)</label><input type="number" id="edit-log-invest"
+                    oninput="app.checkEditLogForm()"></div>
+            <div class="input-group">
+                <label>当選契機(※)</label>
+                <div class="custom-select-container" id="edit-log-trigger-custom-container">
+                    <div class="custom-select-trigger" id="edit-log-trigger-trigger">
+                        <span id="edit-log-trigger-label">選択してください</span>
+                        <span style="font-size: 0.8rem;">▼</span>
+                    </div>
+                    <div class="custom-select-options" id="edit-log-trigger-options"></div>
+                    <input type="hidden" id="edit-log-trigger" value="HR">
+                </div>
+            </div>
+            <div class="input-group">
+                <label>当選R数(※)</label>
+                <div class="custom-select-container" id="edit-log-round-custom-container">
+                    <div class="custom-select-trigger" id="edit-log-round-trigger">
+                        <span id="edit-log-round-label">選択してください</span>
+                        <span style="font-size: 0.8rem;">▼</span>
+                    </div>
+                    <div class="custom-select-options" id="edit-log-round-options"></div>
+                    <input type="hidden" id="edit-log-round" value="2R">
+                </div>
+            </div>
+            <button class="btn-primary" onclick="app.saveEditLog()" style="margin-top: 10px;">修正を保存</button>
+        </div>
+    </div>
+
+    <div id="log-confirm-modal" class="modal-overlay">
+        <div class="modal-content" style="max-width: 400px; text-align: center;">
+            <div class="modal-close" onclick="app.closeLogConfirm()">×</div>
+            <h3 style="margin-top: 0; color: var(--accent-secondary);">記録の確認</h3>
+            <p>すべての項目が入力されました。<br>この内容で記録しますか？</p>
+            <div style="display: flex; gap: 10px; margin-top: 20px;">
+                <button class="btn-primary" style="background: var(--text-sub);" onclick="app.modifyLog()">修正する</button>
+                <button class="btn-primary" onclick="app.recordLog()">記録する</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Interval Save Modal -->
+    <div id="interval-save-modal" class="modal-overlay">
+        <div class="modal-content" style="max-width: 500px;">
+            <div class="modal-close" onclick="document.getElementById('interval-save-modal').style.display='none'">×
+            </div>
+            <h3
+                style="margin-top: 0; color: var(--accent-secondary); border-bottom: 2px solid var(--accent-secondary); padding-bottom: 10px;">
+                区間データの保存</h3>
+
+            <div class="input-group">
+                <label>この区間のメモ・コメント（空でもOK）</label>
+                <textarea id="interval-save-memo" rows="4"
+                    style="width:100%; padding:10px; border:1px solid #ccc; border-radius:4px; font-size:14px; font-family:var(--font-main); box-sizing:border-box;"></textarea>
+            </div>
+
+            <div style="display:flex; flex-direction:column; gap:10px; margin-top:20px;">
+                <button class="btn-primary" onclick="app.executeSaveHistory()" style="background:#227093;">保存する</button>
+                <button class="btn-primary"
+                    onclick="document.getElementById('interval-save-modal').style.display='none'"
+                    style="background:#7f8c8d;">キャンセル</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Reset & Backup Modal -->
+    <div id="reset-modal" class="modal-overlay">
+        <div class="modal-content" style="max-width: 500px;">
+            <div class="modal-close" onclick="document.getElementById('reset-modal').style.display='none'">×</div>
+            <h3
+                style="margin-top: 0; color: var(--accent-secondary); border-bottom: 2px solid var(--accent-secondary); padding-bottom: 10px;">
+                データのバックアップとリセット</h3>
+
+            <div class="input-group">
+                <label>台番</label>
+                <input type="text" id="reset-daiban" placeholder="例: 123番台" style="font-size:16px;">
+            </div>
+
+            <div class="input-group">
+                <label>本日の稼働メモ（台の挙動、ネカセなど）</label>
+                <textarea id="reset-memo" rows="4"
+                    style="width:100%; padding:10px; border:1px solid #ccc; border-radius:4px; font-size:14px; font-family:var(--font-main); box-sizing:border-box;"></textarea>
+            </div>
+
+            <div style="display:flex; flex-direction:column; gap:10px; margin-top:20px;">
+                <button class="btn-primary" onclick="app.executeBackupAndReset()"
+                    style="background:#227093;">バックアップしてリセット</button>
+                <button class="btn-primary" onclick="app.executeResetOnly()"
+                    style="background:#b33939;">バックアップせずにリセット</button>
+                <button class="btn-primary" onclick="document.getElementById('reset-modal').style.display='none'"
+                    style="background:#7f8c8d;">キャンセル</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Save Complete Modal -->
+    <div id="save-complete-modal" class="modal-overlay">
+        <div class="modal-content" style="max-width: 400px; text-align: center;">
+            <div class="modal-close" onclick="document.getElementById('save-complete-modal').style.display='none'">×
+            </div>
+            <h3 style="margin-top: 0; color: var(--accent-secondary);">保存完了</h3>
+            <p style="font-size: 16px; font-weight: bold;">区間データを無事に保存しました！</p>
+            <div style="margin-top: 20px;">
+                <button class="btn-primary"
+                    onclick="document.getElementById('save-complete-modal').style.display='none'">閉じる</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Memo Modal -->
+    <div id="memo-modal" class="modal-overlay">
+        <div class="modal-content memo-modal-content" style="max-width: 500px;">
+            <div class="modal-close" onclick="app.closeMemo()">×</div>
+            <h3 class="memo-title" style="margin-top: 0; padding-bottom: 10px;">📝 稼働メモ</h3>
+            <p style="font-size: 0.85rem; color: var(--text-sub); margin-bottom: 20px;">稼働前や稼働中のメモを自由に入力してください。</p>
+
+            <div class="input-group">
+                <label>【稼働前メモ】</label>
+                <textarea id="memo-before" rows="5"
+                    style="width:100%; padding:10px; border:1px solid #ccc; border-radius:4px; font-size:14px; font-family:var(--font-main); box-sizing:border-box;"
+                    placeholder="稼働前の状況や狙い台の根拠など" oninput="app.saveMemo()"></textarea>
+            </div>
+
+            <div class="input-group" style="margin-top: 20px;">
+                <label>【稼働中メモ】</label>
+                <textarea id="memo-during" rows="5"
+                    style="width:100%; padding:10px; border:1px solid #ccc; border-radius:4px; font-size:14px; font-family:var(--font-main); box-sizing:border-box;"
+                    placeholder="稼働中の挙動や周囲の状況など" oninput="app.saveMemo()"></textarea>
+            </div>
+
+            <div style="margin-top: 20px;">
+                <button class="btn-primary" onclick="app.closeMemo()" style="background:#1976d2;">閉じる</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Simulation Modal -->
+    <div id="sim-modal" class="modal-overlay">
+        <div class="modal-content" style="max-width: 500px;">
+            <div class="modal-close" onclick="app.closeSim()">×</div>
+            <h3 style="margin-top: 0; color: #8e44ad; border-bottom: 2px solid #8e44ad; padding-bottom: 10px;">📊
+                期待値シミュレーション</h3>
+            <p style="font-size: 0.85rem; color: var(--text-sub); margin-bottom: 20px;">※この数値は実戦データには保存されません。</p>
+
+            <div class="input-group">
+                <label>千円あたりの回転数 (回)</label>
+                <input type="number" id="sim-rot" value="" step="0.1" oninput="app.runSim()">
+            </div>
+            <div class="input-group">
+                <label>1Rあたりの出玉 (玉)</label>
+                <input type="number" id="sim-rout" value="" step="1" oninput="app.runSim()">
+            </div>
+            <div class="input-group">
+                <label>拾い率 (%)</label>
+                <input type="number" id="sim-pick" value="" step="0.1" oninput="app.runSim()">
+            </div>
+            <div class="input-group">
+                <label>SPルート選択率 (%)</label>
+                <input type="number" id="sim-sp-rate" value="" step="0.1" oninput="app.runSim()">
+            </div>
+            <div class="input-group">
+                <label>赤橋突破率 (%)</label>
+                <input type="number" id="sim-bridge" value="" step="0.1" oninput="app.runSim()">
+            </div>
+            <div class="input-group">
+                <label>強打率 (%)</label>
+                <input type="number" id="sim-strong-rate" value="" step="0.1" oninput="app.runSim()">
+            </div>
+            <div class="input-group">
+                <label>強打時HR率 (%)</label>
+                <input type="number" id="sim-hr-ratio" value="" step="0.1" oninput="app.runSim()">
+            </div>
+            <div class="input-group">
+                <label>強打時チャンス吸着率 (%) <span style="font-size:0.7rem; color:var(--text-sub);">※左右合計</span></label>
+                <input type="number" id="sim-chance-ratio" value="" step="0.1" oninput="app.runSim()">
+            </div>
+            <div class="input-group">
+                <label>強打時ファール率 (%) <span style="font-size:0.7rem; color:var(--text-sub);">※左右合計</span></label>
+                <input type="number" id="sim-foul-ratio" value="" step="0.1" oninput="app.runSim()">
+            </div>
+
+            <div id="sim-warning" style="display:none; margin-top:15px; padding:10px; background:#fff5f5; border:1px solid #feb2b2; border-radius:4px; color:#c53030; font-size:0.85rem; line-height:1.4;">
+                強打時HR率、強打時チャンス吸着率 ※左右合計、強打時ファール率 ※左右合計を合算した時に数値が100%になりません。100%になるよう調整して下さい。
+            </div>
+
+            <div id="sim-result-container" style="margin-top: 25px;">
+                <div style="font-weight: bold; color: #8e44ad;">■ シミュレーション結果</div>
+                <table class="sim-result-table">
+                    <tr>
+                        <th>期待値(1回転)</th>
+                        <td id="sim-res-unit">-</td>
+                    </tr>
+                    <tr>
+                        <th>ボーダー(千円)</th>
+                        <td id="sim-res-border">-</td>
+                    </tr>
+                    <tr>
+                        <th>推定確率</th>
+                        <td id="sim-res-prob">-</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <button class="btn-memo" onclick="app.openMemo()">📝 稼働前/稼働中メモを更新する</button>
+    <button class="btn-sim" onclick="app.openSim()">📊 シミュレーションを起動する</button>
+
+    <script>
+        const app = {
+            fields: [
+                { id: "total_rot", name: "1. 通常回転数" },
+                { id: "total_pick", name: "2. 拾い個数" },
+                { id: "sp_select", name: "3. SPルート選択個数" },
+                { id: "bridge_pass", name: "4. 赤橋突破個数" },
+                { id: "hr_catch", name: "5. HR吸着個数" },
+                { id: "left_chance_catch", name: "6. 左チャンス吸着個数" },
+                { id: "right_chance_catch", name: "7. 右チャンス吸着個数" },
+                { id: "left_foul", name: "8. 左ファール個数" },
+                { id: "right_foul", name: "9. 右ファール個数" }
+            ],
+
+            metricsConfig: [
+                { id: "rotPerK", name: "千円あたりの回転数", type: "rot", lowerIsBetter: false, defaultVal: "" },
+                { id: "rOut", name: "1Rあたりの出玉", type: "ball", lowerIsBetter: false, defaultVal: "" },
+                { id: "pickRate", name: "拾い率", type: "pct", lowerIsBetter: false, defaultVal: 38 },
+                { id: "spSelectRate", name: "SPルート選択率", type: "pct", lowerIsBetter: false, defaultVal: 1.3 },
+                { id: "bridgePassRate", name: "赤橋突破率", type: "pct", lowerIsBetter: false, defaultVal: 52 },
+                { id: "strongHitRate", name: "強打率", type: "pct", lowerIsBetter: false, defaultVal: 51 },
+                { id: "hrRatio", name: "強打時HR率", type: "pct", lowerIsBetter: false, defaultVal: 18.5 },
+                { id: "chanceRatio", name: "強打時チャンス吸着率 ※左右合計", type: "mergedPct", lowerIsBetter: false, defaultVal: 55 },
+                { id: "chanceWinRate", name: "チャンス吸着時当選率 ※左右合計", type: "mergedPct", lowerIsBetter: false, defaultVal: 19.1 },
+                { id: "foulRatio", name: "強打時ファール率 ※左右合計", type: "mergedPct", lowerIsBetter: false, defaultVal: 30 },
+                { id: "spWinRate", name: "SPルート当選率", type: "prob", lowerIsBetter: true, defaultVal: 3 },
+                { id: "estYakuProb", name: "推定役モノ確率", type: "prob", lowerIsBetter: true, defaultVal: 11 },
+                { id: "estProb", name: "推定大当り確率", type: "prob", lowerIsBetter: true, defaultVal: 28 },
+                { id: "comment", name: "コメント", type: "text" }
+            ],
+            history: [],
+            logHistory: [],
+            jackpotCount: 0,
+            chartInstance: null,
+            isModifying: false,
+            confirmShown: false,
+
+            init() {
+                const container = document.getElementById('fields-container');
+                this.fields.forEach(f => {
+                    const div = document.createElement('div');
+                    div.className = 'input-group';
+                    div.innerHTML = `<label>${f.name}</label><input type="number" id="${f.id}" pattern="\\d*" oninput="app.calc()">`;
+                    container.appendChild(div);
+                });
+
+                this.initCustomSelect();
+                
+                const triggerOpts = [
+                    { value: "", label: "未選択" },
+                    { value: "HR", label: "HR" },
+                    { value: "左HIT", label: "左HIT" },
+                    { value: "右HIT", label: "右HIT" },
+                    { value: "SP", label: "SP" }
+                ];
+                const roundOpts = [
+                    { value: "", label: "未選択" },
+                    { value: "2R", label: "2R" },
+                    { value: "4R", label: "4R" },
+                    { value: "9R", label: "9R" }
+                ];
+                this.setupCustomSelect('log-trigger', triggerOpts, 'log-trigger', () => this.checkLogForm(), "");
+                this.setupCustomSelect('log-round', roundOpts, 'log-round', () => this.checkLogForm(), "");
+
+                this.initTargetSettings();
+                this.loadDataAndHistory();
+            },
+
+            initCustomSelect() {
+                const options = this.metricsConfig.map(m => ({
+                    value: m.id,
+                    label: m.name.replace(' ※左右合計', " <span style='font-size:0.7rem; font-weight:normal; color:var(--text-sub);'>※左右合計</span>")
+                }));
+                this.setupCustomSelect('compare-metric', options, 'compare-metric-select', () => this.updateCompareView(), 'total_rot');
+                
+                // Add click-outside globally if not already added
+                if (!window.customSelectGlobalAdded) {
+                    document.addEventListener('click', () => {
+                        document.querySelectorAll('.custom-select-options').forEach(el => el.classList.remove('open'));
+                    });
+                    window.customSelectGlobalAdded = true;
+                }
+            },
+
+            setupCustomSelect(containerIdBase, options, hiddenInputId, onSelect, initialValue) {
+                const trigger = document.getElementById(`${containerIdBase}-trigger`);
+                const optionsContainer = document.getElementById(`${containerIdBase}-options`);
+                const label = document.getElementById(`${containerIdBase}-label`);
+                const hiddenInput = document.getElementById(hiddenInputId);
+
+                if (!trigger || !optionsContainer || !label || !hiddenInput) return;
+
+                optionsContainer.innerHTML = '';
+                let foundInitial = false;
+
+                options.forEach(opt => {
+                    const div = document.createElement('div');
+                    div.className = 'custom-option';
+                    if (opt.value == initialValue) {
+                        div.classList.add('selected');
+                        label.innerHTML = opt.label;
+                        hiddenInput.value = opt.value;
+                        foundInitial = true;
+                    }
+                    div.innerHTML = opt.label;
+                    div.onclick = (e) => {
+                        e.stopPropagation();
+                        hiddenInput.value = opt.value;
+                        label.innerHTML = div.innerHTML;
+                        optionsContainer.querySelectorAll('.custom-option').forEach(o => o.classList.remove('selected'));
+                        div.classList.add('selected');
+                        optionsContainer.classList.remove('open');
+                        if (onSelect) onSelect(opt.value);
+                    };
+                    optionsContainer.appendChild(div);
+                });
+
+                if (!foundInitial && options.length > 0) {
+                    const first = optionsContainer.firstChild;
+                    if (first) {
+                        first.classList.add('selected');
+                        label.innerHTML = options[0].label;
+                        hiddenInput.value = options[0].value;
+                    }
+                }
+
+                trigger.onclick = (e) => {
+                    e.stopPropagation();
+                    const isOpen = optionsContainer.classList.contains('open');
+                    document.querySelectorAll('.custom-select-options').forEach(el => el.classList.remove('open'));
+                    if (!isOpen) optionsContainer.classList.add('open');
+                };
+            },
+
+            updateHistoryDropdown() {
+                const options = this.history.map((h, i) => {
+                    const ts = h.ts || Date.now();
+                    const timeStr = new Date(ts).toLocaleString('ja-JP', { hour: '2-digit', minute: '2-digit' });
+                    const prevPick = i === 0 ? 0 : this.history[i - 1].v.total_pick;
+                    const label = prevPick === h.v.total_pick ? `拾い個数:${h.v.total_pick}個(${timeStr})` : `拾い個数:${prevPick + 1}個～${h.v.total_pick}個(${timeStr})`;
+                    return { value: i, label: label };
+                }).reverse();
+
+                this.setupCustomSelect('interval-detail', options, 'interval-detail-select', () => this.updateIntervalDetailView(), options[0]?.value);
+                if (options.length > 0) {
+                    this.updateIntervalDetailView();
+                } else {
+                    const labelEl = document.getElementById('interval-detail-label');
+                    const hiddenEl = document.getElementById('interval-detail-select');
+                    if (labelEl) labelEl.innerHTML = "履歴データがありません";
+                    if (hiddenEl) hiddenEl.value = "";
+                }
+            },
+
+            initTargetSettings() {
+                const container = document.getElementById('settings-targets-container');
+                let html = '';
+                this.metricsConfig.forEach(m => {
+                    if (m.type === 'text') return;
+                    const unit = (m.type === 'pct' || m.type === 'mergedPct') ? '%' : '分母';
+                    const defVal = m.defaultVal !== undefined ? m.defaultVal : '';
+                    html += `<div class="input-group"><label>${m.name}<br>(${unit})</label>
+                             <input type="number" id="target-${m.id}" value="${defVal}" step="0.1" onchange="app.saveDataAndHistory(); app.updateCompareView();" placeholder="目標値"></div>`;
+                });
+                container.innerHTML = html;
+            },
+
+            showTab(id) {
+                document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                document.getElementById(id).classList.add('active');
+
+                if (event && event.currentTarget && event.currentTarget.classList.contains('tab')) {
+                    event.currentTarget.classList.add('active');
+                }
+
+                if (id === 'compare') this.updateCompareView();
+            },
+
+            openSettings() {
+                document.getElementById('settings-modal').style.display = 'flex';
+            },
+
+            closeSettings() {
+                document.getElementById('settings-modal').style.display = 'none';
+            },
+
+            openMemo() {
+                document.getElementById('memo-modal').style.display = 'flex';
+            },
+
+            closeMemo() {
+                document.getElementById('memo-modal').style.display = 'none';
+            },
+
+            saveMemo() {
+                this.saveDataAndHistory();
+            },
+
+            checkLogForm() {
+                const holdEl = document.getElementById('log-hold');
+                const remainEl = document.getElementById('log-remain');
+                const hold = holdEl.value;
+                const remain = remainEl.value;
+                const investVal = document.getElementById('log-invest').value;
+                const trigger = document.getElementById('log-trigger').value;
+                const round = document.getElementById('log-round').value;
+
+                const replay = parseFloat(document.getElementById('log-replay').value) || 0;
+                const invest = parseFloat(investVal) || 0;
+
+                if (hold !== "" && remain !== "" && parseFloat(remain) > parseFloat(hold) && replay === 0 && invest === 0) {
+                    remainEl.classList.add('input-error');
+                } else {
+                    remainEl.classList.remove('input-error');
+                }
+
+                const isComplete = hold !== "" && remain !== "" && trigger !== "" && round !== "";
+
+                if (isComplete && !this.isModifying && !this.confirmShown) {
+                    this.confirmShown = true;
+                    document.getElementById('log-confirm-modal').style.display = 'flex';
+                } else if (!isComplete) {
+                    this.confirmShown = false;
+                }
+
+                this.updateLogHistoryView();
+                this.calc();
+                this.saveDataAndHistory();
+            },
+
+            closeLogConfirm() {
+                document.getElementById('log-confirm-modal').style.display = 'none';
+                this.confirmShown = false;
+            },
+
+            modifyLog() {
+                document.getElementById('log-confirm-modal').style.display = 'none';
+                this.isModifying = true;
+                document.getElementById('log-modify-record-container').style.display = 'block';
+            },
+
+            recordLogFromModify() {
+                this.recordLog();
+            },
+
+            recordLog() {
+                document.getElementById('log-confirm-modal').style.display = 'none';
+                this.isModifying = false;
+                this.confirmShown = false;
+                document.getElementById('log-modify-record-container').style.display = 'none';
+
+                const hold = parseFloat(document.getElementById('log-hold').value) || 0;
+                const remain = parseFloat(document.getElementById('log-remain').value) || 0;
+                const replay = parseFloat(document.getElementById('log-replay').value) || 0;
+                const invest = parseFloat(document.getElementById('log-invest').value) || 0;
+                const trigger = document.getElementById('log-trigger').value;
+                const round = document.getElementById('log-round').value;
+
+                const kasi = parseFloat(document.getElementById('set-kasi').value) || 250;
+                const usedBalls = hold - remain + replay + (invest / 1000) * kasi;
+
+                this.jackpotCount++;
+                this.logHistory.push({
+                    no: this.jackpotCount,
+                    usedBalls: usedBalls,
+                    trigger: trigger,
+                    round: round,
+                    inputs: { hold, remain, replay, invest }
+                });
+
+                ['log-hold', 'log-remain', 'log-replay', 'log-invest', 'log-trigger', 'log-round'].forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) el.value = "";
+                });
+                if (document.getElementById('log-trigger-label')) document.getElementById('log-trigger-label').innerText = "未選択";
+                if (document.getElementById('log-round-label')) document.getElementById('log-round-label').innerText = "未選択";
+
+                this.updateLogHistoryView();
+                this.calc();
+                this.saveDataAndHistory();
+                alert('実戦ログを記録しました。');
+            },
+
+            deleteLog(index) {
+                if (confirm('この履歴を削除してよろしいですか？')) {
+                    this.logHistory.splice(index, 1);
+                    this.logHistory.forEach((h, i) => h.no = i + 1);
+                    this.jackpotCount = this.logHistory.length;
+                    this.calc();
+                    this.saveDataAndHistory();
+                    this.updateLogHistoryView();
+                }
+            },
+
+            updateLogHistoryView() {
+                document.getElementById('jackpot-count-display').innerText = this.jackpotCount;
+                const tbody = document.getElementById('log-history-table');
+                const thead = tbody.previousElementSibling;
+                const delMode = document.getElementById('log-delete-mode') && document.getElementById('log-delete-mode').checked;
+
+                if (thead) {
+                    thead.innerHTML = `<tr>
+                        <th style="width: 10%; text-align: center;">No</th>
+                        <th style="width: 25%; text-align: center;">使用玉数</th>
+                        <th style="width: 25%; text-align: center;">獲得出玉</th>
+                        <th style="width: 25%; text-align: center;">当選契機</th>
+                        ${delMode ? '<th style="width: 15%; text-align: center; color: var(--plus-red);">削除</th>' : '<th style="width: 15%; text-align: center;">R数</th>'}
+                    </tr>`;
+                }
+
+                if (this.logHistory.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="5" style="padding: 15px;">履歴がありません</td></tr>';
+                    return;
+                }
+
+                this.logHistory.sort((a, b) => a.no - b.no);
+
+                let html = '';
+                this.logHistory.forEach((h, index) => {
+                    let nextHoldStr = "";
+                    if (index + 1 < this.logHistory.length) {
+                        nextHoldStr = this.logHistory[index + 1].inputs ? this.logHistory[index + 1].inputs.hold : "";
+                    } else {
+                        nextHoldStr = document.getElementById('log-hold').value;
+                    }
+                    let gainedBallsDisplay = "-";
+                    if (nextHoldStr !== "" && nextHoldStr !== undefined && !isNaN(parseFloat(nextHoldStr)) && h.inputs) {
+                        const gainedBalls = parseFloat(nextHoldStr) - h.inputs.remain;
+                        gainedBallsDisplay = `${Math.floor(gainedBalls)}玉`;
+                    }
+
+                    const lastCol = delMode ?
+                        `<button style="background:var(--plus-red); color:white; border:none; border-radius:4px; padding:2px 8px; cursor:pointer;" onclick="app.deleteLog(${index})">×</button>` :
+                        `<span style="font-family:var(--font-eng); font-weight:bold;">${h.round}</span>`;
+
+                    html += `<tr>
+                        <td>${h.no}</td>
+                        <td style="font-family:var(--font-eng); font-weight:bold; cursor:pointer; color:var(--accent-secondary); text-decoration:underline;" onclick="app.openEditLogModal(${index})">${Math.floor(h.usedBalls)}玉</td>
+                        <td style="font-family:var(--font-eng); font-weight:bold; color:var(--plus-red);">${gainedBallsDisplay}</td>
+                        <td style="font-size:0.9em;">${h.trigger}</td>
+                        <td>${lastCol}</td>
+                    </tr>`;
+                });
+                tbody.innerHTML = html;
+            },
+
+            openEditLogModal(index) {
+                const h = this.logHistory[index];
+                if (!h) return;
+                document.getElementById('edit-log-index').value = index;
+                document.getElementById('edit-log-no').innerText = h.no;
+
+                if (h.inputs) {
+                    document.getElementById('edit-log-hold').value = h.inputs.hold;
+                    document.getElementById('edit-log-remain').value = h.inputs.remain;
+                    document.getElementById('edit-log-replay').value = h.inputs.replay;
+                    document.getElementById('edit-log-invest').value = h.inputs.invest;
+                }
+                const triggerOpts = [
+                    { value: "HR", label: "HR" },
+                    { value: "左HIT", label: "左HIT" },
+                    { value: "右HIT", label: "右HIT" },
+                    { value: "SP", label: "SP" }
+                ];
+                const roundOpts = [
+                    { value: "2R", label: "2R" },
+                    { value: "4R", label: "4R" },
+                    { value: "9R", label: "9R" }
+                ];
+                this.setupCustomSelect('edit-log-trigger', triggerOpts, 'edit-log-trigger', null, h.trigger);
+                this.setupCustomSelect('edit-log-round', roundOpts, 'edit-log-round', null, h.round);
+
+                document.getElementById('log-edit-modal').style.display = 'flex';
+            },
+
+            closeEditLogModal() {
+                document.getElementById('log-edit-modal').style.display = 'none';
+            },
+
+            saveEditLog() {
+                const index = document.getElementById('edit-log-index').value;
+                const h = this.logHistory[index];
+                if (!h) return;
+
+                const hold = parseFloat(document.getElementById('edit-log-hold').value) || 0;
+                const remain = parseFloat(document.getElementById('edit-log-remain').value) || 0;
+                const replay = parseFloat(document.getElementById('edit-log-replay').value) || 0;
+                const invest = parseFloat(document.getElementById('edit-log-invest').value) || 0;
+                const trigger = document.getElementById('edit-log-trigger').value;
+                const round = document.getElementById('edit-log-round').value;
+
+                const kasi = parseFloat(document.getElementById('set-kasi').value) || 250;
+                const usedBalls = hold - remain + replay + (invest / 1000) * kasi;
+
+                h.usedBalls = usedBalls;
+                h.trigger = trigger;
+                h.round = round;
+                h.inputs = { hold, remain, replay, invest };
+
+                this.updateLogHistoryView();
+                this.calc();
+                this.saveDataAndHistory();
+                this.closeEditLogModal();
+            },
+
+            checkEditLogForm() {
+                const holdEl = document.getElementById('edit-log-hold');
+                const remainEl = document.getElementById('edit-log-remain');
+                if (holdEl && remainEl) {
+                    const hold = holdEl.value;
+                    const remain = remainEl.value;
+                    const replay = parseFloat(document.getElementById('edit-log-replay').value) || 0;
+                    const invest = parseFloat(document.getElementById('edit-log-invest').value) || 0;
+
+                    if (hold !== "" && remain !== "" && parseFloat(remain) > parseFloat(hold) && replay === 0 && invest === 0) {
+                        remainEl.classList.add('input-error');
+                    } else {
+                        remainEl.classList.remove('input-error');
+                    }
+                }
+            },
+
+            formatVal(val, isYen = true) {
+                const sign = val > 0 ? "+" : "";
+                const colorClass = val > 0 ? "val-plus" : (val < 0 ? "val-minus" : "");
+                const text = isYen ? `${sign}${Math.floor(val).toLocaleString()}円` : `${sign}${val.toFixed(1)}円`;
+                return `<span class="${colorClass}">${text}</span>`;
+            },
+
+            getSettings() {
+                return {
+                    sp: parseFloat(document.getElementById('set-sp-rate').value) || 3,
+                    nm: parseFloat(document.getElementById('set-nm-rate').value) || 19.1,
+                    avgR: parseFloat(document.getElementById('set-avg-r').value) || 4.9,
+                    exch: parseFloat(document.getElementById('set-exchange').value) || 4,
+                    kasi: 1000 / (parseFloat(document.getElementById('set-kasi').value) || 250)
+                };
+            },
+
+            calcMetricsObject(v, s) {
+                const safeDiv = (num, den) => den > 0 ? num / den : 0;
+
+                const expVCountFine = (v.sp_select / s.sp) + (v.hr_catch + (v.left_chance_catch + v.right_chance_catch) * (s.nm / 100));
+                const estProbDenom = expVCountFine > 0 ? (v.total_rot / expVCountFine) : 0;
+                
+                const pickRateVal = safeDiv(v.total_pick, v.total_rot);
+                const estYakuProbDenom = pickRateVal > 0 ? (estProbDenom * pickRateVal) : 0;
+
+                const kasiBalls = s.kasi > 0 ? (1000 / s.kasi) : 250;
+                const usedK = (v.totalUsedBalls || 0) > 0 ? (v.totalUsedBalls / kasiBalls) : 0;
+                const rotPerK = usedK > 0 ? (v.total_rot / usedK) : 0;
+
+                const totalRounds = (v.v_2r || 0) * 2 + (v.v_4r || 0) * 4 + (v.v_9r || 0) * 9;
+                const rOut = totalRounds > 0 ? (v.totalGained / totalRounds) : 0;
+
+                const sumHits = v.hr_catch + v.right_chance_catch + v.left_chance_catch + v.right_foul + v.left_foul;
+
+                return {
+                    rotPerK: rotPerK,
+                    rOut: rOut,
+                    pickRate: pickRateVal,
+                    spSelectRate: safeDiv(v.sp_select, v.total_pick),
+                    bridgePassRate: safeDiv(v.bridge_pass, v.total_pick - v.sp_select),
+                    strongHitRate: safeDiv(sumHits, v.bridge_pass),
+                    hrRatio: safeDiv(v.hr_catch, sumHits),
+                    // Merged Ratios
+                    chanceRatio: {
+                        total: safeDiv(v.right_chance_catch + v.left_chance_catch, sumHits),
+                        right: safeDiv(v.right_chance_catch, sumHits),
+                        left: safeDiv(v.left_chance_catch, sumHits)
+                    },
+                    chanceWinRate: {
+                        total: safeDiv(v.right_hit_count + v.left_hit_count, v.right_chance_catch + v.left_chance_catch),
+                        right: safeDiv(v.right_hit_count, v.right_chance_catch),
+                        left: safeDiv(v.left_hit_count, v.left_chance_catch)
+                    },
+                    foulRatio: {
+                        total: safeDiv(v.right_foul + v.left_foul, sumHits),
+                        right: safeDiv(v.right_foul, sumHits),
+                        left: safeDiv(v.left_foul, sumHits)
+                    },
+                    spWinRate: safeDiv(v.sp_select, v.sp_v_count),
+                    estProb: estProbDenom,
+                    estYakuProb: estYakuProbDenom
+                };
+            },
+
+            calc() {
+                const v = {};
+                this.fields.forEach(f => {
+                    v[f.id] = parseFloat(document.getElementById(f.id).value) || 0;
+                });
+
+                const s = this.getSettings();
+
+                let v2r = 0, v4r = 0, v9r = 0;
+                let hr_hit_count = 0, right_hit_count = 0, left_hit_count = 0, sp_v_count = 0;
+                let totalUsedBalls = 0, totalInvest = 0, totalGained = 0;
+                const rawKasi = parseFloat(document.getElementById('set-kasi').value) || 250;
+
+                this.logHistory.forEach((h, index) => {
+                    if (h.round === "2R") v2r++;
+                    else if (h.round === "4R") v4r++;
+                    else if (h.round === "9R") v9r++;
+
+                    if (h.trigger === "HR") hr_hit_count++;
+                    else if (h.trigger === "右HIT") right_hit_count++;
+                    else if (h.trigger === "左HIT") left_hit_count++;
+                    else if (h.trigger === "SP") sp_v_count++;
+
+                    totalUsedBalls += (h.usedBalls || 0);
+                    if (h.inputs) {
+                        totalInvest += (h.inputs.invest || 0);
+                        let nextHoldStr = (index + 1 < this.logHistory.length) ? 
+                            (this.logHistory[index + 1].inputs ? this.logHistory[index + 1].inputs.hold : "") : 
+                            document.getElementById('log-hold').value;
+                        if (nextHoldStr !== "") totalGained += (parseFloat(nextHoldStr) - h.inputs.remain);
+                    }
+                });
+
+                const unHoldStr = document.getElementById('log-hold').value;
+                const unRemainStr = document.getElementById('log-remain').value;
+                const unReplayStr = document.getElementById('log-replay').value;
+                const unInvestStr = document.getElementById('log-invest').value;
+                if (unHoldStr !== "" || unRemainStr !== "" || unReplayStr !== "" || unInvestStr !== "") {
+                    const unHold = parseFloat(unHoldStr) || 0, unRemain = parseFloat(unRemainStr) || 0, unReplay = parseFloat(unReplayStr) || 0, unInvest = parseFloat(unInvestStr) || 0;
+                    totalUsedBalls += (unHold - unRemain + unReplay + (unInvest / 1000) * rawKasi);
+                    totalInvest += unInvest;
+                }
+
+                v.v_2r = v2r; v.v_4r = v4r; v.v_9r = v9r;
+                v.hr_hit_count = hr_hit_count; v.right_hit_count = right_hit_count; v.left_hit_count = left_hit_count; v.sp_v_count = sp_v_count;
+                v.totalUsedBalls = totalUsedBalls; v.totalInvest = totalInvest; v.totalGained = totalGained;
+
+                const cashUsedBalls = (totalInvest / 1000) * rawKasi;
+                v.holding_rate = totalUsedBalls > 0 ? ((totalUsedBalls - cashUsedBalls) / totalUsedBalls) * 100 : 0;
+                v.rot_per_k = (totalUsedBalls / rawKasi) > 0 ? v.total_rot / (totalUsedBalls / rawKasi) : 0;
+
+                const totalRounds = (v2r * 2) + (v4r * 4) + (v9r * 9);
+                v.r_out = totalRounds > 0 ? (totalGained / totalRounds) : 0;
+
+                const expVCount = (v.sp_select / s.sp) + (v.hr_catch + (v.left_chance_catch + v.right_chance_catch) * (s.nm / 100));
+                const estProbDenom = expVCount > 0 ? (v.total_rot / expVCount) : 0;
+
+                const avgOutJade = s.avgR * v.r_out;
+                const totalExpJade = expVCount * avgOutJade;
+                const jadeUsed = v.rot_per_k > 0 ? (v.total_rot / v.rot_per_k * 250) : 0;
+                const totalInvestYen = v.rot_per_k > 0 ? (v.total_rot / v.rot_per_k * 1000) : 0;
+
+                const yenHold = (totalExpJade * s.exch) - (jadeUsed * s.exch);
+                const yenCash = (totalExpJade * s.exch) - (totalInvestYen);
+                const holdRate = v.holding_rate / 100;
+                const totalExpYen = (yenHold * holdRate) + (yenCash * (1 - holdRate));
+
+                document.getElementById('res-total-exp').innerHTML = this.formatVal(totalExpYen);
+                document.getElementById('res-unit-exp').innerHTML = this.formatVal(v.total_rot > 0 ? totalExpYen / v.total_rot : 0, false);
+                
+                const unitCash = (yenCash / (v.total_rot || 1)).toFixed(1);
+                const unitHold = (yenHold / (v.total_rot || 1)).toFixed(1);
+                document.getElementById('res-unit-detail').innerHTML = `
+                    <div style="display: flex; justify-content: center; gap: 8px; margin-top: 8px; flex-wrap: wrap;">
+                        <div class="box-info">現金<br><span style="font-family:var(--font-eng);">${unitCash}円</span></div>
+                        <div class="box-info">持ち玉<br><span style="font-family:var(--font-eng);">${unitHold}円</span></div>
+                    </div>
+                `;
+
+                const borderHold = (avgOutJade > 0 && estProbDenom > 0) ? (250 * estProbDenom / avgOutJade) : 0;
+                const borderCash = (avgOutJade > 0 && estProbDenom > 0 && s.exch > 0) ? (1000 * estProbDenom / (avgOutJade * s.exch)) : 0;
+                document.getElementById('res-border').innerHTML = `
+                    <div style="display: flex; justify-content: center; gap: 8px; margin-top: 8px; flex-wrap: wrap;">
+                        <div class="box-info">持ち玉<br><span style="font-family:var(--font-eng);">${borderHold.toFixed(1)}<span style="font-size:12px; font-weight:normal; font-family:var(--font-main);"> 回転</span></span></div>
+                        <div class="box-info">現金<br><span style="font-family:var(--font-eng);">${borderCash.toFixed(1)}<span style="font-size:12px; font-weight:normal; font-family:var(--font-main);"> 回転</span></span></div>
+                    </div>
+                `;
+
+                const pickRate = v.total_rot > 0 ? (v.total_pick / v.total_rot) : 0;
+                const estYakuProbDenom = pickRate > 0 ? (estProbDenom * pickRate) : 0;
+                const totalV = v2r + v4r + v9r;
+                const totalR = (v2r * 2) + (v4r * 4) + (v9r * 9);
+                const actAvgR = totalV > 0 ? totalR / totalV : 0;
+                const gapJade = (totalR * v.r_out) - (totalV * avgOutJade);
+
+                document.getElementById('res-probs').innerHTML = `
+                    <div style="display: flex; justify-content: center; gap: 8px; flex-wrap: wrap;">
+                        <div class="box-info">役モノ<br><span style="font-family:var(--font-eng);">1/${estYakuProbDenom.toFixed(1)}</span></div>
+                        <div class="box-info">大当り<br><span style="font-family:var(--font-eng);">1/${estProbDenom.toFixed(1)}</span></div>
+                    </div>
+                `;
+
+                const avgRColor = actAvgR > s.avgR ? 'var(--plus-red)' : (actAvgR < s.avgR ? 'var(--minus-blue)' : 'var(--text-main)');
+                const gapJadeColor = gapJade > 0 ? 'var(--plus-red)' : (gapJade < 0 ? 'var(--minus-blue)' : 'var(--text-main)');
+                document.getElementById('res-gap').innerHTML = `
+                    <div style="display: flex; justify-content: center; gap: 8px; flex-wrap: wrap;">
+                        <div class="box-info">平均R数<br><span style="font-family:var(--font-eng); color:${avgRColor};">${actAvgR.toFixed(1)}</span></div>
+                        <div class="box-info">玉数<br><span style="font-family:var(--font-eng); color:${gapJadeColor};">${gapJade > 0 ? '+' : ''}${Math.floor(gapJade)}<span style="font-size:12px; font-weight:normal; font-family:var(--font-main);"> 玉</span></span></div>
+                    </div>
+                `;
+
+                const m = this.calcMetricsObject(v, s);
+                const details = [
+                    ["千円あたりの回転数", `<span style="font-family:var(--font-eng); font-weight:bold; font-size:18px;">${v.rot_per_k.toFixed(1)} 回転</span>`],
+                    ["持ち玉比率", `<span style="font-family:var(--font-eng); font-weight:bold; font-size:18px;">${v.holding_rate.toFixed(1)} %</span>`],
+                    ["1Rあたりの出玉", `<span style="font-family:var(--font-eng); font-weight:bold; font-size:18px;">${v.r_out.toFixed(1)} 玉</span>`],
+                    ["R別当選回数", `<span style="font-size:13px; font-weight:bold; color:var(--text-main);">2R: ${v2r}回 / 4R: ${v4r}回 / 9R: ${v9r}回</span>`],
+                    ["当選契機別回数", `<span style="font-size:13px; font-weight:bold; color:var(--text-main);">SP: ${sp_v_count}回 / HR: ${hr_hit_count}回 / 左HIT: ${left_hit_count}回 / 右HIT: ${right_hit_count}回</span>`],
+                    ["拾い率", this.formatF(m.pickRate, 'pct')],
+                    ["SPルート選択率", this.formatF(m.spSelectRate, 'pct')],
+                    ["赤橋突破率", this.formatF(m.bridgePassRate, 'pct')],
+                    ["強打率", this.formatF(m.strongHitRate, 'pct')],
+                    ["強打時HR率", this.formatF(m.hrRatio, 'pct')],
+                    ["強打時チャンス吸着率 <span style='font-size:0.7rem; font-weight:normal; color:var(--text-sub);'>※左右合計(左:右)</span>", this.formatF(m.chanceRatio, 'mergedPct')],
+                    ["チャンス吸着時当選率 <span style='font-size:0.7rem; font-weight:normal; color:var(--text-sub);'>※左右合計(左:右)</span>", this.formatF(m.chanceWinRate, 'mergedPct')],
+                    ["強打時ファール率 <span style='font-size:0.7rem; font-weight:normal; color:var(--text-sub);'>※左右合計(左:右)</span>", this.formatF(m.foulRatio, 'mergedPct')],
+                    ["SPルート当選率", this.formatF(m.spWinRate, 'prob')]
+                ];
+                document.getElementById('res-details-table').innerHTML = details.map(d => `<tr><th style="width:70%;">${d[0]}</th><td style="width:30%; font-family:var(--font-eng); font-weight:bold; font-size:16px;">${d[1]}</td></tr>`).join('');
+
+                this.lastCalcRes = { totalExpYen, unitExpYen: v.total_rot > 0 ? totalExpYen / v.total_rot : 0, borderHold, borderCash, estYakuProbDenom, estProbDenom, actAvgR, gapJade };
+                this.lastCalcV = { ...v };
+                this.saveDataAndHistory();
+            },
+
+            formatF(val, type, hideSub) {
+                if (type === 'mergedPct' && typeof val === 'object') {
+                    if (hideSub) return `${(val.total * 100).toFixed(1)}%`;
+                    return `${(val.total * 100).toFixed(1)}% (${(val.left * 100).toFixed(1)}%:${(val.right * 100).toFixed(1)}%)`;
+                }
+                if (type === 'pct' || type === 'mergedPct') return `${(val * 100).toFixed(1)}%`;
+                if (type === 'prob') return val > 0 ? `1 / ${val.toFixed(1)}` : "-";
+                if (type === 'rot') return `${val.toFixed(1)} 回転`;
+                if (type === 'ball') return `${val.toFixed(1)} 玉`;
+                return val;
+            },
+
+            getCompareStr(val, avg, type, lowerIsBetter) {
+                const vNum = (type === 'mergedPct' && typeof val === 'object') ? val.total : val;
+                const aNum = (type === 'mergedPct' && typeof avg === 'object') ? avg.total : avg;
+
+                if (aNum === 0 || vNum === 0) return "-";
+                let delta = vNum - aNum;
+                let isGood = lowerIsBetter ? (vNum < aNum) : (vNum > aNum);
+                if (type === 'pct' || type === 'mergedPct') {
+                    const deltaPct = delta * 100;
+                    if (Math.abs(deltaPct) < 0.05) return "-";
+                    const icon = isGood ? '↑' : '↓', color = isGood ? 'var(--plus-red)' : 'var(--minus-blue)', sign = deltaPct > 0 ? '+' : '';
+                    return `<span style="color:${color}; font-weight:bold;">${icon} (${sign}${deltaPct.toFixed(1)}%)</span>`;
+                }
+                if (type === 'prob' || type === 'rot' || type === 'ball') {
+                    if (Math.abs(delta) < 0.05) return "-";
+                    const icon = isGood ? '↑' : '↓', color = isGood ? 'var(--plus-red)' : 'var(--minus-blue)', sign = delta > 0 ? '+' : '';
+                    return `<span style="color:${color}; font-weight:bold;">${icon} (${sign}${delta.toFixed(delta < 1 ? 2 : 1)})</span>`;
+                }
+                return "-";
+            },
+
+            updateCompareView() {
+                const metricId = document.getElementById('compare-metric-select').value;
+                const m = this.metricsConfig.find(x => x.id === metricId);
+                const tbody = document.getElementById('compare-list');
+                const theadTr = document.querySelector('#compare .data-table thead tr');
+                const delMode = document.getElementById('history-delete-mode') && document.getElementById('history-delete-mode').checked;
+
+                if (m.type === 'text') {
+                    if (theadTr) {
+                        theadTr.innerHTML = `
+                            <th style="width: 33.3%; text-align: center;">区間(拾い)</th>
+                            <th style="width: 66.7%; text-align: center;">コメント</th>
+                        `;
+                    }
+                    let html = '';
+                    this.history.forEach((h, i) => {
+                        const prevPick = i === 0 ? 0 : this.history[i - 1].v.total_pick;
+                        const label = prevPick === h.v.total_pick ? `${h.v.total_pick}個` : `${prevPick + 1}個～${h.v.total_pick}個`;
+                        const actionCol = delMode ?
+                            `<button style="background:var(--plus-red); color:white; border:none; border-radius:4px; padding:2px 8px; cursor:pointer; float:right;" onclick="app.deleteHistory(${i})">×</button>` : '';
+                        html += `<tr><td style="text-align:center;">${label}</td><td style="text-align:left;">${h.comment || h.memo || '-'}${actionCol}</td></tr>`;
+                    });
+                    tbody.innerHTML = html;
+                    if (this.chartInstance) { this.chartInstance.destroy(); this.chartInstance = null; }
+                    document.getElementById('compareChart').style.display = 'none';
+                    return;
+                }
+
+                if (theadTr) {
+                    theadTr.innerHTML = `
+                        <th style="width: 33.3%; text-align: center;">区間(拾い)</th>
+                        <th style="width: 33.3%; text-align: center;">数値</th>
+                        ${delMode ? '<th style="width: 33.3%; text-align: center; color: var(--plus-red);">削除</th>' : '<th style="width: 33.3%; text-align: center;">累計との比較</th>'}
+                    `;
+                }
+
+                document.getElementById('compareChart').style.display = 'block';
+
+                if (this.history.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="3" style="text-align:center; padding: 20px;">区間データが保存されていません。<br>「算出結果」画面から保存してください。</td></tr>';
+                    if (this.chartInstance) { this.chartInstance.destroy(); this.chartInstance = null; }
+                    return;
+                }
+
+                const s = this.getSettings();
+                const latestV = this.history[this.history.length - 1].v;
+                const cumulativeRes = this.calcMetricsObject(latestV, s);
+                const cumulativeVal = cumulativeRes[metricId];
+
+                const labels = [];
+                const dataPoints = [];
+                const tableRows = [];
+
+                let prevV = null;
+                let prevPick = 0;
+
+                for (let i = 0; i < this.history.length; i++) {
+                    const h = this.history[i];
+                    const deltaV = {};
+                    Object.keys(h.v).forEach(k => {
+                        deltaV[k] = (h.v[k] || 0) - (prevV && prevV[k] ? prevV[k] : 0);
+                    });
+                    ['total_rot', 'total_pick', 'sp_select', 'bridge_pass', 'hr_catch', 'right_chance_catch', 'left_chance_catch', 'right_foul', 'left_foul', 'v_2r', 'v_4r', 'v_9r', 'hr_hit_count', 'right_hit_count', 'left_hit_count', 'sp_v_count', 'totalUsedBalls', 'totalInvest', 'totalGained'].forEach(k => {
+                        if (deltaV[k] === undefined || isNaN(deltaV[k])) deltaV[k] = 0;
+                    });
+
+                    const res = this.calcMetricsObject(deltaV, s);
+                    const val = res[metricId];
+                    const label = prevPick === h.v.total_pick ? `${h.v.total_pick}個` : `${prevPick + 1}個～${h.v.total_pick}個`;
+
+                    const compStr = this.getCompareStr(val, cumulativeVal, m.type, m.lowerIsBetter);
+                    const delBtn = delMode ? `<button style="background:var(--plus-red); color:white; border:none; border-radius:4px; padding:2px 8px; cursor:pointer;" onclick="app.deleteHistory(${i})">×</button>` : "";
+
+                    tableRows.push(`<tr>
+                        <td style="text-align:center; font-size:0.85rem;">${label}</td>
+                        <td style="text-align:center; font-family:var(--font-eng); font-weight:bold;">${this.formatF(val, m.type, true)}</td>
+                        <td style="text-align:center; font-size:0.85rem;">${delMode ? delBtn : compStr}</td>
+                    </tr>`);
+
+                    labels.push(label);
+                    dataPoints.push(val === 0 && m.type === 'prob' ? null : (m.type === 'pct' || m.type === 'mergedPct' ? (typeof val === 'object' ? val.total * 100 : val * 100) : val));
+
+                    prevV = h.v;
+                    prevPick = h.v.total_pick;
+                }
+
+                while (labels.length < 5) {
+                    labels.push("");
+                }
+
+                tableRows.push(`<tr style="background:rgba(0,0,0,0.03); font-weight:bold;">
+                    <td style="text-align:center;">累計平均</td>
+                    <td style="text-align:center; font-family:var(--font-eng);">${this.formatF(cumulativeVal, m.type, true)}</td>
+                    <td style="text-align:center;">-</td>
+                </tr>`);
+
+                tbody.innerHTML = tableRows.join('');
+
+                const targetVal = parseFloat(document.getElementById(`target-${metricId}`).value) || null;
+                this.drawChart(labels, dataPoints, cumulativeVal, m, targetVal);
+            },
+
+            drawChart(labels, dataPoints, cumVal, metric, targetVal) {
+                const ctx = document.getElementById('compareChart').getContext('2d');
+                if (this.chartInstance) this.chartInstance.destroy();
+
+                const mult = (metric.type === 'pct' || metric.type === 'mergedPct') ? 100 : 1;
+                const cumLineData = labels.map(() => (typeof cumVal === 'object' ? cumVal.total : cumVal) * mult);
+
+                const datasets = [
+                    {
+                        label: metric.name,
+                        data: dataPoints,
+                        borderColor: '#227093', // blue marker
+                        borderWidth: 2,
+                        tension: 0.1,
+                        fill: false
+                    },
+                    {
+                        label: '累計平均',
+                        data: cumLineData,
+                        borderColor: '#b33939', // red marker
+                        borderDash: [5, 5],
+                        borderWidth: 2,
+                        pointRadius: 0
+                    }
+                ];
+
+                if (targetVal !== null) {
+                    datasets.push({
+                        label: '任意基準ライン',
+                        data: labels.map(() => targetVal),
+                        borderColor: '#218c74',
+                        borderDash: [10, 5],
+                        borderWidth: 2,
+                        pointRadius: 0
+                    });
+                }
+
+                Chart.defaults.font.family = "'Noto Sans JP', sans-serif";
+
+                this.chartInstance = new Chart(ctx, {
+                    type: 'line',
+                    data: { labels, datasets },
+                    options: {
+                        responsive: true,
+                        scales: {
+                            y: {
+                                beginAtZero: false
+                            },
+                            x: {
+                                offset: true
+                            }
+                        }
+                    }
+                });
+            },
+
+            saveHistory() {
+                document.getElementById('interval-save-modal').style.display = 'flex';
+            },
+
+            executeSaveHistory() {
+                const memo = document.getElementById('interval-save-memo').value;
+                const now = new Date();
+
+                this.history.push({
+                    ts: now.getTime(),
+                    comment: memo,
+                    v: { ...this.lastCalcV }
+                });
+
+                document.getElementById('interval-save-modal').style.display = 'none';
+                document.getElementById('interval-save-memo').value = "";
+                
+                this.saveDataAndHistory();
+                this.updateHistoryDropdown();
+                document.getElementById('save-complete-modal').style.display = 'flex';
+            },
+
+
+            updateIntervalDetailView() {
+                const idx = parseInt(document.getElementById('interval-detail-select').value, 10);
+                const container = document.getElementById('interval-details-table');
+                const probContainer = document.getElementById('interval-probs');
+                
+                if (isNaN(idx) || this.history.length === 0) {
+                    container.innerHTML = '<tr><td colspan="2" style="text-align:center; padding: 20px;">区間データがありません。</td></tr>';
+                    probContainer.innerHTML = "";
+                    return;
+                }
+
+                const currentH = this.history[idx];
+                const prevH = idx > 0 ? this.history[idx - 1] : null;
+
+                const deltaV = {};
+                Object.keys(currentH.v).forEach(k => {
+                    deltaV[k] = (currentH.v[k] || 0) - (prevH && prevH.v[k] ? prevH.v[k] : 0);
+                });
+                ['total_rot', 'total_pick', 'sp_select', 'bridge_pass', 'hr_catch', 'right_chance_catch', 'left_chance_catch', 'right_foul', 'left_foul', 'v_2r', 'v_4r', 'v_9r', 'hr_hit_count', 'right_hit_count', 'left_hit_count', 'sp_v_count', 'totalUsedBalls', 'totalInvest', 'totalGained'].forEach(k => {
+                    if (deltaV[k] === undefined || isNaN(deltaV[k])) deltaV[k] = 0;
+                });
+
+                const s = this.getSettings();
+                const m = this.calcMetricsObject(deltaV, s);
+
+                const expVCountFine = (deltaV.sp_select / s.sp) + (deltaV.hr_catch + (deltaV.left_chance_catch + deltaV.right_chance_catch) * (s.nm / 100));
+                const estProbDenom = expVCountFine > 0 ? (deltaV.total_rot / expVCountFine) : 0;
+                const pickRateVal = deltaV.total_rot > 0 ? (deltaV.total_pick / deltaV.total_rot) : 0;
+                const estYakuProbDenom = pickRateVal > 0 ? (estProbDenom * pickRateVal) : 0;
+
+                const totalVCount = deltaV.v_2r + deltaV.v_4r + deltaV.v_9r;
+                const totalR = (deltaV.v_2r * 2) + (deltaV.v_4r * 4) + (deltaV.v_9r * 9);
+                const actAvgR = totalVCount > 0 ? totalR / totalVCount : 0;
+                const avgOutJade = s.avgR * m.rOut;
+                const gapJade = (totalR * m.rOut) - (totalVCount * avgOutJade);
+
+                const avgRColor = actAvgR > s.avgR ? 'var(--plus-red)' : (actAvgR < s.avgR ? 'var(--minus-blue)' : 'var(--text-main)');
+                const gapJadeColor = gapJade > 0 ? 'var(--plus-red)' : (gapJade < 0 ? 'var(--minus-blue)' : 'var(--text-main)');
+
+                probContainer.innerHTML = `
+                    <div style="display: flex; justify-content: center; gap: 8px; flex-wrap: wrap;">
+                        <div class="box-info">役モノ<br><span style="font-family:var(--font-eng);">1/${estYakuProbDenom > 0 ? estYakuProbDenom.toFixed(1) : '-'}</span></div>
+                        <div class="box-info">大当り<br><span style="font-family:var(--font-eng);">1/${estProbDenom > 0 ? estProbDenom.toFixed(1) : '-'}</span></div>
+                        <div class="box-info">平均R数<br><span style="font-family:var(--font-eng); color:${avgRColor};">${actAvgR > 0 ? actAvgR.toFixed(1) : '-'}R</span></div>
+                        <div class="box-info">玉数<br><span style="font-family:var(--font-eng); color:${gapJadeColor};">${gapJade > 0 ? '+' : ''}${Math.floor(gapJade)}<span style="font-size:12px; font-weight:normal; font-family:var(--font-main);"> 玉</span></span></div>
+                    </div>
+                `;
+
+                const details = [
+                    ["回転率", this.formatF(m.rotPerK, 'rot')],
+                    ["1R出玉", this.formatF(m.rOut, 'ball')],
+                    ["拾い率", this.formatF(m.pickRate, 'pct')],
+                    ["SP選択率", this.formatF(m.spSelectRate, 'pct')],
+                    ["赤橋突破率", this.formatF(m.bridgePassRate, 'pct')],
+                    ["強打率", this.formatF(m.strongHitRate, 'pct')],
+                    ["強打時HR率", this.formatF(m.hrRatio, 'pct')],
+                    ["強打時チャンス吸着率 <span style='font-size:0.7rem; font-weight:normal; color:var(--text-sub);'>※左右合計(左:右)</span>", this.formatF(m.chanceRatio, 'mergedPct')],
+                    ["チャンス吸着時当選率 <span style='font-size:0.7rem; font-weight:normal; color:var(--text-sub);'>※左右合計(左:右)</span>", this.formatF(m.chanceWinRate, 'mergedPct')],
+                    ["強打時ファール率 <span style='font-size:0.7rem; font-weight:normal; color:var(--text-sub);'>※左右合計(左:右)</span>", this.formatF(m.foulRatio, 'mergedPct')],
+                    ["SPルート当選率", this.formatF(m.spWinRate, 'prob')]
+                ];
+                container.innerHTML = details.map(d => `<tr><th style="width:70%;">${d[0]}</th><td style="width:30%; font-family:var(--font-eng); font-weight:bold; font-size:16px;">${d[1]}</td></tr>`).join('');
+            },
+
+            resetAll() {
+                document.getElementById('reset-daiban').value = "";
+                document.getElementById('reset-memo').value = "";
+                document.getElementById('reset-modal').style.display = 'flex';
+            },
+
+            runSim() {
+                const getV = (id) => document.getElementById(id).value;
+                const ids = ['sim-rot', 'sim-rout', 'sim-pick', 'sim-sp-rate', 'sim-bridge', 'sim-strong-rate', 'sim-hr-ratio', 'sim-chance-ratio', 'sim-foul-ratio'];
+
+                const warningEl = document.getElementById('sim-warning');
+                
+                // いずれかの入力が空の場合は「-」を表示して終了
+                if (ids.some(id => getV(id) === "")) {
+                    document.getElementById('sim-res-unit').innerHTML = "-";
+                    document.getElementById('sim-res-border').innerText = "-";
+                    document.getElementById('sim-res-prob').innerText = "-";
+                    if (warningEl) warningEl.style.display = 'none';
+                    return;
+                }
+
+                const rot = parseFloat(getV('sim-rot'));
+                const rout = parseFloat(getV('sim-rout'));
+                const pick = parseFloat(getV('sim-pick')) / 100;
+                const spRate = parseFloat(getV('sim-sp-rate')) / 100;
+                const bridgeRate = parseFloat(getV('sim-bridge')) / 100;
+                const strongRate = parseFloat(getV('sim-strong-rate')) / 100;
+                
+                const hrPct = parseFloat(getV('sim-hr-ratio'));
+                const chancePct = parseFloat(getV('sim-chance-ratio'));
+                const foulPct = parseFloat(getV('sim-foul-ratio'));
+                
+                // バリデーション: 合計が100%かチェック
+                const totalPct = hrPct + chancePct + foulPct;
+                if (Math.abs(totalPct - 100) > 0.01) {
+                    if (warningEl) warningEl.style.display = 'block';
+                } else {
+                    if (warningEl) warningEl.style.display = 'none';
+                }
+
+                const hrRatio = hrPct / 100;
+                const chanceRatio = chancePct / 100;
+
+                const s = this.getSettings();
+                
+                // 1回転あたりの推定V入賞個数
+                // SP分 + ノーマル分[拾い×非SP率×橋突破率×強打率×(HR割合 + チャンス割合×チャンス当選率(設定値))]
+                const expV = (pick * spRate / s.sp) + 
+                             (pick * (1 - spRate) * bridgeRate * strongRate * (hrRatio + chanceRatio * (s.nm / 100)));
+                
+                const prob = expV > 0 ? 1 / expV : 0;
+                const avgOut = s.avgR * rout;
+
+                // 1回転あたりのコスト
+                const yenCostPerRot = 1000 / (rot || 1);
+                const jadeCostPerRot = 250 / (rot || 1);
+
+                const expUnitHold = (expV * avgOut * s.exch) - (jadeCostPerRot * s.exch);
+                const expUnitCash = (expV * avgOut * s.exch) - yenCostPerRot;
+                
+                const unitHold = expUnitHold;
+                const unitCash = expUnitCash;
+
+                const borderHold = (avgOut > 0 && prob > 0) ? (250 * prob / avgOut) : 0;
+                const borderCash = (avgOut > 0 && prob > 0 && s.exch > 0) ? (1000 * prob / (avgOut * s.exch)) : 0;
+
+                const estYakuProbDenom = (pick > 0 && prob > 0) ? (pick * prob) : 0;
+
+                const formatSimVal = (val) => {
+                    const color = val > 0 ? 'var(--plus-red)' : (val < 0 ? 'var(--minus-blue)' : 'inherit');
+                    return `<span style="color:${color}; font-weight:bold;">${val.toFixed(1)}円</span>`;
+                };
+
+                document.getElementById('sim-res-unit').innerHTML = `
+                    持ち玉: ${formatSimVal(unitHold)} / 現金: ${formatSimVal(unitCash)}
+                `;
+                document.getElementById('sim-res-border').innerHTML = `
+                    持ち玉: <span style="font-weight:bold;">${borderHold.toFixed(1)}回</span> / 現金: <span style="font-weight:bold;">${borderCash.toFixed(1)}回</span>
+                `;
+                document.getElementById('sim-res-prob').innerHTML = `
+                    役モノ: <span style="font-weight:bold;">1/${estYakuProbDenom.toFixed(1)}</span> / 大当り: <span style="font-weight:bold;">1/${prob.toFixed(1)}</span>
+                `;
+            },
+
+            async executeBackupAndReset() {
+                if (!confirm("クリップボードに今回の実戦データをコピーし、リセットしてもよろしいですか。\n\n※詳細設定は保持されます。")) {
+                    return;
+                }
+                const daiban = document.getElementById('reset-daiban').value;
+                const memo = document.getElementById('reset-memo').value;
+                await this.copyBackupToClipboard(daiban, memo);
+                this.executeReset();
+                document.getElementById('reset-modal').style.display = 'none';
+                alert("クリップボードに今回の実戦データをコピーしました。\n\nメモ帳アプリ等にペーストしてご確認下さい。");
+            },
+
+            executeResetOnly() {
+                if (confirm("バックアップせずにデータをリセットしてよろしいですか?\n\n※詳細設定は保持されます。")) {
+                    this.executeReset();
+                    document.getElementById('reset-modal').style.display = 'none';
+                    alert("リセットが完了しました。");
+                }
+            },
+
+            executeReset() {
+                this.history = [];
+                this.logHistory = [];
+                this.jackpotCount = 0;
+                this.isModifying = false;
+                this.confirmShown = false;
+
+                this.fields.forEach(f => {
+                    const el = document.getElementById(f.id);
+                    if (el) el.value = "";
+                });
+
+                ['log-hold', 'log-remain', 'log-replay', 'log-invest', 'log-trigger', 'log-round'].forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) el.value = "";
+                });
+
+                document.getElementById('memo-before').value = "";
+                document.getElementById('memo-during').value = "";
+
+                this.saveDataAndHistory();
+                this.calc();
+                this.updateCompareView();
+                this.updateHistoryDropdown();
+                this.updateIntervalDetailView();
+                this.updateLogHistoryView();
+            },
+
+            async copyBackupToClipboard(daiban, memo) {
+                const daibanText = daiban || "";
+                let masterDataText = "========================================\n" +
+                    ` ファインプレー 台番: ${daibanText}\n` +
+                    "========================================\n\n";
+
+                masterDataText += "【稼働前メモ】\n" + (document.getElementById('memo-before').value || "（入力なし）") + "\n\n";
+                masterDataText += "【稼働中メモ】\n" + (document.getElementById('memo-during').value || "（入力なし）") + "\n\n";
+                masterDataText += "【稼働終了後メモ】\n" + (memo || "（入力なし）") + "\n\n";
+
+                const v = { ...this.lastCalcV };
+                const s = this.getSettings();
+                const m = this.calcMetricsObject(v, s);
+
+                masterDataText += "【最終結果】\n";
+                masterDataText += `総期待値: ${Math.floor(this.lastCalcRes.totalExpYen || 0).toLocaleString()}円\n`;
+                masterDataText += `1回転あたりの期待値: ${this.lastCalcRes.unitExpYen ? this.lastCalcRes.unitExpYen.toFixed(1) : "0.0"}円\n`;
+                masterDataText += `持ち玉比率: ${v.holding_rate ? v.holding_rate.toFixed(1) : "0.0"}%\n`;
+                masterDataText += `千円あたりの回転数: ${m.rotPerK ? m.rotPerK.toFixed(1) : "0.0"}回/k\n`;
+                masterDataText += `1R出玉: ${m.rOut ? m.rOut.toFixed(1) : "0.0"}玉\n`;
+                masterDataText += `推定大当り確率: ${this.lastCalcRes.estProbDenom > 0 ? "1/" + this.lastCalcRes.estProbDenom.toFixed(1) : "-"}\n`;
+                const totalV = (v.v_2r || 0) + (v.v_4r || 0) + (v.v_9r || 0);
+                const totalR = ((v.v_2r || 0) * 2) + ((v.v_4r || 0) * 4) + ((v.v_9r || 0) * 9);
+                const actAvgR = totalV > 0 ? totalR / totalV : 0;
+                masterDataText += `平均R数(R別当選回数): ${actAvgR > 0 ? actAvgR.toFixed(1) : '-'}R (2R: ${v.v_2r || 0}回 / 4R: ${v.v_4r || 0}回 / 9R: ${v.v_9r || 0}回)\n`;
+                masterDataText += `余剰玉数: ${this.lastCalcRes.gapJade >= 0 ? '+' : ''}${Math.floor(this.lastCalcRes.gapJade || 0)}玉\n`;
+                masterDataText += `当選契機別回数: SP: ${v.sp_v_count || 0}回 / HR: ${v.hr_hit_count || 0}回 / 左HIT: ${v.left_hit_count || 0}回 / 右HIT: ${v.right_hit_count || 0}回\n\n`;
+
+                masterDataText += "【最終累計入力数値】\n";
+                this.fields.forEach(f => {
+                    masterDataText += `${f.name}: ${v[f.id] || 0}\n`;
+                });
+                masterDataText += "\n";
+
+                masterDataText += "【最終算出データ】\n";
+                masterDataText += `拾い率: ${this.formatF(m.pickRate, 'pct')}\n`;
+                masterDataText += `SPルート選択率: ${this.formatF(m.spSelectRate, 'pct')}\n`;
+                masterDataText += `赤橋突破率: ${this.formatF(m.bridgePassRate, 'pct')}\n`;
+                masterDataText += `強打率: ${this.formatF(m.strongHitRate, 'pct')}\n`;
+                masterDataText += `強打時HR率: ${this.formatF(m.hrRatio, 'pct')}\n`;
+                masterDataText += `強打時チャンス吸着率: ${this.formatF(m.chanceRatio, 'mergedPct')}\n`;
+                masterDataText += `チャンス吸着時当選率: ${this.formatF(m.chanceWinRate, 'mergedPct')}\n`;
+                masterDataText += `強打時ファール率: ${this.formatF(m.foulRatio, 'mergedPct')}\n`;
+                masterDataText += `SPルート当選率: ${this.formatF(m.spWinRate, 'prob')}\n\n`;
+
+                masterDataText += "【区間履歴】\n";
+                if (this.history && this.history.length > 0) {
+                    let prevV = null;
+                    this.history.forEach((h, i) => {
+                        const deltaV = {};
+                        Object.keys(h.v).forEach(k => {
+                            deltaV[k] = (h.v[k] || 0) - (prevV && prevV[k] ? prevV[k] : 0);
+                        });
+                        ['total_rot', 'total_pick', 'sp_select', 'bridge_pass', 'hr_catch', 'right_chance_catch', 'left_chance_catch', 'right_foul', 'left_foul', 'v_2r', 'v_4r', 'v_9r', 'hr_hit_count', 'right_hit_count', 'left_hit_count', 'sp_v_count', 'totalUsedBalls', 'totalInvest', 'totalGained'].forEach(k => {
+                            if (deltaV[k] === undefined || isNaN(deltaV[k])) deltaV[k] = 0;
+                        });
+
+                        const hm = this.calcMetricsObject(deltaV, s);
+                        
+                        const safeDivPct = (num, den) => den > 0 ? ((num / den) * 100).toFixed(1) + "%" : "0.0%";
+                        const safeDivProb = (num, den) => den > 0 ? `1 / ${(num / den).toFixed(1)}` : "-";
+
+                        const ts = h.ts || Date.now();
+                        const timeStr = new Date(ts).toLocaleString('ja-JP', { hour: '2-digit', minute: '2-digit' });
+                        const prevPick = i === 0 ? 0 : (this.history[i - 1].totalPick || this.history[i - 1].v.total_pick);
+                        const currentPick = h.totalPick || h.v.total_pick;
+                        const pickLabel = prevPick === currentPick ? `拾い個数:${currentPick}個(${timeStr})` : `拾い個数:${prevPick + 1}個～${currentPick}個(${timeStr})`;
+
+                        masterDataText += `--- ${pickLabel} ---\n`;
+                        masterDataText += `コメント: ${h.memo || ""}\n`;
+                        masterDataText += `回転率: ${hm.rotPerK.toFixed(1)}回/k | 1R出玉: ${hm.rOut.toFixed(1)}玉\n`;
+                        masterDataText += `拾い率: ${safeDivPct(deltaV.total_pick, deltaV.total_rot)} | 推定役モノ確率: ${hm.estYakuProb > 0 ? "1/" + hm.estYakuProb.toFixed(1) : "-"} | 推定大当り確率: ${hm.estProb > 0 ? "1/" + hm.estProb.toFixed(1) : "-"}\n`;
+                        masterDataText += `SP選択率: ${safeDivPct(deltaV.sp_select, deltaV.total_pick)} | 赤橋突破率: ${safeDivPct(deltaV.bridge_pass, deltaV.total_pick - deltaV.sp_select)}\n`;
+                        
+                        const sumHits = deltaV.hr_catch + deltaV.right_chance_catch + deltaV.left_chance_catch + deltaV.right_foul + deltaV.left_foul;
+                        masterDataText += `強打率: ${safeDivPct(sumHits, deltaV.bridge_pass)} | 強打時HR率: ${safeDivPct(deltaV.hr_catch, sumHits)}\n`;
+                        masterDataText += `強打時チャンス吸着率: ${this.formatF(hm.chanceRatio, 'mergedPct')} | チャンス吸着時当選率: ${this.formatF(hm.chanceWinRate, 'mergedPct')}\n`;
+                        masterDataText += `強打時ファール率: ${this.formatF(hm.foulRatio, 'mergedPct')} | SPルート当選率: ${this.formatF(hm.spWinRate, 'prob')}\n\n`;
+
+                        prevV = h.v;
+                    });
+                } else {
+                    masterDataText += "保存された区間データはありません。\n\n";
+                }
+
+                try {
+                    await navigator.clipboard.writeText(masterDataText);
+                } catch (err) {
+                    console.error('Failed to copy: ', err);
+                    alert('コピーに失敗しました。手動でコピーしてください。\n\n' + masterDataText);
+                }
+            },
+
+            openSim() {
+                const s = this.getSettings();
+                const v = this.lastCalcV;
+
+                if (v && v.total_rot > 0) {
+                    const m = this.calcMetricsObject(v, s);
+                    document.getElementById('sim-rot').value = m.rotPerK > 0 ? m.rotPerK.toFixed(1) : "";
+                    document.getElementById('sim-rout').value = m.rOut > 0 ? m.rOut.toFixed(1) : "";
+                    document.getElementById('sim-pick').value = (m.pickRate * 100).toFixed(1);
+                    document.getElementById('sim-sp-rate').value = (m.spSelectRate * 100).toFixed(1);
+                    document.getElementById('sim-bridge').value = (m.bridgePassRate * 100).toFixed(1);
+                    document.getElementById('sim-strong-rate').value = (m.strongHitRate * 100).toFixed(1);
+                    document.getElementById('sim-hr-ratio').value = (m.hrRatio * 100).toFixed(1);
+                    document.getElementById('sim-chance-ratio').value = (m.chanceRatio.total * 100).toFixed(1);
+                    document.getElementById('sim-foul-ratio').value = (m.foulRatio.total * 100).toFixed(1);
+                } else {
+                    const ids = ['sim-rot', 'sim-rout', 'sim-pick', 'sim-sp-rate', 'sim-bridge', 'sim-strong-rate', 'sim-hr-ratio', 'sim-chance-ratio', 'sim-foul-ratio'];
+                    ids.forEach(id => {
+                        const el = document.getElementById(id);
+                        if (el) el.value = "";
+                    });
+                }
+                
+                this.runSim();
+                document.getElementById('sim-modal').style.display = 'flex';
+            },
+
+            closeSim() {
+                document.getElementById('sim-modal').style.display = 'none';
+            },
+
+            resetBasicSettings() {
+                if (!confirm("基本設定をデフォルト値に戻しますか？")) return;
+                document.getElementById('set-sp-rate').value = 3;
+                document.getElementById('set-nm-rate').value = 19.1;
+                document.getElementById('set-avg-r').value = 4.9;
+                document.getElementById('set-kasi').value = 250;
+                document.getElementById('set-exchange').value = 4.0;
+                this.calc();
+                this.saveDataAndHistory();
+            },
+
+            resetTargetSettings() {
+                if (!confirm("各種項目の基準値設定をデフォルト値に戻しますか？")) return;
+                this.metricsConfig.forEach(m => {
+                    const el = document.getElementById(`target-${m.id}`);
+                    if (el) el.value = m.defaultVal !== undefined ? m.defaultVal : '';
+                });
+                this.saveDataAndHistory();
+                this.updateCompareView();
+            },
+
+            saveDataAndHistory() {
+                const data = {};
+                this.fields.forEach(f => {
+                    data[f.id] = document.getElementById(f.id).value;
+                });
+                const settings = {
+                    sp: document.getElementById('set-sp-rate').value,
+                    nm: document.getElementById('set-nm-rate').value,
+                    avgR: document.getElementById('set-avg-r').value,
+                    kasi: document.getElementById('set-kasi').value,
+                    exch: document.getElementById('set-exchange').value
+                };
+                const targets = {};
+                this.metricsConfig.forEach(m => {
+                    const el = document.getElementById(`target-${m.id}`);
+                    if (el) targets[m.id] = el.value;
+                });
+
+                const saveObj = {
+                    data: data,
+                    settings: settings,
+                    targets: targets,
+                    history: this.history,
+                    logHistory: this.logHistory,
+                    jackpotCount: this.jackpotCount,
+                    memoBefore: document.getElementById('memo-before').value,
+                    memoDuring: document.getElementById('memo-during').value
+                };
+                localStorage.setItem('pachitaku_fine play_data', JSON.stringify(saveObj));
+            },
+
+            loadDataAndHistory() {
+                const savedJson = localStorage.getItem('pachitaku_fine play_data');
+                if (savedJson) {
+                    const saved = JSON.parse(savedJson);
+                    if (saved.data) {
+                        this.fields.forEach(f => {
+                            if (saved.data[f.id] !== undefined) document.getElementById(f.id).value = saved.data[f.id];
+                        });
+                    }
+                    if (saved.settings) {
+                        if (saved.settings.sp) document.getElementById('set-sp-rate').value = saved.settings.sp;
+                        if (saved.settings.nm) document.getElementById('set-nm-rate').value = saved.settings.nm;
+                        if (saved.settings.avgR) document.getElementById('set-avg-r').value = saved.settings.avgR;
+                        if (saved.settings.kasi) document.getElementById('set-kasi').value = saved.settings.kasi;
+                        if (saved.settings.exch) document.getElementById('set-exchange').value = saved.settings.exch;
+                    }
+                    if (saved.targets) {
+                        this.metricsConfig.forEach(m => {
+                            if (saved.targets[m.id] !== undefined) {
+                                const el = document.getElementById(`target-${m.id}`);
+                                if (el) el.value = saved.targets[m.id];
+                            }
+                        });
+                    }
+                    this.history = saved.history || [];
+                    this.logHistory = saved.logHistory || [];
+                    this.jackpotCount = saved.jackpotCount || 0;
+                    if (saved.memoBefore !== undefined) document.getElementById('memo-before').value = saved.memoBefore;
+                    if (saved.memoDuring !== undefined) document.getElementById('memo-during').value = saved.memoDuring;
+                }
+                this.updateLogHistoryView();
+                this.updateHistoryDropdown();
+                this.calc();
+            }
+        };
+
+        window.onload = () => app.init();
+    </script>
+</body>
+
+</html>
