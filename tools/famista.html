@@ -542,6 +542,63 @@
             border-bottom: 2px solid #1976d2 !important;
         }
 
+        /* Custom Select Styles */
+        .custom-select-container {
+            position: relative;
+            width: 100%;
+            margin-bottom: 15px;
+            font-family: var(--font-main);
+        }
+
+        .custom-select-trigger {
+            padding: 12px;
+            background: white;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 16px;
+        }
+
+        .custom-select-options {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 1px solid #ccc;
+            border-top: none;
+            border-radius: 0 0 4px 4px;
+            z-index: 1000;
+            display: none;
+            max-height: 300px;
+            overflow-y: auto;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .custom-select-options.open {
+            display: block;
+        }
+
+        .custom-option {
+            padding: 10px 12px;
+            cursor: pointer;
+            transition: background 0.2s;
+            border-bottom: 1px solid #eee;
+        }
+
+        .custom-option:hover {
+            background: #f8f9fa;
+        }
+
+        .custom-option.selected {
+            background: #e3f2fd;
+            color: #1976d2;
+            font-weight: bold;
+        }
+
         .sim-result-table {
             width: 100%;
             border-collapse: collapse;
@@ -611,24 +668,25 @@
                         oninput="app.checkLogForm()"></div>
                 <div class="input-group">
                     <label>当選契機(※)</label>
-                    <select id="log-trigger" onchange="app.checkLogForm()"
-                        style="width:100%; padding: 10px; font-size: 16px; border-radius: 4px; border: 1px solid #ccc; font-family: var(--font-main);">
-                        <option value="">未選択</option>
-                        <option value="ノーマルルート">ノーマルルート</option>
-                        <option value="SPルート">SPルート</option>
-                        <option value="ストレートコース選択後HR">ストレートコース選択後HR</option>
-                        <option value="変化球選択後HR">変化球選択後HR</option>
-                    </select>
+                    <div class="custom-select-container" id="log-trigger-custom-container">
+                        <div class="custom-select-trigger" id="log-trigger-trigger">
+                            <span id="log-trigger-label">未選択</span>
+                            <span style="font-size: 0.8rem;">▼</span>
+                        </div>
+                        <div class="custom-select-options" id="log-trigger-options"></div>
+                        <input type="hidden" id="log-trigger" value="">
+                    </div>
                 </div>
                 <div class="input-group">
                     <label>当選R数(※)</label>
-                    <select id="log-round" onchange="app.checkLogForm()"
-                        style="width:100%; padding: 10px; font-size: 16px; border-radius: 4px; border: 1px solid #ccc; font-family: var(--font-main);">
-                        <option value="">未選択</option>
-                        <option value="2R">2R</option>
-                        <option value="4R">4R</option>
-                        <option value="9R">9R</option>
-                    </select>
+                    <div class="custom-select-container" id="log-round-custom-container">
+                        <div class="custom-select-trigger" id="log-round-trigger">
+                            <span id="log-round-label">未選択</span>
+                            <span style="font-size: 0.8rem;">▼</span>
+                        </div>
+                        <div class="custom-select-options" id="log-round-options"></div>
+                        <input type="hidden" id="log-round" value="">
+                    </div>
                 </div>
                 <div id="log-modify-record-container" style="display:none; margin-top: 15px;">
                     <button class="btn-primary" onclick="app.recordLogFromModify()">この修正内容で記録</button>
@@ -713,9 +771,14 @@
                 </label>
             </div>
 
-            <select id="compare-metric-select" onchange="app.updateCompareView()"
-                style="width:100%; padding: 10px; font-size: 16px; margin-bottom: 15px; border-radius: 4px; border: 1px solid #ccc; font-family: var(--font-main);">
-            </select>
+            <div class="custom-select-container" id="compare-metric-custom-container">
+                <div class="custom-select-trigger" id="compare-metric-trigger">
+                    <span id="compare-metric-label">項目を選択してください</span>
+                    <span style="font-size: 0.8rem;">▼</span>
+                </div>
+                <div class="custom-select-options" id="compare-metric-options"></div>
+                <input type="hidden" id="compare-metric-select" value="total_rot">
+            </div>
             <div style="margin-bottom: 20px;">
                 <table class="data-table" style="table-layout: fixed; text-align: center;">
                     <thead>
@@ -735,9 +798,14 @@
 
             <div class="section-header">■ 区間詳細（特定の区間データ）</div>
 
-            <select id="interval-detail-select" onchange="app.updateIntervalDetailView()"
-                style="width:100%; padding: 10px; font-size: 16px; margin-bottom: 15px; border-radius: 4px; border: 1px solid #ccc; font-family: var(--font-main);">
-            </select>
+            <div class="custom-select-container" id="interval-detail-custom-container">
+                <div class="custom-select-trigger" id="interval-detail-trigger">
+                    <span id="interval-detail-label">区間を選択してください</span>
+                    <span style="font-size: 0.8rem;">▼</span>
+                </div>
+                <div class="custom-select-options" id="interval-detail-options"></div>
+                <input type="hidden" id="interval-detail-select" value="">
+            </div>
 
             <div style="margin-top: 15px;">
                 <div style="font-weight: bold; margin-bottom: 10px; color: var(--accent-secondary);">■ 推定確率・欠損/余剰</div>
@@ -802,22 +870,25 @@
                     oninput="app.checkEditLogForm()"></div>
             <div class="input-group">
                 <label>当選契機(※)</label>
-                <select id="edit-log-trigger"
-                    style="width:100%; padding: 10px; font-size: 16px; border-radius: 4px; border: 1px solid #ccc; font-family: var(--font-main);">
-                    <option value="ノーマルルート">ノーマルルート</option>
-                    <option value="SPルート">SPルート</option>
-                    <option value="ストレートコース選択後HR">ストレートコース選択後HR</option>
-                    <option value="変化球選択後HR">変化球選択後HR</option>
-                </select>
+                <div class="custom-select-container" id="edit-log-trigger-custom-container">
+                    <div class="custom-select-trigger" id="edit-log-trigger-trigger">
+                        <span id="edit-log-trigger-label">選択してください</span>
+                        <span style="font-size: 0.8rem;">▼</span>
+                    </div>
+                    <div class="custom-select-options" id="edit-log-trigger-options"></div>
+                    <input type="hidden" id="edit-log-trigger" value="ノーマルルート">
+                </div>
             </div>
             <div class="input-group">
                 <label>当選R数(※)</label>
-                <select id="edit-log-round"
-                    style="width:100%; padding: 10px; font-size: 16px; border-radius: 4px; border: 1px solid #ccc; font-family: var(--font-main);">
-                    <option value="2R">2R</option>
-                    <option value="4R">4R</option>
-                    <option value="9R">9R</option>
-                </select>
+                <div class="custom-select-container" id="edit-log-round-custom-container">
+                    <div class="custom-select-trigger" id="edit-log-round-trigger">
+                        <span id="edit-log-round-label">選択してください</span>
+                        <span style="font-size: 0.8rem;">▼</span>
+                    </div>
+                    <div class="custom-select-options" id="edit-log-round-options"></div>
+                    <input type="hidden" id="edit-log-round" value="2R">
+                </div>
             </div>
             <button class="btn-primary" onclick="app.saveEditLog()" style="margin-top: 10px;">修正を保存</button>
         </div>
@@ -986,7 +1057,7 @@
         const app = {
             fields: [
                 { id: "total_rot", name: "1. 通常回転数" },
-                { id: "total_pick", name: "2. 拾い個数" },
+{ id: "total_pick", name: "2. 拾い個数" },
                 { id: "sp_select", name: "3. SPルート選択個数" },
                 { id: "st_select", name: "4. ストレート選択個数" },
                 { id: "st_rot_in", name: "5. ストレート選択時回転体突入個数", parent: "st_select" },
@@ -1026,16 +1097,112 @@
                     container.appendChild(div);
                 });
 
-                const sel = document.getElementById('compare-metric-select');
-                this.metricsConfig.forEach(m => {
-                    const opt = document.createElement('option');
-                    opt.value = m.id;
-                    opt.innerText = m.name;
-                    sel.appendChild(opt);
-                });
+                this.initCustomSelect();
+
+                const triggerOpts = [
+                    { value: "", label: "未選択" },
+                    { value: "ノーマルルート", label: "ノーマルルート" },
+                    { value: "SPルート", label: "SPルート" },
+                    { value: "ストレートコース選択後HR", label: "ストレートコース選択後HR" },
+                    { value: "変化球選択後HR", label: "変化球選択後HR" }
+                ];
+                const roundOpts = [
+                    { value: "", label: "未選択" },
+                    { value: "2R", label: "2R" },
+                    { value: "4R", label: "4R" },
+                    { value: "9R", label: "9R" }
+                ];
+                this.setupCustomSelect('log-trigger', triggerOpts, 'log-trigger', () => this.checkLogForm(), "");
+                this.setupCustomSelect('log-round', roundOpts, 'log-round', () => this.checkLogForm(), "");
 
                 this.initTargetSettings();
                 this.loadDataAndHistory();
+            },
+
+            initCustomSelect() {
+                const options = this.metricsConfig.map(m => ({
+                    value: m.id,
+                    label: m.name
+                }));
+                this.setupCustomSelect('compare-metric', options, 'compare-metric-select', () => this.updateCompareView(), 'total_rot');
+                
+                if (!window.customSelectGlobalAdded) {
+                    document.addEventListener('click', () => {
+                        document.querySelectorAll('.custom-select-options').forEach(el => el.classList.remove('open'));
+                    });
+                    window.customSelectGlobalAdded = true;
+                }
+            },
+
+            setupCustomSelect(containerIdBase, options, hiddenInputId, onSelect, initialValue) {
+                const trigger = document.getElementById(`${containerIdBase}-trigger`);
+                const optionsContainer = document.getElementById(`${containerIdBase}-options`);
+                const label = document.getElementById(`${containerIdBase}-label`);
+                const hiddenInput = document.getElementById(hiddenInputId);
+
+                if (!trigger || !optionsContainer || !label || !hiddenInput) return;
+
+                optionsContainer.innerHTML = '';
+                let foundInitial = false;
+
+                options.forEach(opt => {
+                    const div = document.createElement('div');
+                    div.className = 'custom-option';
+                    if (opt.value == initialValue) {
+                        div.classList.add('selected');
+                        label.innerHTML = opt.label;
+                        hiddenInput.value = opt.value;
+                        foundInitial = true;
+                    }
+                    div.innerHTML = opt.label;
+                    div.onclick = (e) => {
+                        e.stopPropagation();
+                        hiddenInput.value = opt.value;
+                        label.innerHTML = div.innerHTML;
+                        optionsContainer.querySelectorAll('.custom-option').forEach(o => o.classList.remove('selected'));
+                        div.classList.add('selected');
+                        optionsContainer.classList.remove('open');
+                        if (onSelect) onSelect(opt.value);
+                    };
+                    optionsContainer.appendChild(div);
+                });
+
+                if (!foundInitial && options.length > 0) {
+                    const first = optionsContainer.firstChild;
+                    if (first) {
+                        first.classList.add('selected');
+                        label.innerHTML = options[0].label;
+                        hiddenInput.value = options[0].value;
+                    }
+                }
+
+                trigger.onclick = (e) => {
+                    e.stopPropagation();
+                    const isOpen = optionsContainer.classList.contains('open');
+                    document.querySelectorAll('.custom-select-options').forEach(el => el.classList.remove('open'));
+                    if (!isOpen) optionsContainer.classList.add('open');
+                };
+            },
+
+            updateHistoryDropdown() {
+                const options = this.history.map((h, i) => {
+                    const ts = h.ts || Date.now();
+                    const timeStr = new Date(ts).toLocaleString('ja-JP', { hour: '2-digit', minute: '2-digit' });
+                    const prevPick = i === 0 ? 0 : this.history[i - 1].totalPick || this.history[i - 1].v.total_pick;
+                    const currentPick = h.totalPick || h.v.total_pick;
+                    const label = prevPick === currentPick ? `拾い個数:${currentPick}個(${timeStr})` : `拾い個数:${prevPick + 1}個～${currentPick}個(${timeStr})`;
+                    return { value: i, label: label };
+                }).reverse();
+
+                this.setupCustomSelect('interval-detail', options, 'interval-detail-select', () => this.updateIntervalDetailView(), options[0]?.value);
+                if (options.length > 0) {
+                    this.updateIntervalDetailView();
+                } else {
+                    const labelEl = document.getElementById('interval-detail-label');
+                    const hiddenEl = document.getElementById('interval-detail-select');
+                    if (labelEl) labelEl.innerHTML = "履歴データがありません";
+                    if (hiddenEl) hiddenEl.value = "";
+                }
             },
 
             initTargetSettings() {
@@ -1156,11 +1323,20 @@
                     inputs: { hold, remain, replay, invest }
                 });
 
-                // Clear all log fields after record to allow new entry
-                ['log-hold', 'log-remain', 'log-replay', 'log-invest', 'log-trigger', 'log-round'].forEach(id => {
-                    const el = document.getElementById(id);
-                    if (el) el.value = "";
-                });
+                ['log-hold', 'log-remain', 'log-replay', 'log-invest'].forEach(id => document.getElementById(id).value = "");
+                this.setupCustomSelect('log-trigger', [
+                    { value: "", label: "未選択" },
+                    { value: "ノーマルルート", label: "ノーマルルート" },
+                    { value: "SPルート", label: "SPルート" },
+                    { value: "ストレートコース選択後HR", label: "ストレートコース選択後HR" },
+                    { value: "変化球選択後HR", label: "変化球選択後HR" }
+                ], 'log-trigger', () => this.checkLogForm(), "");
+                this.setupCustomSelect('log-round', [
+                    { value: "", label: "未選択" },
+                    { value: "2R", label: "2R" },
+                    { value: "4R", label: "4R" },
+                    { value: "9R", label: "9R" }
+                ], 'log-round', () => this.checkLogForm(), "");
 
                 this.updateLogHistoryView();
                 this.calc();
@@ -1201,7 +1377,6 @@
                     return;
                 }
 
-                // Sort by No ascending (1, 2, 3...)
                 this.logHistory.sort((a, b) => a.no - b.no);
 
                 let html = '';
@@ -1248,6 +1423,20 @@
                 document.getElementById('edit-log-index').value = index;
                 document.getElementById('edit-log-no').innerText = h.no;
 
+                const triggerOpts = [
+                    { value: "ノーマルルート", label: "ノーマルルート" },
+                    { value: "SPルート", label: "SPルート" },
+                    { value: "ストレートコース選択後HR", label: "ストレートコース選択後HR" },
+                    { value: "変化球選択後HR", label: "変化球選択後HR" }
+                ];
+                const roundOpts = [
+                    { value: "2R", label: "2R" },
+                    { value: "4R", label: "4R" },
+                    { value: "9R", label: "9R" }
+                ];
+                this.setupCustomSelect('edit-log-trigger', triggerOpts, 'edit-log-trigger', null, h.trigger);
+                this.setupCustomSelect('edit-log-round', roundOpts, 'edit-log-round', null, h.round);
+
                 if (h.inputs) {
                     document.getElementById('edit-log-hold').value = h.inputs.hold;
                     document.getElementById('edit-log-remain').value = h.inputs.remain;
@@ -1259,8 +1448,6 @@
                     document.getElementById('edit-log-replay').value = "";
                     document.getElementById('edit-log-invest').value = "";
                 }
-                document.getElementById('edit-log-trigger').value = h.trigger;
-                document.getElementById('edit-log-round').value = h.round;
 
                 document.getElementById('log-edit-modal').style.display = 'flex';
             },
@@ -1333,7 +1520,7 @@
                 const safeDiv = (num, den) => den > 0 ? num / den : 0;
 
                 const rotInSum = (v.st_rot_in || 0) + (v.ch_rot_in || 0);
-                const expVCount = ((v.sp_select || 0) / s.sp) + (rotInSum / s.nm);
+                const expVCount = ((v.sp_select || 0) / s.sp) + (rotInSum / s.nm) + (v.st_hr_in || 0) + (v.ch_hr_in || 0);
                 const estProbDenom = expVCount > 0 ? ((v.total_rot || 0) / expVCount) : 0;
                 const pickRateVal = safeDiv(v.total_pick || 0, v.total_rot || 0);
                 const estYakuProbDenom = pickRateVal > 0 ? (estProbDenom * pickRateVal) : 0;
@@ -1532,7 +1719,7 @@
                     ["SPルート<br>回転体当選率", safeDivProb(v.sp_select, v.sp_v_in)],
                     ["ノーマルルート<br>回転体当選率", safeDivProb(v.st_rot_in + v.ch_rot_in, v.nm_total_v)]
                 ];
-                document.getElementById('res-details-table').innerHTML = details.map(d => `<tr><th>${d[0]}</th><td style="font-family:var(--font-eng); font-weight:bold;">${d[1]}</td></tr>`).join('');
+                document.getElementById('res-details-table').innerHTML = details.map(d => `<tr><th style="width:70%;">${d[0]}</th><td style="width:30%; font-family:var(--font-eng); font-weight:bold; font-size:16px;">${d[1]}</td></tr>`).join('');
 
                 this.lastCalcRes = {
                     totalExpYen,
@@ -1745,7 +1932,6 @@
                         responsive: true,
                         scales: {
                             y: {
-                                reverse: metric.lowerIsBetter,
                                 beginAtZero: false
                             },
                             x: {
@@ -1756,30 +1942,6 @@
                 });
             },
 
-            updateIntervalDropdown() {
-                const detailSelect = document.getElementById('interval-detail-select');
-                if (!detailSelect) return;
-                const previousDetailValue = detailSelect.value;
-                detailSelect.innerHTML = '';
-
-                for (let i = 0; i < this.history.length; i++) {
-                    const h = this.history[i];
-                    const prevPick = i === 0 ? 0 : this.history[i - 1].totalPick;
-                    const label = prevPick === h.totalPick ? `${h.totalPick}個` : `${prevPick + 1}個～${h.totalPick}個`;
-                    const opt = document.createElement('option');
-                    opt.value = i;
-                    opt.innerText = label;
-                    detailSelect.appendChild(opt);
-                }
-
-                if (previousDetailValue && detailSelect.querySelector(`option[value="${previousDetailValue}"]`)) {
-                    detailSelect.value = previousDetailValue;
-                } else if (this.history.length > 0) {
-                    detailSelect.value = this.history.length - 1;
-                }
-
-                this.updateIntervalDetailView();
-            },
 
             updateIntervalDetailView() {
                 const select = document.getElementById('interval-detail-select');
@@ -1788,15 +1950,15 @@
 
                 if (!select || !tBody || !probsDiv) return;
 
-                if (this.history.length === 0 || select.options.length === 0) {
+                const idx = parseInt(select.value, 10);
+
+                if (isNaN(idx) || this.history.length === 0) {
                     tBody.innerHTML = '<tr><td colspan="2" style="text-align:center; padding: 20px;">区間データがありません。</td></tr>';
                     probsDiv.innerHTML = '';
                     return;
                 }
-
-                const index = parseInt(select.value, 10);
-                const currentH = this.history[index];
-                const prevH = index > 0 ? this.history[index - 1] : null;
+                const currentH = this.history[idx];
+                const prevH = idx > 0 ? this.history[idx - 1] : null;
 
                 const deltaV = {};
                 Object.keys(currentH.v).forEach(k => {
@@ -1829,7 +1991,7 @@
                     ["ノーマルルート選択時<br>回転体当選率", safeDivProb(deltaV.st_rot_in + deltaV.ch_rot_in, deltaV.nm_total_v)]
                 ];
 
-                tBody.innerHTML = details.map(d => `<tr><th style="width: 50%;">${d[0]}</th><td style="width: 50%; font-family:var(--font-eng); font-weight:bold;">${d[1]}</td></tr>`).join('');
+                tBody.innerHTML = details.map(d => `<tr><th style="width: 70%;">${d[0]}</th><td style="width: 30%; font-family:var(--font-eng); font-weight:bold; font-size:16px;">${d[1]}</td></tr>`).join('');
 
                 const totalV = (deltaV.v_2r || 0) + (deltaV.v_4r || 0) + (deltaV.v_9r || 0);
                 const totalR = ((deltaV.v_2r || 0) * 2) + ((deltaV.v_4r || 0) * 4) + ((deltaV.v_9r || 0) * 9);
@@ -1845,7 +2007,7 @@
                     <div style="display: flex; justify-content: center; gap: 8px; flex-wrap: wrap;">
                         <div class="box-info">役モノ<br><span style="font-family:var(--font-eng);">1/${resObj.estYakuProb > 0 ? resObj.estYakuProb.toFixed(1) : '-'}</span></div>
                         <div class="box-info">大当り<br><span style="font-family:var(--font-eng);">1/${resObj.estProb > 0 ? resObj.estProb.toFixed(1) : '-'}</span></div>
-                        <div class="box-info">平均R数<br><span style="font-family:var(--font-eng);">${actAvgR > 0 ? actAvgR.toFixed(2) : '-'}R</span></div>
+                        <div class="box-info">平均R数<br><span style="font-family:var(--font-eng);">${actAvgR > 0 ? actAvgR.toFixed(1) : '-'}R</span></div>
                         <div class="box-info">玉数<br><span style="font-family:var(--font-eng); color:${gapColor};">${gapSign}${gapJade.toFixed(0)}玉</span></div>
                     </div>
                 `;
@@ -1871,7 +2033,7 @@
 
                 this.saveDataAndHistory();
                 this.updateCompareView();
-                this.updateIntervalDropdown();
+                this.updateHistoryDropdown();
                 document.getElementById('save-complete-modal').style.display = 'flex';
             },
 
@@ -1969,7 +2131,7 @@
                 }
                 this.updateLogHistoryView();
                 this.calc();
-                this.updateIntervalDropdown();
+                this.updateHistoryDropdown();
             },
 
             async copyBackupToClipboard(daiban, memo) {
@@ -1995,12 +2157,12 @@
                 masterDataText += `総期待値: ${Math.floor(res.totalExpYen)}円\n`;
                 masterDataText += `1回転あたりの期待値: ${res.unitExpYen.toFixed(1)}円\n`;
                 masterDataText += `持ち玉比率: ${v.holding_rate.toFixed(1)}%\n`;
-                masterDataText += `千円あたりの回転数: ${v.rot_per_k.toFixed(1)} 回/k (ボーダー 持ち玉:${res.borderHold.toFixed(1)} / 現金:${res.borderCash.toFixed(1)})\n`;
+                masterDataText += `千円あたりの回転数: ${v.rot_per_k.toFixed(1)}回/k\n`;
                 masterDataText += `1R出玉: ${v.r_out.toFixed(1)}玉\n`;
-                masterDataText += `推定確率: 役モノ 1/${res.estYakuProbDenom.toFixed(1)} / 大当り 1/${res.estProbDenom.toFixed(1)}\n`;
-                masterDataText += `平均R数: ${res.actAvgR.toFixed(1)}R (2R:${v.v_2r}回 / 4R:${v.v_4r}回 / 9R:${v.v_9r}回)\n`;
+                masterDataText += `推定大当り確率: 1/${res.estProbDenom.toFixed(1)}\n`;
+                masterDataText += `平均R数(R別当選回数): ${res.actAvgR.toFixed(1)}R (2R: ${v.v_2r}回 / 4R: ${v.v_4r}回 / 9R: ${v.v_9r}回)\n`;
                 masterDataText += `余剰玉数: ${res.gapJade > 0 ? "+" : ""}${res.gapJade.toFixed(0)}玉\n`;
-                masterDataText += `当選契機別回数: SP:${v.sp_v_in}回 / ノーマル:${v.nm_total_v}回 / HR:${v.st_hr_in + v.ch_hr_in}回\n\n`;
+                masterDataText += `当選契機別回数: SP: ${v.sp_v_in}回 / ノーマル: ${v.nm_total_v}回 / HR: ${v.st_hr_in + v.ch_hr_in}回\n\n`;
 
                 masterDataText += "【最終累計入力数値】\n";
                 this.fields.forEach(f => {
@@ -2024,14 +2186,18 @@
                 masterDataText += `SPルート回転体当選率: ${safeDivProb(v.sp_select, v.sp_v_in)}\n`;
                 masterDataText += `ノーマルルート回転体当選率: ${safeDivProb(v.st_rot_in + v.ch_rot_in, v.nm_total_v)}\n\n`;
 
-                masterDataText += "【区間別詳細データ】\n";
+                masterDataText += "【区間履歴】\n";
                 if (this.history && this.history.length > 0) {
                     let prevV = null;
                     this.history.forEach((h, i) => {
-                        const prevPick = i === 0 ? 0 : this.history[i - 1].totalPick;
-                        const label = prevPick === h.totalPick ? `${h.totalPick}個` : `${prevPick + 1}個～${h.totalPick}個`;
-                        masterDataText += `--- 区間${i + 1} (${label}) ---\n`;
-                        masterDataText += `[コメント] ${h.comment || "なし"}\n`;
+                        const ts = h.ts || Date.now();
+                        const timeStr = new Date(ts).toLocaleString('ja-JP', { hour: '2-digit', minute: '2-digit' });
+                        const prevPick = i === 0 ? 0 : (this.history[i - 1].totalPick || this.history[i - 1].v.total_pick);
+                        const currentPick = h.totalPick || h.v.total_pick;
+                        const pickLabel = prevPick === currentPick ? `拾い個数:${currentPick}個(${timeStr})` : `拾い個数:${prevPick + 1}個～${currentPick}個(${timeStr})`;
+
+                        masterDataText += `--- ${pickLabel} ---\n`;
+                        masterDataText += `コメント: ${h.comment || h.memo || ""}\n`;
                         const deltaV = {};
                         Object.keys(h.v).forEach(k => {
                             deltaV[k] = (h.v[k] || 0) - (prevV && prevV[k] ? prevV[k] : 0);
@@ -2138,6 +2304,9 @@
                     const el = document.getElementById(id);
                     if (el) el.value = "";
                 });
+                if (document.getElementById('log-trigger-label')) document.getElementById('log-trigger-label').innerText = "未選択";
+                if (document.getElementById('log-round-label')) document.getElementById('log-round-label').innerText = "未選択";
+                document.querySelectorAll('.custom-option').forEach(opt => opt.classList.remove('selected'));
 
                 document.getElementById('log-modify-record-container').style.display = 'none';
 
@@ -2147,7 +2316,8 @@
                 this.saveDataAndHistory();
                 this.calc();
                 this.updateCompareView();
-                this.updateIntervalDropdown();
+                this.updateHistoryDropdown();
+                this.updateIntervalDetailView();
                 this.updateLogHistoryView();
             },
 
