@@ -1,0 +1,1668 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>PACHINKO TACTICS - パチンコ攻略ツール</title>
+    <link rel="icon" href="../favicon.png">
+    <link rel="apple-touch-icon" href="../apple-touch-icon.png">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Noto+Sans+JP:wght@400;500;700;900&display=swap"
+        rel="stylesheet">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --font-main: 'Noto Sans JP', sans-serif;
+            --font-eng: 'Inter', sans-serif;
+            --bg-color: #d4a373;
+            --body-bg-image: url('../corkboard_bg.png');
+            --bg-panel: #FFFFFF;
+            --text-main: #333333;
+            --text-sub: #555555;
+            --accent-color: #b33939;
+            --accent-secondary: #227093;
+            --border-color: rgba(0, 0, 0, 0.15);
+            --board-bg: #1a2a24;
+            --chalk-white: rgba(255, 255, 255, 0.9);
+            --shadow: 0 5px 15px rgba(0, 0, 0, 0.35);
+            --plus-red: #b33939;
+            --minus-blue: #227093;
+        }
+
+        body {
+            margin: 0;
+            background-color: var(--bg-color);
+            background-image: var(--body-bg-image);
+            background-attachment: fixed;
+            font-family: var(--font-main);
+            color: var(--text-main);
+            font-size: 16px;
+            padding-bottom: 40px;
+        }
+
+        .blackboard-header {
+            position: relative;
+            width: 100%;
+            min-height: 140px;
+            background-color: var(--board-bg);
+            background-image: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.05) 0%, transparent 80%), url('https://www.transparenttextures.com/patterns/dark-matter.png');
+            border-bottom: 8px solid #3d2b1f;
+            box-shadow: inset 0 0 50px rgba(0, 0, 0, 0.5), 0 4px 15px rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            padding: 20px 0;
+        }
+
+        .header-center {
+            text-align: center;
+            z-index: 10;
+            width: 100%;
+        }
+
+        .header-center h1 {
+            font-family: var(--font-eng);
+            font-size: clamp(2.2rem, 8vw, 3.8rem);
+            font-weight: 900;
+            color: var(--chalk-white);
+            letter-spacing: 0.15em;
+            margin: 0;
+            line-height: 1.1;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .header-center .subtitle {
+            font-size: clamp(0.9rem, 3.5vw, 1.2rem);
+            font-weight: 700;
+            color: var(--chalk-white);
+            margin-top: 5px;
+            opacity: 0.8;
+            letter-spacing: 0.05em;
+        }
+
+        .back-to-top {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            z-index: 20;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: #fff;
+            padding: 4px 8px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-weight: bold;
+        }
+
+        .settings-btn {
+            position: absolute;
+            bottom: 8px;
+            left: 10px;
+            z-index: 20;
+            background: var(--accent-secondary);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 0.7rem;
+        }
+
+        .reset-btn {
+            position: absolute;
+            bottom: 8px;
+            right: 10px;
+            z-index: 20;
+            background: rgba(179, 57, 57, 0.15);
+            color: #fff;
+            border: 1px solid rgba(179, 57, 57, 0.4);
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 0.7rem;
+        }
+
+        .container {
+            width: 95%;
+            max-width: 800px;
+            margin: 30px auto;
+            background: var(--bg-panel);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 2px;
+            box-shadow: var(--shadow);
+            position: relative;
+            min-height: 70vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 6px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, #ff5252, #b33939);
+            box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.3);
+            z-index: 5;
+        }
+
+        .tabs {
+            display: flex;
+            background: rgba(0, 0, 0, 0.03);
+            border-bottom: 2px dashed rgba(0, 0, 0, 0.1);
+            padding-top: 20px;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 15px 5px;
+            text-align: center;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .tab-group-blue {
+            background-color: rgba(34, 112, 147, 0.05);
+            color: var(--accent-secondary);
+        }
+
+        .tab-group-blue.active {
+            background-color: var(--accent-secondary);
+            color: #fff;
+            border-bottom: 3px solid #1a5b78;
+        }
+
+        .tab-group-red {
+            background-color: rgba(179, 57, 57, 0.05);
+            color: var(--accent-color);
+        }
+
+        .tab-group-red.active {
+            background-color: var(--accent-color);
+            color: #fff;
+            border-bottom: 3px solid #8e2b2b;
+        }
+
+        .content-section {
+            display: none;
+            padding: 20px;
+        }
+
+        .content-section.active {
+            display: block;
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(5px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+            border-bottom: 1px dashed var(--border-color);
+            padding-bottom: 10px;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: var(--text-main);
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 18px;
+            box-sizing: border-box;
+            font-family: var(--font-eng);
+            background-color: #fafafa;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            background-color: #fff;
+        }
+
+        .result-card {
+            background: #fafafa;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            padding: 20px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .main-val {
+            font-family: var(--font-eng);
+            font-size: 32px;
+            font-weight: 900;
+            margin: 10px 0;
+            color: var(--accent-color);
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+
+        .data-table th,
+        .data-table td {
+            border: 1px solid var(--border-color);
+            padding: 10px;
+            text-align: left;
+        }
+
+        .data-table th {
+            background: rgba(0, 0, 0, 0.03);
+            width: 70%;
+            font-weight: 700;
+        }
+
+        .btn-primary {
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+            font-family: var(--font-main);
+        }
+
+        .section-header {
+            font-weight: 900;
+            margin-bottom: 10px;
+            padding: 8px 12px;
+            background: var(--accent-secondary);
+            color: white;
+            border-radius: 2px;
+            font-size: 1.1rem;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .box-info {
+            background: #f1f3f5;
+            border: 1px solid var(--border-color);
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        .box-info span {
+            font-weight: bold;
+            font-size: 16px;
+            color: var(--text-main);
+        }
+
+        .reset-defaults-btn {
+            background: #fff;
+            color: var(--accent-color);
+            border: 1px solid var(--accent-color);
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .reset-defaults-btn:hover {
+            background: rgba(179, 57, 57, 0.1);
+        }
+
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: var(--bg-panel);
+            width: 90%;
+            max-width: 500px;
+            padding: 20px;
+            border-radius: 8px;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 28px;
+            cursor: pointer;
+            color: var(--text-sub);
+        }
+
+        /* Custom Select */
+        .custom-select-container {
+            position: relative;
+            width: 100%;
+            margin-bottom: 15px;
+        }
+
+        .custom-select-trigger {
+            padding: 12px;
+            background: white;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .custom-select-options {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 1px solid #ccc;
+            border-top: none;
+            z-index: 1000;
+            display: none;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .custom-select-options.open {
+            display: block;
+        }
+
+        .custom-option {
+            padding: 10px;
+            cursor: pointer;
+            border-bottom: 1px solid #eee;
+        }
+
+        .custom-option:hover {
+            background: #f8f9fa;
+        }
+
+        .custom-option.selected {
+            background: #e3f2fd;
+            color: #1976d2;
+            font-weight: bold;
+        }
+
+        .btn-memo {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 95%;
+            max-width: 800px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin: 30px auto;
+        }
+
+        .memo-modal-content {
+            background-color: #e3f2fd !important;
+        }
+
+        .memo-title {
+            color: #1976d2 !important;
+            border-bottom: 2px solid #1976d2 !important;
+        }
+
+        .strategy-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            z-index: 20;
+            background: #f1c40f;
+            color: #333;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: var(--font-main);
+            font-size: 0.7rem;
+            opacity: 0.9;
+        }
+
+        .strategy-btn:hover {
+            background: #f39c12;
+            opacity: 1;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="blackboard-header">
+        <a href="../index.html" class="back-to-top">⇐ TOPへ戻る</a>
+        <button class="strategy-btn" onclick="alert('カミングスーン！')">💡 攻略考察</button>
+        <div class="header-center">
+            <h1>PACHINKO TOOL</h1>
+            <div class="subtitle">パチンコ 実戦ログツール</div>
+        </div>
+        <button class="settings-btn" onclick="app.openSettings()">⚙ 詳細設定</button>
+        <button class="reset-btn" onclick="app.resetAll()">⚠ データをリセット</button>
+    </header>
+
+    <div class="container">
+        <div class="tabs">
+            <div id="tab-rot" class="tab tab-group-blue active" onclick="app.showTab('log-rot')">回転数ログ</div>
+            <div id="tab-out" class="tab tab-group-blue" onclick="app.showTab('log-out')">出玉ログ</div>
+            <div id="tab-calc" class="tab tab-group-red" onclick="app.showTab('log-calc')">算出結果</div>
+            <div id="tab-compare" class="tab tab-group-red" onclick="app.showTab('log-compare')">区間分析</div>
+        </div>
+
+        <!-- 回転数ログ -->
+        <div id="log-rot" class="content-section active">
+            <div class="section-header">■ 現在の回転数状況</div>
+            <div class="input-group"><label>現在の持ち玉数(※)</label><input type="number" id="log-rot-hold"
+                    onblur="app.checkRotLog()"></div>
+            <div class="input-group"><label>残玉数(※)</label><input type="number" id="log-rot-remain"
+                    onblur="app.checkRotLog()"></div>
+            <div class="input-group"><label>再プレイ玉数</label><input type="number" id="log-rot-replay"
+                    onblur="app.checkRotLog()"></div>
+            <div class="input-group"><label>追加投資 (円)</label><input type="number" id="log-rot-invest"
+                    onblur="app.checkRotLog()"></div>
+            <div class="input-group">
+                <label>ストロークパターン</label>
+                <div class="custom-select-container" id="log-stroke-custom-container">
+                    <div class="custom-select-trigger" id="log-stroke-trigger">
+                        <span id="log-stroke-label">パターンA</span>
+                        <span>▼</span>
+                    </div>
+                    <div class="custom-select-options" id="log-stroke-options"></div>
+                    <input type="hidden" id="log-stroke" value="">
+                </div>
+            </div>
+            <div class="input-group"><label>総通常回転数(※)</label><input type="number" id="log-rot-val"
+                    onblur="app.checkRotLog()"></div>
+            <div id="log-rot-modify-record-container" style="display:none; margin-top: 15px;">
+                <button class="btn-primary" onclick="app.recordRotLog()">この修正内容で登録</button>
+            </div>
+
+            <div class="section-header" style="margin-top:30px; display:flex; justify-content:space-between;">
+                <span>■ 回転数履歴</span>
+                <label style="font-size:0.8rem; font-weight:normal;"><input type="checkbox" id="log-rot-delete-mode"
+                        onchange="app.updateRotHistoryView()"> 削除モード</label>
+            </div>
+            <div style="max-height:300px; overflow-y:auto; border:1px solid #ccc; border-radius:4px;">
+                <table class="data-table" style="margin-top:0; border: none;">
+                    <thead style="position:sticky; top:0; background:#f1f1f1; z-index: 10;">
+                        <tr>
+                            <th style="width: 10%; text-align: center;">No</th>
+                            <th style="width: 35%; text-align: center;">使用玉数</th>
+                            <th style="width: 30%; text-align: center;">ストローク</th>
+                            <th style="width: 25%; text-align: center;">回転率/k</th>
+                        </tr>
+                    </thead>
+                    <tbody id="log-rot-history-table"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- 出玉ログ -->
+        <div id="log-out" class="content-section">
+            <div class="section-header" style="display:flex; justify-content:space-between; align-items:center;">
+                <span>■ 連チャン記録</span>
+                <span style="font-weight:bold; font-size:0.9rem;">初当り回数 <span id="out-log-count">0</span>回</span>
+            </div>
+            <div class="input-group"><label>初当り時持ち玉数(※)</label><input type="number" id="log-out-before"
+                    onblur="app.checkOutLog()"></div>
+            <div class="input-group"><label>連チャン終了後持ち玉(※)</label><input type="number" id="log-out-after"
+                    onblur="app.checkOutLog()"></div>
+            <div class="input-group"><label>オーバー入賞個数</label><input type="number" id="log-out-over" value=""
+                    onblur="app.checkOutLog()"></div>
+            <div class="input-group"><label>獲得R数(※)</label><input type="number" id="log-out-rounds"
+                    onblur="app.checkOutLog()"></div>
+            <div id="log-out-modify-record-container" style="display:none; margin-top: 15px;">
+                <button class="btn-primary" onclick="app.recordOutLog()">この修正内容で登録</button>
+            </div>
+
+            <div class="section-header" style="margin-top:30px; display:flex; justify-content:space-between;">
+                <span>■ 出玉履歴</span>
+                <label style="font-size:0.8rem; font-weight:normal;"><input type="checkbox" id="log-out-delete-mode"
+                        onchange="app.updateOutHistoryView()"> 削除モード</label>
+            </div>
+            <div style="max-height:300px; overflow-y:auto; border:1px solid #ccc; border-radius:4px;">
+                <table class="data-table" style="margin-top:0; border: none;">
+                    <thead style="position:sticky; top:0; background:#f1f1f1; z-index: 10;">
+                        <tr>
+                            <th style="width: 10%; text-align: center;">No</th>
+                            <th style="width: 35%; text-align: center;">獲得玉数</th>
+                            <th style="width: 30%; text-align: center;">1R出玉</th>
+                            <th style="width: 25%; text-align: center;">オーバー率</th>
+                        </tr>
+                    </thead>
+                    <tbody id="log-out-history-table"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- 算出結果 -->
+        <div id="log-calc" class="content-section">
+            <div class="result-card">
+                <div style="color:var(--text-sub);">千円あたりの回転数</div>
+                <div id="res-rot-per-k" class="main-val" style="color:var(--text-main);">0.0回/k</div>
+                <div id="res-stroke-boxes"
+                    style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-top:15px;"></div>
+            </div>
+            <div class="result-card">
+                <div style="color:var(--text-sub);">1Rあたりの平均出玉</div>
+                <div id="res-r-out" style="font-size:24px; font-weight:bold; margin:5px 0;">0.0玉</div>
+            </div>
+            <div class="result-card">
+                <div style="color:var(--text-sub);">平均オーバー入賞率</div>
+                <div id="res-over-rate" style="font-size:24px; font-weight:bold;">0.0%</div>
+            </div>
+            <div class="section-header">■ 詳細集計データ</div>
+            <table class="data-table">
+                <tbody id="res-details-table"></tbody>
+            </table>
+            <button class="btn-primary" onclick="app.openIntervalSaveModal()" style="margin-top:20px;">区間データを保存</button>
+        </div>
+
+        <!-- 区間分析 -->
+        <div id="log-compare" class="content-section">
+            <div class="section-header" style="display:flex; justify-content:space-between;">
+                <span>■ 区間比較</span>
+                <label style="font-size:0.8rem; font-weight:normal;"><input type="checkbox" id="history-delete-mode"
+                        onchange="app.updateIntervalView()"> 削除モード</label>
+            </div>
+
+            <div style="margin-top: 10px; margin-bottom: 15px;">
+                <div class="custom-select-container" id="compare-metric-custom-container">
+                    <div class="custom-select-trigger" id="compare-metric-trigger">
+                        <span id="compare-metric-label">選択してください</span>
+                        <span style="font-size: 0.8rem;">▼</span>
+                    </div>
+                    <div class="custom-select-options" id="compare-metric-options"></div>
+                    <input type="hidden" id="compare-metric-select" value="rotPerK">
+                </div>
+            </div>
+
+            <div style="overflow-x:auto; margin-bottom:20px;">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 30%; text-align: center;">時刻</th>
+                            <th style="width: 35%; text-align: center;">数値</th>
+                            <th style="width: 35%; text-align: center;">累計との比較</th>
+                        </tr>
+                    </thead>
+                    <tbody id="interval-table"></tbody>
+                </table>
+            </div>
+
+            <div id="compare-chart-container"
+                style="background: white; padding: 10px; border-radius: 4px; border: 1px solid var(--border-color); margin-top: 20px; display: none;">
+                <canvas id="compareChart" style="width:100%; height:250px;"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <button class="btn-memo" onclick="app.openMemo()">📝 稼働前/稼働中メモを更新する</button>
+
+    <!-- モーダル類 -->
+    <div id="settings-modal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-close" onclick="app.closeSettings()">×</div>
+            <h2
+                style="margin-top: 0; border-bottom: 2px solid var(--accent-secondary); padding-bottom: 10px; color: var(--accent-secondary);">
+                ⚙ 詳細設定</h2>
+
+            <div
+                style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; margin-top: 20px;">
+                <div style="font-weight: bold; color: var(--accent-secondary);">■ 基本設定</div>
+                <button class="reset-defaults-btn" onclick="app.resetBasicSettings()">デフォルトに戻す</button>
+            </div>
+            <div class="input-group">
+                <label>貸玉<br>(1000円あたりの玉数)</label>
+                <input type="number" id="set-kasi" value="250" onchange="app.calc()">
+            </div>
+
+            <div
+                style="display: flex; justify-content: space-between; align-items: center; margin-top: 25px; margin-bottom: 5px;">
+                <div style="font-weight: bold; color: var(--accent-secondary);">■ ストロークパターン名称設定</div>
+                <button class="reset-defaults-btn" onclick="app.resetStrokeNames()">デフォルトに戻す</button>
+            </div>
+            <p style="font-size: 12px; color: var(--text-sub); margin-top: 0; margin-bottom: 10px;">※MAX5文字</p>
+            <div id="settings-targets-container"></div>
+
+        </div>
+    </div>
+
+    <div id="memo-modal" class="modal-overlay">
+        <div class="modal-content memo-modal-content" style="max-width: 500px;">
+            <div class="modal-close" onclick="app.closeMemo()">×</div>
+            <h3 class="memo-title" style="margin-top: 0; padding-bottom: 10px;">📝 稼働メモ</h3>
+            <p style="font-size: 0.85rem; color: var(--text-sub); margin-bottom: 20px;">稼働前や稼働中のメモを自由に入力してください。</p>
+
+            <div class="input-group">
+                <label>【稼働前メモ】</label>
+                <textarea id="memo-before" rows="5"
+                    style="width:100%; padding:10px; border:1px solid #ccc; border-radius:4px; font-size:14px; font-family:var(--font-main); box-sizing:border-box;"
+                    placeholder="稼働前の状況や狙い台の根拠など" oninput="app.saveData()"></textarea>
+            </div>
+
+            <div class="input-group" style="margin-top: 20px;">
+                <label>【稼働中メモ】</label>
+                <textarea id="memo-during" rows="5"
+                    style="width:100%; padding:10px; border:1px solid #ccc; border-radius:4px; font-size:14px; font-family:var(--font-main); box-sizing:border-box;"
+                    placeholder="稼働中の挙動や周囲の状況など" oninput="app.saveData()"></textarea>
+            </div>
+
+            <div style="margin-top: 20px;">
+                <button class="btn-primary" onclick="app.closeMemo()"
+                    style="background:var(--accent-secondary);">閉じる</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Reset & Backup Modal -->
+    <div id="reset-modal" class="modal-overlay">
+        <div class="modal-content" style="max-width: 500px;">
+            <div class="modal-close" onclick="document.getElementById('reset-modal').style.display='none'">×</div>
+            <h3
+                style="margin-top: 0; color: var(--accent-secondary); border-bottom: 2px solid var(--accent-secondary); padding-bottom: 10px;">
+                データのバックアップとリセット</h3>
+
+            <div class="input-group">
+                <label>機種名</label>
+                <input type="text" id="reset-machine" placeholder="例: PA海物語極JAPAN Withナギナミ" style="font-size:16px;">
+            </div>
+
+            <div class="input-group">
+                <label>台番</label>
+                <input type="text" id="reset-daiban" placeholder="例: 123番台" style="font-size:16px;">
+            </div>
+
+            <div class="input-group">
+                <label>本日の稼働メモ（台の挙動、ネカセなど）</label>
+                <textarea id="reset-memo" rows="4"
+                    style="width:100%; padding:10px; border:1px solid #ccc; border-radius:4px; font-size:14px; font-family:var(--font-main); box-sizing:border-box;"></textarea>
+            </div>
+
+            <div style="display:flex; flex-direction:column; gap:10px; margin-top:20px;">
+                <button class="btn-primary" onclick="app.executeBackupAndReset()"
+                    style="background:#227093;">バックアップしてリセット</button>
+                <button class="btn-primary" onclick="app.executeResetOnly()"
+                    style="background:#b33939;">バックアップせずにリセット</button>
+                <button class="btn-primary" onclick="document.getElementById('reset-modal').style.display='none'"
+                    style="background:#7f8c8d;">キャンセル</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="log-confirm-modal" class="modal-overlay">
+        <div class="modal-content" style="max-width: 400px; text-align: center;">
+            <span class="modal-close" onclick="app.closeLogConfirm()">&times;</span>
+            <h3 style="margin-top: 0; color: var(--accent-secondary);">記録の確認</h3>
+            <p>すべての項目が入力されました。<br>この内容で記録しますか？</p>
+            <div style="display: flex; gap: 10px; margin-top: 20px;">
+                <button class="btn-primary" style="background: var(--text-sub);" onclick="app.modifyLog()">修正する</button>
+                <button class="btn-primary" onclick="app.recordRotLog()">記録する</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 回転数履歴修正モーダル -->
+    <div id="log-confirm-out-modal" class="modal-overlay">
+        <div class="modal-content" style="max-width: 400px; text-align: center;">
+            <span class="modal-close" onclick="app.closeLogConfirmOut()">&times;</span>
+            <h3 style="margin-top: 0; color: var(--accent-secondary);">記録の確認</h3>
+            <p>すべての項目が入力されました。<br>この内容で記録しますか？</p>
+            <div style="display: flex; gap: 10px; margin-top: 20px;">
+                <button class="btn-primary" style="background: var(--text-sub);"
+                    onclick="app.modifyLogOut()">修正する</button>
+                <button class="btn-primary" onclick="app.recordOutLog()">記録する</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 出玉履歴修正モーダル -->
+    <div id="log-out-edit-modal" class="modal-overlay">
+        <div class="modal-content" style="max-width: 400px;">
+            <span class="modal-close" onclick="app.closeEditOutLogModal()">&times;</span>
+            <h3
+                style="margin-top: 0; border-bottom: 2px solid var(--accent-secondary); padding-bottom: 10px; color: var(--accent-secondary);">
+                出玉履歴の修正 (No.<span id="edit-out-no"></span>)</h3>
+            <input type="hidden" id="edit-out-index">
+            <div class="input-group"><label>初当り時持ち玉数(※)</label><input type="number" id="edit-out-before"></div>
+            <div class="input-group"><label>連チャン終了後持ち玉(※)</label><input type="number" id="edit-out-after"></div>
+            <div class="input-group"><label>獲得R数(※)</label><input type="number" id="edit-out-rounds"></div>
+            <div class="input-group"><label>オーバー入賞個数</label><input type="number" id="edit-out-over"></div>
+            <button class="btn-primary" onclick="app.saveEditOutLog()" style="margin-top: 10px;">修正を保存</button>
+        </div>
+    </div>
+    <!-- 回転数履歴修正モーダル -->
+    <div id="log-rot-edit-modal" class="modal-overlay">
+        <div class="modal-content" style="max-width: 400px;">
+            <span class="modal-close" onclick="app.closeEditRotLogModal()">&times;</span>
+            <h3
+                style="margin-top: 0; border-bottom: 2px solid var(--accent-secondary); padding-bottom: 10px; color: var(--accent-secondary);">
+                回転数履歴の修正 (No.<span id="edit-rot-no"></span>)</h3>
+            <input type="hidden" id="edit-rot-index">
+            <div class="input-group"><label>総通常回転数(※)</label><input type="number" id="edit-rot-val"></div>
+            <div class="input-group"><label>現在の持ち玉数(※)</label><input type="number" id="edit-rot-hold"></div>
+            <div class="input-group"><label>残玉数(※)</label><input type="number" id="edit-rot-remain"></div>
+            <div class="input-group"><label>再プレイ玉数</label><input type="number" id="edit-rot-replay"></div>
+            <div class="input-group"><label>追加投資 (円)</label><input type="number" id="edit-rot-invest"></div>
+            <div class="input-group">
+                <label>ストロークパターン</label>
+                <div class="custom-select-container" id="edit-stroke-custom-container">
+                    <div class="custom-select-trigger" id="edit-stroke-trigger">
+                        <span id="edit-stroke-label">選択してください</span>
+                        <span>▼</span>
+                    </div>
+                    <div class="custom-select-options" id="edit-stroke-options"></div>
+                    <input type="hidden" id="edit-stroke">
+                </div>
+            </div>
+            <button class="btn-primary" onclick="app.saveEditRotLog()" style="margin-top: 10px;">修正を保存</button>
+        </div>
+    </div>
+
+    <!-- Interval Save Modal -->
+    <div id="interval-save-modal" class="modal-overlay">
+        <div class="modal-content" style="max-width: 500px;">
+            <div class="modal-close" onclick="document.getElementById('interval-save-modal').style.display='none'">×
+            </div>
+            <h3
+                style="margin-top: 0; color: var(--accent-secondary); border-bottom: 2px solid var(--accent-secondary); padding-bottom: 10px;">
+                区間データの保存</h3>
+            <div class="input-group">
+                <label>この区間のメモ・コメント（空でもOK）</label>
+                <textarea id="interval-save-memo" rows="4"
+                    style="width:100%; padding:10px; border:1px solid #ccc; border-radius:4px; font-size:14px; font-family:var(--font-main); box-sizing:border-box;"></textarea>
+            </div>
+            <div style="display:flex; flex-direction:column; gap:10px; margin-top:20px;">
+                <button class="btn-primary" onclick="app.executeSaveHistory()" style="background:#227093;">保存する</button>
+                <button class="btn-primary"
+                    onclick="document.getElementById('interval-save-modal').style.display='none'"
+                    style="background:#7f8c8d;">キャンセル</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Save Complete Modal -->
+    <div id="save-complete-modal" class="modal-overlay">
+        <div class="modal-content" style="max-width: 400px; text-align: center;">
+            <div class="modal-close" onclick="document.getElementById('save-complete-modal').style.display='none'">×
+            </div>
+            <h3 style="margin-top: 0; color: var(--accent-secondary);">保存完了</h3>
+            <p style="font-size: 16px; font-weight: bold;">区間データを無事に保存しました！</p>
+            <div style="margin-top: 20px;">
+                <button class="btn-primary"
+                    onclick="document.getElementById('save-complete-modal').style.display='none'">閉じる</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const app = {
+            strokeNames: { "": "未選択", A: "パターンA", B: "パターンB", C: "パターンC", D: "パターンD" },
+            metricsConfig: [
+                { id: "rotPerK", name: "千円あたりの回転数", type: "rot", lowerIsBetter: false },
+                { id: "rOut", name: "1R出玉", type: "ball", lowerIsBetter: false },
+                { id: "gainedBalls", name: "獲得出玉", type: "ball", lowerIsBetter: false },
+                { id: "overRate", name: "オーバー入賞率", type: "pct", lowerIsBetter: false },
+                { id: "comment", name: "コメント", type: "text" }
+            ],
+            rotHistory: [],
+            outHistory: [],
+            intervalHistory: [],
+            chartInstance: null,
+            isModifying: false,
+            confirmShown: false,
+            isModifyingOut: false,
+            confirmOutShown: false,
+
+            init() {
+                this.initCustomSelect();
+                this.initTargetSettings();
+                this.loadData();
+                this.updateViews();
+            },
+
+            initCustomSelect() {
+                const strokeOptions = [
+                    { value: "", label: "未選択" },
+                    { value: "A", label: this.strokeNames["A"] },
+                    { value: "B", label: this.strokeNames["B"] },
+                    { value: "C", label: this.strokeNames["C"] },
+                    { value: "D", label: this.strokeNames["D"] }
+                ];
+                this.setupCustomSelect('log-stroke', strokeOptions, 'log-stroke', () => this.checkRotLog(), "");
+
+                const compareOptions = this.metricsConfig.map(m => ({ value: m.id, label: m.name }));
+                this.setupCustomSelect('compare-metric', compareOptions, 'compare-metric-select', () => this.updateIntervalView(), 'rotPerK');
+
+                document.addEventListener('click', () => {
+                    document.querySelectorAll('.custom-select-options').forEach(el => el.classList.remove('open'));
+                });
+            },
+
+            setupCustomSelect(base, options, hiddenId, onSelect, initial) {
+                const trigger = document.getElementById(`${base}-trigger`);
+                const container = document.getElementById(`${base}-options`);
+                const label = document.getElementById(`${base}-label`);
+                const hidden = document.getElementById(hiddenId);
+                if (!trigger || !container) return;
+
+                container.innerHTML = '';
+                options.forEach(opt => {
+                    const div = document.createElement('div');
+                    div.className = 'custom-option';
+                    if (opt.value === initial) {
+                        div.classList.add('selected');
+                        label.innerText = opt.label;
+                        hidden.value = opt.value;
+                    }
+                    div.innerText = opt.label;
+                    div.onclick = (e) => {
+                        e.stopPropagation();
+                        hidden.value = opt.value;
+                        label.innerText = opt.label;
+                        container.querySelectorAll('.custom-option').forEach(o => o.classList.remove('selected'));
+                        div.classList.add('selected');
+                        container.classList.remove('open');
+                        if (onSelect) onSelect(opt.value);
+                    };
+                    container.appendChild(div);
+                });
+
+                trigger.onclick = (e) => {
+                    e.stopPropagation();
+                    const isOpen = container.classList.contains('open');
+                    document.querySelectorAll('.custom-select-options').forEach(el => el.classList.remove('open'));
+                    if (!isOpen) container.classList.add('open');
+                };
+            },
+
+            initTargetSettings() {
+                const container = document.getElementById('settings-targets-container');
+                let html = '';
+                ['A', 'B', 'C', 'D'].forEach(key => {
+                    html += `<div class="input-group"><label>パターン${key}の名称</label>
+                             <input type="text" id="stroke-name-${key}" value="${this.strokeNames[key]}" maxlength="5" placeholder="空欄" onchange="app.saveStrokeNames()"></div>`;
+                });
+                container.innerHTML = html;
+            },
+
+            resetBasicSettings() {
+                if (!confirm("基本設定をデフォルトに戻しますか？")) return;
+                document.getElementById('set-kasi').value = 250;
+                this.calc();
+                this.saveData();
+            },
+
+            resetStrokeNames() {
+                if (!confirm("ストローク名称をデフォルトに戻しますか？")) return;
+                ['A', 'B', 'C', 'D'].forEach(key => {
+                    this.strokeNames[key] = "パターン" + key;
+                });
+                this.initTargetSettings();
+                this.initCustomSelect();
+                this.updateViews();
+                this.saveData();
+            },
+
+            saveStrokeNames() {
+                ['A', 'B', 'C', 'D'].forEach(key => {
+                    this.strokeNames[key] = document.getElementById(`stroke-name-${key}`).value || key;
+                });
+                this.initCustomSelect();
+                this.updateViews();
+                this.saveData();
+            },
+
+            showTab(id) {
+                document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                document.getElementById(id).classList.add('active');
+                document.getElementById('tab-' + id.replace('log-', '')).classList.add('active');
+                if (id === 'compare') this.updateChart();
+            },
+
+            openSettings() { document.getElementById('settings-modal').style.display = 'flex'; },
+            closeSettings() { document.getElementById('settings-modal').style.display = 'none'; this.saveData(); this.updateViews(); },
+            openMemo() { document.getElementById('memo-modal').style.display = 'flex'; },
+            closeMemo() { document.getElementById('memo-modal').style.display = 'none'; },
+
+            updateViews() {
+                this.calc();
+                this.updateRotHistoryView();
+                this.updateOutHistoryView();
+                this.updateIntervalView();
+            },
+
+            resetAll() {
+                document.getElementById('reset-machine').value = "";
+                document.getElementById('reset-daiban').value = "";
+                document.getElementById('reset-memo').value = "";
+                document.getElementById('reset-modal').style.display = 'flex';
+            },
+
+            async executeBackupAndReset() {
+                if (!confirm("クリップボードに今回の実戦データをコピーし、リセットしてもよろしいですか。\n\n※詳細設定は保持されます。")) return;
+                const machine = document.getElementById('reset-machine').value;
+                const daiban = document.getElementById('reset-daiban').value;
+                const memo = document.getElementById('reset-memo').value;
+                await this.copyBackupToClipboard(machine, daiban, memo);
+                this.executeReset();
+                document.getElementById('reset-modal').style.display = 'none';
+                alert("クリップボードに今回の実戦データをコピーしました。\n\nメモ帳アプリ等にペーストしてご確認下さい。");
+            },
+
+            executeResetOnly() {
+                if (confirm("バックアップせずにデータをリセットしてよろしいですか?\n\n※詳細設定は保持されます。")) {
+                    this.executeReset();
+                    document.getElementById('reset-modal').style.display = 'none';
+                    alert("リセットが完了しました。");
+                }
+            },
+
+            async copyBackupToClipboard(machine, daiban, memo) {
+                const machineText = machine || "";
+                const daibanText = daiban || "";
+                let masterDataText = "========================================\n" +
+                    ` 機種名: ${machineText} 台番: ${daibanText}\n` +
+                    "========================================\n\n";
+
+                masterDataText += "【稼働前メモ】\n";
+                masterDataText += (document.getElementById('memo-before').value || "（入力なし）") + "\n\n";
+
+                masterDataText += "【稼働中メモ】\n";
+                masterDataText += (document.getElementById('memo-during').value || "（入力なし）") + "\n\n";
+
+                masterDataText += "【稼働終了後メモ】\n";
+                masterDataText += (memo || "（入力なし）") + "\n\n";
+
+                const kasi = parseFloat(document.getElementById('set-kasi').value) || 250;
+                let tUsed = 0, tRot = 0;
+                const strokeData = { A: { used: 0, rot: 0 }, B: { used: 0, rot: 0 }, C: { used: 0, rot: 0 }, D: { used: 0, rot: 0 } };
+                this.rotHistory.forEach(h => {
+                    tUsed += h.usedBalls;
+                    tRot += h.rot;
+                    if (h.stroke && strokeData[h.stroke]) {
+                        strokeData[h.stroke].used += h.usedBalls;
+                        strokeData[h.stroke].rot += h.rot;
+                    }
+                });
+                let tGained = 0, tRounds = 0, tOver = 0;
+                this.outHistory.forEach(h => { tGained += h.gained; tRounds += h.rounds; tOver += (h.over || 0); });
+
+                const rotPerK = tUsed > 0 ? (tRot / tUsed) * kasi : 0;
+                const rOut = tRounds > 0 ? tGained / tRounds : 0;
+                const overRate = tRounds > 0 ? (tOver / tRounds) * 100 : 0;
+                const holdingRate = (tUsed > 0) ? (this.rotHistory.filter(h => (h.inputs && h.inputs.replay > 0) || (h.inputs && h.inputs.hold > 0)).reduce((sum, h) => sum + h.usedBalls, 0) / tUsed) * 100 : 0; // Simplified holding rate logic
+
+                masterDataText += "【最終結果】\n";
+                masterDataText += `総通常回転数: ${tRot} 回\n`;
+                masterDataText += `持ち玉比率: ${holdingRate.toFixed(1)}%\n`;
+                masterDataText += `総使用玉数: ${Math.floor(tUsed)} 玉\n`;
+                masterDataText += `総獲得玉数: ${Math.floor(tGained)} 玉\n`;
+                masterDataText += `総獲得R数：${tRounds}\n`;
+                masterDataText += `千円あたりの回転数: ${rotPerK.toFixed(1)} 回/k\n`;
+                ['A', 'B', 'C', 'D'].forEach(k => {
+                    const s = strokeData[k];
+                    const sr = s.used > 0 ? (s.rot / s.used) * kasi : 0;
+                    masterDataText += `┗${this.strokeNames[k]}:${sr.toFixed(1)} 回/k\n`;
+                });
+                masterDataText += `1R出玉: ${rOut.toFixed(1)} 玉\n`;
+                masterDataText += `平均オーバー入賞率: ${overRate.toFixed(1)}%\n\n`;
+
+                masterDataText += "【区間別コメント】\n";
+                if (this.intervalHistory.length > 0) {
+                    this.intervalHistory.forEach((h, i) => {
+                        const timeStr = new Date(h.ts).toLocaleString('ja-JP', { hour: '2-digit', minute: '2-digit' });
+                        masterDataText += `${timeStr}：${h.comment || "-"}\n`;
+                    });
+                } else {
+                    masterDataText += "保存された区間データはありません。\n\n";
+                }
+
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    try { await navigator.clipboard.writeText(masterDataText); } catch (e) { }
+                } else {
+                    const textArea = document.createElement("textarea");
+                    textArea.value = masterDataText; document.body.appendChild(textArea); textArea.select();
+                    try { document.execCommand('copy'); } catch (e) { }
+                    document.body.removeChild(textArea);
+                }
+            },
+
+            executeReset() {
+                this.rotHistory = [];
+                this.outHistory = [];
+                this.intervalHistory = [];
+
+                const ids = [
+                    'log-rot-hold', 'log-rot-remain', 'log-rot-replay', 'log-rot-invest', 'log-rot-val',
+                    'log-out-before', 'log-out-after', 'log-out-rounds', 'log-out-over',
+                    'memo-before', 'memo-during'
+                ];
+                ids.forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) el.value = "";
+                });
+
+                this.saveData();
+                this.updateViews();
+            },
+
+            checkRotLog() {
+                const rot = document.getElementById('log-rot-val').value;
+                const hold = document.getElementById('log-rot-hold').value;
+                const remain = document.getElementById('log-rot-remain').value;
+                const stroke = document.getElementById('log-stroke').value;
+                const isComplete = rot !== "" && hold !== "" && remain !== "";
+
+                if (isComplete && !this.isModifying && !this.confirmShown) {
+                    this.confirmShown = true;
+                    document.getElementById('log-confirm-modal').style.display = 'flex';
+                } else if (!isComplete) {
+                    this.confirmShown = false;
+                }
+            },
+
+            closeLogConfirm() {
+                document.getElementById('log-confirm-modal').style.display = 'none';
+                this.confirmShown = false;
+            },
+
+            modifyLog() {
+                document.getElementById('log-confirm-modal').style.display = 'none';
+                this.isModifying = true;
+                document.getElementById('log-rot-modify-record-container').style.display = 'block';
+            },
+
+            recordRotLog() {
+                document.getElementById('log-confirm-modal').style.display = 'none';
+                this.isModifying = false;
+                this.confirmShown = false;
+                document.getElementById('log-rot-modify-record-container').style.display = 'none';
+
+                const totalRotInput = parseFloat(document.getElementById('log-rot-val').value);
+                const hold = parseFloat(document.getElementById('log-rot-hold').value);
+                const remain = parseFloat(document.getElementById('log-rot-remain').value);
+                const replay = parseFloat(document.getElementById('log-rot-replay').value) || 0;
+                const invest = parseFloat(document.getElementById('log-rot-invest').value) || 0;
+                const stroke = document.getElementById('log-stroke').value;
+                const kasi = parseFloat(document.getElementById('set-kasi').value) || 250;
+
+                if (isNaN(totalRotInput) || isNaN(hold) || isNaN(remain)) { alert('通常回転数、持ち玉数は必須入力です。'); return; }
+                const lastTotalRot = this.rotHistory.length > 0 ? this.rotHistory[this.rotHistory.length - 1].totalRot : 0;
+                const rot = totalRotInput - lastTotalRot;
+                if (rot < 0) {
+                    if (!confirm('入力された総回転数が前回の記録より少なくなっています。よろしいですか？')) return;
+                }
+
+                const usedBalls = hold - remain + replay + (invest / 1000) * kasi;
+                this.rotHistory.push({
+                    ts: Date.now(),
+                    rot, totalRot: totalRotInput, usedBalls, stroke, invest, replay,
+                    inputs: { totalRot: totalRotInput, hold, remain, replay, invest, stroke }
+                });
+
+                document.getElementById('log-rot-val').value = "";
+                document.getElementById('log-rot-hold').value = remain;
+                document.getElementById('log-rot-remain').value = "";
+                document.getElementById('log-rot-replay').value = "";
+                document.getElementById('log-rot-invest').value = "";
+                document.getElementById('log-out-before').value = remain;
+
+                this.updateViews();
+                this.saveData();
+            },
+
+            openEditRotLogModal(index) {
+                const h = this.rotHistory[index];
+                if (!h) return;
+                document.getElementById('edit-rot-index').value = index;
+                document.getElementById('edit-rot-no').innerText = index + 1;
+
+                const inputs = h.inputs || { totalRot: h.totalRot, hold: 0, remain: 0, replay: h.replay, invest: h.invest, stroke: h.stroke };
+                document.getElementById('edit-rot-val').value = inputs.totalRot;
+                document.getElementById('edit-rot-hold').value = inputs.hold;
+                document.getElementById('edit-rot-remain').value = inputs.remain;
+                document.getElementById('edit-rot-replay').value = inputs.replay;
+                document.getElementById('edit-rot-invest').value = inputs.invest;
+
+                const strokeOptions = [
+                    { value: "A", label: this.strokeNames["A"] },
+                    { value: "B", label: this.strokeNames["B"] },
+                    { value: "C", label: this.strokeNames["C"] },
+                    { value: "D", label: this.strokeNames["D"] }
+                ];
+                this.setupCustomSelect('edit-stroke', strokeOptions, 'edit-stroke', null, h.stroke);
+                document.getElementById('log-rot-edit-modal').style.display = 'flex';
+            },
+
+            closeEditRotLogModal() {
+                document.getElementById('log-rot-edit-modal').style.display = 'none';
+            },
+
+            saveEditRotLog() {
+                const index = parseInt(document.getElementById('edit-rot-index').value);
+                const totalRotInput = parseFloat(document.getElementById('edit-rot-val').value);
+                const hold = parseFloat(document.getElementById('edit-rot-hold').value);
+                const remain = parseFloat(document.getElementById('edit-rot-remain').value);
+                const replay = parseFloat(document.getElementById('edit-rot-replay').value) || 0;
+                const invest = parseFloat(document.getElementById('edit-rot-invest').value) || 0;
+                const stroke = document.getElementById('edit-stroke').value;
+                const kasi = parseFloat(document.getElementById('set-kasi').value) || 250;
+
+                if (isNaN(totalRotInput) || isNaN(hold) || isNaN(remain)) { alert('必須項目を入力してください。'); return; }
+
+                const h = this.rotHistory[index];
+                h.totalRot = totalRotInput;
+                h.stroke = stroke;
+                h.invest = invest;
+                h.replay = replay;
+                h.usedBalls = hold - remain + replay + (invest / 1000) * kasi;
+                h.inputs = { totalRot: totalRotInput, hold, remain, replay, invest, stroke };
+
+                for (let i = 0; i < this.rotHistory.length; i++) {
+                    const prevTotal = i === 0 ? 0 : this.rotHistory[i - 1].totalRot;
+                    this.rotHistory[i].rot = this.rotHistory[i].totalRot - prevTotal;
+                }
+                this.updateViews();
+                this.saveData();
+                this.closeEditRotLogModal();
+            },
+
+            deleteRotLog(i) {
+                if (confirm('この履歴を削除しますか？')) { this.rotHistory.splice(i, 1); this.updateViews(); this.saveData(); }
+            },
+
+            checkOutLog() {
+                const before = document.getElementById('log-out-before').value;
+                const after = document.getElementById('log-out-after').value;
+                const rounds = document.getElementById('log-out-rounds').value;
+                const isComplete = before !== "" && after !== "" && rounds !== "";
+
+                if (isComplete && !this.isModifyingOut && !this.confirmOutShown) {
+                    this.confirmOutShown = true;
+                    document.getElementById('log-confirm-out-modal').style.display = 'flex';
+                } else if (!isComplete) {
+                    this.confirmOutShown = false;
+                }
+            },
+
+            closeLogConfirmOut() {
+                document.getElementById('log-confirm-out-modal').style.display = 'none';
+                this.confirmOutShown = false;
+            },
+
+            modifyLogOut() {
+                document.getElementById('log-confirm-out-modal').style.display = 'none';
+                this.isModifyingOut = true;
+                document.getElementById('log-out-modify-record-container').style.display = 'block';
+            },
+
+            recordOutLog() {
+                document.getElementById('log-confirm-out-modal').style.display = 'none';
+                this.isModifyingOut = false;
+                this.confirmOutShown = false;
+                document.getElementById('log-out-modify-record-container').style.display = 'none';
+
+                const before = parseFloat(document.getElementById('log-out-before').value);
+                const after = parseFloat(document.getElementById('log-out-after').value);
+                const rounds = parseFloat(document.getElementById('log-out-rounds').value);
+                const over = parseFloat(document.getElementById('log-out-over').value) || 0;
+
+                if (isNaN(before) || isNaN(after) || isNaN(rounds)) { alert('必須項目を入力してください。'); return; }
+
+                this.outHistory.push({ ts: Date.now(), gained: after - before, holdBefore: before, holdAfter: after, rounds, over });
+
+                document.getElementById('log-out-before').value = "";
+                document.getElementById('log-out-after').value = "";
+                document.getElementById('log-out-rounds').value = "";
+                document.getElementById('log-out-over').value = "";
+                document.getElementById('log-rot-hold').value = after;
+
+                this.updateViews();
+                this.saveData();
+            },
+
+            openEditOutLogModal(index) {
+                const h = this.outHistory[index];
+                if (!h) return;
+                document.getElementById('edit-out-index').value = index;
+                document.getElementById('edit-out-no').innerText = index + 1;
+                document.getElementById('edit-out-before').value = h.holdBefore;
+                document.getElementById('edit-out-after').value = h.holdAfter;
+                document.getElementById('edit-out-rounds').value = h.rounds;
+                document.getElementById('edit-out-over').value = h.over;
+                document.getElementById('log-out-edit-modal').style.display = 'flex';
+            },
+
+            closeEditOutLogModal() {
+                document.getElementById('log-out-edit-modal').style.display = 'none';
+            },
+
+            saveEditOutLog() {
+                const index = parseInt(document.getElementById('edit-out-index').value);
+                const before = parseFloat(document.getElementById('edit-out-before').value);
+                const after = parseFloat(document.getElementById('edit-out-after').value);
+                const rounds = parseFloat(document.getElementById('edit-out-rounds').value);
+                const over = parseFloat(document.getElementById('edit-out-over').value) || 0;
+
+                if (isNaN(before) || isNaN(after) || isNaN(rounds)) { alert('必須項目を入力してください。'); return; }
+
+                const h = this.outHistory[index];
+                h.holdBefore = before;
+                h.holdAfter = after;
+                h.gained = after - before;
+                h.rounds = rounds;
+                h.over = over;
+
+                this.updateViews();
+                this.saveData();
+                this.closeEditOutLogModal();
+            },
+
+            deleteOutLog(i) {
+                if (confirm('この履歴を削除しますか？')) { this.outHistory.splice(i, 1); this.updateViews(); this.saveData(); }
+            },
+
+            updateViews() {
+                this.updateRotHistoryView();
+                this.updateOutHistoryView();
+                this.calc();
+            },
+
+            updateRotHistoryView() {
+                const tbody = document.getElementById('log-rot-history-table');
+                const delMode = document.getElementById('log-rot-delete-mode').checked;
+                tbody.innerHTML = '';
+                const kasi = parseFloat(document.getElementById('set-kasi').value) || 250;
+
+                if (this.rotHistory.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="4" style="padding:15px; text-align:center;">履歴がありません</td></tr>';
+                    return;
+                }
+
+                this.rotHistory.forEach((h, i) => {
+                    const rpk = h.usedBalls > 0 ? (h.rot / h.usedBalls) * kasi : 0;
+                    const row = document.createElement('tr');
+                    const delBtn = delMode ? `<button style="background:var(--plus-red); color:white; border:none; border-radius:4px; padding:2px 8px; cursor:pointer;" onclick="app.deleteRotLog(${i})">×</button>` : '';
+                    row.innerHTML = `
+                        <td style="text-align:center;">${i + 1}</td>
+                        <td style="text-align:center; color:#1976d2; cursor:pointer; font-weight:bold; text-decoration:underline;" onclick="app.openEditRotLogModal(${i})">${Math.floor(h.usedBalls)}玉</td>
+                        <td style="text-align:center;">${this.strokeNames[h.stroke] || h.stroke}</td>
+                        <td style="text-align:center;">${rpk.toFixed(1)}回/k ${delBtn}</td>
+                    `;
+                    tbody.appendChild(row);
+                });
+            },
+
+            updateOutHistoryView() {
+                const tbody = document.getElementById('log-out-history-table');
+                const delMode = document.getElementById('log-out-delete-mode').checked;
+                tbody.innerHTML = '';
+
+                if (this.outHistory.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="4" style="padding:15px; text-align:center;">履歴がありません</td></tr>';
+                    return;
+                }
+
+                this.outHistory.forEach((h, i) => {
+                    const rOut = h.rounds > 0 ? h.gained / h.rounds : 0;
+                    const overPct = h.rounds > 0 ? (h.over / h.rounds) * 100 : 0;
+                    const row = document.createElement('tr');
+                    const delBtn = delMode ? `<button style="background:var(--plus-red); color:white; border:none; border-radius:4px; padding:2px 8px; cursor:pointer;" onclick="app.deleteOutLog(${i})">×</button>` : '';
+                    row.innerHTML = `
+                        <td style="text-align:center;">${i + 1}</td>
+                        <td style="text-align:center; color:#1976d2; cursor:pointer; font-weight:bold; text-decoration:underline;" onclick="app.openEditOutLogModal(${i})">${Math.floor(h.gained)}玉</td>
+                        <td style="text-align:center;">${rOut.toFixed(1)}玉</td>
+                        <td style="text-align:center;">${overPct.toFixed(1)}% ${delBtn}</td>
+                    `;
+                    tbody.appendChild(row);
+                });
+            },
+
+            calc() {
+                const kasi = parseFloat(document.getElementById('set-kasi').value) || 250;
+                let totalUsed = 0, totalRot = 0, holdUsed = 0;
+                const strokeData = { A: { used: 0, rot: 0 }, B: { used: 0, rot: 0 }, C: { used: 0, rot: 0 }, D: { used: 0, rot: 0 } };
+
+                this.rotHistory.forEach(h => {
+                    totalUsed += h.usedBalls; totalRot += h.rot;
+                    if (h.isHold) holdUsed += h.usedBalls;
+                    if (strokeData[h.stroke]) { strokeData[h.stroke].used += h.usedBalls; strokeData[h.stroke].rot += h.rot; }
+                });
+
+                let totalGained = 0, totalRounds = 0, totalOver = 0;
+                this.outHistory.forEach(h => { totalGained += h.gained; totalRounds += h.rounds; totalOver += h.over; });
+
+                const rpk = totalUsed > 0 ? (totalRot / totalUsed) * kasi : 0;
+                const rOut = totalRounds > 0 ? totalGained / totalRounds : 0;
+                const overRate = totalRounds > 0 ? (totalOver / totalRounds) * 100 : 0;
+                const holdRate = totalUsed > 0 ? (holdUsed / totalUsed) * 100 : 0;
+
+                document.getElementById('res-rot-per-k').innerText = rpk.toFixed(1) + '回/k';
+                document.getElementById('res-r-out').innerText = rOut.toFixed(1) + '玉';
+                document.getElementById('res-over-rate').innerText = overRate.toFixed(1) + '%';
+
+                document.getElementById('res-stroke-boxes').innerHTML = ["A", "B", "C", "D"].map(k => {
+                    const s = strokeData[k];
+                    const srpk = s.used > 0 ? (s.rot / s.used) * kasi : 0;
+                    return `<div class="box-info">${this.strokeNames[k]}<br><span style="font-size:1.4rem;">${srpk.toFixed(1)}</span></div>`;
+                }).join('');
+
+                const details = [
+                    ["総通常回転数", totalRot + "回"],
+                    ["持ち玉比率", holdRate.toFixed(1) + "%"],
+                    ["総使用玉数", Math.floor(totalUsed) + "玉"],
+                    ["総獲得出玉", Math.floor(totalGained) + "玉"],
+                    ["総獲得R数", totalRounds + "R"]
+                ];
+                document.getElementById('res-details-table').innerHTML = details.map(d => `<tr><th>${d[0]}</th><td>${d[1]}</td></tr>`).join('');
+                this.updateIntervalView();
+            },
+
+            openIntervalSaveModal() {
+                document.getElementById('interval-save-memo').value = "";
+                document.getElementById('interval-save-modal').style.display = 'flex';
+            },
+
+            executeSaveHistory() {
+                const memo = document.getElementById('interval-save-memo').value;
+                document.getElementById('interval-save-modal').style.display = 'none';
+
+                const kasi = parseFloat(document.getElementById('set-kasi').value) || 250;
+                let totalUsed = 0, totalRot = 0;
+                this.rotHistory.forEach(h => { totalUsed += h.usedBalls; totalRot += h.rot; });
+                let totalGained = 0, totalRounds = 0, totalOver = 0;
+                this.outHistory.forEach(h => { totalGained += h.gained; totalRounds += h.rounds; totalOver += (h.over || 0); });
+
+                this.intervalHistory.push({
+                    ts: Date.now(),
+                    totalRot, totalUsed, totalRounds, totalGained, totalOver,
+                    comment: memo
+                });
+                this.updateIntervalView();
+                this.saveData();
+                document.getElementById('save-complete-modal').style.display = 'flex';
+            },
+
+            formatF(val, type) {
+                if (type === 'pct') return `${(val * 100).toFixed(1)}%`;
+                if (type === 'rot') return `${val.toFixed(1)} 回`;
+                if (type === 'ball') return `${val.toFixed(1)} 玉`;
+                return val;
+            },
+
+            getCompareStr(val, avg, type, lowerIsBetter) {
+                if (avg === 0 || val === 0) return "-";
+                let delta = val - avg;
+                let isGood = lowerIsBetter ? (val < avg) : (val > avg);
+                if (Math.abs(delta) < 0.001) return "-";
+
+                const icon = isGood ? '↑' : '↓';
+                const color = isGood ? 'var(--plus-red)' : 'var(--minus-blue)';
+
+                if (type === 'pct') {
+                    const deltaPct = delta * 100;
+                    return `<span style="color:${color}; font-weight:bold;">${icon} (${deltaPct > 0 ? '+' : ''}${deltaPct.toFixed(1)}%)</span>`;
+                }
+                return `<span style="color:${color}; font-weight:bold;">${icon} (${delta > 0 ? '+' : ''}${delta.toFixed(1)})</span>`;
+            },
+
+            deleteHistory(index) {
+                if (confirm('この区間データを削除してよろしいですか？')) {
+                    this.intervalHistory.splice(index, 1);
+                    this.updateIntervalView();
+                    this.saveData();
+                }
+            },
+
+            updateIntervalView() {
+                const metricId = document.getElementById('compare-metric-select').value;
+                const metric = this.metricsConfig.find(m => m.id === metricId);
+                const tbody = document.getElementById('interval-table');
+                const theadTr = document.querySelector('#log-compare .data-table thead tr');
+                const delMode = document.getElementById('history-delete-mode').checked;
+                const kasi = parseFloat(document.getElementById('set-kasi').value) || 250;
+
+                if (metric.type === 'text') {
+                    if (theadTr) theadTr.innerHTML = '<th style="width: 30%; text-align: center;">時刻</th><th style="width: 70%; text-align: center;">コメント</th>';
+                    let html = '';
+                    this.intervalHistory.forEach((h, i) => {
+                        const timeStr = new Date(h.ts).toLocaleString('ja-JP', { hour: '2-digit', minute: '2-digit' });
+                        const actionCol = delMode ? `<button style="background:var(--plus-red); color:white; border:none; border-radius:4px; padding:2px 8px; cursor:pointer; float:right;" onclick="app.deleteHistory(${i})">×</button>` : '';
+                        html += `<tr><td style="text-align:center;">${timeStr}</td><td style="text-align:left;">${h.comment || '-'}${actionCol}</td></tr>`;
+                    });
+                    tbody.innerHTML = html;
+                    if (this.chartInstance) { this.chartInstance.destroy(); this.chartInstance = null; }
+                    document.getElementById('compare-chart-container').style.display = 'none';
+                    return;
+                }
+
+                if (theadTr) theadTr.innerHTML = `<th style="width: 30%; text-align: center;">時刻</th><th style="width: 35%; text-align: center;">数値</th><th style="width: 35%; text-align: center;">${delMode ? '削除' : '累計比較'}</th>`;
+                document.getElementById('compare-chart-container').style.display = 'block';
+
+                if (this.intervalHistory.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="3" style="padding:15px; text-align:center;">区間データがありません</td></tr>';
+                    if (this.chartInstance) { this.chartInstance.destroy(); this.chartInstance = null; }
+                    return;
+                }
+
+                const lastH = this.intervalHistory[this.intervalHistory.length - 1];
+                const totalRot = lastH.totalRot;
+                const totalUsed = lastH.totalUsed;
+                const totalRounds = lastH.totalRounds;
+                const totalGained = lastH.totalGained;
+                const totalOver = lastH.totalOver;
+
+                const cumulativeMap = {
+                    rotPerK: totalUsed > 0 ? (totalRot / totalUsed) * kasi : 0,
+                    rOut: totalRounds > 0 ? totalGained / totalRounds : 0,
+                    gainedBalls: totalGained,
+                    overRate: totalRounds > 0 ? (totalOver / totalRounds) * 100 : 0
+                };
+                const cumulativeVal = cumulativeMap[metricId];
+
+                let html = '';
+                const labels = [];
+                const dataPoints = [];
+                const tableRows = [];
+
+                this.intervalHistory.forEach((h, i) => {
+                    const prev = i === 0 ? { totalRot: 0, totalUsed: 0, totalRounds: 0, totalGained: 0, totalOver: 0 } : this.intervalHistory[i - 1];
+                    const diffRot = h.totalRot - prev.totalRot;
+                    const diffUsed = h.totalUsed - prev.totalUsed;
+                    const diffRounds = h.totalRounds - prev.totalRounds;
+                    const diffGained = h.totalGained - prev.totalGained;
+                    const diffOver = h.totalOver - prev.totalOver;
+
+                    const iMetrics = {
+                        rotPerK: diffUsed > 0 ? (diffRot / diffUsed) * kasi : 0,
+                        rOut: diffRounds > 0 ? diffGained / diffRounds : 0,
+                        gainedBalls: diffGained,
+                        overRate: diffRounds > 0 ? diffOver / diffRounds : 0
+                    };
+                    const val = iMetrics[metricId];
+                    const timeStr = new Date(h.ts).toLocaleTimeString('ja-JP', { hour: '2-digit', minute: '2-digit' });
+
+                    tableRows.push(`<tr>
+                        <td style="text-align:center;">${timeStr}</td>
+                        <td style="text-align:center; font-family:var(--font-eng); font-weight:bold;">${this.formatF(val, metric.type)}</td>
+                        <td style="text-align:center; font-family:var(--font-eng);">
+                            ${delMode ? `<button style="background:var(--plus-red); color:white; border:none; border-radius:4px; padding:2px 8px; cursor:pointer;" onclick="app.deleteHistory(${i})">削除</button>` : this.getCompareStr(val, cumulativeVal, metric.type, metric.lowerIsBetter)}
+                        </td>
+                    </tr>`);
+
+                    labels.push(timeStr);
+                    dataPoints.push(metric.type === 'pct' ? val * 100 : val);
+                });
+
+                tableRows.push(`<tr style="background:rgba(0,0,0,0.03); font-weight:bold;">
+                    <td style="text-align:center;">累計平均</td>
+                    <td style="text-align:center; font-family:var(--font-eng);">${this.formatF(cumulativeVal, metric.type)}</td>
+                    <td style="text-align:center;">-</td>
+                </tr>`);
+
+                tbody.innerHTML = tableRows.join('');
+                this.drawChart(labels, dataPoints, cumulativeVal, metric);
+            },
+
+            drawChart(labels, dataPoints, cumVal, metric) {
+                const ctx = document.getElementById('compareChart').getContext('2d');
+                if (this.chartInstance) this.chartInstance.destroy();
+
+                const mult = metric.type === 'pct' ? 100 : 1;
+                const cumLineData = labels.map(() => cumVal * mult);
+
+                this.chartInstance = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels,
+                        datasets: [
+                            {
+                                label: metric.name,
+                                data: dataPoints,
+                                borderColor: '#227093',
+                                borderWidth: 2,
+                                tension: 0.1,
+                                fill: false
+                            },
+                            {
+                                label: '累計平均',
+                                data: cumLineData,
+                                borderColor: '#b33939',
+                                borderDash: [5, 5],
+                                borderWidth: 2,
+                                pointRadius: 0
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: { font: { family: "'Inter', sans-serif" } }
+                            },
+                            x: {
+                                offset: true,
+                                ticks: { font: { family: "'Inter', sans-serif" } }
+                            }
+                        }
+                    }
+                });
+            },
+
+            updateChart() {
+                const kasi = parseFloat(document.getElementById('set-kasi').value) || 250;
+                const labels = [], data = [];
+                this.rotHistory.forEach((h, i) => {
+                    labels.push(i + 1);
+                    data.push(h.usedBalls > 0 ? (h.rot / h.usedBalls) * kasi : 0);
+                });
+
+                const ctx = document.getElementById('compareChart').getContext('2d');
+                if (this.chartInstance) this.chartInstance.destroy();
+                this.chartInstance = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels,
+                        datasets: [{ label: '回転率/k', data, borderColor: '#227093', tension: 0.2, fill: false }]
+                    },
+                    options: { responsive: true, scales: { y: { beginAtZero: false } } }
+                });
+
+                document.getElementById('compare-list').innerHTML = this.rotHistory.map((h, i) => {
+                    const rpk = h.usedBalls > 0 ? (h.rot / h.usedBalls) * kasi : 0;
+                    const time = new Date(h.ts).toLocaleTimeString('ja-JP', { hour: '2-digit', minute: '2-digit' });
+                    return `<tr><td>${time}</td><td>${rpk.toFixed(2)}</td><td>${this.strokeNames[h.stroke]}</td></tr>`;
+                }).reverse().join('');
+            },
+
+            saveData() {
+                const data = {
+                    rotHistory: this.rotHistory,
+                    outHistory: this.outHistory,
+                    intervalHistory: this.intervalHistory,
+                    strokeNames: this.strokeNames,
+                    settings: { kasi: document.getElementById('set-kasi').value },
+                    memoBefore: document.getElementById('memo-before').value,
+                    memoDuring: document.getElementById('memo-during').value
+                };
+                localStorage.setItem('pachitaku_pachinko_data', JSON.stringify(data));
+            },
+
+            loadData() {
+                const saved = JSON.parse(localStorage.getItem('pachitaku_pachinko_data'));
+                if (saved) {
+                    this.rotHistory = saved.rotHistory || [];
+                    this.outHistory = saved.outHistory || [];
+                    this.intervalHistory = saved.intervalHistory || [];
+                    this.strokeNames = saved.strokeNames || this.strokeNames;
+                    if (saved.settings) document.getElementById('set-kasi').value = saved.settings.kasi;
+                    document.getElementById('memo-before').value = saved.memoBefore || "";
+                    document.getElementById('memo-during').value = saved.memoDuring || "";
+                }
+            }
+        };
+
+        window.onload = () => app.init();
+    </script>
+</body>
+
+</html>
