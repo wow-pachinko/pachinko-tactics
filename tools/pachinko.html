@@ -509,13 +509,13 @@
         <div id="log-rot" class="content-section active">
             <div class="section-header">■ 現在の回転数状況</div>
             <div class="input-group"><label>現在の持ち玉数(※)</label><input type="number" id="log-rot-hold"
-                    onblur="app.checkRotLog()"></div>
+                    onblur="app.checkRotLog()" oninput="app.saveData()"></div>
             <div class="input-group"><label>残玉数(※)</label><input type="number" id="log-rot-remain"
-                    onblur="app.checkRotLog()"></div>
+                    onblur="app.checkRotLog()" oninput="app.saveData()"></div>
             <div class="input-group"><label>再プレイ玉数</label><input type="number" id="log-rot-replay"
-                    onblur="app.checkRotLog()"></div>
+                    onblur="app.checkRotLog()" oninput="app.saveData()"></div>
             <div class="input-group"><label>追加投資 (円)</label><input type="number" id="log-rot-invest"
-                    onblur="app.checkRotLog()"></div>
+                    onblur="app.checkRotLog()" oninput="app.saveData()"></div>
             <div class="input-group">
                 <label>ストロークパターン</label>
                 <div class="custom-select-container" id="log-stroke-custom-container">
@@ -524,11 +524,11 @@
                         <span>▼</span>
                     </div>
                     <div class="custom-select-options" id="log-stroke-options"></div>
-                    <input type="hidden" id="log-stroke" value="">
+                    <input type="hidden" id="log-stroke" value="" onchange="app.saveData()">
                 </div>
             </div>
             <div class="input-group"><label>総通常回転数(※)</label><input type="number" id="log-rot-val"
-                    onblur="app.checkRotLog()"></div>
+                    onblur="app.checkRotLog()" oninput="app.saveData()"></div>
             <div id="log-rot-modify-record-container" style="display:none; margin-top: 15px;">
                 <button class="btn-primary" onclick="app.recordRotLog()">この修正内容で登録</button>
             </div>
@@ -560,13 +560,13 @@
                 <span style="font-weight:bold; font-size:0.9rem;">初当り回数 <span id="out-log-count">0</span>回</span>
             </div>
             <div class="input-group"><label>初当り時持ち玉数(※)</label><input type="number" id="log-out-before"
-                    onblur="app.checkOutLog()"></div>
+                    onblur="app.checkOutLog()" oninput="app.saveData()"></div>
             <div class="input-group"><label>連チャン終了後持ち玉(※)</label><input type="number" id="log-out-after"
-                    onblur="app.checkOutLog()"></div>
+                    onblur="app.checkOutLog()" oninput="app.saveData()"></div>
             <div class="input-group"><label>オーバー入賞個数</label><input type="number" id="log-out-over" value=""
-                    onblur="app.checkOutLog()"></div>
+                    onblur="app.checkOutLog()" oninput="app.saveData()"></div>
             <div class="input-group"><label>獲得R数(※)</label><input type="number" id="log-out-rounds"
-                    onblur="app.checkOutLog()"></div>
+                    onblur="app.checkOutLog()" oninput="app.saveData()"></div>
             <div id="log-out-modify-record-container" style="display:none; margin-top: 15px;">
                 <button class="btn-primary" onclick="app.recordOutLog()">この修正内容で登録</button>
             </div>
@@ -1117,6 +1117,7 @@
                 } else if (!isComplete) {
                     this.confirmShown = false;
                 }
+                this.saveData();
             },
 
             closeLogConfirm() {
@@ -1241,6 +1242,7 @@
                 } else if (!isComplete) {
                     this.confirmOutShown = false;
                 }
+                this.saveData();
             },
 
             closeLogConfirmOut() {
@@ -1631,7 +1633,7 @@
                     const rpk = h.usedBalls > 0 ? (h.rot / h.usedBalls) * kasi : 0;
                     const time = new Date(h.ts).toLocaleTimeString('ja-JP', { hour: '2-digit', minute: '2-digit' });
                     return `<tr><td>${time}</td><td>${rpk.toFixed(2)}</td><td>${this.strokeNames[h.stroke]}</td></tr>`;
-                }).reverse().join('');
+                }).join('');
             },
 
             saveData() {
@@ -1642,7 +1644,19 @@
                     strokeNames: this.strokeNames,
                     settings: { kasi: document.getElementById('set-kasi').value },
                     memoBefore: document.getElementById('memo-before').value,
-                    memoDuring: document.getElementById('memo-during').value
+                    memoDuring: document.getElementById('memo-during').value,
+                    currentInputs: {
+                        rotHold: document.getElementById('log-rot-hold').value,
+                        rotRemain: document.getElementById('log-rot-remain').value,
+                        rotReplay: document.getElementById('log-rot-replay').value,
+                        rotInvest: document.getElementById('log-rot-invest').value,
+                        stroke: document.getElementById('log-stroke').value,
+                        rotVal: document.getElementById('log-rot-val').value,
+                        outBefore: document.getElementById('log-out-before').value,
+                        outAfter: document.getElementById('log-out-after').value,
+                        outRounds: document.getElementById('log-out-rounds').value,
+                        outOver: document.getElementById('log-out-over').value
+                    }
                 };
                 localStorage.setItem('pachitaku_pachinko_data', JSON.stringify(data));
             },
@@ -1657,7 +1671,27 @@
                     if (saved.settings) document.getElementById('set-kasi').value = saved.settings.kasi;
                     document.getElementById('memo-before').value = saved.memoBefore || "";
                     document.getElementById('memo-during').value = saved.memoDuring || "";
+                    if (saved.currentInputs) {
+                        const ci = saved.currentInputs;
+                        if (ci.rotHold !== undefined) document.getElementById('log-rot-hold').value = ci.rotHold;
+                        if (ci.rotRemain !== undefined) document.getElementById('log-rot-remain').value = ci.rotRemain;
+                        if (ci.rotReplay !== undefined) document.getElementById('log-rot-replay').value = ci.rotReplay;
+                        if (ci.rotInvest !== undefined) document.getElementById('log-rot-invest').value = ci.rotInvest;
+                        if (ci.stroke !== undefined) {
+                            document.getElementById('log-stroke').value = ci.stroke;
+                            const labelText = this.strokeNames[ci.stroke];
+                            if (labelText) {
+                                document.getElementById('log-stroke-label').innerText = labelText;
+                            }
+                        }
+                        if (ci.rotVal !== undefined) document.getElementById('log-rot-val').value = ci.rotVal;
+                        if (ci.outBefore !== undefined) document.getElementById('log-out-before').value = ci.outBefore;
+                        if (ci.outAfter !== undefined) document.getElementById('log-out-after').value = ci.outAfter;
+                        if (ci.outRounds !== undefined) document.getElementById('log-out-rounds').value = ci.outRounds;
+                        if (ci.outOver !== undefined) document.getElementById('log-out-over').value = ci.outOver;
+                    }
                 }
+                this.updateViews();
             }
         };
 

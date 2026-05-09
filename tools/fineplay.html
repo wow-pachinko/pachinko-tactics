@@ -652,13 +652,13 @@
             </div>
             <div id="log-fields">
                 <div class="input-group"><label>現在の持ち玉数(※)</label><input type="number" id="log-hold"
-                        oninput="app.checkLogForm()"></div>
+                        oninput="app.checkLogForm(); app.saveDataAndHistory()"></div>
                 <div class="input-group"><label>残玉数(※)</label><input type="number" id="log-remain"
-                        oninput="app.checkLogForm()"></div>
+                        oninput="app.checkLogForm(); app.saveDataAndHistory()"></div>
                 <div class="input-group"><label>再プレイ玉数</label><input type="number" id="log-replay"
-                        oninput="app.checkLogForm()"></div>
+                        oninput="app.checkLogForm(); app.saveDataAndHistory()"></div>
                 <div class="input-group"><label>追加投資(円)</label><input type="number" id="log-invest"
-                        oninput="app.checkLogForm()"></div>
+                        oninput="app.checkLogForm(); app.saveDataAndHistory()"></div>
                 <div class="input-group">
                     <label>当選契機(※)</label>
                     <div class="custom-select-container" id="log-trigger-custom-container">
@@ -1207,7 +1207,7 @@
                     const prevPick = i === 0 ? 0 : this.history[i - 1].v.total_pick;
                     const label = prevPick === h.v.total_pick ? `拾い個数:${h.v.total_pick}個(${timeStr})` : `拾い個数:${prevPick + 1}個～${h.v.total_pick}個(${timeStr})`;
                     return { value: i, label: label };
-                }).reverse();
+                });
 
                 this.setupCustomSelect('interval-detail', options, 'interval-detail-select', () => this.updateIntervalDetailView(), options[0]?.value);
                 if (options.length > 0) {
@@ -2270,7 +2270,15 @@
                     logHistory: this.logHistory,
                     jackpotCount: this.jackpotCount,
                     memoBefore: document.getElementById('memo-before').value,
-                    memoDuring: document.getElementById('memo-during').value
+                    memoDuring: document.getElementById('memo-during').value,
+                    currentInputs: {
+                        hold: document.getElementById('log-hold').value,
+                        remain: document.getElementById('log-remain').value,
+                        replay: document.getElementById('log-replay').value,
+                        invest: document.getElementById('log-invest').value,
+                        trigger: document.getElementById('log-trigger').value,
+                        round: document.getElementById('log-round').value
+                    }
                 };
                 localStorage.setItem('pachitaku_fine play_data', JSON.stringify(saveObj));
             },
@@ -2304,6 +2312,22 @@
                     this.jackpotCount = saved.jackpotCount || 0;
                     if (saved.memoBefore !== undefined) document.getElementById('memo-before').value = saved.memoBefore;
                     if (saved.memoDuring !== undefined) document.getElementById('memo-during').value = saved.memoDuring;
+                    if (saved.currentInputs) {
+                        const ci = saved.currentInputs;
+                        if (ci.hold !== undefined) document.getElementById('log-hold').value = ci.hold;
+                        if (ci.remain !== undefined) document.getElementById('log-remain').value = ci.remain;
+                        if (ci.replay !== undefined) document.getElementById('log-replay').value = ci.replay;
+                        if (ci.invest !== undefined) document.getElementById('log-invest').value = ci.invest;
+                        if (ci.trigger !== undefined) {
+                            document.getElementById('log-trigger').value = ci.trigger;
+                            const triggerLabel = { "HR": "HR", "左HIT": "左HIT", "右HIT": "右HIT", "SP": "SP" }[ci.trigger];
+                            if (triggerLabel) document.getElementById('log-trigger-label').innerText = triggerLabel;
+                        }
+                        if (ci.round !== undefined) {
+                            document.getElementById('log-round').value = ci.round;
+                            document.getElementById('log-round-label').innerText = ci.round;
+                        }
+                    }
                 }
                 this.updateLogHistoryView();
                 this.updateHistoryDropdown();

@@ -1192,7 +1192,7 @@
                     const currentPick = h.totalPick || h.v.total_pick;
                     const label = prevPick === currentPick ? `拾い個数:${currentPick}個(${timeStr})` : `拾い個数:${prevPick + 1}個～${currentPick}個(${timeStr})`;
                     return { value: i, label: label };
-                }).reverse();
+                });
 
                 this.setupCustomSelect('interval-detail', options, 'interval-detail-select', () => this.updateIntervalDetailView(), options[0]?.value);
                 if (options.length > 0) {
@@ -2117,8 +2117,14 @@
                         if (saved.logData.remain !== undefined) document.getElementById('log-remain').value = saved.logData.remain;
                         if (saved.logData.replay !== undefined) document.getElementById('log-replay').value = saved.logData.replay;
                         if (saved.logData.invest !== undefined) document.getElementById('log-invest').value = saved.logData.invest;
-                        if (saved.logData.trigger !== undefined) document.getElementById('log-trigger').value = saved.logData.trigger;
-                        if (saved.logData.round !== undefined) document.getElementById('log-round').value = saved.logData.round;
+                        if (saved.logData.trigger !== undefined) {
+                            document.getElementById('log-trigger').value = saved.logData.trigger;
+                            document.getElementById('log-trigger-label').innerText = saved.logData.trigger;
+                        }
+                        if (saved.logData.round !== undefined) {
+                            document.getElementById('log-round').value = saved.logData.round;
+                            document.getElementById('log-round-label').innerText = saved.logData.round;
+                        }
                     }
                     if (saved.logHistory) {
                         this.logHistory = saved.logHistory;
