@@ -6,7 +6,7 @@
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-7F66S1YKNZ"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
+        function gtag() { dataLayer.push(arguments); }
         gtag('js', new Date());
 
         gtag('config', 'G-7F66S1YKNZ');
@@ -518,7 +518,7 @@
         <!-- 回転数ログ -->
         <div id="log-rot" class="content-section active">
             <div class="section-header">■ 現在の回転数状況</div>
-            <div class="input-group"><label>打ち始め回転数</label><input type="number" id="log-rot-start"
+            <div class="input-group"><label>打ち始め回転数(※)</label><input type="number" id="log-rot-start"
                     onblur="app.checkRotLog()" oninput="app.saveData()"></div>
             <div class="input-group"><label>現在の持ち玉数(※)</label><input type="number" id="log-rot-hold"
                     onblur="app.checkRotLog()" oninput="app.saveData()"></div>
