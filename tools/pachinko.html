@@ -518,9 +518,11 @@
         <!-- 回転数ログ -->
         <div id="log-rot" class="content-section active">
             <div class="section-header">■ 現在の回転数状況</div>
+            <div class="input-group"><label>打ち始め回転数</label><input type="number" id="log-rot-start"
+                    onblur="app.checkRotLog()" oninput="app.saveData()"></div>
             <div class="input-group"><label>現在の持ち玉数(※)</label><input type="number" id="log-rot-hold"
                     onblur="app.checkRotLog()" oninput="app.saveData()"></div>
-            <div class="input-group"><label>残玉数(※)</label><input type="number" id="log-rot-remain"
+            <div class="input-group"><label>初当り時持ち玉数(※)</label><input type="number" id="log-rot-remain"
                     onblur="app.checkRotLog()" oninput="app.saveData()"></div>
             <div class="input-group"><label>再プレイ玉数</label><input type="number" id="log-rot-replay"
                     onblur="app.checkRotLog()" oninput="app.saveData()"></div>
@@ -537,7 +539,7 @@
                     <input type="hidden" id="log-stroke" value="" onchange="app.saveData()">
                 </div>
             </div>
-            <div class="input-group"><label>総通常回転数(※)</label><input type="number" id="log-rot-val"
+            <div class="input-group"><label>初当り時回転数(※)</label><input type="number" id="log-rot-val"
                     onblur="app.checkRotLog()" oninput="app.saveData()"></div>
             <div id="log-rot-modify-record-container" style="display:none; margin-top: 15px;">
                 <button class="btn-primary" onclick="app.recordRotLog()">この修正内容で登録</button>
@@ -805,9 +807,10 @@
                 style="margin-top: 0; border-bottom: 2px solid var(--accent-secondary); padding-bottom: 10px; color: var(--accent-secondary);">
                 回転数履歴の修正 (No.<span id="edit-rot-no"></span>)</h3>
             <input type="hidden" id="edit-rot-index">
-            <div class="input-group"><label>総通常回転数(※)</label><input type="number" id="edit-rot-val"></div>
+            <div class="input-group"><label>打ち始め回転数(※)</label><input type="number" id="edit-rot-start"></div>
+            <div class="input-group"><label>初当り時回転数(※)</label><input type="number" id="edit-rot-val"></div>
             <div class="input-group"><label>現在の持ち玉数(※)</label><input type="number" id="edit-rot-hold"></div>
-            <div class="input-group"><label>残玉数(※)</label><input type="number" id="edit-rot-remain"></div>
+            <div class="input-group"><label>初当り時持ち玉数(※)</label><input type="number" id="edit-rot-remain"></div>
             <div class="input-group"><label>再プレイ玉数</label><input type="number" id="edit-rot-replay"></div>
             <div class="input-group"><label>追加投資 (円)</label><input type="number" id="edit-rot-invest"></div>
             <div class="input-group">
@@ -1101,7 +1104,7 @@
                 this.intervalHistory = [];
 
                 const ids = [
-                    'log-rot-hold', 'log-rot-remain', 'log-rot-replay', 'log-rot-invest', 'log-rot-val',
+                    'log-rot-start', 'log-rot-hold', 'log-rot-remain', 'log-rot-replay', 'log-rot-invest', 'log-rot-val',
                     'log-out-before', 'log-out-after', 'log-out-rounds', 'log-out-over',
                     'memo-before', 'memo-during'
                 ];
@@ -1115,11 +1118,12 @@
             },
 
             checkRotLog() {
+                const start = document.getElementById('log-rot-start').value;
                 const rot = document.getElementById('log-rot-val').value;
                 const hold = document.getElementById('log-rot-hold').value;
                 const remain = document.getElementById('log-rot-remain').value;
                 const stroke = document.getElementById('log-stroke').value;
-                const isComplete = rot !== "" && hold !== "" && remain !== "";
+                const isComplete = start !== "" && rot !== "" && hold !== "" && remain !== "";
 
                 if (isComplete && !this.isModifying && !this.confirmShown) {
                     this.confirmShown = true;
@@ -1147,7 +1151,8 @@
                 this.confirmShown = false;
                 document.getElementById('log-rot-modify-record-container').style.display = 'none';
 
-                const totalRotInput = parseFloat(document.getElementById('log-rot-val').value);
+                const jackpotRotInput = parseFloat(document.getElementById('log-rot-val').value);
+                const startRotInput = parseFloat(document.getElementById('log-rot-start').value);
                 const hold = parseFloat(document.getElementById('log-rot-hold').value);
                 const remain = parseFloat(document.getElementById('log-rot-remain').value);
                 const replay = parseFloat(document.getElementById('log-rot-replay').value) || 0;
@@ -1155,21 +1160,21 @@
                 const stroke = document.getElementById('log-stroke').value;
                 const kasi = parseFloat(document.getElementById('set-kasi').value) || 250;
 
-                if (isNaN(totalRotInput) || isNaN(hold) || isNaN(remain)) { alert('通常回転数、持ち玉数は必須入力です。'); return; }
-                const lastTotalRot = this.rotHistory.length > 0 ? this.rotHistory[this.rotHistory.length - 1].totalRot : 0;
-                const rot = totalRotInput - lastTotalRot;
+                if (isNaN(jackpotRotInput) || isNaN(startRotInput) || isNaN(hold) || isNaN(remain)) { alert('通常回転数、持ち玉数は必須入力です。'); return; }
+                const rot = jackpotRotInput - startRotInput;
                 if (rot < 0) {
-                    if (!confirm('入力された総回転数が前回の記録より少なくなっています。よろしいですか？')) return;
+                    if (!confirm('入力された「初当り時回転数」が「打ち始め回転数」より少なくなっています。よろしいですか？')) return;
                 }
 
                 const usedBalls = hold - remain + replay + (invest / 1000) * kasi;
                 this.rotHistory.push({
                     ts: Date.now(),
-                    rot, totalRot: totalRotInput, usedBalls, stroke, invest, replay,
-                    inputs: { totalRot: totalRotInput, hold, remain, replay, invest, stroke }
+                    rot, jackpotRot: jackpotRotInput, startRot: startRotInput, usedBalls, stroke, invest, replay,
+                    inputs: { jackpotRot: jackpotRotInput, startRot: startRotInput, hold, remain, replay, invest, stroke }
                 });
 
                 document.getElementById('log-rot-val').value = "";
+                document.getElementById('log-rot-start').value = "";
                 document.getElementById('log-rot-hold').value = remain;
                 document.getElementById('log-rot-remain').value = "";
                 document.getElementById('log-rot-replay').value = "";
@@ -1186,8 +1191,9 @@
                 document.getElementById('edit-rot-index').value = index;
                 document.getElementById('edit-rot-no').innerText = index + 1;
 
-                const inputs = h.inputs || { totalRot: h.totalRot, hold: 0, remain: 0, replay: h.replay, invest: h.invest, stroke: h.stroke };
-                document.getElementById('edit-rot-val').value = inputs.totalRot;
+                const inputs = h.inputs || { jackpotRot: h.jackpotRot || h.totalRot, startRot: h.startRot || 0, hold: 0, remain: 0, replay: h.replay, invest: h.invest, stroke: h.stroke };
+                document.getElementById('edit-rot-val').value = inputs.jackpotRot || inputs.totalRot;
+                document.getElementById('edit-rot-start').value = inputs.startRot;
                 document.getElementById('edit-rot-hold').value = inputs.hold;
                 document.getElementById('edit-rot-remain').value = inputs.remain;
                 document.getElementById('edit-rot-replay').value = inputs.replay;
@@ -1209,7 +1215,8 @@
 
             saveEditRotLog() {
                 const index = parseInt(document.getElementById('edit-rot-index').value);
-                const totalRotInput = parseFloat(document.getElementById('edit-rot-val').value);
+                const jackpotRotInput = parseFloat(document.getElementById('edit-rot-val').value);
+                const startRotInput = parseFloat(document.getElementById('edit-rot-start').value);
                 const hold = parseFloat(document.getElementById('edit-rot-hold').value);
                 const remain = parseFloat(document.getElementById('edit-rot-remain').value);
                 const replay = parseFloat(document.getElementById('edit-rot-replay').value) || 0;
@@ -1217,20 +1224,17 @@
                 const stroke = document.getElementById('edit-stroke').value;
                 const kasi = parseFloat(document.getElementById('set-kasi').value) || 250;
 
-                if (isNaN(totalRotInput) || isNaN(hold) || isNaN(remain)) { alert('必須項目を入力してください。'); return; }
+                if (isNaN(jackpotRotInput) || isNaN(startRotInput) || isNaN(hold) || isNaN(remain)) { alert('必須項目を入力してください。'); return; }
 
                 const h = this.rotHistory[index];
-                h.totalRot = totalRotInput;
+                h.jackpotRot = jackpotRotInput;
+                h.startRot = startRotInput;
+                h.rot = jackpotRotInput - startRotInput;
                 h.stroke = stroke;
                 h.invest = invest;
                 h.replay = replay;
                 h.usedBalls = hold - remain + replay + (invest / 1000) * kasi;
-                h.inputs = { totalRot: totalRotInput, hold, remain, replay, invest, stroke };
-
-                for (let i = 0; i < this.rotHistory.length; i++) {
-                    const prevTotal = i === 0 ? 0 : this.rotHistory[i - 1].totalRot;
-                    this.rotHistory[i].rot = this.rotHistory[i].totalRot - prevTotal;
-                }
+                h.inputs = { jackpotRot: jackpotRotInput, startRot: startRotInput, hold, remain, replay, invest, stroke };
                 this.updateViews();
                 this.saveData();
                 this.closeEditRotLogModal();
@@ -1657,6 +1661,7 @@
                     memoDuring: document.getElementById('memo-during').value,
                     currentInputs: {
                         rotHold: document.getElementById('log-rot-hold').value,
+                        rotStart: document.getElementById('log-rot-start').value,
                         rotRemain: document.getElementById('log-rot-remain').value,
                         rotReplay: document.getElementById('log-rot-replay').value,
                         rotInvest: document.getElementById('log-rot-invest').value,
@@ -1684,6 +1689,7 @@
                     if (saved.currentInputs) {
                         const ci = saved.currentInputs;
                         if (ci.rotHold !== undefined) document.getElementById('log-rot-hold').value = ci.rotHold;
+                        if (ci.rotStart !== undefined) document.getElementById('log-rot-start').value = ci.rotStart;
                         if (ci.rotRemain !== undefined) document.getElementById('log-rot-remain').value = ci.rotRemain;
                         if (ci.rotReplay !== undefined) document.getElementById('log-rot-replay').value = ci.rotReplay;
                         if (ci.rotInvest !== undefined) document.getElementById('log-rot-invest').value = ci.rotInvest;
