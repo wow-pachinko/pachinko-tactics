@@ -518,16 +518,6 @@
         <!-- 回転数ログ -->
         <div id="log-rot" class="content-section active">
             <div class="section-header">■ 現在の回転数状況</div>
-            <div class="input-group"><label>打ち始め回転数(※)</label><input type="number" id="log-rot-start"
-                    onblur="app.checkRotLog()" oninput="app.saveData()"></div>
-            <div class="input-group"><label>現在の持ち玉数(※)</label><input type="number" id="log-rot-hold"
-                    onblur="app.checkRotLog()" oninput="app.saveData()"></div>
-            <div class="input-group"><label>初当り時持ち玉数(※)</label><input type="number" id="log-rot-remain"
-                    onblur="app.checkRotLog()" oninput="app.saveData()"></div>
-            <div class="input-group"><label>再プレイ玉数</label><input type="number" id="log-rot-replay"
-                    onblur="app.checkRotLog()" oninput="app.saveData()"></div>
-            <div class="input-group"><label>追加投資 (円)</label><input type="number" id="log-rot-invest"
-                    onblur="app.checkRotLog()" oninput="app.saveData()"></div>
             <div class="input-group">
                 <label>ストロークパターン</label>
                 <div class="custom-select-container" id="log-stroke-custom-container">
@@ -539,7 +529,17 @@
                     <input type="hidden" id="log-stroke" value="" onchange="app.saveData()">
                 </div>
             </div>
-            <div class="input-group"><label>初当り時回転数(※)</label><input type="number" id="log-rot-val"
+            <div class="input-group"><label>打ち始め回転数(※)</label><input type="number" id="log-rot-start"
+                    onblur="app.checkRotLog()" oninput="app.saveData()"></div>
+            <div class="input-group"><label>打ち始め持ち玉数(※)</label><input type="number" id="log-rot-hold"
+                    onblur="app.checkRotLog()" oninput="app.saveData()"></div>
+            <div class="input-group"><label>記録時回転数(※)</label><input type="number" id="log-rot-val"
+                    onblur="app.checkRotLog()" oninput="app.saveData()"></div>
+            <div class="input-group"><label>再プレイ玉数</label><input type="number" id="log-rot-replay"
+                    onblur="app.checkRotLog()" oninput="app.saveData()"></div>
+            <div class="input-group"><label>追加投資 (円)</label><input type="number" id="log-rot-invest"
+                    onblur="app.checkRotLog()" oninput="app.saveData()"></div>
+            <div class="input-group"><label>記録時持ち玉数(※)</label><input type="number" id="log-rot-remain"
                     onblur="app.checkRotLog()" oninput="app.saveData()"></div>
             <div id="log-rot-modify-record-container" style="display:none; margin-top: 15px;">
                 <button class="btn-primary" onclick="app.recordRotLog()">この修正内容で登録</button>
@@ -623,7 +623,6 @@
             <table class="data-table">
                 <tbody id="res-details-table"></tbody>
             </table>
-            <button class="btn-primary" onclick="app.openIntervalSaveModal()" style="margin-top:20px;">区間データを保存</button>
         </div>
 
         <!-- 区間分析 -->
@@ -633,6 +632,7 @@
                 <label style="font-size:0.8rem; font-weight:normal;"><input type="checkbox" id="history-delete-mode"
                         onchange="app.updateIntervalView()"> 削除モード</label>
             </div>
+            <div id="compare-warning" style="margin-top:10px; margin-bottom:10px; display:none;"></div>
 
             <div style="margin-top: 10px; margin-bottom: 15px;">
                 <div class="custom-select-container" id="compare-metric-custom-container">
@@ -662,6 +662,25 @@
                 style="background: white; padding: 10px; border-radius: 4px; border: 1px solid var(--border-color); margin-top: 20px; display: none;">
                 <canvas id="compareChart" style="width:100%; height:250px;"></canvas>
             </div>
+
+            <!-- ■ 区間一覧 -->
+            <div class="section-header" style="margin-top: 30px; display:flex; justify-content:space-between; align-items:center;">
+                <span>■ 区間一覧</span>
+            </div>
+            <div style="display: flex; gap: 5px; margin-bottom: 10px;">
+                <button id="btn-list-rot" class="btn-primary" style="flex:1; padding: 8px; font-size: 14px; background: #3498db;" onclick="app.setListTab('rot')">通常区間</button>
+                <button id="btn-list-rush" class="btn-primary" style="flex:1; padding: 8px; font-size: 14px; background: #7f8c8d;" onclick="app.setListTab('rush')">RUSH区間</button>
+            </div>
+            <div style="overflow-x:auto; max-height: 350px; border:1px solid #ccc; border-radius:4px; margin-bottom: 20px;">
+                <table class="data-table" style="margin-top:0; border: none;">
+                    <thead style="position:sticky; top:0; background:#f1f1f1; z-index: 10;">
+                        <tr id="list-table-header">
+                        </tr>
+                    </thead>
+                    <tbody id="list-table-body">
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 
@@ -683,6 +702,20 @@
             <div class="input-group">
                 <label>貸玉<br>(1000円あたりの玉数)</label>
                 <input type="number" id="set-kasi" value="250" onchange="app.calc()">
+            </div>
+
+            <div
+                style="display: flex; justify-content: space-between; align-items: center; margin-top: 25px; margin-bottom: 10px;">
+                <div style="font-weight: bold; color: var(--accent-secondary);">■ 自動区間記録</div>
+                <button class="reset-defaults-btn" onclick="app.resetAutoIntervalSettings()">デフォルトに戻す</button>
+            </div>
+            <div class="input-group">
+                <label>通常データ<br>※指定の通常回転数ごとに通常区間を自動保存（0で無効）</label>
+                <input type="number" id="set-auto-interval" value="0" onchange="app.saveData()">
+            </div>
+            <div class="input-group">
+                <label>RUSHデータ<br>※指定の獲得R数ごとにRUSH区間を自動保存（0で無効）</label>
+                <input type="number" id="set-auto-interval-rush" value="0" onchange="app.saveData()">
             </div>
 
             <div
@@ -733,18 +766,18 @@
 
             <div class="input-group">
                 <label>機種名</label>
-                <input type="text" id="reset-machine" placeholder="例: PA海物語極JAPAN Withナギナミ" style="font-size:16px;">
+                <input type="text" id="reset-machine" placeholder="例: PA海物語極JAPAN Withナギナミ" style="font-size:16px;" oninput="app.saveData()">
             </div>
 
             <div class="input-group">
                 <label>台番</label>
-                <input type="text" id="reset-daiban" placeholder="例: 123番台" style="font-size:16px;">
+                <input type="text" id="reset-daiban" placeholder="例: 123番台" style="font-size:16px;" oninput="app.saveData()">
             </div>
 
             <div class="input-group">
                 <label>本日の稼働メモ（台の挙動、ネカセなど）</label>
                 <textarea id="reset-memo" rows="4"
-                    style="width:100%; padding:10px; border:1px solid #ccc; border-radius:4px; font-size:14px; font-family:var(--font-main); box-sizing:border-box;"></textarea>
+                    style="width:100%; padding:10px; border:1px solid #ccc; border-radius:4px; font-size:14px; font-family:var(--font-main); box-sizing:border-box;" oninput="app.saveData()"></textarea>
             </div>
 
             <div style="display:flex; flex-direction:column; gap:10px; margin-top:20px;">
@@ -807,12 +840,6 @@
                 style="margin-top: 0; border-bottom: 2px solid var(--accent-secondary); padding-bottom: 10px; color: var(--accent-secondary);">
                 回転数履歴の修正 (No.<span id="edit-rot-no"></span>)</h3>
             <input type="hidden" id="edit-rot-index">
-            <div class="input-group"><label>打ち始め回転数(※)</label><input type="number" id="edit-rot-start"></div>
-            <div class="input-group"><label>初当り時回転数(※)</label><input type="number" id="edit-rot-val"></div>
-            <div class="input-group"><label>現在の持ち玉数(※)</label><input type="number" id="edit-rot-hold"></div>
-            <div class="input-group"><label>初当り時持ち玉数(※)</label><input type="number" id="edit-rot-remain"></div>
-            <div class="input-group"><label>再プレイ玉数</label><input type="number" id="edit-rot-replay"></div>
-            <div class="input-group"><label>追加投資 (円)</label><input type="number" id="edit-rot-invest"></div>
             <div class="input-group">
                 <label>ストロークパターン</label>
                 <div class="custom-select-container" id="edit-stroke-custom-container">
@@ -824,6 +851,12 @@
                     <input type="hidden" id="edit-stroke">
                 </div>
             </div>
+            <div class="input-group"><label>打ち始め回転数(※)</label><input type="number" id="edit-rot-start"></div>
+            <div class="input-group"><label>打ち始め持ち玉数(※)</label><input type="number" id="edit-rot-hold"></div>
+            <div class="input-group"><label>記録時回転数(※)</label><input type="number" id="edit-rot-val"></div>
+            <div class="input-group"><label>再プレイ玉数</label><input type="number" id="edit-rot-replay"></div>
+            <div class="input-group"><label>追加投資 (円)</label><input type="number" id="edit-rot-invest"></div>
+            <div class="input-group"><label>記録時持ち玉数(※)</label><input type="number" id="edit-rot-remain"></div>
             <button class="btn-primary" onclick="app.saveEditRotLog()" style="margin-top: 10px;">修正を保存</button>
         </div>
     </div>
@@ -837,6 +870,17 @@
                 style="margin-top: 0; color: var(--accent-secondary); border-bottom: 2px solid var(--accent-secondary); padding-bottom: 10px;">
                 区間データの保存</h3>
             <div class="input-group">
+                <label>保存する区間タイプ</label>
+                <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+                    <label style="flex:1; padding: 10px; border: 1px solid #ccc; border-radius: 4px; text-align: center; cursor: pointer; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 5px;">
+                        <input type="radio" name="save-interval-type" value="rot" checked> 通常区間
+                    </label>
+                    <label style="flex:1; padding: 10px; border: 1px solid #ccc; border-radius: 4px; text-align: center; cursor: pointer; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 5px;">
+                        <input type="radio" name="save-interval-type" value="rush"> RUSH区間
+                    </label>
+                </div>
+            </div>
+            <div class="input-group">
                 <label>この区間のメモ・コメント（空でもOK）</label>
                 <textarea id="interval-save-memo" rows="4"
                     style="width:100%; padding:10px; border:1px solid #ccc; border-radius:4px; font-size:14px; font-family:var(--font-main); box-sizing:border-box;"></textarea>
@@ -847,6 +891,22 @@
                     onclick="document.getElementById('interval-save-modal').style.display='none'"
                     style="background:#7f8c8d;">キャンセル</button>
             </div>
+        </div>
+    </div>
+
+    <!-- 区間データコメント編集モーダル -->
+    <div id="interval-edit-modal" class="modal-overlay">
+        <div class="modal-content" style="max-width: 400px;">
+            <span class="modal-close" onclick="app.closeEditIntervalModal()">&times;</span>
+            <h3 style="margin-top: 0; border-bottom: 2px solid var(--accent-secondary); padding-bottom: 10px; color: var(--accent-secondary);">
+                区間メモの修正</h3>
+            <input type="hidden" id="edit-interval-index">
+            <div class="input-group">
+                <label>メモ・コメント</label>
+                <textarea id="edit-interval-comment" rows="4"
+                    style="width:100%; padding:10px; border:1px solid #ccc; border-radius:4px; font-size:14px; font-family:var(--font-main); box-sizing:border-box;"></textarea>
+            </div>
+            <button class="btn-primary" onclick="app.saveEditIntervalComment()" style="margin-top: 10px;">修正を保存</button>
         </div>
     </div>
 
@@ -882,6 +942,7 @@
             confirmShown: false,
             isModifyingOut: false,
             confirmOutShown: false,
+            listTab: "rot",
 
             init() {
                 this.initCustomSelect();
@@ -1003,9 +1064,6 @@
             },
 
             resetAll() {
-                document.getElementById('reset-machine').value = "";
-                document.getElementById('reset-daiban').value = "";
-                document.getElementById('reset-memo').value = "";
                 document.getElementById('reset-modal').style.display = 'flex';
             },
 
@@ -1061,12 +1119,28 @@
                 const rotPerK = tUsed > 0 ? (tRot / tUsed) * kasi : 0;
                 const rOut = tRounds > 0 ? tGained / tRounds : 0;
                 const overRate = tRounds > 0 ? (tOver / tRounds) * 100 : 0;
-                const holdingRate = (tUsed > 0) ? (this.rotHistory.filter(h => (h.inputs && h.inputs.replay > 0) || (h.inputs && h.inputs.hold > 0)).reduce((sum, h) => sum + h.usedBalls, 0) / tUsed) * 100 : 0; // Simplified holding rate logic
+                let tInvest = 0;
+                this.rotHistory.forEach(h => { tInvest += (h.invest || 0); });
+                const totalInvestBalls = (tInvest / 1000) * kasi;
+                const holdUsed = Math.max(0, tUsed - totalInvestBalls);
+                const holdingRate = tUsed > 0 ? (holdUsed / tUsed) * 100 : 0;
 
                 masterDataText += "【最終結果】\n";
                 masterDataText += `総通常回転数: ${tRot} 回\n`;
+                ['A', 'B', 'C', 'D'].forEach(k => {
+                    const s = strokeData[k];
+                    if (s.rot > 0) {
+                        masterDataText += `　┗ ${this.strokeNames[k]}通常回転数: ${s.rot} 回\n`;
+                    }
+                });
                 masterDataText += `持ち玉比率: ${holdingRate.toFixed(1)}%\n`;
                 masterDataText += `総使用玉数: ${Math.floor(tUsed)} 玉\n`;
+                ['A', 'B', 'C', 'D'].forEach(k => {
+                    const s = strokeData[k];
+                    if (s.used > 0) {
+                        masterDataText += `　┗ ${this.strokeNames[k]}使用玉数: ${Math.floor(s.used)} 玉\n`;
+                    }
+                });
                 masterDataText += `総獲得玉数: ${Math.floor(tGained)} 玉\n`;
                 masterDataText += `総獲得R数：${tRounds}\n`;
                 masterDataText += `千円あたりの回転数: ${rotPerK.toFixed(1)} 回/k\n`;
@@ -1106,7 +1180,7 @@
                 const ids = [
                     'log-rot-start', 'log-rot-hold', 'log-rot-remain', 'log-rot-replay', 'log-rot-invest', 'log-rot-val',
                     'log-out-before', 'log-out-after', 'log-out-rounds', 'log-out-over',
-                    'memo-before', 'memo-during'
+                    'memo-before', 'memo-during', 'reset-machine', 'reset-daiban', 'reset-memo'
                 ];
                 ids.forEach(id => {
                     const el = document.getElementById(id);
@@ -1175,13 +1249,14 @@
 
                 document.getElementById('log-rot-val').value = "";
                 document.getElementById('log-rot-start').value = "";
-                document.getElementById('log-rot-hold').value = remain;
+                document.getElementById('log-rot-hold').value = "";
                 document.getElementById('log-rot-remain').value = "";
                 document.getElementById('log-rot-replay').value = "";
                 document.getElementById('log-rot-invest').value = "";
                 document.getElementById('log-out-before').value = remain;
 
                 this.updateViews();
+                this.checkAutoIntervalSave();
                 this.saveData();
             },
 
@@ -1236,6 +1311,7 @@
                 h.usedBalls = hold - remain + replay + (invest / 1000) * kasi;
                 h.inputs = { jackpotRot: jackpotRotInput, startRot: startRotInput, hold, remain, replay, invest, stroke };
                 this.updateViews();
+                this.checkAutoIntervalSave();
                 this.saveData();
                 this.closeEditRotLogModal();
             },
@@ -1292,6 +1368,7 @@
                 document.getElementById('log-rot-hold').value = after;
 
                 this.updateViews();
+                this.checkAutoIntervalSave();
                 this.saveData();
             },
 
@@ -1328,6 +1405,7 @@
                 h.over = over;
 
                 this.updateViews();
+                this.checkAutoIntervalSave();
                 this.saveData();
                 this.closeEditOutLogModal();
             },
@@ -1372,6 +1450,10 @@
                 const delMode = document.getElementById('log-out-delete-mode').checked;
                 tbody.innerHTML = '';
 
+                if (document.getElementById('out-log-count')) {
+                    document.getElementById('out-log-count').innerText = this.outHistory.length;
+                }
+
                 if (this.outHistory.length === 0) {
                     tbody.innerHTML = '<tr><td colspan="4" style="padding:15px; text-align:center;">履歴がありません</td></tr>';
                     return;
@@ -1394,21 +1476,24 @@
 
             calc() {
                 const kasi = parseFloat(document.getElementById('set-kasi').value) || 250;
-                let totalUsed = 0, totalRot = 0, holdUsed = 0;
+                let totalUsed = 0, totalRot = 0, totalInvest = 0;
                 const strokeData = { A: { used: 0, rot: 0 }, B: { used: 0, rot: 0 }, C: { used: 0, rot: 0 }, D: { used: 0, rot: 0 } };
 
                 this.rotHistory.forEach(h => {
                     totalUsed += h.usedBalls; totalRot += h.rot;
-                    if (h.isHold) holdUsed += h.usedBalls;
+                    totalInvest += (h.invest || 0);
                     if (strokeData[h.stroke]) { strokeData[h.stroke].used += h.usedBalls; strokeData[h.stroke].rot += h.rot; }
                 });
 
                 let totalGained = 0, totalRounds = 0, totalOver = 0;
-                this.outHistory.forEach(h => { totalGained += h.gained; totalRounds += h.rounds; totalOver += h.over; });
+                this.outHistory.forEach(h => { totalGained += h.gained; totalRounds += h.rounds; totalOver += (h.over || 0); });
 
                 const rpk = totalUsed > 0 ? (totalRot / totalUsed) * kasi : 0;
                 const rOut = totalRounds > 0 ? totalGained / totalRounds : 0;
                 const overRate = totalRounds > 0 ? (totalOver / totalRounds) * 100 : 0;
+
+                const totalInvestBalls = (totalInvest / 1000) * kasi;
+                const holdUsed = Math.max(0, totalUsed - totalInvestBalls);
                 const holdRate = totalUsed > 0 ? (holdUsed / totalUsed) * 100 : 0;
 
                 document.getElementById('res-rot-per-k').innerText = rpk.toFixed(1) + '回/k';
@@ -1421,13 +1506,25 @@
                     return `<div class="box-info">${this.strokeNames[k]}<br><span style="font-size:1.4rem;">${srpk.toFixed(1)}</span></div>`;
                 }).join('');
 
-                const details = [
-                    ["総通常回転数", totalRot + "回"],
-                    ["持ち玉比率", holdRate.toFixed(1) + "%"],
-                    ["総使用玉数", Math.floor(totalUsed) + "玉"],
-                    ["総獲得出玉", Math.floor(totalGained) + "玉"],
-                    ["総獲得R数", totalRounds + "R"]
-                ];
+                const details = [];
+                details.push(["総通常回転数", totalRot + "回"]);
+                ["A", "B", "C", "D"].forEach(k => {
+                    const s = strokeData[k];
+                    if (s.rot > 0) {
+                        details.push([`　┗ ${this.strokeNames[k]}通常回転数`, s.rot + "回"]);
+                    }
+                });
+                details.push(["持ち玉比率", holdRate.toFixed(1) + "%"]);
+                details.push(["総使用玉数", Math.floor(totalUsed) + "玉"]);
+                ["A", "B", "C", "D"].forEach(k => {
+                    const s = strokeData[k];
+                    if (s.used > 0) {
+                        details.push([`　┗ ${this.strokeNames[k]}使用玉数`, Math.floor(s.used) + "玉"]);
+                    }
+                });
+                details.push(["総獲得出玉", Math.floor(totalGained) + "玉"]);
+                details.push(["総獲得R数", totalRounds + "R"]);
+
                 document.getElementById('res-details-table').innerHTML = details.map(d => `<tr><th>${d[0]}</th><td>${d[1]}</td></tr>`).join('');
                 this.updateIntervalView();
             },
@@ -1439,6 +1536,8 @@
 
             executeSaveHistory() {
                 const memo = document.getElementById('interval-save-memo').value;
+                const typeEl = document.querySelector('input[name="save-interval-type"]:checked');
+                const type = typeEl ? typeEl.value : 'rot';
                 document.getElementById('interval-save-modal').style.display = 'none';
 
                 const kasi = parseFloat(document.getElementById('set-kasi').value) || 250;
@@ -1448,6 +1547,7 @@
                 this.outHistory.forEach(h => { totalGained += h.gained; totalRounds += h.rounds; totalOver += (h.over || 0); });
 
                 this.intervalHistory.push({
+                    type,
                     ts: Date.now(),
                     totalRot, totalUsed, totalRounds, totalGained, totalOver,
                     comment: memo
@@ -1455,6 +1555,57 @@
                 this.updateIntervalView();
                 this.saveData();
                 document.getElementById('save-complete-modal').style.display = 'flex';
+            },
+
+            checkAutoIntervalSave() {
+                const kasi = parseFloat(document.getElementById('set-kasi').value) || 250;
+
+                // 1. 通常自動記録判定
+                const autoInterval = parseFloat(document.getElementById('set-auto-interval').value) || 0;
+                if (autoInterval > 0) {
+                    let totalRot = 0, totalUsed = 0;
+                    this.rotHistory.forEach(h => { totalRot += h.rot; totalUsed += h.usedBalls; });
+
+                    const rotIntervals = this.intervalHistory.filter(h => h.type === "rot" || !h.type);
+                    const lastRotInterval = rotIntervals[rotIntervals.length - 1];
+                    const lastRot = lastRotInterval ? lastRotInterval.totalRot : 0;
+
+                    if (totalRot - lastRot >= autoInterval) {
+                        this.intervalHistory.push({
+                            type: "rot",
+                            ts: Date.now(),
+                            totalRot,
+                            totalUsed,
+                            comment: `自動通常記録 (${autoInterval}回転到達)`
+                        });
+                        this.updateIntervalView();
+                        this.saveData();
+                    }
+                }
+
+                // 2. RUSH自動記録判定
+                const autoIntervalRush = parseFloat(document.getElementById('set-auto-interval-rush').value) || 0;
+                if (autoIntervalRush > 0) {
+                    let totalGained = 0, totalRounds = 0, totalOver = 0;
+                    this.outHistory.forEach(h => { totalGained += h.gained; totalRounds += h.rounds; totalOver += (h.over || 0); });
+
+                    const rushIntervals = this.intervalHistory.filter(h => h.type === "rush");
+                    const lastRushInterval = rushIntervals[rushIntervals.length - 1];
+                    const lastRounds = lastRushInterval ? lastRushInterval.totalRounds : 0;
+
+                    if (totalRounds - lastRounds >= autoIntervalRush) {
+                        this.intervalHistory.push({
+                            type: "rush",
+                            ts: Date.now(),
+                            totalGained,
+                            totalRounds,
+                            totalOver,
+                            comment: `自動RUSH記録 (${autoIntervalRush}R到達)`
+                        });
+                        this.updateIntervalView();
+                        this.saveData();
+                    }
+                }
             },
 
             formatF(val, type) {
@@ -1496,13 +1647,43 @@
                 const delMode = document.getElementById('history-delete-mode').checked;
                 const kasi = parseFloat(document.getElementById('set-kasi').value) || 250;
 
+                // 新規追加した区間一覧の更新も呼ぶ
+                this.updateIntervalListView();
+
+                // 自動記録設定の無効化に対する警告の更新
+                const autoIntervalVal = parseFloat(document.getElementById('set-auto-interval').value) || 0;
+                const autoIntervalRushVal = parseFloat(document.getElementById('set-auto-interval-rush').value) || 0;
+                const warningEl = document.getElementById('compare-warning');
+                if (warningEl) {
+                    if (autoIntervalVal <= 0 && autoIntervalRushVal <= 0) {
+                        warningEl.innerHTML = `<div style="background:#fbebeb; border:1px solid #e74c3c; color:#c0392b; padding:10px; border-radius:4px; font-size:14px; font-weight:bold; line-height: 1.4; text-align: left;">⚠️ 自動区間記録が両方無効になっています。<br>詳細設定から自動記録したい数値を入力してください。</div>`;
+                        warningEl.style.display = 'block';
+                    } else if (autoIntervalVal <= 0) {
+                        warningEl.innerHTML = `<div style="background:#fff3cd; border:1px solid #ffc107; color:#856404; padding:10px; border-radius:4px; font-size:14px; font-weight:bold; line-height: 1.4; text-align: left;">⚠️ 通常データが現在の設定（0）のままだと区間記録されません。<br>詳細設定から数値を入力してください。</div>`;
+                        warningEl.style.display = 'block';
+                    } else if (autoIntervalRushVal <= 0) {
+                        warningEl.innerHTML = `<div style="background:#fff3cd; border:1px solid #ffc107; color:#856404; padding:10px; border-radius:4px; font-size:14px; font-weight:bold; line-height: 1.4; text-align: left;">⚠️ RUSHデータが現在の設定（0）のままだと区間記録されません。<br>詳細設定から数値を入力してください。</div>`;
+                        warningEl.style.display = 'block';
+                    } else {
+                        warningEl.style.display = 'none';
+                    }
+                }
+
+                // 選択された指標に応じて描画対象の履歴をフィルタリング
+                const targetHistory = this.intervalHistory.filter(h => {
+                    if (metricId === 'comment') return true;
+                    if (metricId === 'rotPerK') return h.type === 'rot' || !h.type;
+                    return h.type === 'rush';
+                });
+
                 if (metric.type === 'text') {
                     if (theadTr) theadTr.innerHTML = '<th style="width: 30%; text-align: center;">時刻</th><th style="width: 70%; text-align: center;">コメント</th>';
                     let html = '';
-                    this.intervalHistory.forEach((h, i) => {
+                    targetHistory.forEach((h, i) => {
+                        const origIndex = this.intervalHistory.indexOf(h);
                         const timeStr = new Date(h.ts).toLocaleString('ja-JP', { hour: '2-digit', minute: '2-digit' });
-                        const actionCol = delMode ? `<button style="background:var(--plus-red); color:white; border:none; border-radius:4px; padding:2px 8px; cursor:pointer; float:right;" onclick="app.deleteHistory(${i})">×</button>` : '';
-                        html += `<tr><td style="text-align:center;">${timeStr}</td><td style="text-align:left;">${h.comment || '-'}${actionCol}</td></tr>`;
+                        const actionCol = delMode ? `<button style="background:var(--plus-red); color:white; border:none; border-radius:4px; padding:2px 8px; cursor:pointer; float:right;" onclick="app.deleteHistory(${origIndex})">×</button>` : '';
+                        html += `<tr><td style="text-align:center; color:#1976d2; cursor:pointer; font-weight:bold; text-decoration:underline;" onclick="app.openEditIntervalModal(${origIndex})">${timeStr}</td><td style="text-align:left;">${h.comment || '-'}${actionCol}</td></tr>`;
                     });
                     tbody.innerHTML = html;
                     if (this.chartInstance) { this.chartInstance.destroy(); this.chartInstance = null; }
@@ -1513,18 +1694,18 @@
                 if (theadTr) theadTr.innerHTML = `<th style="width: 30%; text-align: center;">時刻</th><th style="width: 35%; text-align: center;">数値</th><th style="width: 35%; text-align: center;">${delMode ? '削除' : '累計比較'}</th>`;
                 document.getElementById('compare-chart-container').style.display = 'block';
 
-                if (this.intervalHistory.length === 0) {
+                if (targetHistory.length === 0) {
                     tbody.innerHTML = '<tr><td colspan="3" style="padding:15px; text-align:center;">区間データがありません</td></tr>';
                     if (this.chartInstance) { this.chartInstance.destroy(); this.chartInstance = null; }
                     return;
                 }
 
-                const lastH = this.intervalHistory[this.intervalHistory.length - 1];
-                const totalRot = lastH.totalRot;
-                const totalUsed = lastH.totalUsed;
-                const totalRounds = lastH.totalRounds;
-                const totalGained = lastH.totalGained;
-                const totalOver = lastH.totalOver;
+                const lastH = targetHistory[targetHistory.length - 1];
+                const totalRot = lastH.totalRot || 0;
+                const totalUsed = lastH.totalUsed || 0;
+                const totalRounds = lastH.totalRounds || 0;
+                const totalGained = lastH.totalGained || 0;
+                const totalOver = lastH.totalOver || 0;
 
                 const cumulativeMap = {
                     rotPerK: totalUsed > 0 ? (totalRot / totalUsed) * kasi : 0,
@@ -1539,13 +1720,13 @@
                 const dataPoints = [];
                 const tableRows = [];
 
-                this.intervalHistory.forEach((h, i) => {
-                    const prev = i === 0 ? { totalRot: 0, totalUsed: 0, totalRounds: 0, totalGained: 0, totalOver: 0 } : this.intervalHistory[i - 1];
-                    const diffRot = h.totalRot - prev.totalRot;
-                    const diffUsed = h.totalUsed - prev.totalUsed;
-                    const diffRounds = h.totalRounds - prev.totalRounds;
-                    const diffGained = h.totalGained - prev.totalGained;
-                    const diffOver = h.totalOver - prev.totalOver;
+                targetHistory.forEach((h, i) => {
+                    const prev = i === 0 ? { totalRot: 0, totalUsed: 0, totalRounds: 0, totalGained: 0, totalOver: 0 } : targetHistory[i - 1];
+                    const diffRot = (h.totalRot || 0) - (prev.totalRot || 0);
+                    const diffUsed = (h.totalUsed || 0) - (prev.totalUsed || 0);
+                    const diffRounds = (h.totalRounds || 0) - (prev.totalRounds || 0);
+                    const diffGained = (h.totalGained || 0) - (prev.totalGained || 0);
+                    const diffOver = (h.totalOver || 0) - (prev.totalOver || 0);
 
                     const iMetrics = {
                         rotPerK: diffUsed > 0 ? (diffRot / diffUsed) * kasi : 0,
@@ -1555,12 +1736,13 @@
                     };
                     const val = iMetrics[metricId];
                     const timeStr = new Date(h.ts).toLocaleTimeString('ja-JP', { hour: '2-digit', minute: '2-digit' });
+                    const origIndex = this.intervalHistory.indexOf(h);
 
                     tableRows.push(`<tr>
-                        <td style="text-align:center;">${timeStr}</td>
+                        <td style="text-align:center; color:#1976d2; cursor:pointer; font-weight:bold; text-decoration:underline;" onclick="app.openEditIntervalModal(${origIndex})">${timeStr}</td>
                         <td style="text-align:center; font-family:var(--font-eng); font-weight:bold;">${this.formatF(val, metric.type)}</td>
                         <td style="text-align:center; font-family:var(--font-eng);">
-                            ${delMode ? `<button style="background:var(--plus-red); color:white; border:none; border-radius:4px; padding:2px 8px; cursor:pointer;" onclick="app.deleteHistory(${i})">削除</button>` : this.getCompareStr(val, cumulativeVal, metric.type, metric.lowerIsBetter)}
+                            ${delMode ? `<button style="background:var(--plus-red); color:white; border:none; border-radius:4px; padding:2px 8px; cursor:pointer;" onclick="app.deleteHistory(${origIndex})">削除</button>` : this.getCompareStr(val, cumulativeVal, metric.type, metric.lowerIsBetter)}
                         </td>
                     </tr>`);
 
@@ -1624,6 +1806,141 @@
                 });
             },
 
+            setListTab(tab) {
+                this.listTab = tab;
+                const btnRot = document.getElementById('btn-list-rot');
+                const btnRush = document.getElementById('btn-list-rush');
+                const tableHeader = document.getElementById('list-table-header');
+                if (btnRot && btnRush) {
+                    if (tab === 'rot') {
+                        btnRot.style.background = '#3498db'; // 水色
+                        btnRush.style.background = '#7f8c8d'; // グレー
+                        if (tableHeader) {
+                            tableHeader.style.background = '#e3f2fd'; // 薄水色
+                            tableHeader.style.color = '#1976d2'; // 青文字
+                        }
+                    } else {
+                        btnRot.style.background = '#7f8c8d'; // グレー
+                        btnRush.style.background = '#e74c3c'; // 赤色
+                        if (tableHeader) {
+                            tableHeader.style.background = '#fbebeb'; // 薄赤色
+                            tableHeader.style.color = '#c0392b'; // 赤文字
+                        }
+                    }
+                }
+                this.updateIntervalListView();
+            },
+
+            updateIntervalListView() {
+                const header = document.getElementById('list-table-header');
+                const tbody = document.getElementById('list-table-body');
+                if (!header || !tbody) return;
+
+                const kasi = parseFloat(document.getElementById('set-kasi').value) || 250;
+
+                if (this.listTab === 'rot') {
+                    header.style.background = '#e3f2fd'; // 薄水色
+                    header.style.color = '#1976d2'; // 青文字
+                    header.innerHTML = `
+                        <th style="width: 25%; text-align: center;">時刻</th>
+                        <th style="width: 25%; text-align: center;">使用玉数</th>
+                        <th style="width: 25%; text-align: center;">通常回転</th>
+                        <th style="width: 25%; text-align: center;">回転率</th>
+                    `;
+
+                    const rotIntervals = this.intervalHistory.filter(h => h.type === "rot" || !h.type);
+                    if (rotIntervals.length === 0) {
+                        tbody.innerHTML = '<tr><td colspan="4" style="padding:15px; text-align:center;">通常区間データがありません</td></tr>';
+                        return;
+                    }
+
+                    let html = '';
+                    rotIntervals.forEach((h, i) => {
+                        const prev = i === 0 ? { totalRot: 0, totalUsed: 0 } : rotIntervals[i - 1];
+                        const diffRot = h.totalRot - (prev.totalRot || 0);
+                        const diffUsed = h.totalUsed - (prev.totalUsed || 0);
+                        const rpk = diffUsed > 0 ? (diffRot / diffUsed) * kasi : 0;
+                        const timeStr = new Date(h.ts).toLocaleTimeString('ja-JP', { hour: '2-digit', minute: '2-digit' });
+
+                        html += `<tr>
+                            <td style="text-align:center;">${timeStr}</td>
+                            <td style="text-align:center; font-family:var(--font-eng); font-weight:bold;">${Math.floor(diffUsed)}玉</td>
+                            <td style="text-align:center; font-family:var(--font-eng); font-weight:bold;">${diffRot}回</td>
+                            <td style="text-align:center; font-family:var(--font-eng); font-weight:bold;">${rpk.toFixed(1)}回/k</td>
+                        </tr>`;
+                    });
+                    tbody.innerHTML = html;
+
+                } else {
+                    header.style.background = '#fbebeb'; // 薄赤色
+                    header.style.color = '#c0392b'; // 赤文字
+                    header.innerHTML = `
+                        <th style="width: 20%; text-align: center;">時刻</th>
+                        <th style="width: 20%; text-align: center;">獲得出玉</th>
+                        <th style="width: 20%; text-align: center;">獲得R数</th>
+                        <th style="width: 20%; text-align: center;">1R出玉</th>
+                        <th style="width: 20%; text-align: center;">オーバー率</th>
+                    `;
+
+                    const rushIntervals = this.intervalHistory.filter(h => h.type === "rush");
+                    if (rushIntervals.length === 0) {
+                        tbody.innerHTML = '<tr><td colspan="5" style="padding:15px; text-align:center;">RUSH区間データがありません</td></tr>';
+                        return;
+                    }
+
+                    let html = '';
+                    rushIntervals.forEach((h, i) => {
+                        const prev = i === 0 ? { totalGained: 0, totalRounds: 0, totalOver: 0 } : rushIntervals[i - 1];
+                        const diffGained = h.totalGained - (prev.totalGained || 0);
+                        const diffRounds = h.totalRounds - (prev.totalRounds || 0);
+                        const diffOver = h.totalOver - (prev.totalOver || 0);
+                        const rOut = diffRounds > 0 ? diffGained / diffRounds : 0;
+                        const overPct = diffRounds > 0 ? (diffOver / diffRounds) * 100 : 0;
+                        const timeStr = new Date(h.ts).toLocaleTimeString('ja-JP', { hour: '2-digit', minute: '2-digit' });
+
+                        html += `<tr>
+                            <td style="text-align:center;">${timeStr}</td>
+                            <td style="text-align:center; font-family:var(--font-eng); font-weight:bold;">${Math.floor(diffGained)}玉</td>
+                            <td style="text-align:center; font-family:var(--font-eng); font-weight:bold;">${diffRounds}R</td>
+                            <td style="text-align:center; font-family:var(--font-eng); font-weight:bold;">${rOut.toFixed(1)}玉</td>
+                            <td style="text-align:center; font-family:var(--font-eng); font-weight:bold;">${overPct.toFixed(1)}%</td>
+                        </tr>`;
+                    });
+                    tbody.innerHTML = html;
+                }
+            },
+
+            openEditIntervalModal(index) {
+                const h = this.intervalHistory[index];
+                if (!h) return;
+                document.getElementById('edit-interval-index').value = index;
+                document.getElementById('edit-interval-comment').value = h.comment || "";
+                document.getElementById('interval-edit-modal').style.display = 'flex';
+            },
+
+            closeEditIntervalModal() {
+                document.getElementById('interval-edit-modal').style.display = 'none';
+            },
+
+            saveEditIntervalComment() {
+                const index = parseInt(document.getElementById('edit-interval-index').value);
+                const comment = document.getElementById('edit-interval-comment').value;
+                if (this.intervalHistory[index]) {
+                    this.intervalHistory[index].comment = comment;
+                    this.updateIntervalView();
+                    this.saveData();
+                }
+                this.closeEditIntervalModal();
+            },
+
+            resetAutoIntervalSettings() {
+                if (!confirm("自動区間記録設定をデフォルトに戻しますか？")) return;
+                document.getElementById('set-auto-interval').value = 500;
+                document.getElementById('set-auto-interval-rush').value = 50;
+                this.saveData();
+                this.updateIntervalView();
+            },
+
             updateChart() {
                 const kasi = parseFloat(document.getElementById('set-kasi').value) || 250;
                 const labels = [], data = [];
@@ -1656,9 +1973,16 @@
                     outHistory: this.outHistory,
                     intervalHistory: this.intervalHistory,
                     strokeNames: this.strokeNames,
-                    settings: { kasi: document.getElementById('set-kasi').value },
+                    settings: {
+                        kasi: document.getElementById('set-kasi').value,
+                        autoInterval: document.getElementById('set-auto-interval').value,
+                        autoIntervalRush: document.getElementById('set-auto-interval-rush').value
+                    },
                     memoBefore: document.getElementById('memo-before').value,
                     memoDuring: document.getElementById('memo-during').value,
+                    resetMachine: document.getElementById('reset-machine') ? document.getElementById('reset-machine').value : "",
+                    resetDaiban: document.getElementById('reset-daiban') ? document.getElementById('reset-daiban').value : "",
+                    resetMemo: document.getElementById('reset-memo') ? document.getElementById('reset-memo').value : "",
                     currentInputs: {
                         rotHold: document.getElementById('log-rot-hold').value,
                         rotStart: document.getElementById('log-rot-start').value,
@@ -1683,9 +2007,16 @@
                     this.outHistory = saved.outHistory || [];
                     this.intervalHistory = saved.intervalHistory || [];
                     this.strokeNames = saved.strokeNames || this.strokeNames;
-                    if (saved.settings) document.getElementById('set-kasi').value = saved.settings.kasi;
+                    if (saved.settings) {
+                        document.getElementById('set-kasi').value = saved.settings.kasi;
+                        document.getElementById('set-auto-interval').value = saved.settings.autoInterval || "0";
+                        document.getElementById('set-auto-interval-rush').value = saved.settings.autoIntervalRush || "0";
+                    }
                     document.getElementById('memo-before').value = saved.memoBefore || "";
                     document.getElementById('memo-during').value = saved.memoDuring || "";
+                    if (document.getElementById('reset-machine')) document.getElementById('reset-machine').value = saved.resetMachine || "";
+                    if (document.getElementById('reset-daiban')) document.getElementById('reset-daiban').value = saved.resetDaiban || "";
+                    if (document.getElementById('reset-memo')) document.getElementById('reset-memo').value = saved.resetMemo || "";
                     if (saved.currentInputs) {
                         const ci = saved.currentInputs;
                         if (ci.rotHold !== undefined) document.getElementById('log-rot-hold').value = ci.rotHold;
