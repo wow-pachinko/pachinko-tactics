@@ -6,7 +6,7 @@
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-7F66S1YKNZ"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
+    function gtag() { dataLayer.push(arguments); }
     gtag('js', new Date());
 
     gtag('config', 'G-7F66S1YKNZ');
@@ -666,8 +666,7 @@
         </button>
       </li>
       <li>
-        <span class="coming-soon-badge">Coming soon</span>
-        <button class="tab-btn disabled" data-target="tab-article">
+        <button class="tab-btn" data-target="tab-article">
           <i class="fa-solid fa-pen-nib"></i> 記事
         </button>
       </li>
@@ -701,11 +700,12 @@
       <div class="panel">
         <h2 class="section-title"><i class="fa-solid fa-bell"></i> 新着情報</h2>
         <div class="vr-list">
+          <!-- 新着情報　追加時はこの下に追記していく  -->
           <a href="https://pachinko-tactics.com/tools/pachinko" class="list-item">
             <div class="item-content">
               <span class="badge" style="background:var(--accent-color); color:#fff;">攻略ツール公開</span>
-              <div class="item-title">「パチンコ実戦ログツール」ベータ版を公開しました。</div>
-              <div class="item-meta">2026/05/09</div>
+              <div class="item-title">「パチンコ実戦ログツール」ver1.0を公開しました。</div>
+              <div class="item-meta">2026/05/28</div>
             </div>
           </a>
           <a href="https://pachinko-tactics.com/tools/odatebuta2" class="list-item">
@@ -800,12 +800,13 @@
       <a href="https://pachinko-tactics.com/tools/pachinko" class="content-card" data-machine="pachinko">
         <div class="card-header">パチンコ実戦ログツール</div>
         <div class="card-body">
-          <div class="card-thumb-container" style="background:#ccc; color:#666; font-weight:bold; font-size:1.5rem; display: flex; align-items: center; justify-content: center;">
-            NO IMAGE
+          <div class="card-thumb-container">
+            <img src="pachinko.tool.webp" alt="パチンコ実戦ログツール">
           </div>
-          <div class="card-desc">通常回転数や出玉データを入力するだけで、リアルタイムで千円あたりの回転率や1R出玉、オーバー入賞率を算出！ 複数の打ち方の比較や、上ブレ・下ブレの判定に役立つ『区間分析』も完備。メモ機能やデータ保存機能も充実しており、あらゆる機種の攻略にご活用いただけます。
+          <div class="card-desc">通常回転数や出玉データを入力するだけで、リアルタイムで千円あたりの回転率や1R出玉、オーバー入賞率を算出！
+            複数の打ち方の比較や、上ブレ・下ブレの判定に役立つ『区間分析』も完備。メモ機能やデータ保存機能も充実しており、あらゆる機種の攻略にご活用いただけます。
           </div>
-          <div class="card-meta"><span class="badge">稼働中</span> Ver β</div>
+          <div class="card-meta"><span class="badge">稼働中</span> Ver 1.0</div>
         </div>
       </a>
       <a href="https://pachinko-tactics.com/tools/odatebuta2" class="content-card" data-machine="odatebuta2">
@@ -896,51 +897,21 @@
 
     <!-- 4. ARTICLE SECTION -->
     <section id="tab-article" class="tab-pane">
-      <a href="#" class="content-card" data-genre="mind">
-        <div class="card-header">【コラム】パチンコは「運」ではなく「確率の収束」である</div>
-        <div class="card-body">
-          <div class="card-thumb-container">NO IMAGE</div>
-          <div class="card-desc">感情を排除し、マシーンとして台に向き合うためのメンタルコントロール術。</div>
-          <div class="card-meta"><span class="badge badge-mind">マインド</span> <i class="fa-regular fa-clock"></i>
-            2026/04/18</div>
+      <!-- ジャンル：稼働ログ -->
+      <div class="panel content-card" data-genre="log">
+        <h2 class="section-title"><i class="fa-solid fa-pen-nib"></i> 稼働ログ</h2>
+        <div class="vr-list">
+          <!-- ここに記事を追加していく -->
+          <a href="https://x.com/wow_pachi_122/status/2054011534515548179?s=20" class="list-item" target="_blank"
+            rel="noopener">
+            <div class="item-content">
+              <div class="item-title">5/11 ハネモノファミスタetc</div>
+              <div class="item-meta">2026/05/28</div>
+            </div>
+          </a>
+          <!-- ここに記事を追加していく -->
         </div>
-      </a>
-      <a href="#" class="content-card" data-genre="log">
-        <div class="card-header">開発記#1：SPAで攻略ツールを作る理由</div>
-        <div class="card-body">
-          <div class="card-thumb-container">NO IMAGE</div>
-          <div class="card-desc">動作の軽さとUIの使い心地を追求した裏話。</div>
-          <div class="card-meta"><span class="badge badge-log">稼働録</span> <i class="fa-regular fa-clock"></i> 2026/04/15
-          </div>
-        </div>
-      </a>
-      <a href="#" class="content-card" data-genre="recommend">
-        <div class="card-header">釘読み練習法：写真で見る「開け」「閉め」</div>
-        <div class="card-body">
-          <div class="card-thumb-container">NO IMAGE</div>
-          <div class="card-desc">実際のホールデータをもとにした視覚トレーニング。</div>
-          <div class="card-meta"><span class="badge badge-recommend">おすすめ</span> <i class="fa-regular fa-clock"></i>
-            2026/04/12</div>
-        </div>
-      </a>
-      <a href="#" class="content-card" data-genre="recommend">
-        <div class="card-header">データ収集自動化スクリプトの構想</div>
-        <div class="card-body">
-          <div class="card-thumb-container">NO IMAGE</div>
-          <div class="card-desc">サイトセブン等からのスクレイピングと倫理的問題についての考察。</div>
-          <div class="card-meta"><span class="badge badge-recommend">おすすめ</span> <i class="fa-regular fa-clock"></i>
-            2026/04/05</div>
-        </div>
-      </a>
-      <a href="#" class="content-card" data-genre="mind">
-        <div class="card-header">店長心理を読む：なぜその台を開けたのか</div>
-        <div class="card-body">
-          <div class="card-thumb-container">NO IMAGE</div>
-          <div class="card-desc">ホールの営業方針から逆算する台選び。</div>
-          <div class="card-meta"><span class="badge badge-mind">マインド</span> <i class="fa-regular fa-clock"></i>
-            2026/03/28</div>
-        </div>
-      </a>
+      </div>
     </section>
   </main>
 
@@ -1046,10 +1017,10 @@
         });
       });
 
-      // --- News "See More" Logic ---
-      const newsList = document.querySelector('#tab-top .vr-list');
-      if (newsList) {
-        const items = newsList.querySelectorAll('.list-item');
+      // --- List "See More" Logic (Common for News & Articles) ---
+      const allVrLists = document.querySelectorAll('.vr-list');
+      allVrLists.forEach(list => {
+        const items = list.querySelectorAll('.list-item');
         if (items.length > 5) {
           for (let i = 5; i < items.length; i++) {
             items[i].classList.add('hidden-item');
@@ -1062,14 +1033,14 @@
               <i class="fa-solid fa-chevron-down"></i>
             </button>
           `;
-          newsList.after(moreBtnContainer);
+          list.after(moreBtnContainer);
 
           moreBtnContainer.querySelector('.more-btn').addEventListener('click', () => {
             items.forEach(item => item.classList.remove('hidden-item'));
             moreBtnContainer.remove();
           });
         }
-      }
+      });
 
     });
   </script>
