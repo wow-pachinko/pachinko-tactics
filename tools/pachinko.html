@@ -492,6 +492,17 @@
             background: #f39c12;
             opacity: 1;
         }
+
+        .input-group.highlight-border {
+            border-bottom: 3px double var(--accent-color);
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+        }
+
+        .input-error {
+            border-color: #e74c3c !important;
+            background-color: #fcebeb !important;
+        }
     </style>
 </head>
 
@@ -518,6 +529,7 @@
         <!-- 回転数ログ -->
         <div id="log-rot" class="content-section active">
             <div class="section-header">■ 現在の回転数状況</div>
+            <div id="rot-error-warning" style="margin-top:10px; margin-bottom:10px; display:none;"></div>
             <div class="input-group">
                 <label>ストロークパターン</label>
                 <div class="custom-select-container" id="log-stroke-custom-container">
@@ -531,7 +543,7 @@
             </div>
             <div class="input-group"><label>打ち始め回転数(※)</label><input type="number" id="log-rot-start"
                     onblur="app.checkRotLog()" oninput="app.saveData()"></div>
-            <div class="input-group"><label>打ち始め持ち玉数(※)</label><input type="number" id="log-rot-hold"
+            <div class="input-group highlight-border"><label>打ち始め持ち玉数(※)</label><input type="number" id="log-rot-hold"
                     onblur="app.checkRotLog()" oninput="app.saveData()"></div>
             <div class="input-group"><label>記録時回転数(※)</label><input type="number" id="log-rot-val"
                     onblur="app.checkRotLog()" oninput="app.saveData()"></div>
@@ -629,8 +641,6 @@
         <div id="log-compare" class="content-section">
             <div class="section-header" style="display:flex; justify-content:space-between;">
                 <span>■ 区間比較</span>
-                <label style="font-size:0.8rem; font-weight:normal;"><input type="checkbox" id="history-delete-mode"
-                        onchange="app.updateIntervalView()"> 削除モード</label>
             </div>
             <div id="compare-warning" style="margin-top:10px; margin-bottom:10px; display:none;"></div>
 
@@ -666,12 +676,14 @@
             <!-- ■ 区間一覧 -->
             <div class="section-header" style="margin-top: 30px; display:flex; justify-content:space-between; align-items:center;">
                 <span>■ 区間一覧</span>
+                <label style="font-size:0.8rem; font-weight:normal;"><input type="checkbox" id="history-delete-mode"
+                        onchange="app.updateIntervalListView()"> 削除モード</label>
             </div>
             <div style="display: flex; gap: 5px; margin-bottom: 10px;">
                 <button id="btn-list-rot" class="btn-primary" style="flex:1; padding: 8px; font-size: 14px; background: #3498db;" onclick="app.setListTab('rot')">通常区間</button>
                 <button id="btn-list-rush" class="btn-primary" style="flex:1; padding: 8px; font-size: 14px; background: #7f8c8d;" onclick="app.setListTab('rush')">RUSH区間</button>
             </div>
-            <div style="overflow-x:auto; max-height: 350px; border:1px solid #ccc; border-radius:4px; margin-bottom: 20px;">
+            <div style="overflow-x:auto; max-height: 300px; overflow-y:auto; border:1px solid #ccc; border-radius:4px; margin-bottom: 20px;">
                 <table class="data-table" style="margin-top:0; border: none;">
                     <thead style="position:sticky; top:0; background:#f1f1f1; z-index: 10;">
                         <tr id="list-table-header">
@@ -945,13 +957,14 @@
             listTab: "rot",
 
             init() {
+                this.loadData();
                 this.initCustomSelect();
                 this.initTargetSettings();
-                this.loadData();
                 this.updateViews();
             },
 
             initCustomSelect() {
+                const currentStroke = document.getElementById('log-stroke') ? document.getElementById('log-stroke').value : "";
                 const strokeOptions = [
                     { value: "", label: "未選択" },
                     { value: "A", label: this.strokeNames["A"] },
@@ -959,7 +972,7 @@
                     { value: "C", label: this.strokeNames["C"] },
                     { value: "D", label: this.strokeNames["D"] }
                 ];
-                this.setupCustomSelect('log-stroke', strokeOptions, 'log-stroke', () => this.checkRotLog(), "");
+                this.setupCustomSelect('log-stroke', strokeOptions, 'log-stroke', () => this.checkRotLog(), currentStroke);
 
                 const compareOptions = this.metricsConfig.map(m => ({ value: m.id, label: m.name }));
                 this.setupCustomSelect('compare-metric', compareOptions, 'compare-metric-select', () => this.updateIntervalView(), 'rotPerK');
@@ -1192,12 +1205,30 @@
             },
 
             checkRotLog() {
-                const start = document.getElementById('log-rot-start').value;
-                const rot = document.getElementById('log-rot-val').value;
+                const startVal = document.getElementById('log-rot-start').value;
+                const rotVal = document.getElementById('log-rot-val').value;
                 const hold = document.getElementById('log-rot-hold').value;
                 const remain = document.getElementById('log-rot-remain').value;
                 const stroke = document.getElementById('log-stroke').value;
-                const isComplete = start !== "" && rot !== "" && hold !== "" && remain !== "";
+
+                const rotInputEl = document.getElementById('log-rot-val');
+                const errorEl = document.getElementById('rot-error-warning');
+                if (errorEl) {
+                    if (startVal !== "" && rotVal !== "" && parseFloat(rotVal) < parseFloat(startVal)) {
+                        errorEl.innerHTML = `<div style="background:#fbebeb; border:1px solid #e74c3c; color:#c0392b; padding:10px; border-radius:4px; font-size:14px; font-weight:bold; line-height: 1.4; text-align: left;">⚠️ 記録時回転数が打ち始め回転数より低く入力されています。</div>`;
+                        errorEl.style.display = 'block';
+                        if (rotInputEl) rotInputEl.classList.add('input-error');
+                        this.confirmShown = false;
+                        document.getElementById('log-confirm-modal').style.display = 'none';
+                        this.saveData();
+                        return;
+                    } else {
+                        errorEl.style.display = 'none';
+                        if (rotInputEl) rotInputEl.classList.remove('input-error');
+                    }
+                }
+
+                const isComplete = startVal !== "" && rotVal !== "" && hold !== "" && remain !== "";
 
                 if (isComplete && !this.isModifying && !this.confirmShown) {
                     this.confirmShown = true;
@@ -1235,10 +1266,11 @@
                 const kasi = parseFloat(document.getElementById('set-kasi').value) || 250;
 
                 if (isNaN(jackpotRotInput) || isNaN(startRotInput) || isNaN(hold) || isNaN(remain)) { alert('通常回転数、持ち玉数は必須入力です。'); return; }
-                const rot = jackpotRotInput - startRotInput;
-                if (rot < 0) {
-                    if (!confirm('入力された「初当り時回転数」が「打ち始め回転数」より少なくなっています。よろしいですか？')) return;
+                if (jackpotRotInput < startRotInput) {
+                    alert('記録時回転数が打ち始め回転数より低いため登録できません。');
+                    return;
                 }
+                const rot = jackpotRotInput - startRotInput;
 
                 const usedBalls = hold - remain + replay + (invest / 1000) * kasi;
                 this.rotHistory.push({
@@ -1249,7 +1281,7 @@
 
                 document.getElementById('log-rot-val').value = "";
                 document.getElementById('log-rot-start').value = "";
-                document.getElementById('log-rot-hold').value = "";
+                document.getElementById('log-rot-hold').value = remain;
                 document.getElementById('log-rot-remain').value = "";
                 document.getElementById('log-rot-replay').value = "";
                 document.getElementById('log-rot-invest').value = "";
@@ -1300,6 +1332,10 @@
                 const kasi = parseFloat(document.getElementById('set-kasi').value) || 250;
 
                 if (isNaN(jackpotRotInput) || isNaN(startRotInput) || isNaN(hold) || isNaN(remain)) { alert('必須項目を入力してください。'); return; }
+                if (jackpotRotInput < startRotInput) {
+                    alert('記録時回転数が打ち始め回転数より低いため保存できません。');
+                    return;
+                }
 
                 const h = this.rotHistory[index];
                 h.jackpotRot = jackpotRotInput;
@@ -1317,7 +1353,12 @@
             },
 
             deleteRotLog(i) {
-                if (confirm('この履歴を削除しますか？')) { this.rotHistory.splice(i, 1); this.updateViews(); this.saveData(); }
+                if (confirm('この履歴を削除しますか？')) {
+                    this.rotHistory.splice(i, 1);
+                    this.updateViews();
+                    this.checkAutoIntervalSave();
+                    this.saveData();
+                }
             },
 
             checkOutLog() {
@@ -1411,7 +1452,12 @@
             },
 
             deleteOutLog(i) {
-                if (confirm('この履歴を削除しますか？')) { this.outHistory.splice(i, 1); this.updateViews(); this.saveData(); }
+                if (confirm('この履歴を削除しますか？')) {
+                    this.outHistory.splice(i, 1);
+                    this.updateViews();
+                    this.checkAutoIntervalSave();
+                    this.saveData();
+                }
             },
 
             updateViews() {
@@ -1560,6 +1606,32 @@
             checkAutoIntervalSave() {
                 const kasi = parseFloat(document.getElementById('set-kasi').value) || 250;
 
+                // 修正・削除によって累積値が減少した場合、それを超える自動保存データを削除
+                let currentTotalRot = 0;
+                this.rotHistory.forEach(h => { currentTotalRot += h.rot; });
+                let currentTotalRounds = 0;
+                this.outHistory.forEach(h => { currentTotalRounds += h.rounds; });
+
+                let removedAny = false;
+                for (let i = this.intervalHistory.length - 1; i >= 0; i--) {
+                    const h = this.intervalHistory[i];
+                    if ((h.type === "rot" || !h.type) && h.comment && h.comment.includes("自動通常記録")) {
+                        if (h.totalRot > currentTotalRot) {
+                            this.intervalHistory.splice(i, 1);
+                            removedAny = true;
+                        }
+                    } else if (h.type === "rush" && h.comment && h.comment.includes("自動RUSH記録")) {
+                        if (h.totalRounds > currentTotalRounds) {
+                            this.intervalHistory.splice(i, 1);
+                            removedAny = true;
+                        }
+                    }
+                }
+                if (removedAny) {
+                    this.updateIntervalView();
+                    this.saveData();
+                }
+
                 // 1. 通常自動記録判定
                 const autoInterval = parseFloat(document.getElementById('set-auto-interval').value) || 0;
                 if (autoInterval > 0) {
@@ -1691,7 +1763,7 @@
                     return;
                 }
 
-                if (theadTr) theadTr.innerHTML = `<th style="width: 30%; text-align: center;">時刻</th><th style="width: 35%; text-align: center;">数値</th><th style="width: 35%; text-align: center;">${delMode ? '削除' : '累計比較'}</th>`;
+                if (theadTr) theadTr.innerHTML = `<th style="width: 30%; text-align: center;">時刻</th><th style="width: 35%; text-align: center;">数値</th><th style="width: 35%; text-align: center;">累計比較</th>`;
                 document.getElementById('compare-chart-container').style.display = 'block';
 
                 if (targetHistory.length === 0) {
@@ -1742,7 +1814,7 @@
                         <td style="text-align:center; color:#1976d2; cursor:pointer; font-weight:bold; text-decoration:underline;" onclick="app.openEditIntervalModal(${origIndex})">${timeStr}</td>
                         <td style="text-align:center; font-family:var(--font-eng); font-weight:bold;">${this.formatF(val, metric.type)}</td>
                         <td style="text-align:center; font-family:var(--font-eng);">
-                            ${delMode ? `<button style="background:var(--plus-red); color:white; border:none; border-radius:4px; padding:2px 8px; cursor:pointer;" onclick="app.deleteHistory(${origIndex})">削除</button>` : this.getCompareStr(val, cumulativeVal, metric.type, metric.lowerIsBetter)}
+                            ${this.getCompareStr(val, cumulativeVal, metric.type, metric.lowerIsBetter)}
                         </td>
                     </tr>`);
 
@@ -1837,16 +1909,26 @@
                 if (!header || !tbody) return;
 
                 const kasi = parseFloat(document.getElementById('set-kasi').value) || 250;
+                const delMode = document.getElementById('history-delete-mode') ? document.getElementById('history-delete-mode').checked : false;
 
                 if (this.listTab === 'rot') {
                     header.style.background = '#e3f2fd'; // 薄水色
                     header.style.color = '#1976d2'; // 青文字
-                    header.innerHTML = `
-                        <th style="width: 25%; text-align: center;">時刻</th>
-                        <th style="width: 25%; text-align: center;">使用玉数</th>
-                        <th style="width: 25%; text-align: center;">通常回転</th>
-                        <th style="width: 25%; text-align: center;">回転率</th>
-                    `;
+                    if (delMode) {
+                        header.innerHTML = `
+                            <th style="width: 25%; text-align: center;">時刻</th>
+                            <th style="width: 25%; text-align: center;">使用玉数</th>
+                            <th style="width: 25%; text-align: center;">通常回転</th>
+                            <th style="width: 25%; text-align: center;">削除</th>
+                        `;
+                    } else {
+                        header.innerHTML = `
+                            <th style="width: 25%; text-align: center;">時刻</th>
+                            <th style="width: 25%; text-align: center;">使用玉数</th>
+                            <th style="width: 25%; text-align: center;">通常回転</th>
+                            <th style="width: 25%; text-align: center;">回転率</th>
+                        `;
+                    }
 
                     const rotIntervals = this.intervalHistory.filter(h => h.type === "rot" || !h.type);
                     if (rotIntervals.length === 0) {
@@ -1861,12 +1943,17 @@
                         const diffUsed = h.totalUsed - (prev.totalUsed || 0);
                         const rpk = diffUsed > 0 ? (diffRot / diffUsed) * kasi : 0;
                         const timeStr = new Date(h.ts).toLocaleTimeString('ja-JP', { hour: '2-digit', minute: '2-digit' });
+                        const origIndex = this.intervalHistory.indexOf(h);
+
+                        const rightColTd = delMode 
+                            ? `<td style="text-align:center;"><button style="background:var(--plus-red); color:white; border:none; border-radius:4px; padding:2px 8px; cursor:pointer;" onclick="app.deleteHistory(${origIndex})">削除</button></td>` 
+                            : `<td style="text-align:center; font-family:var(--font-eng); font-weight:bold;">${rpk.toFixed(1)}回/k</td>`;
 
                         html += `<tr>
                             <td style="text-align:center;">${timeStr}</td>
                             <td style="text-align:center; font-family:var(--font-eng); font-weight:bold;">${Math.floor(diffUsed)}玉</td>
                             <td style="text-align:center; font-family:var(--font-eng); font-weight:bold;">${diffRot}回</td>
-                            <td style="text-align:center; font-family:var(--font-eng); font-weight:bold;">${rpk.toFixed(1)}回/k</td>
+                            ${rightColTd}
                         </tr>`;
                     });
                     tbody.innerHTML = html;
@@ -1874,36 +1961,46 @@
                 } else {
                     header.style.background = '#fbebeb'; // 薄赤色
                     header.style.color = '#c0392b'; // 赤文字
-                    header.innerHTML = `
-                        <th style="width: 20%; text-align: center;">時刻</th>
-                        <th style="width: 20%; text-align: center;">獲得出玉</th>
-                        <th style="width: 20%; text-align: center;">獲得R数</th>
-                        <th style="width: 20%; text-align: center;">1R出玉</th>
-                        <th style="width: 20%; text-align: center;">オーバー率</th>
-                    `;
+                    if (delMode) {
+                        header.innerHTML = `
+                            <th style="width: 25%; text-align: center;">時刻</th>
+                            <th style="width: 25%; text-align: center;">獲得出玉</th>
+                            <th style="width: 25%; text-align: center;">獲得R数</th>
+                            <th style="width: 25%; text-align: center;">削除</th>
+                        `;
+                    } else {
+                        header.innerHTML = `
+                            <th style="width: 25%; text-align: center;">時刻</th>
+                            <th style="width: 25%; text-align: center;">獲得出玉</th>
+                            <th style="width: 25%; text-align: center;">獲得R数</th>
+                            <th style="width: 25%; text-align: center;">1R出玉</th>
+                        `;
+                    }
 
                     const rushIntervals = this.intervalHistory.filter(h => h.type === "rush");
                     if (rushIntervals.length === 0) {
-                        tbody.innerHTML = '<tr><td colspan="5" style="padding:15px; text-align:center;">RUSH区間データがありません</td></tr>';
+                        tbody.innerHTML = '<tr><td colspan="4" style="padding:15px; text-align:center;">RUSH区間データがありません</td></tr>';
                         return;
                     }
 
                     let html = '';
                     rushIntervals.forEach((h, i) => {
-                        const prev = i === 0 ? { totalGained: 0, totalRounds: 0, totalOver: 0 } : rushIntervals[i - 1];
+                        const prev = i === 0 ? { totalGained: 0, totalRounds: 0 } : rushIntervals[i - 1];
                         const diffGained = h.totalGained - (prev.totalGained || 0);
                         const diffRounds = h.totalRounds - (prev.totalRounds || 0);
-                        const diffOver = h.totalOver - (prev.totalOver || 0);
                         const rOut = diffRounds > 0 ? diffGained / diffRounds : 0;
-                        const overPct = diffRounds > 0 ? (diffOver / diffRounds) * 100 : 0;
                         const timeStr = new Date(h.ts).toLocaleTimeString('ja-JP', { hour: '2-digit', minute: '2-digit' });
+                        const origIndex = this.intervalHistory.indexOf(h);
+
+                        const rightColTd = delMode 
+                            ? `<td style="text-align:center;"><button style="background:var(--plus-red); color:white; border:none; border-radius:4px; padding:2px 8px; cursor:pointer;" onclick="app.deleteHistory(${origIndex})">削除</button></td>` 
+                            : `<td style="text-align:center; font-family:var(--font-eng); font-weight:bold;">${rOut.toFixed(1)}玉</td>`;
 
                         html += `<tr>
                             <td style="text-align:center;">${timeStr}</td>
                             <td style="text-align:center; font-family:var(--font-eng); font-weight:bold;">${Math.floor(diffGained)}玉</td>
                             <td style="text-align:center; font-family:var(--font-eng); font-weight:bold;">${diffRounds}R</td>
-                            <td style="text-align:center; font-family:var(--font-eng); font-weight:bold;">${rOut.toFixed(1)}玉</td>
-                            <td style="text-align:center; font-family:var(--font-eng); font-weight:bold;">${overPct.toFixed(1)}%</td>
+                            ${rightColTd}
                         </tr>`;
                     });
                     tbody.innerHTML = html;
@@ -2038,7 +2135,6 @@
                         if (ci.outOver !== undefined) document.getElementById('log-out-over').value = ci.outOver;
                     }
                 }
-                this.updateViews();
             }
         };
 
