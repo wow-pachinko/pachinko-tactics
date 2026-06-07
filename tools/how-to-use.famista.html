@@ -2166,123 +2166,117 @@
                     memoBefore: document.getElementById('memo-before').value,
                     memoDuring: document.getElementById('memo-during').value
                 };
-                localStorage.setItem('pachitaku_v6_data_v2', JSON.stringify(saveObj));
-                localStorage.setItem('pachitaku_v6', JSON.stringify(data));
+                localStorage.setItem('pachitaku_howtouse_famista_v2', JSON.stringify(saveObj));
+                localStorage.setItem('pachitaku_howtouse_famista_v1', JSON.stringify(data));
             },
 
             loadDataAndHistory() {
-                let saved = JSON.parse(localStorage.getItem('pachitaku_v6_data_v2'));
-                if (!saved) {
-                    const old = JSON.parse(localStorage.getItem('pachitaku_v6'));
-                    if (old) {
-                        saved = { current: old, history: [], targets: {}, settings: {} };
-                    } else {
-                        // 初回起動時（またはリセット時）にチュートリアルを理解しやすくするためのリアルなデモデータを注入
-                        saved = {
-                            current: {
-                                total_rot: "320",
-                                total_pick: "145",
-                                sp_select: "18",
-                                st_select: "28",
-                                st_rot_in: "10",
-                                ch_strong: "32",
-                                ch_rot_in: "13"
-                            },
-                            targets: {
-                                rotPerK: "18.0",
-                                rOut: "115",
-                                pickRate: "45",
-                                spSelectRate: "12",
-                                straightSelectRate: "20",
-                                straightRotInRate: "35",
-                                curveStrongRate: "30",
-                                curveRotInRate: "40",
-                                nmTotalRotInRate: "18",
-                                spWinRate: "3.1",
-                                nmWinRate: "4.1"
-                            },
-                            settings: {
-                                sp: "3.1",
-                                nm: "4.1",
-                                avgR: "5.16",
-                                kasi: "250",
-                                exchange: "4.0"
-                            },
-                            logData: {
-                                hold: "2620",
-                                remain: "",
-                                replay: "",
-                                invest: "",
-                                trigger: "",
-                                round: ""
-                            },
-                            logHistory: [
-                                { no: 1, usedBalls: 800, trigger: "SPルート", round: "4R", inputs: { hold: 1000, remain: 200, replay: 0, invest: 0 } },
-                                { no: 2, usedBalls: 500, trigger: "ノーマルルート", round: "9R", inputs: { hold: 660, remain: 160, replay: 0, invest: 0 } },
-                                { no: 3, usedBalls: 300, trigger: "SPルート", round: "2R", inputs: { hold: 1195, remain: 895, replay: 0, invest: 0 } },
-                                { no: 4, usedBalls: 400, trigger: "ストレートコース選択後HR", round: "9R", inputs: { hold: 1125, remain: 725, replay: 0, invest: 0 } },
-                                { no: 5, usedBalls: 800, trigger: "ノーマルルート", round: "4R", inputs: { hold: 1760, remain: 960, replay: 0, invest: 0 } },
-                                { no: 6, usedBalls: 200, trigger: "SPルート", round: "9R", inputs: { hold: 1420, remain: 1220, replay: 0, invest: 0 } },
-                                { no: 7, usedBalls: 600, trigger: "変化球選択後HR", round: "2R", inputs: { hold: 2255, remain: 1655, replay: 0, invest: 0 } },
-                                { no: 8, usedBalls: 300, trigger: "ノーマルルート", round: "9R", inputs: { hold: 1885, remain: 1585, replay: 0, invest: 0 } }
-                            ],
-                            jackpotCount: 8,
-                            memoBefore: "朝イチから実戦開始。SPルートのクセが良さそうな台を選択。ボーダー17回/kを目標にする。",
-                            memoDuring: "ハネの拾いは悪くない。SPルートからのV入賞が少し足りないが、ノーマルルートでのホームラン即当りに助けられている。続行。",
-                            history: [
-                                {
-                                    ts: Date.now() - 7200000,
-                                    comment: "開始から最初の区間。ハネの拾いは非常に安定している。",
-                                    totalPick: 50,
-                                    v: {
-                                        total_rot: 110,
-                                        total_pick: 50,
-                                        sp_select: 6,
-                                        st_select: 10,
-                                        st_rot_in: 3,
-                                        ch_strong: 12,
-                                        ch_rot_in: 5,
-                                        st_hr_in: 0,
-                                        ch_hr_in: 0,
-                                        sp_v_in: 1,
-                                        nm_total_v: 1,
-                                        v_2r: 0,
-                                        v_4r: 1,
-                                        v_9r: 1,
-                                        totalUsedBalls: 1600,
-                                        totalInvest: 0,
-                                        totalGained: 1725
-                                    }
-                                },
-                                {
-                                    ts: Date.now() - 3600000,
-                                    comment: "中盤区間。SPルートで少しハマり気味だが、ノーマルのバッティングが好調。",
-                                    totalPick: 100,
-                                    v: {
-                                        total_rot: 220,
-                                        total_pick: 100,
-                                        sp_select: 12,
-                                        st_select: 20,
-                                        st_rot_in: 7,
-                                        ch_strong: 22,
-                                        ch_rot_in: 9,
-                                        st_hr_in: 1,
-                                        ch_hr_in: 0,
-                                        sp_v_in: 2,
-                                        nm_total_v: 2,
-                                        v_2r: 1,
-                                        v_4r: 2,
-                                        v_9r: 3,
-                                        totalUsedBalls: 3000,
-                                        totalInvest: 0,
-                                        totalGained: 4255
-                                    }
-                                }
-                            ]
-                        };
-                        localStorage.setItem('pachitaku_v6_data_v2', JSON.stringify(saved));
-                    }
-                }
+                // 使い方ページではローカルストレージからの読み込みは行わず、常に同じリアルなデモデータが初期表示されるようにする
+                let saved = {
+                    current: {
+                        total_rot: "320",
+                        total_pick: "145",
+                        sp_select: "18",
+                        st_select: "28",
+                        st_rot_in: "10",
+                        ch_strong: "32",
+                        ch_rot_in: "13"
+                    },
+                    targets: {
+                        rotPerK: "18.0",
+                        rOut: "115",
+                        pickRate: "45",
+                        spSelectRate: "12",
+                        straightSelectRate: "20",
+                        straightRotInRate: "35",
+                        curveStrongRate: "30",
+                        curveRotInRate: "40",
+                        nmTotalRotInRate: "18",
+                        spWinRate: "3.1",
+                        nmWinRate: "4.1"
+                    },
+                    settings: {
+                        sp: "3.1",
+                        nm: "4.1",
+                        avgR: "5.16",
+                        kasi: "250",
+                        exchange: "4.0"
+                    },
+                    logData: {
+                        hold: "2620",
+                        remain: "",
+                        replay: "",
+                        invest: "",
+                        trigger: "",
+                        round: ""
+                    },
+                    logHistory: [
+                        { no: 1, usedBalls: 800, trigger: "SPルート", round: "4R", inputs: { hold: 1000, remain: 200, replay: 0, invest: 0 } },
+                        { no: 2, usedBalls: 500, trigger: "ノーマルルート", round: "9R", inputs: { hold: 660, remain: 160, replay: 0, invest: 0 } },
+                        { no: 3, usedBalls: 300, trigger: "SPルート", round: "2R", inputs: { hold: 1195, remain: 895, replay: 0, invest: 0 } },
+                        { no: 4, usedBalls: 400, trigger: "ストレートコース選択後HR", round: "9R", inputs: { hold: 1125, remain: 725, replay: 0, invest: 0 } },
+                        { no: 5, usedBalls: 800, trigger: "ノーマルルート", round: "4R", inputs: { hold: 1760, remain: 960, replay: 0, invest: 0 } },
+                        { no: 6, usedBalls: 200, trigger: "SPルート", round: "9R", inputs: { hold: 1420, remain: 1220, replay: 0, invest: 0 } },
+                        { no: 7, usedBalls: 600, trigger: "変化球選択後HR", round: "2R", inputs: { hold: 2255, remain: 1655, replay: 0, invest: 0 } },
+                        { no: 8, usedBalls: 300, trigger: "ノーマルルート", round: "9R", inputs: { hold: 1885, remain: 1585, replay: 0, invest: 0 } }
+                    ],
+                    jackpotCount: 8,
+                    memoBefore: "朝イチから実戦開始。SPルートのクセが良さそうな台を選択。ボーダー17回/kを目標にする。",
+                    memoDuring: "ハネの拾いは悪くない。SPルートからのV入賞が少し足りないが、ノーマルルートでのホームラン即当りに助けられている。続行。",
+                    history: [
+                        {
+                            ts: Date.now() - 7200000,
+                            comment: "開始から最初の区間。ハネの拾いは非常に安定している。",
+                            totalPick: 50,
+                            v: {
+                                total_rot: 110,
+                                total_pick: 50,
+                                sp_select: 6,
+                                st_select: 10,
+                                st_rot_in: 3,
+                                ch_strong: 12,
+                                ch_rot_in: 5,
+                                st_hr_in: 0,
+                                ch_hr_in: 0,
+                                sp_v_in: 1,
+                                nm_total_v: 1,
+                                v_2r: 0,
+                                v_4r: 1,
+                                v_9r: 1,
+                                totalUsedBalls: 1600,
+                                totalInvest: 0,
+                                totalGained: 1725
+                            }
+                        },
+                        {
+                            ts: Date.now() - 3600000,
+                            comment: "中盤区間。SPルートで少しハマり気味だが、ノーマルのバッティングが好調。",
+                            totalPick: 100,
+                            v: {
+                                total_rot: 220,
+                                total_pick: 100,
+                                sp_select: 12,
+                                st_select: 20,
+                                st_rot_in: 7,
+                                ch_strong: 22,
+                                ch_rot_in: 9,
+                                st_hr_in: 1,
+                                ch_hr_in: 0,
+                                sp_v_in: 2,
+                                nm_total_v: 2,
+                                v_2r: 1,
+                                v_4r: 2,
+                                v_9r: 3,
+                                totalUsedBalls: 3000,
+                                totalInvest: 0,
+                                totalGained: 4255
+                            }
+                        }
+                    ]
+                };
+
+                // 初期状態をローカルストレージにも保存しておく（操作の連動やシミュレーション用）
+                localStorage.setItem('pachitaku_howtouse_famista_v2', JSON.stringify(saved));
 
                 if (saved) {
                     if (saved.current) {
