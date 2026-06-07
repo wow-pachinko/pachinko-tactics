@@ -14,9 +14,8 @@
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Pハネモノファミリースタジアム(ファミスタ) 期待値計算・攻略ツール【実戦データ公開中】｜PACHINKO TACTICS</title>
-    <meta name="description" content="Pハネモノファミリースタジアム(ファミスタ)の完全無料攻略ツール。数値入力でボーダーや期待値、ネカセが優秀な台の判別に役立つ詳細数値を自動算出！立ち回りをサポートするシミュレータやメモ機能も完備。更に管理人がホールで収集した回転体当選率などのリアルデータも日々更新中。">
-    <link rel="canonical" href="https://pachinko-tactics.com/tools/famista.html">
+    <title>PACHINKO TACTICS - ファミスタ 使い方チュートリアル</title>
+    <link rel="canonical" href="https://pachinko-tactics.com/tools/how-to-use.famista.html">
     <link rel="icon" href="../favicon.png">
     <link rel="apple-touch-icon" href="../apple-touch-icon.png">
 
@@ -29,6 +28,8 @@
         rel="stylesheet">
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/driver.js@1.3.1/dist/driver.css"/>
+    <script src="https://cdn.jsdelivr.net/npm/driver.js@1.3.1/dist/driver.js.iife.js"></script>
     <style>
         :root {
             /* Theme E variables (Investigation Board) */
@@ -65,8 +66,48 @@
             font-family: var(--font-main);
             color: var(--text-main);
             font-size: 16px;
-            padding-bottom: 40px;
+            padding-bottom: 80px; /* changed for help area */
         }
+
+        .help-icon {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: #10ac84;
+            color: #fff;
+            font-size: 12px;
+            cursor: pointer;
+            margin-left: 5px;
+            pointer-events: auto !important;
+            vertical-align: middle;
+            font-weight: bold;
+        }
+
+        .help-icon-red {
+            background: #10ac84 !important;
+        }
+
+        .tooltip {
+            position: absolute;
+            background: #2c3e50;
+            color: #fff;
+            padding: 10px 15px;
+            border-radius: 6px;
+            font-size: 13px;
+            z-index: 2500;
+            max-width: 250px;
+            text-align: left;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s;
+            line-height: 1.5;
+            font-family: var(--font-main);
+        }
+
 
         /* Blackboard Header */
         .blackboard-header {
@@ -161,33 +202,6 @@
 
         .strategy-btn:hover {
             background: #f39c12;
-            opacity: 1;
-        }
-
-        .howto-btn {
-            position: absolute;
-            top: 10px;
-            right: 110px;
-            z-index: 20;
-            background: #3498db;
-            color: #fff;
-            border: 1px solid rgba(255, 255, 255, 0.4);
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.2s;
-            font-family: var(--font-main);
-            font-size: 0.7rem;
-            opacity: 0.9;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-
-        .howto-btn:hover {
-            background: #2980b9;
             opacity: 1;
         }
 
@@ -657,308 +671,10 @@
             width: 40%;
         }
 
-        /* SEO Lead Text Styles */
-        .seo-lead-text {
-            background-color: rgba(33, 140, 116, 0.05);
-            border-left: 4px solid #218c74;
-            padding: 12px 15px;
-            margin: 15px 15px 5px 15px;
-            font-size: 13px;
-            line-height: 1.6;
-            color: var(--text-sub);
-            border-radius: 2px;
-            text-align: left;
-        }
-
-        /* Real Data Button Styles */
-        .btn-real-data {
-            background: #218c74;
-            color: white;
-            border: none;
-            padding: 12px;
-            border-radius: 4px;
-            font-weight: bold;
-            cursor: pointer;
-            width: 95%;
-            max-width: 800px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            margin: 15px auto 30px auto;
-            font-family: var(--font-main);
-            font-size: 16px;
-            transition: background 0.2s;
-            box-shadow: var(--shadow);
-        }
-
-        .btn-real-data:hover {
-            background: #2bcbba;
-        }
-
-        /* Active overlay for modal */
-        .modal-overlay.active {
-            display: flex;
-        }
-
-        /* Tooltip styles for table headers */
-        .tooltip-header {
-            position: relative;
-            cursor: help;
-            color: #227093 !important; /* 青い文字色 */
-            border-bottom: 1px dotted #227093 !important; /* 青い下線 */
-        }
-
-        .tooltip-text {
-            visibility: hidden;
-            width: 220px;
-            background-color: #333;
-            color: #fff;
-            text-align: center;
-            border-radius: 4px;
-            padding: 8px;
-            position: absolute;
-            z-index: 1010;
-            bottom: 125%; /* Position above the header */
-            left: 50%;
-            transform: translateX(-50%);
-            opacity: 0;
-            transition: opacity 0.3s;
-            font-size: 12px;
-            font-weight: normal;
-            white-space: normal;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-            line-height: 1.4;
-        }
-
-        .tooltip-text::after {
-            content: "";
-            position: absolute;
-            top: 100%;
-            left: 50%;
-            margin-left: -5px;
-            border-width: 5px;
-            border-style: solid;
-            border-color: #333 transparent transparent transparent;
-        }
-
-        /* Hover or active class to show tooltip */
-        .tooltip-header:hover .tooltip-text,
-        .tooltip-header.active .tooltip-text {
-            visibility: visible;
-            opacity: 1;
-        }
-
-        /* Sticky Table Header for Real Data Table */
-        .real-data-container {
-            overflow-x: auto;
-            max-height: 280px;
-            overflow-y: auto;
-            -webkit-overflow-scrolling: touch;
-            border: 1px solid var(--border-color);
-            border-radius: 4px;
-            margin-bottom: 15px;
-        }
-
-        .real-data-container thead th {
-            position: sticky;
-            top: 0;
-            background: #f1f3f5; /* 透けない背景色 */
-            z-index: 20;
-            box-shadow: inset 0 -1px 0 var(--border-color); /* 下部境界線を維持 */
-        }
-
-        .sort-arrows {
-            display: inline-flex;
-            flex-direction: column;
-            vertical-align: middle;
-            margin-left: 6px;
-            line-height: 0.8;
-        }
-
-        .sort-asc, .sort-desc {
-            cursor: pointer;
-            font-size: 9px;
-            color: #ccc;
-            transition: color 0.2s;
-            padding: 1px 2px;
-        }
-
-        .sort-asc:hover, .sort-desc:hover {
-            color: #227093;
-        }
-
-        /* アコーディオンの全体スタイル */
-        .specs-accordion {
-            margin-bottom: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .accordion-item {
-            border: 1px solid var(--border-color);
-            border-radius: 4px;
-            background: #fafafa;
-            overflow: hidden;
-            transition: all 0.3s ease;
-        }
-
-        .accordion-item:hover {
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-            border-color: var(--accent-secondary);
-        }
-
-        .accordion-header {
-            width: 100%;
-            background: none;
-            border: none;
-            padding: 12px 15px;
-            text-align: left;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            cursor: pointer;
-            font-family: var(--font-main);
-            font-size: 14px;
-            font-weight: bold;
-            color: var(--text-main);
-            outline: none;
-            transition: background 0.2s;
-        }
-
-        .accordion-header:hover {
-            background: rgba(34, 112, 147, 0.03);
-        }
-
-        .header-value {
-            font-family: var(--font-eng);
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .header-value.val-sp {
-            color: #d63031; /* はっきりとした鮮やかな赤 */
-        }
-
-        .header-value.val-nm {
-            color: #0984e3; /* はっきりとした鮮やかな青 */
-        }
-
-        .header-value.val-hr {
-            color: #d35400; /* 視認性の高い濃いオレンジ */
-        }
-
-        .accordion-arrow {
-            display: inline-block;
-            transition: transform 0.3s ease;
-            color: var(--text-sub);
-            font-size: 10px;
-        }
-
-        .accordion-content {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease-out, padding 0.3s ease;
-            background: #fff;
-            border-top: 1px solid transparent;
-        }
-
-        .accordion-item.open .accordion-content {
-            max-height: 200px; /* 十分な高さ */
-            border-top: 1px solid var(--border-color);
-        }
-
-        .accordion-item.open .accordion-arrow {
-            transform: rotate(180deg);
-        }
-
-        .details-table {
-            width: 100%;
-            margin-top: 0 !important;
-            border: none !important;
-            font-size: 14px;
-        }
-
-        .details-table th, .details-table td {
-            border: none !important;
-            border-bottom: 1px solid #eee !important;
-            padding: 8px 15px !important;
-            text-align: left;
-        }
-
-        .details-table th {
-            background: rgba(0, 0, 0, 0.01) !important;
-            color: var(--text-sub) !important;
-            font-weight: bold !important;
-            width: 60% !important;
-        }
-
-        .details-table td {
-            font-family: var(--font-eng);
-            font-weight: bold;
-            width: 40% !important;
-        }
-
-        .details-table tr:last-child th, .details-table tr:last-child td {
-            border-bottom: none !important;
-        }
-
-        /* メインリード文アコーディオン用スタイル */
-        .main-lead-accordion {
-            background-color: rgba(33, 140, 116, 0.03);
-            border: 1px solid rgba(33, 140, 116, 0.15);
-            border-left: 4px solid #218c74;
-            margin: 15px 15px 5px 15px;
-            border-radius: 2px;
-            overflow: hidden;
-            transition: all 0.3s ease;
-        }
-
-        .main-lead-header {
-            width: 100%;
-            background: none;
-            border: none;
-            padding: 10px 15px;
-            text-align: left;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            cursor: pointer;
-            outline: none;
-            font-family: var(--font-main);
-        }
-
-        .main-lead-title {
-            font-size: 13px;
-            font-weight: bold;
-            color: #218c74;
-        }
-
-        .main-lead-arrow {
-            font-size: 11px;
-            color: var(--text-sub);
-        }
-
-        .main-lead-content {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease-out;
-        }
-
-        .main-lead-accordion.open .main-lead-content {
-            max-height: 150px; /* 十分な高さ */
-        }
-
-        .main-lead-body {
-            margin: 0;
-            padding: 0 15px 12px 15px;
-            font-size: 13px;
-            line-height: 1.6;
-            color: var(--text-sub);
-            white-space: normal;
+        /* チュートリアル実行中はアニメーションを無効化してDriver.jsの要素位置検出エラーを防ぐ */
+        body.tutorial-active .content-section {
+            animation: none !important;
+            transition: none !important;
         }
     </style>
 </head>
@@ -974,13 +690,12 @@
     </svg>
 
     <header class="blackboard-header">
-        <a href="../index.html" class="back-to-top">⇐ TOPへ戻る</a>
-        <a href="how-to-use.famista.html" class="howto-btn">❓ 使い方</a>
+        <a href="famista.html" class="back-to-top">⇐ ツールへ戻る</a>
         <button class="strategy-btn" onclick="alert('カミングスーン！')">💡 攻略考察</button>
 
         <div class="header-center chalk-effect">
-            <h1>FAMISTA TOOL</h1>
-            <div class="subtitle">ハネモノファミスタ 期待値計算/攻略ツール</div>
+            <h1>HOW TO TOOL</h1>
+            <div class="subtitle">ツールの使い方(ファミスタ版)</div>
         </div>
 
         <button class="settings-btn" onclick="app.openSettings()">⚙ 詳細設定</button>
@@ -988,92 +703,84 @@
     </header>
 
     <div class="container">
-        <!-- SEOリード文エリア（アコーディオン化） -->
-        <div class="main-lead-accordion">
-            <button class="main-lead-header" onclick="app.toggleMainLead()">
-                <span class="main-lead-title">【本ツールの概要】</span>
-                <span class="main-lead-arrow">▼ 開く</span>
-            </button>
-            <div class="main-lead-content">
-                <p class="main-lead-body">
-                    本ツールは「Pハネモノファミリースタジアム(ファミスタ)」専用の期待値計算ならびに攻略ツールです。稼働データを入力していくことで、期待値やボーダーラインだけでなく、大当り確率が優秀な台の判別に役立つ詳細な数値をリアルタイムに自動算出します。
-                </p>
-            </div>
-        </div>
         <div class="tabs">
-            <div class="tab tab-group-blue active" onclick="app.showTab('log')">実戦ログ</div>
-            <div class="tab tab-group-blue" onclick="app.showTab('input')">数値入力</div>
-            <div class="tab tab-group-red" onclick="app.showTab('calc')">算出結果</div>
-            <div class="tab tab-group-red" onclick="app.showTab('compare')">区間分析</div>
+            <div class="tab tab-group-blue active" onclick="app.showTab('log')">実戦ログ <span class="help-icon help-icon-red" onclick="event.stopPropagation(); showTooltip('大当り履歴をリアルタイムに記録・分析するタブです。<br>大当りのたびに内容を入力して「記録」ボタンを押すと、回転数や1R出玉、当選契機の振分けなどを自動算出します。打ちながら手元でデータを積み上げることで、その日の実戦推移を正確に把握できます。', this)">？</span></div>
+            <div class="tab tab-group-blue" onclick="app.showTab('input')">数値入力 <span class="help-icon" onclick="event.stopPropagation(); showTooltip('計算の土台となる基礎数値を管理するタブです。<br>期待値計算に必要なヤクモノ確率や台のポテンシャルが分かるデータを算出する為の数値を入力します。なお、1.通常回転数を除いた項目はカチカチ君等で別途計測するようにして下さい。', this)">？</span></div>
+            <div class="tab tab-group-red" onclick="app.showTab('calc')">算出結果 <span class="help-icon" onclick="event.stopPropagation(); showTooltip('現在の入力データに基づいて計算し算出したボーダーや期待値、台の詳細な分析データを確認できるタブです。<br>数値が変更されるたびに即座に再計算が行われます。入力内容が変わるたびにリアルタイムで再計算されます。すべての項目を埋めなくても、必要なデータが揃っていれば、知りたい項目だけを算出させる使い方もできます。（例：「使用玉数」と「通常回転数」のみ入力して「千円あたりの回転数」を確認するなど）', this)">？</span></div>
+            <div class="tab tab-group-red" onclick="app.showTab('compare')">区間分析 <span class="help-icon" onclick="event.stopPropagation(); showTooltip('一定区間ごとに数値を切り出して比較するためのタブです。<br>「算出結果」タブにある「区間データを保存」ボタンを押したタイミングのデータが蓄積されます。区間単位で数値の動きを見ることで、一時的なムラに左右されず、今の台の挙動を客観的に判断する材料になります。', this)">？</span></div>
         </div>
 
         <div id="log" class="content-section active">
-            <div class="section-header" style="display:flex; justify-content: space-between; align-items: center;">
-                <span>■現在の稼働状況</span>
-                <span style="font-size: 0.9rem;">大当り回数 <span id="jackpot-count-display">0</span>回</span>
-            </div>
-            <div id="log-fields">
-                <div class="input-group"><label>現在の持ち玉数(※)</label><input type="number" id="log-hold"
-                        oninput="app.checkLogForm()"></div>
-                <div class="input-group"><label>残玉数(※)</label><input type="number" id="log-remain"
-                        oninput="app.checkLogForm()"></div>
-                <div class="input-group"><label>再プレイ玉数</label><input type="number" id="log-replay"
-                        oninput="app.checkLogForm()"></div>
-                <div class="input-group"><label>追加投資(円)</label><input type="number" id="log-invest"
-                        oninput="app.checkLogForm()"></div>
-                <div class="input-group">
-                    <label>当選契機(※)</label>
-                    <div class="custom-select-container" id="log-trigger-custom-container">
-                        <div class="custom-select-trigger" id="log-trigger-trigger">
-                            <span id="log-trigger-label">未選択</span>
-                            <span style="font-size: 0.8rem;">▼</span>
-                        </div>
-                        <div class="custom-select-options" id="log-trigger-options"></div>
-                        <input type="hidden" id="log-trigger" value="">
-                    </div>
+            <div id="log-status-section">
+                <div class="section-header" style="display:flex; justify-content: space-between; align-items: center;">
+                    <span>■現在の稼働状況 <span class="help-icon help-icon-red" onclick="showTooltip('現在の持ち玉数や投資状況など、リアルタイムの稼働データを管理・入力するタブです。以下の3つが主な入力タイミングです。<br><br>○稼働開始時： 持ち玉がある場合は、必ず現在の玉数を入力してからスタートしてください。<br><br>○大当り時： ※印がついている4項目を入力すると、記録確認のモーダル（ポップアップ）が表示されます。<br><br>○回転数の把握： データを記録していない状態からでも、現在の「持ち玉数」や「追加投資」などその時の状況を入力すれば、使用玉数へ反映されます。数値入力タブの「通常回転数」と合わせることで、千円あたりの回転数を算出できます。', this)">？</span></span>
+                    <span style="font-size: 0.9rem;">大当り回数 <span id="jackpot-count-display">0</span>回</span>
                 </div>
-                <div class="input-group">
-                    <label>当選R数(※)</label>
-                    <div class="custom-select-container" id="log-round-custom-container">
-                        <div class="custom-select-trigger" id="log-round-trigger">
-                            <span id="log-round-label">未選択</span>
-                            <span style="font-size: 0.8rem;">▼</span>
+                <div id="log-fields">
+                    <div class="input-group"><label>現在の持ち玉数(※)</label><input type="number" id="log-hold"
+                            oninput="app.checkLogForm()"></div>
+                    <div class="input-group"><label>残玉数(※)</label><input type="number" id="log-remain"
+                            oninput="app.checkLogForm()"></div>
+                    <div class="input-group"><label>再プレイ玉数</label><input type="number" id="log-replay"
+                            oninput="app.checkLogForm()"></div>
+                    <div class="input-group"><label>追加投資(円)</label><input type="number" id="log-invest"
+                            oninput="app.checkLogForm()"></div>
+                    <div class="input-group">
+                        <label>当選契機(※)</label>
+                        <div class="custom-select-container" id="log-trigger-custom-container">
+                            <div class="custom-select-trigger" id="log-trigger-trigger">
+                                <span id="log-trigger-label">未選択</span>
+                                <span style="font-size: 0.8rem;">▼</span>
+                            </div>
+                            <div class="custom-select-options" id="log-trigger-options"></div>
+                            <input type="hidden" id="log-trigger" value="">
                         </div>
-                        <div class="custom-select-options" id="log-round-options"></div>
-                        <input type="hidden" id="log-round" value="">
                     </div>
-                </div>
-                <div id="log-modify-record-container" style="display:none; margin-top: 15px;">
-                    <button class="btn-primary" onclick="app.recordLogFromModify()">この修正内容で記録</button>
+                    <div class="input-group">
+                        <label>当選R数(※)</label>
+                        <div class="custom-select-container" id="log-round-custom-container">
+                            <div class="custom-select-trigger" id="log-round-trigger">
+                                <span id="log-round-label">未選択</span>
+                                <span style="font-size: 0.8rem;">▼</span>
+                            </div>
+                            <div class="custom-select-options" id="log-round-options"></div>
+                            <input type="hidden" id="log-round" value="">
+                        </div>
+                    </div>
+                    <div id="log-modify-record-container" style="display:none; margin-top: 15px;">
+                        <button class="btn-primary" onclick="app.recordLogFromModify()">この修正内容で記録</button>
+                    </div>
                 </div>
             </div>
 
-            <div class="section-header"
-                style="margin-top: 30px; display:flex; justify-content: space-between; align-items: center;">
-                <span>■履歴</span>
-                <label
-                    style="font-size: 0.8rem; cursor: pointer; display: flex; align-items: center; gap: 4px; font-weight: normal;">
-                    <input type="checkbox" id="log-delete-mode" onchange="app.updateLogHistoryView()"> 削除モード
-                </label>
-            </div>
-            <div
-                style="max-height: 300px; overflow-y: auto; border: 1px solid var(--border-color); border-radius: 4px;">
-                <table class="data-table" style="margin-top: 0; border: none;">
-                    <thead style="position: sticky; top: 0; z-index: 10;">
-                        <tr>
-                            <th style="width: 10%; text-align: center;">No</th>
-                            <th style="width: 25%; text-align: center;">使用玉数</th>
-                            <th style="width: 25%; text-align: center;">獲得出玉</th>
-                            <th style="width: 25%; text-align: center;">当選契機</th>
-                            <th style="width: 15%; text-align: center;">R数</th>
-                        </tr>
-                    </thead>
-                    <tbody id="log-history-table" style="text-align: center;">
-                        <tr>
-                            <td colspan="4" style="padding: 15px;">履歴がありません</td>
-                        </tr>
-                    </tbody>
-                </table>
+            <div id="log-history-section" style="margin-top: 30px;">
+                <div class="section-header"
+                    style="margin-top: 0; display:flex; justify-content: space-between; align-items: center;">
+                    <span>■履歴 <span class="help-icon help-icon-red" onclick="showTooltip('これまでの大当り履歴を表示します。削除モードにチェックを入れれば誤入力を削除できます。', this)">？</span></span>
+                    <label
+                        style="font-size: 0.8rem; cursor: pointer; display: flex; align-items: center; gap: 4px; font-weight: normal;">
+                        <input type="checkbox" id="log-delete-mode" onchange="app.updateLogHistoryView()"> 削除モード
+                    </label>
+                </div>
+                <div
+                    style="max-height: 300px; overflow-y: auto; border: 1px solid var(--border-color); border-radius: 4px;">
+                    <table class="data-table" style="margin-top: 0; border: none;">
+                        <thead style="position: sticky; top: 0; z-index: 10;">
+                            <tr>
+                                <th style="width: 10%; text-align: center;">No <span class="help-icon" onclick="showTooltip('大当りの連番です。', this)">？</span></th>
+                                <th style="width: 25%; text-align: center;">使用玉数 <span class="help-icon" onclick="showTooltip('前回の大当り（または稼働開始）から、今回の大当りまでに使用した玉数です。表示されている玉数をタップすると、記録した内容を修正できます。', this)">？</span></th>
+                                <th style="width: 25%; text-align: center;">獲得出玉 <span class="help-icon" onclick="showTooltip('この大当りで獲得した出玉です。<br>【計算式】次回当選時の持ち玉 - 今回の残玉', this)">？</span></th>
+                                <th style="width: 25%; text-align: center;">当選契機</th>
+                                <th style="width: 15%; text-align: center;">R数</th>
+                            </tr>
+                        </thead>
+                        <tbody id="log-history-table" style="text-align: center;">
+                            <tr>
+                                <td colspan="4" style="padding: 15px;">履歴がありません</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
 
@@ -1083,33 +790,33 @@
 
         <div id="calc" class="content-section">
             <div class="result-card">
-                <div style="font-size: 16px; color: var(--text-sub);">総期待値</div>
+                <div style="font-size: 16px; color: var(--text-sub);">総期待値 <span class="help-icon" onclick="showTooltip('現在の稼働における総期待値です。<br>【計算式】1回転あたりの期待値 × 通常回転数', this)">？</span></div>
                 <div id="res-total-exp" class="main-val">±0円</div>
             </div>
 
             <div class="result-card">
-                <div style="font-size: 16px; color: var(--text-sub);">1回転あたりの期待値</div>
+                <div style="font-size: 16px; color: var(--text-sub);">1回転あたりの期待値 <span class="help-icon" onclick="showTooltip('通常1回転を回した際に得られる見込みの金額です。<br>【計算式】(平均出玉 - (1 ÷ 推定確率) × 250 ÷ 回転率) × 換金率', this)">？</span></div>
                 <div id="res-unit-exp" style="font-size: 24px; font-weight: bold; margin: 5px 0;">±0.0円</div>
                 <div id="res-unit-detail" style="font-size: 13px; color: var(--text-sub);">[現金: -円 | 持ち玉: -円]</div>
             </div>
 
             <div class="result-card">
-                <div style="font-size: 16px; color: var(--text-sub);">千円あたりのボーダーライン</div>
+                <div style="font-size: 16px; color: var(--text-sub);">千円あたりのボーダーライン <span class="help-icon" onclick="showTooltip('期待値がプラスマイナスゼロになる千円あたりの回転数です。<br>【計算式】250 ÷ (平均出玉 × 推定確率)', this)">？</span></div>
                 <div id="res-border" style="font-size: 24px; font-weight: bold;">0.0回転</div>
             </div>
 
             <div class="result-card">
-                <div style="font-size: 16px; color: var(--text-sub);">推定確率</div>
+                <div style="font-size: 16px; color: var(--text-sub);">推定確率 <span class="help-icon" onclick="showTooltip('現在の実戦データから逆算された、大当り確率の予測値です。<br><br>○役モノ確率:「拾い個数」に対して、何個に1個がV入賞したかを示します。<br><br>○大当り確率：「通常回転数」に対して、何回転に1回大当りしたかを示します。', this)">？</span></div>
                 <div id="res-probs" style="margin-top: 5px;"></div>
             </div>
 
             <div class="result-card">
-                <div style="font-size: 16px; color: var(--text-sub);">欠損 / 余剰</div>
+                <div style="font-size: 16px; color: var(--text-sub);">欠損 / 余剰 <span class="help-icon" onclick="showTooltip('■平均R数<br>実戦ログに記録された大当りデータから算出された、1回あたりの平均獲得ラウンド数です。<br>【計算式】総獲得ラウンド数 ÷ 大当り回数<br><br>■玉数<br>理論上の期待出玉（大当り回数 × 詳細設定の平均R数 × 1Rトータル確率ベースの出玉など）と、実際に獲得できた総出玉とのギャップ（差分）です。<br>【計算式】実際の総獲得出玉 － 理論上の総期待出玉<br>※プラスの場合は「余剰（引き強）」、マイナスの場合は「欠損（引き弱）」となります。', this)">？</span></div>
                 <div id="res-gap" style="margin-top: 5px;"></div>
             </div>
 
             <div style="margin-top: 20px;">
-                <div style="font-weight: bold; margin-bottom: 10px; color: var(--accent-secondary);">■ 詳細分析データ</div>
+                <div style="font-weight: bold; margin-bottom: 10px; color: var(--accent-secondary);">■ 詳細分析データ <span class="help-icon" onclick="showTooltip('現在の実戦データおよび入力数値に基づいた、より詳細な集計結果を一覧表示します。', this)">？</span></div>
                 <table class="data-table">
                     <tbody id="res-details-table"></tbody>
                 </table>
@@ -1119,7 +826,7 @@
 
         <div id="compare" class="content-section">
             <div class="section-header" style="display:flex; justify-content: space-between; align-items: center;">
-                <span>■ 区間比較（時系列推移）</span>
+                <span>■ 区間比較 <span class="help-icon help-icon-red" onclick="showTooltip('保存された区間ごとのデータを比較し、数値の推移をグラフや表で確認できます。「削除モード」にチェックを入れると、誤って保存した区間のデータを削除できます。<br>※算出結果タブ下部にある「区間データを保存」ボタンを押すと、それまでの累計データから直前までの保存分を自動的に差し引いた「その区間だけの純粋な数値」が蓄積されます。', this)">？</span></span>
                 <label
                     style="font-size: 0.8rem; cursor: pointer; display: flex; align-items: center; gap: 4px; font-weight: normal;">
                     <input type="checkbox" id="history-delete-mode" onchange="app.updateCompareView()"> 削除モード
@@ -1138,9 +845,9 @@
                 <table class="data-table" style="table-layout: fixed; text-align: center;">
                     <thead>
                         <tr>
-                            <th style="width: 33.3%; text-align: center;">区間(拾い)</th>
-                            <th style="width: 33.3%; text-align: center;">数値</th>
-                            <th style="width: 33.3%; text-align: center;">累計との比較</th>
+                            <th style="width: 33.3%; text-align: center;">区間(拾い) <span class="help-icon" onclick="showTooltip('比較する区間（拾い個数ベース）です。', this)">？</span></th>
+                            <th style="width: 33.3%; text-align: center;">数値 <span class="help-icon" onclick="showTooltip('その区間における該当項目の数値です。', this)">？</span></th>
+                            <th style="width: 33.3%; text-align: center;">累計との比較 <span class="help-icon" onclick="showTooltip('全体累計との差分です。', this)">？</span></th>
                         </tr>
                     </thead>
                     <tbody id="compare-list" style="text-align: center;"></tbody>
@@ -1151,7 +858,7 @@
                 <canvas id="compareChart"></canvas>
             </div>
 
-            <div class="section-header">■ 区間詳細（特定の区間データ）</div>
+            <div class="section-header">■ 区間詳細（特定の区間データ） <span class="help-icon help-icon-red" onclick="showTooltip('選択した特定の区間の詳細なデータを表示します。', this)">？</span></div>
 
             <div class="custom-select-container" id="interval-detail-custom-container">
                 <div class="custom-select-trigger" id="interval-detail-trigger">
@@ -1163,10 +870,10 @@
             </div>
 
             <div style="margin-top: 15px;">
-                <div style="font-weight: bold; margin-bottom: 10px; color: var(--accent-secondary);">■ 推定確率・欠損/余剰</div>
+                <div style="font-weight: bold; margin-bottom: 10px; color: var(--accent-secondary);">■ 推定確率・欠損/余剰 <span class="help-icon" onclick="showTooltip('この区間における推定確率や、理論値との差（欠損・余剰）を表示します。', this)">？</span></div>
                 <div id="interval-probs" style="margin-bottom: 20px;"></div>
 
-                <div style="font-weight: bold; margin-bottom: 10px; color: var(--accent-secondary);">■ 詳細分析データ</div>
+                <div style="font-weight: bold; margin-bottom: 10px; color: var(--accent-secondary);">■ 詳細分析データ <span class="help-icon" onclick="showTooltip('この区間の詳細な分析数値を表示します。', this)">？</span></div>
                 <table class="data-table">
                     <tbody id="interval-details-table"></tbody>
                 </table>
@@ -1184,23 +891,23 @@
 
             <div
                 style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; margin-top: 20px;">
-                <div style="font-weight: bold; color: var(--accent-secondary);">■ 基本設定</div>
+                <div style="font-weight: bold; color: var(--accent-secondary);">■ 基本設定 <span class="help-icon" onclick="showTooltip('台のスペックや換金率など、計算の基本となる数値を設定します。', this)">？</span></div>
                 <button class="reset-defaults-btn" onclick="app.resetBasicSettings()">デフォルトに戻す</button>
             </div>
-            <div class="input-group"><label>SPルート回転体当選率<br>(1/〇)</label><input type="number" id="set-sp-rate"
+            <div class="input-group"><label>SPルート回転体当選率<br>(1/〇) <span class="help-icon" onclick="showTooltip('SPルートに進入した玉が、最終的にV入賞する確率（ネカセやクセの推測値）です。', this)">？</span></label><input type="number" id="set-sp-rate"
                     value="3.1" onchange="app.calc()"></div>
-            <div class="input-group"><label>ノーマルルート回転体当選率<br>(1/〇)</label><input type="number" id="set-nm-rate"
+            <div class="input-group"><label>ノーマルルート回転体当選率<br>(1/〇) <span class="help-icon" onclick="showTooltip('ノーマルルートから回転体（Vチャンスエリア）に突入した玉が、V入賞する確率です。', this)">？</span></label><input type="number" id="set-nm-rate"
                     value="4.1" onchange="app.calc()"></div>
-            <div class="input-group"><label>平均ラウンド数<br>(理論上の振り分け)</label><input type="number" id="set-avg-r"
+            <div class="input-group"><label>平均ラウンド数<br>(理論上の振り分け) <span class="help-icon" onclick="showTooltip('機種理論上の平均ラウンド数（デフォルト値）です。<br>※ファミスタの初期設定は、ホームランV入賞（特図1当り）を含まない数値「9R : 4R : 2R ＝ 36% : 32% : 32%（平均5.16R）」を採用しています。', this)">？</span></label><input type="number" id="set-avg-r"
                     value="5.16" onchange="app.calc()"></div>
-            <div class="input-group"><label>貸玉<br>(1000円あたりの玉数)</label><input type="number" id="set-kasi" value="250"
+            <div class="input-group"><label>貸玉<br>(1000円あたりの玉数) <span class="help-icon" onclick="showTooltip('1000円で借りられる玉数です。', this)">？</span></label><input type="number" id="set-kasi" value="250"
                     onchange="app.calc()"></div>
-            <div class="input-group"><label>換金率<br>(1玉あたりの換金額)</label><input type="number" id="set-exchange" value="4.0"
+            <div class="input-group"><label>換金率<br>(1玉あたりの換金額) <span class="help-icon" onclick="showTooltip('1玉あたりの換金額です。', this)">？</span></label><input type="number" id="set-exchange" value="4.0"
                     onchange="app.calc()"></div>
 
             <div
                 style="display: flex; justify-content: space-between; align-items: center; margin-top: 25px; margin-bottom: 10px;">
-                <div style="font-weight: bold; color: var(--accent-secondary);">■ 各種項目の基準値設定</div>
+                <div style="font-weight: bold; color: var(--accent-secondary);">■ 各種項目の基準値設定 <span class="help-icon" onclick="showTooltip('回転率や拾い率など、目標とする基準数値を個別に設定できます。ここで設定した数値は、「区間分析」タブ内にある■区間比較のグラフ上に「目標ライン」として反映されます。', this)">？</span></div>
                 <button class="reset-defaults-btn" onclick="app.resetTargetSettings()">デフォルトに戻す</button>
             </div>
             <div id="settings-targets-container"></div>
@@ -1291,16 +998,16 @@
             <div class="modal-close" onclick="document.getElementById('reset-modal').style.display='none'">×</div>
             <h3
                 style="margin-top: 0; color: var(--accent-secondary); border-bottom: 2px solid var(--accent-secondary); padding-bottom: 10px;">
-                データのバックアップとリセット</h3>
+                データのバックアップとリセット <span class="help-icon" onclick="showTooltip('現在の実戦データをクリア（初期化）できます。「バックアップしてリセット」を選択すると、初期化と同時に今回記録されたすべてのデータがテキスト形式でクリップボードにコピーされます。コピーされた内容は、スマホやPCの任意のメモ帳アプリ等に貼り付けて保存してください。', this)">？</span></h3>
 
             <div class="input-group">
                 <label>台番</label>
-                <input type="text" id="reset-daiban" placeholder="例: 123番台" style="font-size:16px;" oninput="app.saveDataAndHistory()">
+                <input type="text" id="reset-daiban" placeholder="例: 123番台" style="font-size:16px;">
             </div>
 
             <div class="input-group">
                 <label>本日の稼働メモ（台の挙動、ネカセなど）</label>
-                <textarea id="reset-memo" rows="4" oninput="app.saveDataAndHistory()"
+                <textarea id="reset-memo" rows="4"
                     style="width:100%; padding:10px; border:1px solid #ccc; border-radius:4px; font-size:14px; font-family:var(--font-main); box-sizing:border-box;"></textarea>
             </div>
 
@@ -1321,7 +1028,7 @@
             <div class="modal-close" onclick="document.getElementById('save-complete-modal').style.display='none'">×
             </div>
             <h3 style="margin-top: 0; color: var(--accent-secondary);">保存完了</h3>
-            <p style="font-size: 16px; font-weight: bold;">区間データを無さに保存しました！</p>
+            <p style="font-size: 16px; font-weight: bold;">区間データを無事に保存しました！</p>
             <div style="margin-top: 20px;">
                 <button class="btn-primary"
                     onclick="document.getElementById('save-complete-modal').style.display='none'">閉じる</button>
@@ -1333,7 +1040,7 @@
     <div id="memo-modal" class="modal-overlay">
         <div class="modal-content memo-modal-content" style="max-width: 500px;">
             <div class="modal-close" onclick="app.closeMemo()">×</div>
-            <h3 class="memo-title" style="margin-top: 0; padding-bottom: 10px;">📝 稼働メモ</h3>
+            <h3 class="memo-title" style="margin-top: 0; padding-bottom: 10px;">📝 稼働メモ <span class="help-icon" onclick="showTooltip('稼働前や稼働中のメモを記録できます。', this)">？</span></h3>
             <p style="font-size: 0.85rem; color: var(--text-sub); margin-bottom: 20px;">稼働前や稼働中のメモを自由に入力してください。</p>
 
             <div class="input-group">
@@ -1361,7 +1068,7 @@
         <div class="modal-content" style="max-width: 500px;">
             <div class="modal-close" onclick="app.closeSim()">×</div>
             <h3 style="margin-top: 0; color: #8e44ad; border-bottom: 2px solid #8e44ad; padding-bottom: 10px;">📊
-                期待値シミュレーション</h3>
+                期待値シミュレーション <span class="help-icon" onclick="showTooltip('任意の数値を指定して、通常1回転あたりの期待値、千円あたりのボーダーライン、推定確率などをシミュレーションできる機能です。<br>※すでに実戦ログなどの記録がある場合は、起動した時点の数値が自動的に初期値として入力されますので、変更したい箇所だけを書き換えてご活用ください。', this)">？</span></h3>
             <p style="font-size: 0.85rem; color: var(--text-sub); margin-bottom: 20px;">※この数値は実戦データには保存されません。</p>
 
             <div class="input-group">
@@ -1406,428 +1113,18 @@
     </div>
 
     <button class="btn-memo" onclick="app.openMemo()">📝 稼働前/稼働中メモを更新する</button>
-    <button class="btn-sim" onclick="app.openSim()" style="margin-bottom: 15px;">📊 シミュレーションを起動する</button>
-    <button id="real-data-open-btn" class="btn-real-data">💥 管理人の実戦リアルデータ</button>
-
-    <!-- Real Data Modal -->
-    <div id="real-data-modal" class="modal-overlay">
-        <div class="modal-content" style="max-width: 600px;">
-            <div class="modal-close" id="real-data-close-btn">×</div>
-            <h3 style="margin-top: 0; color: var(--accent-secondary); border-bottom: 2px solid var(--accent-secondary); padding-bottom: 10px; display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 10px;">
-                <span>💥 管理人の実戦リアルデータ</span>
-                <span style="font-size: 12px; font-weight: normal; color: var(--text-sub); font-family: var(--font-main); letter-spacing: 0;">最終更新日: 2026年6月8日</span>
-            </h3>
-            
-            <h4 style="margin-top: 20px; margin-bottom: 5px; color: var(--text-main); font-weight: bold;">■ 世に出てないスペック値</h4>
-            <p style="margin-top: 5px; margin-bottom: 15px; font-size: 13px; color: var(--text-sub); line-height: 1.6; white-space: normal; text-align: left; background: rgba(34, 112, 147, 0.05); padding: 8px 12px; border-radius: 4px; border: 1px solid rgba(34, 112, 147, 0.12);">
-                台のネカセ（傾斜）に左右されない全台共通の未公表スペックや、気になる詳細確率を実戦データから独自に算出・公開しています。
-            </p>
-            <div class="specs-accordion">
-                <!-- SPルート -->
-                <div class="accordion-item">
-                    <button class="accordion-header" onclick="app.toggleAccordion(this)">
-                        <span class="header-title">SPルート回転体当選率</span>
-                        <span class="header-value val-sp">1/3.2 (31.0%) <span class="accordion-arrow">▼</span></span>
-                    </button>
-                    <div class="accordion-content">
-                        <table class="details-table">
-                            <tbody>
-                                <tr>
-                                    <th>SP回転体突入個数</th>
-                                    <td>1,302 個</td>
-                                </tr>
-                                <tr>
-                                    <th>SP大当り(V入賞)個数</th>
-                                    <td>403 個</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                
-                <!-- ノーマルルート -->
-                <div class="accordion-item">
-                    <button class="accordion-header" onclick="app.toggleAccordion(this)">
-                        <span class="header-title">ノーマルルート回転体当選率</span>
-                        <span class="header-value val-nm">1/4.0 (24.9%) <span class="accordion-arrow">▼</span></span>
-                    </button>
-                    <div class="accordion-content">
-                        <table class="details-table">
-                            <tbody>
-                                <tr>
-                                    <th>ノーマル回転体突入個数</th>
-                                    <td>1,966 個</td>
-                                </tr>
-                                <tr>
-                                    <th>ノーマル大当り(V入賞)個数</th>
-                                    <td>490 個</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                
-                <!-- ホームラン -->
-                <div class="accordion-item">
-                    <button class="accordion-header" onclick="app.toggleAccordion(this)">
-                        <span class="header-title">実戦上のホームラン(直当り)率</span>
-                        <span class="header-value val-hr">1/2398.8 (0.05%) <span class="accordion-arrow">▼</span></span>
-                    </button>
-                    <div class="accordion-content">
-                        <table class="details-table">
-                            <tbody>
-                                <tr>
-                                    <th>ノーマルルート総選択個数</th>
-                                    <td>10,692 個</td>
-                                </tr>
-                                <tr>
-                                    <th>ホームラン(直当り)個数</th>
-                                    <td>5 個</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <h4 style="margin-top: 20px; margin-bottom: 5px; color: var(--text-main); font-weight: bold;">■ 優秀台実戦データ</h4>
-            <p style="margin-top: 5px; margin-bottom: 15px; font-size: 13px; color: var(--text-sub); line-height: 1.6; white-space: normal; text-align: left; background: rgba(34, 112, 147, 0.05); padding: 8px 12px; border-radius: 4px; border: 1px solid rgba(34, 112, 147, 0.12);">
-                管理人が実際に稼働した期待値プラスの優秀台データを公開しています。データの信頼性を保つため、終日（通常1,000G以上）回した実戦データのみを掲載しています。
-            </p>
-            <!-- タップ説明表示エリア -->
-            <div id="real-data-tooltip-area" style="display: none; background: rgba(34, 112, 147, 0.05); color: #227093; border: 1px solid rgba(34, 112, 147, 0.3); padding: 12px 15px; border-radius: 4px; margin-bottom: 15px; font-size: 13px; text-align: left; line-height: 1.5;">
-                <!-- ここに説明文が入る -->
-            </div>
-            <div class="real-data-container">
-                <table class="data-table" style="margin-top: 0; border: none; white-space: nowrap; text-align: center; width: 100%; border-collapse: collapse;">
-                    <thead>
-                        <tr style="background: rgba(0, 0, 0, 0.03);">
-                            <th style="text-align: center; border: 1px solid var(--border-color); padding: 10px; color: var(--text-main); font-weight: 700;">日付</th>
-                            <th class="tooltip-header" style="text-align: center; border: 1px solid var(--border-color); padding: 10px; color: var(--text-main); font-weight: 700;">
-                                回転単価
-                                <span class="sort-arrows">
-                                    <span class="sort-asc" onclick="app.sortRealData(event, 'tanka', 'asc')">▲</span>
-                                    <span class="sort-desc" onclick="app.sortRealData(event, 'tanka', 'desc')">▼</span>
-                                </span>
-                                <span class="tooltip-text">1回転あたりの期待値（円）。期待収支を通常回転数で割った数値。</span>
-                            </th>
-                            <th class="tooltip-header" style="text-align: center; border: 1px solid var(--border-color); padding: 10px; color: var(--text-main); font-weight: 700;">
-                                回転率
-                                <span class="sort-arrows">
-                                    <span class="sort-asc" onclick="app.sortRealData(event, 'kaiten', 'asc')">▲</span>
-                                    <span class="sort-desc" onclick="app.sortRealData(event, 'kaiten', 'desc')">▼</span>
-                                </span>
-                                <span class="tooltip-text">千円あたりの通常回転数（ベース値）。</span>
-                            </th>
-                            <th class="tooltip-header" style="text-align: center; border: 1px solid var(--border-color); padding: 10px; color: var(--text-main); font-weight: 700;">
-                                1R出玉
-                                <span class="sort-arrows">
-                                    <span class="sort-asc" onclick="app.sortRealData(event, 'out', 'asc')">▲</span>
-                                    <span class="sort-desc" onclick="app.sortRealData(event, 'out', 'desc')">▼</span>
-                                </span>
-                                <span class="tooltip-text">大当り1R（ラウンド）あたりの獲得出玉数。</span>
-                            </th>
-                            <th class="tooltip-header" style="text-align: center; border: 1px solid var(--border-color); padding: 10px; color: var(--text-main); font-weight: 700;">
-                                大当り確率
-                                <span class="sort-arrows">
-                                    <span class="sort-asc" onclick="app.sortRealData(event, 'prob', 'asc')">▲</span>
-                                    <span class="sort-desc" onclick="app.sortRealData(event, 'prob', 'desc')">▼</span>
-                                </span>
-                                <span class="tooltip-text">実戦値から算出した推定の大当り確率。</span>
-                            </th>
-                            <th class="tooltip-header" style="text-align: center; border: 1px solid var(--border-color); padding: 10px; color: var(--text-main); font-weight: 700;">
-                                役モノ確率
-                                <span class="sort-arrows">
-                                    <span class="sort-asc" onclick="app.sortRealData(event, 'yaku', 'asc')">▲</span>
-                                    <span class="sort-desc" onclick="app.sortRealData(event, 'yaku', 'desc')">▼</span>
-                                </span>
-                                <span class="tooltip-text">役モノ（回転体）のV入賞率（大当り確率/拾い率）。</span>
-                            </th>
-                            <th class="tooltip-header" style="text-align: center; border: 1px solid var(--border-color); padding: 10px; color: var(--text-main); font-weight: 700;">
-                                拾い率
-                                <span class="sort-arrows">
-                                    <span class="sort-asc" onclick="app.sortRealData(event, 'pick', 'asc')">▲</span>
-                                    <span class="sort-desc" onclick="app.sortRealData(event, 'pick', 'desc')">▼</span>
-                                </span>
-                                <span class="tooltip-text">通常回転に対してハネに拾われた玉の割合。</span>
-                            </th>
-                            <th class="tooltip-header" style="text-align: center; border: 1px solid var(--border-color); padding: 10px; color: var(--text-main); font-weight: 700;">
-                                SP選択率
-                                <span class="sort-arrows">
-                                    <span class="sort-asc" onclick="app.sortRealData(event, 'sp', 'asc')">▲</span>
-                                    <span class="sort-desc" onclick="app.sortRealData(event, 'sp', 'desc')">▼</span>
-                                </span>
-                                <span class="tooltip-text">SP（スペシャル）ルート選択率。拾われた玉が直接SP回転体にいく確率。</span>
-                            </th>
-                            <th class="tooltip-header" style="text-align: center; border: 1px solid var(--border-color); padding: 10px; color: var(--text-main); font-weight: 700;">
-                                ST選択率
-                                <span class="sort-arrows">
-                                    <span class="sort-asc" onclick="app.sortRealData(event, 'st', 'asc')">▲</span>
-                                    <span class="sort-desc" onclick="app.sortRealData(event, 'st', 'desc')">▼</span>
-                                </span>
-                                <span class="tooltip-text">ST（ストレート）コース選択率。ノーマルルートのうち、ストレートに進む割合。</span>
-                            </th>
-                            <th class="tooltip-header" style="text-align: center; border: 1px solid var(--border-color); padding: 10px; color: var(--text-main); font-weight: 700;">
-                                ST回転体突入率
-                                <span class="sort-arrows">
-                                    <span class="sort-asc" onclick="app.sortRealData(event, 'st-in', 'asc')">▲</span>
-                                    <span class="sort-desc" onclick="app.sortRealData(event, 'st-in', 'desc')">▼</span>
-                                </span>
-                                <span class="tooltip-text">ST（ストレート）コース選択時に回転体（役物）へ突入する割合。</span>
-                            </th>
-                            <th class="tooltip-header" style="text-align: center; border: 1px solid var(--border-color); padding: 10px; color: var(--text-main); font-weight: 700;">
-                                変化強打率
-                                <span class="sort-arrows">
-                                    <span class="sort-asc" onclick="app.sortRealData(event, 'strong', 'asc')">▲</span>
-                                    <span class="sort-desc" onclick="app.sortRealData(event, 'strong', 'desc')">▼</span>
-                                </span>
-                                <span class="tooltip-text">変化球コース選択時に強打が発生する割合。</span>
-                            </th>
-                            <th class="tooltip-header" style="text-align: center; border: 1px solid var(--border-color); padding: 10px; color: var(--text-main); font-weight: 700;">
-                                変化回転体突入率
-                                <span class="sort-arrows">
-                                    <span class="sort-asc" onclick="app.sortRealData(event, 'strong-in', 'asc')">▲</span>
-                                    <span class="sort-desc" onclick="app.sortRealData(event, 'strong-in', 'desc')">▼</span>
-                                </span>
-                                <span class="tooltip-text">変化球強打時に回転体（役物）へ突入する割合。</span>
-                            </th>
-                            <th class="tooltip-header" style="text-align: center; border: 1px solid var(--border-color); padding: 10px; color: var(--text-main); font-weight: 700;">
-                                N総回転体突入率
-                                <span class="sort-arrows">
-                                    <span class="sort-asc" onclick="app.sortRealData(event, 'total-in', 'asc')">▲</span>
-                                    <span class="sort-desc" onclick="app.sortRealData(event, 'total-in', 'desc')">▼</span>
-                                </span>
-                                <span class="tooltip-text">N（ノーマル）ルート選択時、最終的に回転体（役物）へ突入する総割合。</span>
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr data-date="2026-05-14" data-tanka="23.6" data-kaiten="15.6" data-out="111" data-prob="25.3" data-yaku="12.1" data-pick="47.9" data-sp="12.7" data-st="21.8" data-st-in="33.3" data-strong="33.2" data-strong-in="47.1" data-total-in="19.5">
-                            <td style="border: 1px solid var(--border-color); padding: 10px;">5月14日</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng); font-weight: bold; color: var(--plus-red);">+23.6円</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng); font-weight: bold;">15.6</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng); font-weight: bold;">111</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">1/25.3</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">1/12.1</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">47.9%</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">12.7%</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">21.8%</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">33.3%</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">33.2%</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">47.1%</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">19.5%</td>
-                        </tr>
-                        <tr data-date="2026-05-13" data-tanka="12.5" data-kaiten="15.7" data-out="111" data-prob="29.5" data-yaku="13.8" data-pick="46.7" data-sp="10.0" data-st="25.0" data-st-in="33.3" data-strong="28.9" data-strong-in="46.2" data-total-in="18.3">
-                            <td style="border: 1px solid var(--border-color); padding: 10px;">5月13日</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng); font-weight: bold; color: var(--plus-red);">+12.5円</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng); font-weight: bold;">15.7</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng); font-weight: bold;">111</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">1/29.5</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">1/13.8</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">46.7%</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">10.0%</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">25.0%</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">33.3%</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">28.9%</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">46.2%</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">18.3%</td>
-                        </tr>
-                        <tr data-date="2026-05-03" data-tanka="14.8" data-kaiten="14.5" data-out="111" data-prob="26.8" data-yaku="13.2" data-pick="49.1" data-sp="11.2" data-st="24.1" data-st-in="33.6" data-strong="25.4" data-strong-in="53.3" data-total-in="18.4">
-                            <td style="border: 1px solid var(--border-color); padding: 10px;">5月3日</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng); font-weight: bold; color: var(--plus-red);">+14.8円</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng); font-weight: bold;">14.5</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng); font-weight: bold;">111</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">1/26.8</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">1/13.2</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">49.1%</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">11.2%</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">24.1%</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">33.6%</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">25.4%</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">53.3%</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">18.4%</td>
-                        </tr>
-                        <tr data-date="2026-05-01" data-tanka="8.8" data-kaiten="14.3" data-out="111" data-prob="28.7" data-yaku="14.2" data-pick="49.5" data-sp="10.5" data-st="22.9" data-st-in="30.9" data-strong="27.3" data-strong-in="46.0" data-total-in="16.8">
-                            <td style="border: 1px solid var(--border-color); padding: 10px;">5月1日</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng); font-weight: bold; color: var(--plus-red);">+8.8円</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng); font-weight: bold;">14.3</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng); font-weight: bold;">111</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">1/28.7</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">1/14.2</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">49.5%</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">10.5%</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">22.9%</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">30.9%</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">27.3%</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">46.0%</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">16.8%</td>
-                        </tr>
-                        <tr data-date="2026-04-13" data-tanka="24.0" data-kaiten="15.7" data-out="111" data-prob="25.3" data-yaku="12.8" data-pick="49.9" data-sp="11.8" data-st="22.5" data-st-in="38.3" data-strong="21.3" data-strong-in="46.1" data-total-in="18.5">
-                            <td style="border: 1px solid var(--border-color); padding: 10px;">4月13日</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng); font-weight: bold; color: var(--plus-red);">+24.0円</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng); font-weight: bold;">15.7</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng); font-weight: bold;">111</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">1/25.3</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">1/12.8</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">49.9%</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">11.8%</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">22.5%</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">38.3%</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">21.3%</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">46.1%</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">18.5%</td>
-                        </tr>
-                        <tr data-date="2026-04-12" data-tanka="8.8" data-kaiten="13.5" data-out="111" data-prob="27.3" data-yaku="13.1" data-pick="47.9" data-sp="10.7" data-st="25.1" data-st-in="43.5" data-strong="19.8" data-strong-in="42.2" data-total-in="19.3">
-                            <td style="border: 1px solid var(--border-color); padding: 10px;">4月12日</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng); font-weight: bold; color: var(--plus-red);">+8.8円</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng); font-weight: bold;">13.5</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng); font-weight: bold;">111</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">1/27.3</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">1/13.1</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">47.9%</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">10.7%</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">25.1%</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">43.5%</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">19.8%</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">42.2%</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">19.3%</td>
-                        </tr>
-                        <tr data-date="2026-04-09" data-tanka="3.8" data-kaiten="14.5" data-out="111" data-prob="31.3" data-yaku="14.5" data-pick="46.4" data-sp="10.0" data-st="24.4" data-st-in="31.8" data-strong="20.8" data-strong-in="46.7" data-total-in="17.5">
-                            <td style="border: 1px solid var(--border-color); padding: 10px;">4月9日</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng); font-weight: bold; color: var(--plus-red);">+3.8円</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng); font-weight: bold;">14.5</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng); font-weight: bold;">111</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">1/31.3</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">1/14.5</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">46.4%</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">10.0%</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">24.4%</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">31.8%</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">20.8%</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">46.7%</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">17.5%</td>
-                        </tr>
-                        <tr data-date="2026-04-02" data-tanka="21.4" data-kaiten="13.3" data-out="111" data-prob="23.1" data-yaku="12.5" data-pick="54.3" data-sp="12.0" data-st="30.7" data-st-in="35.4" data-strong="17.9" data-strong-in="52.2" data-total-in="20.2">
-                            <td style="border: 1px solid var(--border-color); padding: 10px;">4月2日</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng); font-weight: bold; color: var(--plus-red);">+21.4円</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng); font-weight: bold;">13.3</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng); font-weight: bold;">111</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">1/23.1</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">1/12.5</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">54.3%</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">12.0%</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">30.7%</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">35.4%</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">17.9%</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">52.2%</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">20.2%</td>
-                        </tr>
-                        <tr data-date="2026-03-04" data-tanka="15.7" data-kaiten="15.7" data-out="111" data-prob="28.2" data-yaku="14.9" data-pick="52.9" data-sp="10.0" data-st="27.8" data-st-in="28.0" data-strong="22.2" data-strong-in="40.0" data-total-in="16.7">
-                            <td style="border: 1px solid var(--border-color); padding: 10px;">3月4日</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng); font-weight: bold; color: var(--plus-red);">+15.7円</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng); font-weight: bold;">15.7</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng); font-weight: bold;">111</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">1/28.2</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">1/14.9</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">52.9%</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">10.0%</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">27.8%</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">28.0%</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">22.2%</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">40.0%</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">16.7%</td>
-                        </tr>
-                        <tr data-date="2026-03-03" data-tanka="15.5" data-kaiten="14.2" data-out="111" data-prob="26.1" data-yaku="12.6" data-pick="48.3" data-sp="11.3" data-st="24.4" data-st-in="38.7" data-strong="20.5" data-strong-in="56.0" data-total-in="20.9">
-                            <td style="border: 1px solid var(--border-color); padding: 10px;">3月3日</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng); font-weight: bold; color: var(--plus-red);">+15.5円</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng); font-weight: bold;">14.2</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng); font-weight: bold;">111</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">1/26.1</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">1/12.6</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">48.3%</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">11.3%</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">24.4%</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">38.7%</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">20.5%</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">56.0%</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">20.9%</td>
-                        </tr>
-                        <tr data-date="2026-02-28" data-tanka="6.9" data-kaiten="15.0" data-out="111" data-prob="30.8" data-yaku="15.4" data-pick="50.0" data-sp="8.0" data-st="20.7" data-st-in="38.9" data-strong="20.7" data-strong-in="49.5" data-total-in="18.3">
-                            <td style="border: 1px solid var(--border-color); padding: 10px;">2月28日</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng); font-weight: bold; color: var(--plus-red);">+6.9円</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng); font-weight: bold;">15.0</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng); font-weight: bold;">111</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">1/30.8</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">1/15.4</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">50.0%</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">8.0%</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">20.7%</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">38.9%</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">20.7%</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">49.5%</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">18.3%</td>
-                        </tr>
-                        <tr data-date="2026-02-27" data-tanka="10.9" data-kaiten="14.3" data-out="111" data-prob="27.9" data-yaku="13.6" data-pick="48.8" data-sp="9.0" data-st="25.1" data-st-in="36.8" data-strong="22.4" data-strong-in="52.0" data-total-in="20.9">
-                            <td style="border: 1px solid var(--border-color); padding: 10px;">2月27日</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng); font-weight: bold; color: var(--plus-red);">+10.9円</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng); font-weight: bold;">14.3</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng); font-weight: bold;">111</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">1/27.9</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">1/13.6</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">48.8%</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">9.0%</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">25.1%</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">36.8%</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">22.4%</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">52.0%</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">20.9%</td>
-                        </tr>
-                        <tr data-date="2026-02-26" data-tanka="4.8" data-kaiten="15.3" data-out="111" data-prob="32.4" data-yaku="16.3" data-pick="50.4" data-sp="9.5" data-st="24.4" data-st-in="19.5" data-strong="18.1" data-strong-in="54.4" data-total-in="14.6">
-                            <td style="border: 1px solid var(--border-color); padding: 10px;">2月26日</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng); font-weight: bold; color: var(--plus-red);">+4.8円</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng); font-weight: bold;">15.3</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng); font-weight: bold;">111</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">1/32.4</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">1/16.3</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">50.4%</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">9.5%</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">24.4%</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">19.5%</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">18.1%</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">54.4%</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">14.6%</td>
-                        </tr>
-                        <tr data-date="2026-02-25" data-tanka="22.0" data-kaiten="15.1" data-out="111" data-prob="25.2" data-yaku="12.5" data-pick="49.8" data-sp="13.5" data-st="23.8" data-st-in="35.5" data-strong="22.3" data-strong-in="43.7" data-total-in="18.2">
-                            <td style="border: 1px solid var(--border-color); padding: 10px;">2月25日</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng); font-weight: bold; color: var(--plus-red);">+22.0円</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng); font-weight: bold;">15.1</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng); font-weight: bold;">111</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">1/25.2</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">1/12.5</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">49.8%</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">13.5%</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">23.8%</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">35.5%</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">22.3%</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">43.7%</td>
-                            <td style="border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-eng);">18.2%</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
+    <button class="btn-sim" onclick="app.openSim()">📊 シミュレーションを起動する</button>
 
     <script>
         const app = {
             fields: [
-                { id: "total_rot", name: "1. 通常回転数" },
-                { id: "total_pick", name: "2. 拾い個数" },
-                { id: "sp_select", name: "3. SPルート選択個数" },
-                { id: "st_select", name: "4. ストレート選択個数" },
-                { id: "st_rot_in", name: "5. ストレート選択時回転体突入個数", parent: "st_select" },
-                { id: "ch_strong", name: "6. 変化球選択時強打個数" },
-                { id: "ch_rot_in", name: "7. 変化球強打時回転体突入個数", parent: "ch_strong" }
+                { id: "total_rot", name: "1. 通常回転数", tooltip: "通常時の総回転数を入力してください。<br>※データランプの数値をそのまま書くのではなく、必ず「自分が回した分の回転数」のみをカウントして入力してください。" },
+                { id: "total_pick", name: "2. 拾い個数", tooltip: "ハネに拾われて、盤面内部（役物内）に進入した玉の個数を入力してください。" },
+                { id: "sp_select", name: "3. SPルート選択個数", tooltip: "役物への進入ルートのうち、大当りへの期待度が高い「SPルート」へ進んだ玉の個数を入力してください。" },
+                { id: "st_select", name: "4. ストレート選択個数", tooltip: "ノーマルルート進入後、赤橋を渡りきって「ストレートコース」を選択した玉の個数を入力してください。" },
+                { id: "st_rot_in", name: "5. ストレート選択時回転体突入個数", parent: "st_select", tooltip: "ストレートコースを選択した後、回転体（Vチャンスエリア）まで突入した玉の個数を入力してください。" },
+                { id: "ch_strong", name: "6. 変化球選択時強打個数", tooltip: "ノーマルルート進入後、赤橋を渡りきれず「変化球コース」を選択し、バットにミートして守備役物まで到達した玉の個数を入力してください。" },
+                { id: "ch_rot_in", name: "7. 変化球強打時回転体突入個数", parent: "ch_strong", tooltip: "変化球コースを選択した後、回転体(Vチャンスエリア)まで突入した玉の個数を入力して下さい。" }
             ],
 
             metricsConfig: [
@@ -1858,7 +1155,7 @@
                 this.fields.forEach(f => {
                     const div = document.createElement('div');
                     div.className = 'input-group';
-                    div.innerHTML = `<label>${f.name}</label><input type="number" id="${f.id}" pattern="\\d*" oninput="app.calc()">`;
+                    div.innerHTML = `<label>${f.name} ${f.tooltip ? `<span class="help-icon" onclick="showTooltip('${f.tooltip}', this)">？</span>` : ''}</label><input type="number" id="${f.id}" pattern="\\d*" oninput="app.calc()">`;
                     container.appendChild(div);
                 });
 
@@ -1984,14 +1281,41 @@
             },
 
             showTab(id) {
-                document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
-                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-                document.getElementById(id).classList.add('active');
+                const targetSection = document.getElementById(id);
+                if (!targetSection) return;
 
-                // Find the tab that triggered this
-                if (event && event.currentTarget) {
-                    event.currentTarget.classList.add('active');
+                // すでにアクティブなら、余計なクラス脱着は避ける（アニメーション再トリガーやDriver.jsのバグ防止）
+                if (targetSection.classList.contains('active')) {
+                    document.querySelectorAll('.tab').forEach(t => {
+                        const target = t.getAttribute('data-target') || (t.getAttribute('onclick') && t.getAttribute('onclick').match(/'([^']+)'/)?.[1]);
+                        if (target === id) {
+                            t.classList.add('active');
+                        } else if (target) {
+                            t.classList.remove('active');
+                        }
+                    });
+                    return;
                 }
+
+                document.querySelectorAll('.content-section').forEach(s => {
+                    if (s.id !== id) {
+                        s.classList.remove('active');
+                    }
+                });
+                
+                targetSection.classList.add('active');
+
+                // タブ自体のアクティブ状態の更新
+                document.querySelectorAll('.tab').forEach(t => {
+                    const target = t.getAttribute('data-target') || (t.getAttribute('onclick') && t.getAttribute('onclick').match(/'([^']+)'/)?.[1]);
+                    if (target) {
+                        if (target === id) {
+                            t.classList.add('active');
+                        } else {
+                            t.classList.remove('active');
+                        }
+                    }
+                });
 
                 if (id === 'compare') this.updateCompareView();
             },
@@ -2129,9 +1453,9 @@
 
                 if (thead) {
                     thead.innerHTML = `<tr>
-                        <th style="width: 10%; text-align: center;">No</th>
-                        <th style="width: 25%; text-align: center;">使用玉数</th>
-                        <th style="width: 25%; text-align: center;">獲得出玉</th>
+                        <th style="width: 10%; text-align: center;">No <span class="help-icon" onclick="showTooltip('大当りの連番です。', this)">？</span></th>
+                        <th style="width: 25%; text-align: center;">使用玉数 <span class="help-icon" onclick="showTooltip('前回の大当り（または稼働開始）から、今回の大当りまでに使用した玉数です。表示されている玉数をタップすると、記録した内容を修正できます。', this)">？</span></th>
+                        <th style="width: 25%; text-align: center;">獲得出玉 <span class="help-icon" onclick="showTooltip('この大当りで獲得した出玉です。<br>【計算式】次回当選時の持ち玉 - 今回の残玉', this)">？</span></th>
                         <th style="width: 25%; text-align: center;">当選契機</th>
                         ${delMode ? '<th style="width: 15%; text-align: center; color: var(--plus-red);">削除</th>' : '<th style="width: 15%; text-align: center;">R数</th>'}
                     </tr>`;
@@ -2469,22 +1793,22 @@
                 const curveSelectCount = nmRouteCount - v.st_select;
 
                 const details = [
-                    ["千円あたりの回転数", `<span style="font-family:var(--font-eng); font-weight:bold; font-size:18px;">${v.rot_per_k.toFixed(1)} 回転</span>`],
-                    ["持ち玉比率", `<span style="font-family:var(--font-eng); font-weight:bold; font-size:18px;">${v.holding_rate.toFixed(1)} %</span>`],
-                    ["1Rあたりの出玉", `<span style="font-family:var(--font-eng); font-weight:bold; font-size:18px;">${v.r_out.toFixed(1)} 玉</span>`],
-                    ["R別当選回数", `<span style="font-size:13px; font-weight:bold; color:var(--text-main);">2R: ${v.v_2r}回 / 4R: ${v.v_4r}回 / 9R: ${v.v_9r}回</span>`],
-                    ["当選契機別回数", `<span style="font-size:13px; font-weight:bold; color:var(--text-main);">SP: ${v.sp_v_in}回 / ﾉｰﾏﾙ: ${v.nm_total_v}回 / HR: ${v.st_hr_in + v.ch_hr_in}回</span>`],
-                    ["拾い率", safeDivPct(v.total_pick, v.total_rot)],
-                    ["SPルート選択率", safeDivPct(v.sp_select, v.total_pick)],
-                    ["ストレート選択率", safeDivPct(v.st_select, nmRouteCount)],
-                    ["ストレート選択時<br>回転体突入率", safeDivPct(v.st_rot_in, v.st_select - v.st_hr_in)],
-                    ["変化球選択時<br>強打率", safeDivPct(v.ch_strong, curveSelectCount)],
-                    ["変化球強打時<br>回転体突入率", safeDivPct(v.ch_rot_in, v.ch_strong - v.ch_hr_in)],
-                    ["ノーマルルート選択時<br>総回転体突入率", safeDivPct(v.st_rot_in + v.ch_rot_in, v.total_pick - v.sp_select - v.st_hr_in - v.ch_hr_in)],
-                    ["SPルート<br>回転体当選率", safeDivProb(v.sp_select, v.sp_v_in)],
-                    ["ノーマルルート<br>回転体当選率", safeDivProb(v.st_rot_in + v.ch_rot_in, v.nm_total_v)]
+                    ["千円あたりの回転数", `<span style="font-family:var(--font-eng); font-weight:bold; font-size:18px;">${v.rot_per_k.toFixed(1)} 回転</span>`, "千円あたりどのぐらい回ったかの数値です。実戦ログで記録された使用玉数を合算し自動的に算出します。<br>【計算式】<br>通常回転数 ÷ (総使用玉数 ÷ 貸玉数)<br>(※貸玉数は詳細設定の貸玉で設定された数値を使用します。)"],
+                    ["持ち玉比率", `<span style="font-family:var(--font-eng); font-weight:bold; font-size:18px;">${v.holding_rate.toFixed(1)} %</span>`, "総使用玉数のうち、持ち玉（または貯玉再プレイ玉）が占める割合です。この比率が高いほど、換金手数料によるギャップ損失を抑えられます。<br>【計算式】<br>((総使用玉数 - 現金投資による使用玉数) ÷ 総使用玉数) × 100<br>※現金投資による使用玉数 ＝ (現金投資額 ÷ 1000) × 貸玉数"],
+                    ["1Rあたりの出玉", `<span style="font-family:var(--font-eng); font-weight:bold; font-size:18px;">${v.r_out.toFixed(1)} 玉</span>`, "1Rあたり獲得出来た玉の平均数値です。実戦ログで記録された獲得玉数を合算し自動的に算出します。<br>【計算式】<br>総獲得出玉 ÷ 総獲得ラウンド数<br>※総獲得ラウンド数 ＝ (2R大当り回数 × 2) ＋ (4R大当り回数 × 4) ＋ (9R大当り回数 × 9)"],
+                    ["R別当選回数", `<span style="font-size:13px; font-weight:bold; color:var(--text-main);">2R: ${v.v_2r}回 / 4R: ${v.v_4r}回 / 9R: ${v.v_9r}回</span>`, "実戦で当選した際のRの振り分け回数です。<br>【計算式】<br>実戦ログに記録された各大当りの各ラウンド（2R/4R/9R）の合計回数"],
+                    ["当選契機別回数", `<span style="font-size:13px; font-weight:bold; color:var(--text-main);">SP: ${v.sp_v_in}回 / ﾉｰﾏﾙ: ${v.nm_total_v}回 / HR: ${v.st_hr_in + v.ch_hr_in}回</span>`, "大当りした際の当選契機別の回数です。SPルートからのV入賞、ノーマルルートからのV入賞、およびホームラン（HR）による当選の回数を集計しています。<br>【計算式】<br>実戦ログに記録された大当りの各当選契機（SPルート/ノーマルルート/ストレートコースor変化球選択後HR）の合計回数"],
+                    ["拾い率", safeDivPct(v.total_pick, v.total_rot), "通常回転数に対して、ハネに拾われて盤面内部（役物内）に進入した玉の割合です。<br>【計算式】<br>(拾い個数 ÷ 通常回転数) × 100"],
+                    ["SPルート選択率", safeDivPct(v.sp_select, v.total_pick), "ハネに拾われた玉のうち、大当りへの期待度が高い「SPルート」を選択した玉の割合です。<br>【計算式】<br>(SPルート選択個数 ÷ 拾い個数) × 100"],
+                    ["ストレート選択率", safeDivPct(v.st_select, nmRouteCount), "ノーマルルートを選択した玉のうち、赤橋を渡りきって「ストレートコース」を選択した玉の割合です。<br>【計算式】<br>(ストレート選択個数 ÷ ノーマルルート進入個数) × 100<br>※ノーマルルート進入個数 ＝ 拾い個数 - SPルート選択個数"],
+                    ["ストレート選択時<br>回転体突入率", safeDivPct(v.st_rot_in, v.st_select - v.st_hr_in), "ストレートコースを選択した玉のうち、ホームラン（HR）での即当りを除き、回転体（Vチャンスエリア）まで突入した玉の割合です。<br>【計算式】<br>(ストレート選択時回転体突入個数 ÷ (ストレート選択個数 - ストレートコース選択後HR回数)) × 100"],
+                    ["変化球選択時<br>強打率", safeDivPct(v.ch_strong, curveSelectCount), "変化球コース(赤橋を渡り切れなかった玉がいきつくコース)へ進んだ玉のうち、バットにミートして守備役物まで到達（強打）した玉の割合です。<br>【計算式】<br>(変化球選択時強打個数 ÷ 変化球コース進入個数) × 100<br>※変化球コース進入個数 ＝ 拾い個数 - SPルート選択個数 - ストレート選択個数"],
+                    ["変化球強打時<br>回転体突入率", safeDivPct(v.ch_rot_in, v.ch_strong - v.ch_hr_in), "変化球を強打した玉のうち、ホームラン（HR）での即当りを除き、回転体（Vチャンスエリア）まで突入した玉の割合です。<br>【計算式】<br>(変化球強打時回転体突入個数 ÷ (変化球選択時強打個数 - 変化球選択後HR回数)) × 100"],
+                    ["ノーマルルート選択時<br>総回転体突入率", safeDivPct(v.st_rot_in + v.ch_rot_in, v.total_pick - v.sp_select - v.st_hr_in - v.ch_hr_in), "ノーマルルートを選択し、ホームラン（HR）による即当りを除いた玉のうち、最終的に回転体（Vチャンスエリア）へ突入した玉の割合です。<br>【計算式】<br>((ストレート選択時回転体突入個数 ＋ 変化球強打時回転体突入個数) ÷ (拾い個数 - SPルート選択個数 - ストレートコース選択後HR回数 - 変化球選択後HR回数)) × 100"],
+                    ["SPルート<br>回転体当選率", safeDivProb(v.sp_select, v.sp_v_in), "SPルートを選択した玉に対して、何個に1個がV入賞（大当り）したかを示します。<br>【計算式】<br>1 ÷ (SPルート選択個数 ÷ SPルートからのV入賞回数)<br>※分母の値 ＝ SPルート選択個数 ÷ SPルートからのV入賞回数"],
+                    ["ノーマルルート<br>回転体当選率", safeDivProb(v.st_rot_in + v.ch_rot_in, v.nm_total_v), "ノーマルルートから回転体（Vチャンスエリア）に突入した玉に対して、何個に1個がV入賞（大当り）したかを示します。<br>【計算式】<br>1 ÷ ((ストレート選択時回転体突入個数 ＋ 変化球強打時回転体突入個数) ÷ ノーマルルートからのV入賞回数)<br>※分母の値 ＝ (ストレート選択時回転体突入個数 ＋ 変化球強打時回転体突入個数) ÷ ノーマルルートからのV入賞回数"]
                 ];
-                document.getElementById('res-details-table').innerHTML = details.map(d => `<tr><th style="width:70%;">${d[0]}</th><td style="width:30%; font-family:var(--font-eng); font-weight:bold; font-size:16px;">${d[1]}</td></tr>`).join('');
+                document.getElementById('res-details-table').innerHTML = details.map(d => `<tr><th style="width:70%;">${d[0]}${d[2] ? ` <span class="help-icon" onclick="showTooltip('${d[2]}', this)">？</span>` : ''}</th><td style="width:30%; font-family:var(--font-eng); font-weight:bold; font-size:16px;">${d[1]}</td></tr>`).join('');
 
                 this.lastCalcRes = {
                     totalExpYen,
@@ -2840,9 +2164,7 @@
                     logHistory: this.logHistory,
                     jackpotCount: this.jackpotCount,
                     memoBefore: document.getElementById('memo-before').value,
-                    memoDuring: document.getElementById('memo-during').value,
-                    resetDaiban: document.getElementById('reset-daiban') ? document.getElementById('reset-daiban').value : "",
-                    resetMemo: document.getElementById('reset-memo') ? document.getElementById('reset-memo').value : ""
+                    memoDuring: document.getElementById('memo-during').value
                 };
                 localStorage.setItem('pachitaku_v6_data_v2', JSON.stringify(saveObj));
                 localStorage.setItem('pachitaku_v6', JSON.stringify(data));
@@ -2852,7 +2174,114 @@
                 let saved = JSON.parse(localStorage.getItem('pachitaku_v6_data_v2'));
                 if (!saved) {
                     const old = JSON.parse(localStorage.getItem('pachitaku_v6'));
-                    if (old) saved = { current: old, history: [], targets: {}, settings: {} };
+                    if (old) {
+                        saved = { current: old, history: [], targets: {}, settings: {} };
+                    } else {
+                        // 初回起動時（またはリセット時）にチュートリアルを理解しやすくするためのリアルなデモデータを注入
+                        saved = {
+                            current: {
+                                total_rot: "320",
+                                total_pick: "145",
+                                sp_select: "18",
+                                st_select: "28",
+                                st_rot_in: "10",
+                                ch_strong: "32",
+                                ch_rot_in: "13"
+                            },
+                            targets: {
+                                rotPerK: "18.0",
+                                rOut: "115",
+                                pickRate: "45",
+                                spSelectRate: "12",
+                                straightSelectRate: "20",
+                                straightRotInRate: "35",
+                                curveStrongRate: "30",
+                                curveRotInRate: "40",
+                                nmTotalRotInRate: "18",
+                                spWinRate: "3.1",
+                                nmWinRate: "4.1"
+                            },
+                            settings: {
+                                sp: "3.1",
+                                nm: "4.1",
+                                avgR: "5.16",
+                                kasi: "250",
+                                exchange: "4.0"
+                            },
+                            logData: {
+                                hold: "2620",
+                                remain: "",
+                                replay: "",
+                                invest: "",
+                                trigger: "",
+                                round: ""
+                            },
+                            logHistory: [
+                                { no: 1, usedBalls: 800, trigger: "SPルート", round: "4R", inputs: { hold: 1000, remain: 200, replay: 0, invest: 0 } },
+                                { no: 2, usedBalls: 500, trigger: "ノーマルルート", round: "9R", inputs: { hold: 660, remain: 160, replay: 0, invest: 0 } },
+                                { no: 3, usedBalls: 300, trigger: "SPルート", round: "2R", inputs: { hold: 1195, remain: 895, replay: 0, invest: 0 } },
+                                { no: 4, usedBalls: 400, trigger: "ストレートコース選択後HR", round: "9R", inputs: { hold: 1125, remain: 725, replay: 0, invest: 0 } },
+                                { no: 5, usedBalls: 800, trigger: "ノーマルルート", round: "4R", inputs: { hold: 1760, remain: 960, replay: 0, invest: 0 } },
+                                { no: 6, usedBalls: 200, trigger: "SPルート", round: "9R", inputs: { hold: 1420, remain: 1220, replay: 0, invest: 0 } },
+                                { no: 7, usedBalls: 600, trigger: "変化球選択後HR", round: "2R", inputs: { hold: 2255, remain: 1655, replay: 0, invest: 0 } },
+                                { no: 8, usedBalls: 300, trigger: "ノーマルルート", round: "9R", inputs: { hold: 1885, remain: 1585, replay: 0, invest: 0 } }
+                            ],
+                            jackpotCount: 8,
+                            memoBefore: "朝イチから実戦開始。SPルートのクセが良さそうな台を選択。ボーダー17回/kを目標にする。",
+                            memoDuring: "ハネの拾いは悪くない。SPルートからのV入賞が少し足りないが、ノーマルルートでのホームラン即当りに助けられている。続行。",
+                            history: [
+                                {
+                                    ts: Date.now() - 7200000,
+                                    comment: "開始から最初の区間。ハネの拾いは非常に安定している。",
+                                    totalPick: 50,
+                                    v: {
+                                        total_rot: 110,
+                                        total_pick: 50,
+                                        sp_select: 6,
+                                        st_select: 10,
+                                        st_rot_in: 3,
+                                        ch_strong: 12,
+                                        ch_rot_in: 5,
+                                        st_hr_in: 0,
+                                        ch_hr_in: 0,
+                                        sp_v_in: 1,
+                                        nm_total_v: 1,
+                                        v_2r: 0,
+                                        v_4r: 1,
+                                        v_9r: 1,
+                                        totalUsedBalls: 1600,
+                                        totalInvest: 0,
+                                        totalGained: 1725
+                                    }
+                                },
+                                {
+                                    ts: Date.now() - 3600000,
+                                    comment: "中盤区間。SPルートで少しハマり気味だが、ノーマルのバッティングが好調。",
+                                    totalPick: 100,
+                                    v: {
+                                        total_rot: 220,
+                                        total_pick: 100,
+                                        sp_select: 12,
+                                        st_select: 20,
+                                        st_rot_in: 7,
+                                        ch_strong: 22,
+                                        ch_rot_in: 9,
+                                        st_hr_in: 1,
+                                        ch_hr_in: 0,
+                                        sp_v_in: 2,
+                                        nm_total_v: 2,
+                                        v_2r: 1,
+                                        v_4r: 2,
+                                        v_9r: 3,
+                                        totalUsedBalls: 3000,
+                                        totalInvest: 0,
+                                        totalGained: 4255
+                                    }
+                                }
+                            ]
+                        };
+                        localStorage.setItem('pachitaku_v6_data_v2', JSON.stringify(saved));
+                    }
                 }
 
                 if (saved) {
@@ -2901,8 +2330,6 @@
                     }
                     if (saved.memoBefore !== undefined) document.getElementById('memo-before').value = saved.memoBefore;
                     if (saved.memoDuring !== undefined) document.getElementById('memo-during').value = saved.memoDuring;
-                    if (document.getElementById('reset-daiban')) document.getElementById('reset-daiban').value = saved.resetDaiban || "";
-                    if (document.getElementById('reset-memo')) document.getElementById('reset-memo').value = saved.resetMemo || "";
                 }
                 this.updateLogHistoryView();
                 this.calc();
@@ -3038,6 +2465,8 @@
             },
 
             resetAll() {
+                document.getElementById('reset-daiban').value = "";
+                document.getElementById('reset-memo').value = "";
                 document.getElementById('reset-modal').style.display = 'flex';
             },
 
@@ -3072,12 +2501,54 @@
                     const el = document.getElementById(f.id);
                     if (el) el.value = "";
                 });
-                
+
+                ['log-hold', 'log-remain', 'log-replay', 'log-invest', 'log-trigger', 'log-round'].forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) el.value = "";
+                });
+                if (document.getElementById('log-trigger-label')) document.getElementById('log-trigger-label').innerText = "未選択";
+                if (document.getElementById('log-round-label')) document.getElementById('log-round-label').innerText = "未選択";
+                document.querySelectorAll('.custom-option').forEach(opt => opt.classList.remove('selected'));
+
+                document.getElementById('log-modify-record-container').style.display = 'none';
+
+                document.getElementById('memo-before').value = "";
+                document.getElementById('memo-during').value = "";
+
                 this.saveDataAndHistory();
                 this.calc();
-                this.updateLogHistoryView();
                 this.updateCompareView();
                 this.updateHistoryDropdown();
+                this.updateIntervalDetailView();
+                this.updateLogHistoryView();
+            },
+
+            openSim() {
+                document.getElementById('sim-modal').style.display = 'flex';
+
+                // 現在の実戦データを取得（データがある場合のみ）
+                if (this.lastCalcV && this.lastCalcV.total_rot > 0) {
+                    const v = this.lastCalcV;
+                    const s = this.getSettings();
+                    const metrics = this.calcMetricsObject(v, s);
+
+                    document.getElementById('sim-rot').value = v.rot_per_k ? v.rot_per_k.toFixed(1) : "";
+                    document.getElementById('sim-rout').value = v.r_out ? v.r_out.toFixed(1) : "";
+                    document.getElementById('sim-pick').value = metrics.pickRate ? (metrics.pickRate * 100).toFixed(1) : "";
+                    document.getElementById('sim-sp-rate').value = metrics.spSelectRate ? (metrics.spSelectRate * 100).toFixed(1) : "";
+                    document.getElementById('sim-nm-in').value = metrics.nmTotalRotInRate ? (metrics.nmTotalRotInRate * 100).toFixed(1) : "";
+                } else {
+                    // データがない場合は空欄にする
+                    ['sim-rot', 'sim-rout', 'sim-pick', 'sim-sp-rate', 'sim-nm-in'].forEach(id => {
+                        document.getElementById(id).value = "";
+                    });
+                }
+
+                this.runSim();
+            },
+
+            closeSim() {
+                document.getElementById('sim-modal').style.display = 'none';
             },
 
             runSim() {
@@ -3156,181 +2627,226 @@
                 document.getElementById('sim-res-prob').innerHTML = `
                     役モノ: <span style="font-weight:bold;">1/${estYakuProbDenom.toFixed(1)}</span> / 大当り: <span style="font-weight:bold;">1/${estProbDenom.toFixed(1)}</span>
                 `;
-            },
-
-            sortRealData(evt, key, direction) {
-                try {
-                    if (evt) evt.stopPropagation(); // ツールチップの起動を防ぐ
-                    
-                    const tbody = document.querySelector('#real-data-modal .real-data-container tbody');
-                    if (!tbody) return;
-                    
-                    const rows = Array.from(tbody.querySelectorAll('tr'));
-                    
-                    rows.sort((a, b) => {
-                        let valA = a.getAttribute(`data-${key}`);
-                        let valB = b.getAttribute(`data-${key}`);
-                        
-                        const isBlankA = valA === "" || valA === null || valA === undefined;
-                        const isBlankB = valB === "" || valB === null || valB === undefined;
-                        
-                        // 両方空の場合は順序維持
-                        if (isBlankA && isBlankB) return 0;
-                        // 空の値は常に末尾に置く
-                        if (isBlankA) return 1;
-                        if (isBlankB) return -1;
-                        
-                        // 日付の場合は文字列としてそのまま比較する（YYYY-MM-DD形式なので文字列比較で正しい時系列になる）
-                        if (key === 'date') {
-                            if (valA < valB) return direction === 'asc' ? -1 : 1;
-                            if (valA > valB) return direction === 'asc' ? 1 : -1;
-                            return 0;
-                        }
-                        
-                        // 数値に変換して比較
-                        let numA = parseFloat(valA);
-                        let numB = parseFloat(valB);
-                        
-                        if (isNaN(numA)) numA = valA;
-                        if (isNaN(numB)) numB = valB;
-                        
-                        if (numA < numB) return direction === 'asc' ? -1 : 1;
-                        if (numA > numB) return direction === 'asc' ? 1 : -1;
-                        return 0;
-                    });
-                    
-                    // DOMを再配置
-                    rows.forEach(row => tbody.appendChild(row));
-                    
-                    // 矢印のアクティブ状態の更新
-                    document.querySelectorAll('.sort-asc, .sort-desc').forEach(el => {
-                        el.style.color = '#ccc';
-                    });
-                    
-                    if (evt && evt.target) {
-                        const activeArrow = evt.target;
-                        const targetSpan = activeArrow.closest('.sort-asc, .sort-desc') || activeArrow;
-                        if (targetSpan && targetSpan.style) {
-                            targetSpan.style.color = '#227093'; // 青いアクティブ色
-                        }
-                    }
-                } catch (err) {
-                    console.error("sortRealData error:", err);
-                }
-            },
-
-            toggleAccordion(headerEl) {
-                try {
-                    const item = headerEl.parentElement;
-                    const content = item.querySelector('.accordion-content');
-                    const isOpen = item.classList.contains('open');
-
-                    // 他のすべてのアコーディオンを閉じる
-                    document.querySelectorAll('.accordion-item').forEach(el => {
-                        el.classList.remove('open');
-                        const c = el.querySelector('.accordion-content');
-                        if (c) c.style.maxHeight = null;
-                    });
-
-                    // クリックされたアイテムが閉じていた場合は開く
-                    if (!isOpen && content) {
-                        item.classList.add('open');
-                        content.style.maxHeight = content.scrollHeight + "px";
-                    }
-                } catch (err) {
-                    console.error("toggleAccordion error:", err);
-                }
-            },
-
-            toggleMainLead() {
-                try {
-                    const accordion = document.querySelector('.main-lead-accordion');
-                    const content = accordion.querySelector('.main-lead-content');
-                    const arrow = accordion.querySelector('.main-lead-arrow');
-                    const isOpen = accordion.classList.contains('open');
-
-                    if (isOpen) {
-                        accordion.classList.remove('open');
-                        if (content) content.style.maxHeight = null;
-                        if (arrow) arrow.innerText = "▼ 開く";
-                    } else {
-                        accordion.classList.add('open');
-                        if (content) content.style.maxHeight = content.scrollHeight + "px";
-                        if (arrow) arrow.innerText = "▲ 閉じる";
-                    }
-                } catch (err) {
-                    console.error("toggleMainLead error:", err);
-                }
             }
         };
 
         app.init();
+    </script>
+    <div id="intro-modal" class="modal-overlay" style="display: flex;">
+        <div class="modal-content">
+            <span class="modal-close" onclick="document.getElementById('intro-modal').style.display='none'">&times;</span>
+            <h2 style="margin-top:0; color:var(--accent-secondary); border-bottom: 2px solid var(--accent-secondary); padding-bottom: 8px; font-size: 1.2rem;">使い方専用ページへようこそ！</h2>
+            <p style="font-size: 14px; line-height: 1.6;">このページでは、実際のツールと同じ画面を触りながら、各機能の使い方を学ぶことができます。</p>
+            <ul style="line-height: 1.6; font-size: 14px; padding-left: 20px;">
+                <li style="margin-bottom: 10px;"><strong>各項目の説明</strong>：項目名の横にある<span class="help-icon" style="position:static; pointer-events:none;">？</span>を押すと、解説が出ます。</li>
+                <li style="margin-bottom: 10px;"><strong>タブの解説</strong>：各タブを「2回」続けて押すと、そのタブ全体の役割が分かります。</li>
+                <li><strong>チュートリアル</strong>：画面下部の「チュートリアルを開始する」ボタンを押すと、実際の操作の流れに沿ったガイドが始まります。</li>
+            </ul>
+            <button class="btn-primary" style="margin-top: 15px;" onclick="document.getElementById('intro-modal').style.display='none'">閉じる</button>
+        </div>
+    </div>
+    <button id="start-tutorial" class="btn-primary" style="position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); width: 80%; max-width: 400px; z-index: 1500; font-size: 1.1rem; padding: 15px; border-radius: 30px; box-shadow: 0 4px 10px rgba(0,0,0,0.3);">チュートリアルを開始する</button>
 
-        // 実戦リアルデータモーダル制御
-        document.addEventListener('DOMContentLoaded', () => {
-            const openBtn = document.getElementById('real-data-open-btn');
-            const closeBtn = document.getElementById('real-data-close-btn');
-            const modal = document.getElementById('real-data-modal');
-
-            if (openBtn && closeBtn && modal) {
-                const resetToDefaultSort = () => {
-                    try {
-                        app.sortRealData(null, 'date', 'desc');
-                        
-                        // 縦スクロールと横スクロール位置をリセット
-                        const container = document.querySelector('#real-data-modal .real-data-container');
-                        if (container) {
-                            container.scrollTop = 0;
-                            container.scrollLeft = 0;
-                        }
-
-                        // 全てのアコーディオンを閉じる
-                        document.querySelectorAll('.accordion-item').forEach(el => {
-                            el.classList.remove('open');
-                            const c = el.querySelector('.accordion-content');
-                            if (c) c.style.maxHeight = null;
-                        });
-                    } catch (err) {
-                        console.error("resetToDefaultSort error:", err);
+    <script>
+        // 使い方ページ専用処理
+        window.addEventListener('load', () => {
+            // --- 1. 入力の無効化とヘルプアイコンの動的追加 ---
+            const helpTexts = {
+                'log-hold': '稼働開始前、または大当り終了後の持ち玉数を入力してください。<br>※ほとんどのホールでは、持ち玉数が台横のサイドパネルに表示されます。<br>※大当り終了後に入力する際は、上皿の玉を一度すべて流してから数値を反映させてください',
+                'log-remain': '大当り開始前（または千円あたりの回転数を算出したい時）の持ち玉数を入力してください。<br>※現在の持ち玉数と同様、必ず上皿の玉を一度すべて流してから数値を反映させてください。<br>※大当りした際は、パンクを避けるため速やかに上皿の玉を流すようにしてください。',
+                'log-replay': '当該区間（稼働開始～大当り開始前、または大当り終了後～大当り開始前）の間に、貯玉から再プレイした玉数を入力してください。',
+                'log-invest': '当該区間(稼働開始～大当り開始前または、大当り終了後～大当り開始前)で追加投資した額を入力して下さい。',
+                'log-trigger': '大当りした際、当選契機(ノーマルルート/SPルート/ストレートコースor変化球選択後HR)を選択して下さい。',
+                'log-round': '大当りした際、当選R数(2R/4R/9R)を選択して下さい。'
+            };
+            
+            document.querySelectorAll('.input-group label').forEach(label => {
+                const inputEl = label.parentElement.querySelector('input, .custom-select-trigger');
+                if(inputEl) {
+                    const id = inputEl.id || inputEl.parentElement.id.replace('-custom-container', '');
+                    const cleanId = id.replace('-trigger', '');
+                    if (helpTexts[cleanId]) {
+                        const icon = document.createElement('span');
+                        icon.className = 'help-icon';
+                        icon.textContent = '？';
+                        icon.onclick = (e) => {
+                            e.stopPropagation();
+                            showTooltip(helpTexts[cleanId], icon);
+                        };
+                        label.appendChild(icon);
                     }
-                };
-
-                openBtn.addEventListener('click', () => {
-                    resetToDefaultSort();
-                    modal.classList.add('active');
-                });
-                closeBtn.addEventListener('click', () => {
-                    resetToDefaultSort();
-                    modal.classList.remove('active');
-                });
-                modal.addEventListener('click', (e) => {
-                    if (e.target === modal) {
-                        resetToDefaultSort();
-                        modal.classList.remove('active');
-                    }
-                });
-            }
-
-            // ツールチップのタップ制御（スマホ対応・説明エリア表示方式）
-            document.querySelectorAll('.tooltip-header').forEach(header => {
-                header.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    const tooltipText = header.querySelector('.tooltip-text').innerText;
-                    const tooltipArea = document.getElementById('real-data-tooltip-area');
-                    if (tooltipArea) {
-                        tooltipArea.style.display = 'block';
-                        tooltipArea.innerHTML = `<strong>【${header.firstChild.textContent.trim()}】</strong><br>${tooltipText}`;
-                    }
-                });
-            });
-
-            // 画面外クリックでツールチップ説明エリアを閉じる（ヘッダー自身へのクリックを除く）
-            document.addEventListener('click', (e) => {
-                const tooltipArea = document.getElementById('real-data-tooltip-area');
-                if (tooltipArea && !e.target.closest('.tooltip-header') && !e.target.closest('#real-data-tooltip-area')) {
-                    tooltipArea.style.display = 'none';
                 }
             });
+            
+            // --- 2. タブのダブルクリック判定 ---
+            const tabHelpTexts = {
+                'log': '■ 実戦ログ\n大当り履歴をリアルタイムに記録・分析するタブです。\n大当りのたびに内容を入力して「記録」ボタンを押すと、回転数や1R出玉、当選契機の振分けなどを自動算出します。打ちながら手元でデータを積み上げることで、その日の実戦推移を正確に把握できます。\n\nなお、「記録」ボタンは(※)がついている項目が全て記入された際、出現します。',
+                'input': '■ 数値入力\n計算の土台となる基礎数値を管理するタブです。\n期待値計算に必要なヤクモノ確率や台のポテンシャルが分かるデータを算出する為の数値を入力します。なお、1.通常回転数を除いた項目はカチカチ君等で別途計測するようにして下さい。',
+                'calc': '■ 算出結果\n入力されたデータに基づいて計算し算出したボーダーや期待値、台の詳細な分析データを確認できるタブです。\n数値が変更されるたびに再計算、即時反映されます。すべての項目を埋めなくても、必要なデータが揃っていれば、知りたい項目だけを算出させる使い方もできます。（例：「使用玉数」と「通常回転数」のみ入力して「千円あたりの回転数」を確認するなど）',
+                'compare': '■ 区間分析\n一定区間ごとに数値を切り出して比較するためのタブです。\n「算出結果」タブにある「区間データを保存」ボタンを押したタイミングのデータが蓄積されます。区間単位で数値の動きを見ることで、一時的なムラに左右されず、今の台の挙動を客観的に判断する材料になります。'
+            };
+            
+            document.querySelectorAll('.tab').forEach(tab => {
+                const onclickStr = tab.getAttribute('onclick');
+                if(onclickStr) {
+                    const tabIdMatch = onclickStr.match(/'([^']+)'/);
+                    if (tabIdMatch) {
+                        tab.setAttribute('data-target', tabIdMatch[1]);
+                    }
+                    tab.removeAttribute('onclick');
+                    let clickCount = 0;
+                    let clickTimer = null;
+                    tab.addEventListener('click', (e) => {
+                        clickCount++;
+                        if (clickCount === 1) {
+                            eval(onclickStr);
+                            showTooltip('💡 もう一度同じタブを押すと、その説明が表示されます。', tab, 'bottom');
+                            clickTimer = setTimeout(() => {
+                                clickCount = 0;
+                            }, 600);
+                        } else if (clickCount === 2) {
+                            clearTimeout(clickTimer);
+                            clickCount = 0;
+                            const tabIdMatch2 = onclickStr.match(/'([^']+)'/);
+                            if (tabIdMatch2) showTooltip(tabHelpTexts[tabIdMatch2[1]], tab, 'bottom');
+                        }
+                    });
+                }
+            });
+            
+            // --- 3. その他の無効化処理 ---
+            document.querySelectorAll('input, select, .custom-select-trigger, .btn-primary, .reset-defaults-btn').forEach(el => {
+                if (el.id !== 'start-tutorial' && !el.classList.contains('strategy-btn') && !el.closest('#intro-modal')) {
+                    // 区間分析タブ（#compare）内のドロップダウンは操作可能にするため除外
+                    if (el.closest('#compare') && el.classList.contains('custom-select-trigger')) {
+                        return;
+                    }
+                    el.style.pointerEvents = 'none';
+                    if (el.tagName !== 'INPUT' || el.type !== 'checkbox') {
+                        el.style.opacity = '0.6';
+                    }
+                }
+            });
+
+            // --- 4. Driver.js (チュートリアル) ---
+            const driverObj = window.driver.js.driver({
+                showProgress: true,
+                nextBtnText: '次へ',
+                prevBtnText: '戻る',
+                doneBtnText: '完了',
+                onDestroyed: () => {
+                    document.body.classList.remove('tutorial-active');
+                }
+            });
+
+            document.getElementById('start-tutorial').addEventListener('click', () => {
+                document.body.classList.add('tutorial-active');
+                app.showTab('log');
+
+                driverObj.setSteps([
+                    {
+                        element: '.blackboard-header',
+                        popover: { title: 'チュートリアルへようこそ！', description: 'このツールは、「Pハネモノ ファミリースタジアム」の実戦データをリアルタイムに記録・分析し、台のポテンシャル（ボーダーや期待値）を正確に把握するための攻略ツールです。', side: "bottom", align: 'start' }
+                    },
+                    {
+                        element: '.settings-btn',
+                        popover: { title: '1. スペックと換金率の設定', description: '稼働を始める前に「詳細設定」を開き、ホールの換金率や台のSP・ノーマルルートの回転体当選率（ネカセやクセの推測値）を入力します。', side: "bottom", align: 'start' }
+                    },
+                    {
+                        element: '#log-status-section',
+                        popover: { title: '2. 稼働状況のリアルタイム入力', description: '実戦ログのタブでは、打ちながら「現在の持ち玉」「追加投資」などを入力します。大当りした際は、※印のついた4項目（持ち玉、残玉、当選契機、当選R数）を入力すると、自動的に「記録確認」のポップアップが表示されて履歴に保存されます。', side: "top", align: 'start' },
+                        onHighlightStarted: () => { app.showTab('log'); }
+                    },
+                    {
+                        element: '#log-history-section',
+                        popover: { title: '3. 履歴の確認と修正', description: '記録された大当り履歴の一覧です。使用玉数をタップするといつでも入力内容を修正できます。「削除モード」にチェックを入れれば誤って記録した履歴を削除することも可能です。', side: "top", align: 'start' },
+                        onHighlightStarted: () => { app.showTab('log'); }
+                    },
+                    {
+                        element: '#fields-container',
+                        popover: { title: '4. 計測データの入力', description: '「数値入力」タブでは、自分が回した「通常回転数」や、役物へ進入した「拾い個数」「各ルートの選択個数」などをカチカチ君等の計測に基づいて入力します。', side: "top", align: 'start' },
+                        onHighlightStarted: () => { app.showTab('input'); }
+                    },
+                    {
+                        element: '#calc',
+                        popover: { title: '5. ボーダーや期待値の自動算出', description: '算出結果のタブでは、実戦ログと数値入力から、リアルタイムで「総期待値」「千円あたりのボーダー」「役物確率の推定値」などを自動計算して表示します。<br><br>また、この画面の下部にある「区間データを保存」を押すことで、その時点のデータを区間データとして記録できます。保存された区間データは区間分析タブ内で確認出来ます。', side: "top", align: 'start' },
+                        onHighlightStarted: () => { app.showTab('calc'); }
+                    },
+                    {
+                        element: '#compare',
+                        popover: { title: '6. 区間データの時系列比較', description: '区間分析のタブでは、保存した区間ごとのデータを比較し、推移をグラフや表で確認できます。区間単位での数値の動きを見ることで、一時的なムラに左右されず、今の台の挙動を客観的に判断できます。<br><br>※誤って保存したデータがある場合は、「削除モード」にチェックを入れることで簡単に削除できます。', side: "top", align: 'start' },
+                        onHighlightStarted: () => { app.showTab('compare'); }
+                    },
+                    {
+                        element: '.btn-sim',
+                        popover: { title: '7. 期待値シミュレーション', description: '実戦データとは別に、任意の数値を指定して「通常1回転あたりの期待値」や「ボーダーライン」を即座に計算してシミュレーションできる便利な機能です。', side: "top", align: 'start' }
+                    },
+                    {
+                        element: '.btn-memo',
+                        popover: { title: '8. 稼働前/稼働中メモを更新する', description: '稼働前の狙い台の根拠や、稼働中の台の挙動・周囲の状況などを自由にメモして残しておくことができます。', side: "top", align: 'start' }
+                    },
+                    {
+                        element: '.reset-btn',
+                        popover: { title: '9. データのクリアとバックアップ', description: '稼働が終了したらここからデータをリセットします。「バックアップしてリセット」を選ぶと、本日の稼働データやメモがすべてクリップボードにコピーされるため、スマホのメモ帳等に簡単に貼り付けて保存できます。', side: "bottom", align: 'start' }
+                    },
+                    {
+                        element: '.back-to-top',
+                        popover: { title: 'いざ実戦へ！', description: 'チュートリアルは以上です。ツールを活用して勝利を掴み取りましょう！<br><br>もし使っていてまだ分からない事やご質問があるようであれば、<a href="https://x.com/wow_pachi_122" target="_blank" style="color: #227093; font-weight: bold; text-decoration: underline; pointer-events: auto !important;">管理人のX</a>のDMまでお気軽にお問い合わせください。', side: "bottom", align: 'start' }
+                    }
+                ]);
+                driverObj.drive();
+            });
+        });
+
+        // --- ツールチップ表示制御 ---
+        let currentTooltip = null;
+
+        function showTooltip(text, targetEl, side = 'bottom') {
+            if (currentTooltip) {
+                currentTooltip.remove();
+            }
+
+            const tooltip = document.createElement('div');
+            tooltip.className = 'tooltip';
+            tooltip.innerHTML = text.replace(/\n/g, '<br>');
+            document.body.appendChild(tooltip);
+
+            const rect = targetEl.getBoundingClientRect();
+            const scrollY = window.scrollY || window.pageYOffset;
+            const scrollX = window.scrollX || window.pageXOffset;
+
+            tooltip.style.opacity = '1';
+            
+            let top;
+            if (side === 'bottom') {
+                top = rect.bottom + scrollY + 10;
+            } else if (side === 'top') {
+                top = rect.top + scrollY - tooltip.offsetHeight - 10;
+            } else {
+                // Auto
+                top = rect.top + scrollY - tooltip.offsetHeight - 10;
+                if (top < scrollY) top = rect.bottom + scrollY + 10;
+            }
+            
+            let left = rect.left + scrollX + (rect.width / 2) - (tooltip.offsetWidth / 2);
+
+            if (left < 10) left = 10;
+            if (left + tooltip.offsetWidth > window.innerWidth - 10) {
+                left = window.innerWidth - tooltip.offsetWidth - 10;
+            }
+
+            tooltip.style.top = top + 'px';
+            tooltip.style.left = left + 'px';
+
+            currentTooltip = tooltip;
+        }
+
+        // 関係ない場所をクリックした時にツールチップを閉じる
+        document.addEventListener('click', (e) => {
+            if (currentTooltip && !e.target.closest('.help-icon') && !e.target.closest('.tab')) {
+                currentTooltip.style.opacity = '0';
+                setTimeout(() => { if(currentTooltip && currentTooltip.parentElement) currentTooltip.remove(); currentTooltip = null; }, 300);
+            }
         });
     </script>
 </body>
