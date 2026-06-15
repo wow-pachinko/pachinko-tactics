@@ -503,6 +503,10 @@
             border-color: #e74c3c !important;
             background-color: #fcebeb !important;
         }
+
+        .required-input:placeholder-shown {
+            border: 2px solid #000000 !important;
+        }
     </style>
 </head>
 
@@ -542,17 +546,17 @@
                 </div>
             </div>
             <div class="input-group"><label>打ち始め回転数(※)</label><input type="number" id="log-rot-start"
-                    onblur="app.checkRotLog()" oninput="app.saveData()"></div>
+                    class="required-input" placeholder=" " onblur="app.checkRotLog()" oninput="app.saveData()"></div>
             <div class="input-group highlight-border"><label>打ち始め持ち玉数(※)</label><input type="number" id="log-rot-hold"
-                    onblur="app.checkRotLog()" oninput="app.saveData()"></div>
+                    class="required-input" placeholder=" " onblur="app.checkRotLog()" oninput="app.saveData()"></div>
             <div class="input-group"><label>記録時回転数(※)</label><input type="number" id="log-rot-val"
-                    onblur="app.checkRotLog()" oninput="app.saveData()"></div>
+                    class="required-input" placeholder=" " onblur="app.checkRotLog()" oninput="app.saveData()"></div>
             <div class="input-group"><label>再プレイ玉数</label><input type="number" id="log-rot-replay"
                     onblur="app.checkRotLog()" oninput="app.saveData()"></div>
             <div class="input-group"><label>追加投資 (円)</label><input type="number" id="log-rot-invest"
                     onblur="app.checkRotLog()" oninput="app.saveData()"></div>
             <div class="input-group"><label>記録時持ち玉数(※)</label><input type="number" id="log-rot-remain"
-                    onblur="app.checkRotLog()" oninput="app.saveData()"></div>
+                    class="required-input" placeholder=" " onblur="app.checkRotLog()" oninput="app.saveData()"></div>
             <div id="log-rot-modify-record-container" style="display:none; margin-top: 15px;">
                 <button class="btn-primary" onclick="app.recordRotLog()">この修正内容で登録</button>
             </div>
@@ -584,13 +588,13 @@
                 <span style="font-weight:bold; font-size:0.9rem;">初当り回数 <span id="out-log-count">0</span>回</span>
             </div>
             <div class="input-group"><label>初当り時持ち玉数(※)</label><input type="number" id="log-out-before"
-                    onblur="app.checkOutLog()" oninput="app.saveData()"></div>
+                    class="required-input" placeholder=" " onblur="app.checkOutLog()" oninput="app.saveData()"></div>
             <div class="input-group"><label>連チャン終了後持ち玉(※)</label><input type="number" id="log-out-after"
-                    onblur="app.checkOutLog()" oninput="app.saveData()"></div>
+                    class="required-input" placeholder=" " onblur="app.checkOutLog()" oninput="app.saveData()"></div>
             <div class="input-group"><label>オーバー入賞個数</label><input type="number" id="log-out-over" value=""
                     onblur="app.checkOutLog()" oninput="app.saveData()"></div>
             <div class="input-group"><label>獲得R数(※)</label><input type="number" id="log-out-rounds"
-                    onblur="app.checkOutLog()" oninput="app.saveData()"></div>
+                    class="required-input" placeholder=" " onblur="app.checkOutLog()" oninput="app.saveData()"></div>
             <div id="log-out-modify-record-container" style="display:none; margin-top: 15px;">
                 <button class="btn-primary" onclick="app.recordOutLog()">この修正内容で登録</button>
             </div>
@@ -942,7 +946,6 @@
             metricsConfig: [
                 { id: "rotPerK", name: "千円あたりの回転数", type: "rot", lowerIsBetter: false },
                 { id: "rOut", name: "1R出玉", type: "ball", lowerIsBetter: false },
-                { id: "gainedBalls", name: "獲得出玉", type: "ball", lowerIsBetter: false },
                 { id: "overRate", name: "オーバー入賞率", type: "pct", lowerIsBetter: false },
                 { id: "comment", name: "コメント", type: "text" }
             ],
@@ -1139,6 +1142,7 @@
                 const holdingRate = tUsed > 0 ? (holdUsed / tUsed) * 100 : 0;
 
                 masterDataText += "【最終結果】\n";
+                masterDataText += `総初当り回数: ${this.outHistory.length} 回\n`;
                 masterDataText += `総通常回転数: ${tRot} 回\n`;
                 ['A', 'B', 'C', 'D'].forEach(k => {
                     const s = strokeData[k];

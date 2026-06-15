@@ -343,6 +343,14 @@
             border: 2px solid var(--plus-red) !important;
         }
 
+        .required-input:placeholder-shown {
+            border: 2px solid #000000 !important;
+        }
+
+        .required-select-empty {
+            border: 2px solid #000000 !important;
+        }
+
         .result-card {
             background: #fafafa;
             border: 1px solid var(--border-color);
@@ -669,9 +677,9 @@
             </div>
             <div id="log-fields">
                 <div class="input-group"><label>現在の持ち玉数(※)</label><input type="number" id="log-hold"
-                        oninput="app.checkLogForm()"></div>
+                        class="required-input" placeholder=" " oninput="app.checkLogForm(); app.saveDataAndHistory()"></div>
                 <div class="input-group"><label>残玉数(※)</label><input type="number" id="log-remain"
-                        oninput="app.checkLogForm()"></div>
+                        class="required-input" placeholder=" " oninput="app.checkLogForm(); app.saveDataAndHistory()"></div>
                 <div class="input-group"><label>再プレイ玉数</label><input type="number" id="log-replay"
                         oninput="app.checkLogForm()"></div>
                 <div class="input-group"><label>追加投資(円)</label><input type="number" id="log-invest"
@@ -954,12 +962,12 @@
 
             <div class="input-group">
                 <label>台番</label>
-                <input type="text" id="reset-daiban" placeholder="例: 123番台" style="font-size:16px;">
+                <input type="text" id="reset-daiban" placeholder="例: 123番台" style="font-size:16px;" oninput="app.saveDataAndHistory()">
             </div>
 
             <div class="input-group">
                 <label>本日の稼働メモ（台の挙動、ネカセなど）</label>
-                <textarea id="reset-memo" rows="4"
+                <textarea id="reset-memo" rows="4" oninput="app.saveDataAndHistory()"
                     style="width:100%; padding:10px; border:1px solid #ccc; border-radius:4px; font-size:14px; font-family:var(--font-main); box-sizing:border-box;"></textarea>
             </div>
 
@@ -1262,6 +1270,28 @@
                 this.saveDataAndHistory();
             },
 
+            updateRequiredSelectBorders() {
+                const trigger = document.getElementById('log-trigger') ? document.getElementById('log-trigger').value : "";
+                const round = document.getElementById('log-round') ? document.getElementById('log-round').value : "";
+                
+                const triggerTrigger = document.getElementById('log-trigger-trigger');
+                if (triggerTrigger) {
+                    if (trigger === "") {
+                        triggerTrigger.classList.add('required-select-empty');
+                    } else {
+                        triggerTrigger.classList.remove('required-select-empty');
+                    }
+                }
+                const roundTrigger = document.getElementById('log-round-trigger');
+                if (roundTrigger) {
+                    if (round === "") {
+                        roundTrigger.classList.add('required-select-empty');
+                    } else {
+                        roundTrigger.classList.remove('required-select-empty');
+                    }
+                }
+            },
+
             checkLogForm() {
                 const holdEl = document.getElementById('log-hold');
                 const remainEl = document.getElementById('log-remain');
@@ -1279,6 +1309,8 @@
                 } else {
                     remainEl.classList.remove('input-error');
                 }
+
+                this.updateRequiredSelectBorders();
 
                 const isComplete = hold !== "" && remain !== "" && trigger !== "" && round !== "";
 
@@ -1352,6 +1384,7 @@
                 this.calc();
 
                 this.saveDataAndHistory();
+                this.updateRequiredSelectBorders();
                 alert('実戦ログを記録しました。');
             },
 
@@ -2071,7 +2104,9 @@
                     logHistory: this.logHistory,
                     jackpotCount: this.jackpotCount,
                     memoBefore: document.getElementById('memo-before').value,
-                    memoDuring: document.getElementById('memo-during').value
+                    memoDuring: document.getElementById('memo-during').value,
+                    resetDaiban: document.getElementById('reset-daiban') ? document.getElementById('reset-daiban').value : "",
+                    resetMemo: document.getElementById('reset-memo') ? document.getElementById('reset-memo').value : ""
                 };
                 localStorage.setItem('pachitaku_odatebuta2_data', JSON.stringify(saveObj));
             },
@@ -2126,10 +2161,13 @@
                     }
                     if (saved.memoBefore !== undefined) document.getElementById('memo-before').value = saved.memoBefore;
                     if (saved.memoDuring !== undefined) document.getElementById('memo-during').value = saved.memoDuring;
+                    if (document.getElementById('reset-daiban')) document.getElementById('reset-daiban').value = saved.resetDaiban || "";
+                    if (document.getElementById('reset-memo')) document.getElementById('reset-memo').value = saved.resetMemo || "";
                 }
                 this.updateLogHistoryView();
                 this.calc();
                 this.updateHistoryDropdown();
+                this.updateRequiredSelectBorders();
             },
 
             async copyBackupToClipboard(daiban, memo) {
@@ -2258,8 +2296,6 @@
             },
 
             resetAll() {
-                document.getElementById('reset-daiban').value = "";
-                document.getElementById('reset-memo').value = "";
                 document.getElementById('reset-modal').style.display = 'flex';
             },
 
@@ -2307,6 +2343,8 @@
 
                 document.getElementById('memo-before').value = "";
                 document.getElementById('memo-during').value = "";
+                document.getElementById('reset-daiban').value = "";
+                document.getElementById('reset-memo').value = "";
 
                 this.saveDataAndHistory();
                 this.calc();
@@ -2314,6 +2352,7 @@
                 this.updateHistoryDropdown();
                 this.updateIntervalDetailView();
                 this.updateLogHistoryView();
+                this.updateRequiredSelectBorders();
             },
 
             openSim() {

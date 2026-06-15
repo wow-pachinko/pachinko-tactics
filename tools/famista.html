@@ -371,6 +371,14 @@
             border: 2px solid var(--plus-red) !important;
         }
 
+        .required-input:placeholder-shown {
+            border: 2px solid #000000 !important;
+        }
+
+        .required-select-empty {
+            border: 2px solid #000000 !important;
+        }
+
         .result-card {
             background: #fafafa;
             border: 1px solid var(--border-color);
@@ -1014,9 +1022,9 @@
             </div>
             <div id="log-fields">
                 <div class="input-group"><label>現在の持ち玉数(※)</label><input type="number" id="log-hold"
-                        oninput="app.checkLogForm()"></div>
+                        class="required-input" placeholder=" " oninput="app.checkLogForm()"></div>
                 <div class="input-group"><label>残玉数(※)</label><input type="number" id="log-remain"
-                        oninput="app.checkLogForm()"></div>
+                        class="required-input" placeholder=" " oninput="app.checkLogForm()"></div>
                 <div class="input-group"><label>再プレイ玉数</label><input type="number" id="log-replay"
                         oninput="app.checkLogForm()"></div>
                 <div class="input-group"><label>追加投資(円)</label><input type="number" id="log-invest"
@@ -1321,7 +1329,7 @@
             <div class="modal-close" onclick="document.getElementById('save-complete-modal').style.display='none'">×
             </div>
             <h3 style="margin-top: 0; color: var(--accent-secondary);">保存完了</h3>
-            <p style="font-size: 16px; font-weight: bold;">区間データを無さに保存しました！</p>
+            <p style="font-size: 16px; font-weight: bold;">区間データを無事に保存しました！</p>
             <div style="margin-top: 20px;">
                 <button class="btn-primary"
                     onclick="document.getElementById('save-complete-modal').style.display='none'">閉じる</button>
@@ -1967,6 +1975,7 @@
                     const hiddenEl = document.getElementById('interval-detail-select');
                     if (labelEl) labelEl.innerHTML = "履歴データがありません";
                     if (hiddenEl) hiddenEl.value = "";
+                    this.updateIntervalDetailView();
                 }
             },
 
@@ -2012,8 +2021,64 @@
                 document.getElementById('memo-modal').style.display = 'none';
             },
 
+            openSim() {
+                document.getElementById('sim-modal').style.display = 'flex';
+                
+                // 実戦データの算出値をシミュレータに引き継ぐ
+                const v = this.lastCalcV;
+                if (v && v.total_rot > 0) {
+                    // 1. 千円あたりの回転数
+                    document.getElementById('sim-rot').value = v.rot_per_k > 0 ? v.rot_per_k.toFixed(1) : "";
+                    // 2. 1Rあたりの出玉
+                    document.getElementById('sim-rout').value = v.r_out > 0 ? Math.round(v.r_out) : "";
+                    // 3. 拾い率 (%)
+                    document.getElementById('sim-pick').value = (v.total_rot > 0 && v.total_pick > 0) ? ((v.total_pick / v.total_rot) * 100).toFixed(1) : "";
+                    // 4. SPルート選択率 (%)
+                    document.getElementById('sim-sp-rate').value = (v.total_pick > 0 && v.sp_select > 0) ? ((v.sp_select / v.total_pick) * 100).toFixed(1) : "";
+                    // 5. ノーマルルート選択時総回転体突入率 (%)
+                    const nmDenominator = v.total_pick - v.sp_select - v.st_hr_in - v.ch_hr_in;
+                    const nmNumerator = v.st_rot_in + v.ch_rot_in;
+                    document.getElementById('sim-nm-in').value = (nmDenominator > 0 && nmNumerator > 0) ? ((nmNumerator / nmDenominator) * 100).toFixed(1) : "";
+                } else {
+                    // 実戦データがリセットされている場合は入力欄をクリア
+                    document.getElementById('sim-rot').value = "";
+                    document.getElementById('sim-rout').value = "";
+                    document.getElementById('sim-pick').value = "";
+                    document.getElementById('sim-sp-rate').value = "";
+                    document.getElementById('sim-nm-in').value = "";
+                }
+                
+                this.runSim();
+            },
+
+            closeSim() {
+                document.getElementById('sim-modal').style.display = 'none';
+            },
+
             saveMemo() {
                 this.saveDataAndHistory();
+            },
+
+            updateRequiredSelectBorders() {
+                const trigger = document.getElementById('log-trigger') ? document.getElementById('log-trigger').value : "";
+                const round = document.getElementById('log-round') ? document.getElementById('log-round').value : "";
+                
+                const triggerTrigger = document.getElementById('log-trigger-trigger');
+                if (triggerTrigger) {
+                    if (trigger === "") {
+                        triggerTrigger.classList.add('required-select-empty');
+                    } else {
+                        triggerTrigger.classList.remove('required-select-empty');
+                    }
+                }
+                const roundTrigger = document.getElementById('log-round-trigger');
+                if (roundTrigger) {
+                    if (round === "") {
+                        roundTrigger.classList.add('required-select-empty');
+                    } else {
+                        roundTrigger.classList.remove('required-select-empty');
+                    }
+                }
             },
 
             checkLogForm() {
@@ -2033,6 +2098,8 @@
                 } else {
                     remainEl.classList.remove('input-error');
                 }
+
+                this.updateRequiredSelectBorders();
 
                 const isComplete = hold !== "" && remain !== "" && trigger !== "" && round !== "";
 
@@ -2906,6 +2973,7 @@
                 }
                 this.updateLogHistoryView();
                 this.calc();
+                this.updateRequiredSelectBorders();
                 this.updateHistoryDropdown();
             },
 
@@ -3067,17 +3135,36 @@
                 this.jackpotCount = 0;
                 this.isModifying = false;
                 this.confirmShown = false;
+                this.lastCalcV = null;
+                this.lastCalcRes = null;
 
                 this.fields.forEach(f => {
                     const el = document.getElementById(f.id);
                     if (el) el.value = "";
                 });
-                
+
+                // 台番、メモ、実戦ログ入力欄もリセット
+                const clearIds = [
+                    'reset-daiban', 'reset-memo', 'memo-before', 'memo-during',
+                    'log-hold', 'log-remain', 'log-replay', 'log-invest', 'log-trigger', 'log-round'
+                ];
+                clearIds.forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) el.value = "";
+                });
+
+                // セレクトボックスの表示ラベルも初期化
+                const triggerLabel = document.getElementById('log-trigger-label');
+                if (triggerLabel) triggerLabel.innerText = "未選択";
+                const roundLabel = document.getElementById('log-round-label');
+                if (roundLabel) roundLabel.innerText = "未選択";
+
                 this.saveDataAndHistory();
                 this.calc();
                 this.updateLogHistoryView();
                 this.updateCompareView();
                 this.updateHistoryDropdown();
+                this.updateRequiredSelectBorders();
             },
 
             runSim() {
