@@ -1,0 +1,1669 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-7F66S1YKNZ"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-7F66S1YKNZ');
+  </script>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>【沖海6甘Withえなこ 完全攻略バイブル】通常・大当り・ST時短中の止め打ち・技術介入など攻略手順総まとめ｜PACHINKO TACTICS</title>
+  <meta name="description" content="「PAスーパー海物語IN沖縄6 Withえなこ」の通常回転10000回転超の実戦データを基にした、実戦に必ず役立つ攻略を総まとめ！通常時のストローク調整から、大当り・電サポ（ST/時短）中の詳細な止め打ち手順まで、スペックを最大限活かす具体的な方法を詳しく解説します。">
+  <link rel="canonical" href="https://pachinko-tactics.com/analysis/okiumi6enaco">
+  
+  <!-- Fonts ( JURA & Noto Sans JP ) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Jura:wght@400;600;700;900&family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+  
+  <!-- Icons (FontAwesome) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Mermaid.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: 'neutral',
+      themeVariables: {
+        background: '#ffffff',
+        primaryColor: '#e2e8f0',
+        primaryTextColor: '#333333',
+        lineColor: '#b33939'
+      }
+    });
+  </script>
+  
+  <style>
+    /* =========================================================
+       CSS Variables (Theme: Investigation Board - index.html準拠)
+       ========================================================= */
+    :root {
+      --font-main: 'Noto Sans JP', sans-serif;
+      --font-eng: 'Jura', sans-serif;
+
+      --bg-color: #d4a373;
+      --body-bg-image: url('../index/corkboard_bg.png');
+
+      --bg-panel: #FFFFFF;
+      --text-main: #333333;
+      --text-panel: #1A1A1A;
+      --text-sub: #555555;
+
+      --accent-color: #b33939; /* えんじ色のピン・マーカー */
+      --accent-hover: #ff5252;
+      --accent-secondary: #227093; /* 青マーカー */
+      --border-color: rgba(0, 0, 0, 0.15);
+
+      --shadow: 0 5px 15px rgba(0, 0, 0, 0.35);
+      --input-bg: rgba(255, 255, 255, 0.95);
+
+      --badge-bg: rgba(179, 57, 57, 0.1);
+      --badge-text: #b33939;
+      
+      --board-bg: #1a2a24;
+      --chalk-white: rgba(255, 255, 255, 0.9);
+    }
+
+    /* =========================================================
+       Global & Smooth Scroll Styles
+       ========================================================= */
+    html {
+      scroll-behavior: smooth; /* スムーススクロール有効化 */
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      background-image: var(--body-bg-image);
+      background-size: auto;
+      background-attachment: fixed;
+      color: var(--text-main);
+      font-family: var(--font-main);
+      line-height: 1.65;
+      padding-bottom: 60px;
+    }
+
+    a {
+      color: var(--accent-color);
+      text-decoration: none;
+      transition: color 0.2s;
+      font-weight: 700;
+    }
+
+    a:hover {
+      color: var(--accent-hover);
+      text-decoration: underline;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 0 15px;
+    }
+
+    /* =========================================================
+       Breadcrumbs (Blackboard style - 黒板色背景・最上段ベタ付け)
+       ========================================================= */
+    .breadcrumbs {
+      background-color: var(--board-bg);
+      background-image:
+        radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.02) 0%, transparent 80%),
+        url('https://www.transparenttextures.com/patterns/dark-matter.png');
+      padding: 8px 0;
+      border-radius: 0;
+      font-size: 0.8rem;
+      margin-bottom: 20px;
+      box-shadow: inset 0 -3px 10px rgba(0, 0, 0, 0.4);
+      border: none;
+      border-bottom: 4px solid #3d2b1f; /* 下部のみ木枠境界線 */
+      width: 100%;
+    }
+
+    .breadcrumbs-inner {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 0 15px;
+    }
+
+    .breadcrumbs ul {
+      display: flex;
+      list-style: none;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      padding-left: 0;
+      margin: 0;
+    }
+
+    .breadcrumbs li {
+      color: rgba(255, 255, 255, 0.6);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .breadcrumbs a {
+      color: var(--chalk-white);
+      font-weight: 700;
+      transition: color 0.2s;
+    }
+
+    .breadcrumbs a:hover {
+      color: var(--accent-hover);
+      text-decoration: underline;
+    }
+
+    /* 区切り文字の制御 */
+    .breadcrumbs li+li::before {
+      content: '\f105'; /* FontAwesome angle-right */
+      font-family: 'Font Awesome 6 Free';
+      font-weight: 900;
+      color: rgba(255, 255, 255, 0.4);
+      font-size: 0.75rem;
+      margin-right: 8px;
+    }
+
+    /* =========================================================
+       Top Navigation Buttons (index.html準拠)
+       ========================================================= */
+    .top-nav-buttons {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .nav-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 18px;
+      background-color: var(--input-bg);
+      color: var(--accent-color);
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      transition: all 0.2s;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+      cursor: pointer;
+    }
+
+    .nav-btn:hover {
+      background-color: var(--accent-color);
+      color: #fff;
+      border-color: var(--accent-color);
+      text-decoration: none;
+    }
+
+    .nav-btn i {
+      font-size: 0.85rem;
+    }
+
+    /* =========================================================
+       Investigation Paper Panels (White sheet pinned on cork)
+       ========================================================= */
+    .panel {
+      background-color: var(--bg-panel);
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      border-radius: 2px;
+      padding: 30px 24px;
+      margin-bottom: 30px;
+      box-shadow: var(--shadow);
+      position: relative;
+      color: var(--text-panel);
+    }
+
+    /* Red Push Pin on top of each paper panel */
+    .panel::before {
+      content: '';
+      position: absolute;
+      top: 8px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%, #ff6b6b, #b33939);
+      box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.4), inset -1px -2px 3px rgba(0, 0, 0, 0.3);
+      z-index: 10;
+    }
+
+    /* Typography inside Paper Panel */
+    h1.article-title {
+      font-size: clamp(1.05rem, 2.5vw, 1.25rem); /* 控えめサイズ */
+      font-weight: 700;
+      color: var(--text-panel);
+      line-height: 1.4;
+      margin-bottom: 14px;
+      text-align: left;
+      font-family: var(--font-main);
+      border-bottom: 1px solid var(--border-color); /* 1px細いグレー線 */
+      padding-bottom: 8px;
+    }
+
+    h2.section-title {
+      font-size: 1.35rem;
+      font-weight: 900;
+      color: var(--text-panel);
+      border-bottom: 2px solid var(--accent-color);
+      padding-bottom: 10px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    h2.section-title i {
+      color: var(--accent-color);
+    }
+
+    /* 攻略小見出し（目次項目）の四角枠デザイン */
+    h3.subset-title {
+      font-size: 1.0rem;
+      font-weight: 700;
+      color: var(--text-panel);
+      border: 1px solid var(--accent-color); /* えんじ色の四角枠 */
+      background-color: rgba(179, 57, 57, 0.02);
+      padding: 6px 12px;
+      border-radius: 4px;
+      display: block; /* 横幅いっぱいにする */
+      margin-top: 32px;
+      margin-bottom: 14px;
+    }
+
+    /* 目次にない通常の小見出し（装飾なし） */
+    h3.sub-heading-plain {
+      font-size: 1.0rem;
+      font-weight: 700;
+      color: var(--text-panel);
+      margin-top: 24px;
+      margin-bottom: 10px;
+      border: none;
+      background: none;
+      padding: 0;
+      display: block;
+    }
+
+    p {
+      font-size: 0.95rem;
+      color: var(--text-sub);
+      margin-bottom: 16px;
+    }
+
+    /* =========================================================
+       TOC (Table of Contents) Pinned Paper
+       ========================================================= */
+    .toc-panel {
+      background-color: #faf6ee; /* 少し古びた紙の色 */
+      border-left: 3px double var(--accent-color);
+    }
+    .toc-title {
+      font-weight: 900;
+      font-size: 1rem;
+      color: var(--accent-color);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .toc-list {
+      list-style-type: none;
+      padding-left: 0;
+    }
+    .toc-list li {
+      margin-bottom: 8px;
+      font-size: 0.9rem;
+    }
+    .toc-list ul {
+      padding-left: 20px;
+      margin-top: 4px;
+      list-style-type: circle;
+    }
+
+    /* =========================================================
+       攻略手順・ステップ（イエロー付箋・Post-it風）
+       ========================================================= */
+    .procedure-sticky {
+      background-color: #fffde6; /* ポストイット風イエロー */
+      border-left: 4px solid #f5b041;
+      padding: 16px 20px;
+      margin: 20px 0;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+      position: relative;
+    }
+    .procedure-sticky::after {
+      /* テープ留め風の半透明装飾 */
+      content: '';
+      position: absolute;
+      top: -8px;
+      left: 30px;
+      width: 60px;
+      height: 16px;
+      background: rgba(212, 163, 115, 0.35);
+      transform: rotate(-3deg);
+    }
+    .procedure-sticky h4 {
+      font-size: 0.95rem;
+      font-weight: 900;
+      color: #b7950b;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .procedure-steps {
+      padding-left: 18px;
+      font-size: 0.9rem;
+      color: var(--text-panel);
+    }
+    .procedure-steps li {
+      margin-bottom: 6px;
+    }
+
+    .procedure-sticky.blue {
+      background-color: #e6f7ff; /* 淡いブルー */
+      border-left-color: #1890ff; /* 青ボーダー */
+    }
+    .procedure-sticky.blue h4 {
+      color: #096dd9;
+    }
+    .procedure-sticky.blue::after {
+      background: rgba(24, 144, 255, 0.2); /* テープ色も青系に */
+    }
+
+    .procedure-sticky.green {
+      background-color: #f6ffed; /* 淡いグリーン */
+      border-left-color: #52c41a; /* 緑ボーダー */
+    }
+    .procedure-sticky.green h4 {
+      color: #389e0d;
+    }
+    .procedure-sticky.green::after {
+      background: rgba(82, 196, 26, 0.2); /* テープ色も緑系に */
+    }
+
+    .procedure-sticky.pink {
+      background-color: #fff0f6; /* 淡いピンク */
+      border-left-color: #eb2f96; /* ピンクボーダー */
+    }
+    .procedure-sticky.pink h4 {
+      color: #c41d7f;
+    }
+    .procedure-sticky.pink::after {
+      background: rgba(235, 47, 150, 0.2); /* テープ色もピンク系に */
+    }
+
+    /* 効果バッジ：青系に反転 */
+    .effect-badge {
+      display: inline-flex;
+      align-items: center;
+      background-color: rgba(34, 112, 147, 0.08); /* 青系の薄い背景色 */
+      color: var(--accent-secondary); /* 青文字 (#227093) */
+      border: 1px solid rgba(34, 112, 147, 0.3); /* 青ボーダー */
+      padding: 4px 10px;
+      border-radius: 2px;
+      font-weight: 700;
+      font-size: 0.78rem;
+      margin-bottom: 12px;
+    }
+    .effect-badge i {
+      margin-right: 6px;
+    }
+
+    /* =========================================================
+       Details & Summary (アコーディオン - 付箋紙/レポート調)
+       ========================================================= */
+    details {
+      background-color: #fcfcfc;
+      border: 1px solid var(--border-color);
+      border-radius: 4px;
+      margin: 18px 0;
+      overflow: hidden;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+    details[open] {
+      background-color: #fdfdfd;
+      border-color: var(--accent-color);
+    }
+    summary {
+      padding: 12px 18px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--text-panel);
+      cursor: pointer;
+      user-select: none;
+      outline: none;
+      background-color: #f5f5f5;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid transparent;
+      transition: background 0.2s;
+    }
+    summary:hover {
+      background-color: #eaeaea;
+    }
+    details[open] summary {
+      background-color: #fff0f0;
+      color: var(--accent-color);
+      border-bottom-color: rgba(179, 57, 57, 0.15);
+    }
+    summary::after {
+      content: '\f107'; /* FontAwesome angle-down */
+      font-family: 'Font Awesome 6 Free';
+      font-weight: 900;
+      color: var(--text-sub);
+      transition: transform 0.3s;
+    }
+    details[open] summary::after {
+      transform: rotate(-180deg);
+      color: var(--accent-color);
+    }
+    .details-content {
+      padding: 18px;
+      background-color: #ffffff;
+    }
+    .details-content h5 {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--accent-color);
+      margin-top: 16px;
+      margin-bottom: 8px;
+      border-bottom: 1px dashed var(--border-color);
+      padding-bottom: 4px;
+    }
+    .details-content h5:first-child {
+      margin-top: 0;
+    }
+    .details-content ul {
+      list-style-type: square;
+      padding-left: 18px;
+      font-size: 0.85rem;
+      color: var(--text-sub);
+    }
+    .details-content li {
+      margin-bottom: 6px;
+    }
+    .details-content p {
+      font-size: 0.85rem;
+      margin-bottom: 10px;
+    }
+
+    /* =========================================================
+       Tables (White Paper style responsive table)
+       ========================================================= */
+    .table-container {
+      overflow-x: auto;
+      margin: 20px 0;
+      border: 1px solid var(--border-color);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+      background-color: #ffffff;
+    }
+    th, td {
+      padding: 10px 14px;
+      border: 1px solid var(--border-color); /* 格子状のグリッド線を追加 */
+      color: var(--text-panel);
+    }
+    th {
+      background-color: #f7f9fa;
+      color: var(--accent-color);
+      font-weight: 900;
+      border-bottom: 2px solid var(--border-color); /* ヘッダー下部の強調線を維持 */
+    }
+
+    /* =========================================================
+       Alert Cards (Investigation warnings)
+       ========================================================= */
+    .alert-box {
+      border-left: 4px solid var(--accent-color);
+      padding: 16px;
+      margin: 24px 0;
+      background-color: rgba(179, 57, 57, 0.03);
+      border-radius: 0 4px 4px 0;
+    }
+    .alert-box.note {
+      border-left-color: var(--accent-secondary);
+      background-color: rgba(34, 112, 147, 0.03);
+    }
+    .alert-title {
+      font-weight: 900;
+      font-size: 0.85rem;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--accent-color);
+      text-transform: uppercase;
+      font-family: var(--font-eng);
+    }
+    .alert-box.note .alert-title {
+      color: var(--accent-secondary);
+    }
+    .alert-box p {
+      margin: 0;
+      font-size: 0.88rem;
+      color: var(--text-panel);
+    }
+
+    /* 画像のレスポンシブ縮小対応 */
+    img.responsive-img {
+      max-width: 100%;
+      height: auto;
+      display: block;
+      margin: 16px auto;
+      border-radius: 4px;
+      border: 3px solid #f4eedb; outline: 1px solid rgba(0,0,0,0.12); box-shadow: 0 6px 16px rgba(0,0,0,0.15); padding: 2px; background-color: #ffffff; border-radius: 6px;
+    }
+
+    /* =========================================================
+       Back to Top Floating Button (目次戻り仕様)
+       ========================================================= */
+    .back-to-top {
+      position: fixed;
+      bottom: 25px;
+      right: 25px;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%, #ff5252, #b33939);
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+      z-index: 1000;
+      transition: transform 0.2s, opacity 0.2s, visibility 0.2s;
+      opacity: 0;
+      visibility: hidden;
+      cursor: pointer;
+    }
+
+    .back-to-top.show {
+      opacity: 0.85;
+      visibility: visible;
+    }
+
+    .back-to-top:hover {
+      transform: scale(1.1);
+      opacity: 1;
+      color: #ffffff;
+    }
+
+    .back-to-top i {
+      font-size: 1.1rem;
+    }
+
+    /* Footer */
+    footer {
+      margin-top: 40px;
+      padding-top: 20px;
+      border-top: 1px dashed var(--border-color);
+      text-align: center;
+      font-size: 0.78rem;
+      color: var(--text-sub);
+    }
+    /* 鬲夂ｾ､菫｡鬆ｼ蠎ｦ豈碑ｼ・ユ繝ｼ繝悶Ν逕ｨ迚ｹ蛻･繧ｫ繧ｹ繧ｿ繝 */
+    .compare-table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+    .compare-table th, .compare-table td {
+      border: 1px solid var(--border-color);
+      padding: 10px 14px;
+    }
+    .compare-table td.col-label {
+      font-weight: 500;
+      background-color: #fafafa;
+    }
+    .compare-table .col-75 {
+      background-color: rgba(179, 57, 57, 0.04) !important; /* 豺｡縺・ヴ繝ｳ繧ｯ邉ｻ */
+      text-align: center;
+    }
+    .compare-table .col-100 {
+      background-color: rgba(34, 112, 147, 0.04) !important; /* 豺｡縺・ヶ繝ｫ繝ｼ邉ｻ */
+      text-align: center;
+    }
+    .compare-table th.double-border-left,
+    .compare-table td.double-border-left {
+      border-left: 3px double rgba(0, 0, 0, 0.25) !important; /* 邵ｦ縺ｮ莠碁㍾邱・*/
+    }
+    
+  </style>
+</head>
+<body>
+
+  <!-- 最上段のパンくずリスト（黒板色背景・額縁下部仕様） -->
+  <div class="breadcrumbs">
+    <div class="breadcrumbs-inner">
+      <ul>
+        <li><a href="../index/index.html"><i class="fa-solid fa-house"></i> TOP</a></li>
+        <li><a href="../index/index.html#tab-article">記事</a></li>
+        <li>沖海6えなこ攻略考察</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ================= Main Content Area ================= -->
+  <main class="container">
+
+    <!-- 最上段のナビゲーションボタン（TOP戻り / ログツール） -->
+    <div class="top-nav-buttons">
+      <a href="../index/index.html" class="nav-btn"><i class="fa-solid fa-arrow-left"></i> TOPへ戻る</a>
+      <a href="https://pachinko-tactics.com/tools/pachinko" class="nav-btn"><i class="fa-solid fa-calculator"></i> パチンコ実戦ログツール</a>
+    </div>
+
+    <!-- 0. イントロダクションと目次 -->
+    <div class="panel">
+      <!-- 最上段のタイトル (H1) -->
+      <h1 class="article-title">【沖海6甘えなこ 攻略考察】回転率に関わる重要釘からボーダーラインを下げる攻略手順まで解説!</h1>
+      
+      <!-- 最上段のサムネイル画像 -->
+      <img src="https://images.pachinko-tactics.com/okiumi6-enaco/encosamune.webp" alt="PAスーパー海物語IN沖縄6Withえなこ 攻略バイブル サムネ" class="responsive-img" loading="lazy" decoding="async">
+
+      <h2 class="section-title"><i class="fa-solid fa-file-invoice"></i> 概要</h2>
+      <p>「PAスーパー海物語IN沖縄6 Withえなこ」を通常回転10000回転以上検証！その実戦データを元にして作成した『沖海6甘えねこを実戦する際に必ず役立つ攻略書』となっています。</p>
+      <p>通常時のストローク調整や大当り・電サポ中の詳細な止め打ち手順などスペックを最大限に活かした攻略法を状況別(通常時/大当り中/ST時短中)に分けて詳しく解説します。</p>
+
+      <!-- 読む前にご一読ください -->
+      <details style="border-color: #d32f2f; margin-top: 15px;">
+        <summary style="background-color: #fff0f0; color: #d32f2f; font-weight: 900;">⚠️ 読む前にご一読ください (クリックで開閉)</summary>
+        <div class="details-content" style="font-size: 0.85rem; line-height: 1.5; color: var(--text-panel);">
+          <ul style="list-style-type: disc; padding-left: 18px; margin: 0;">
+            <li style="margin-bottom: 6px;">本記事の攻略内容は、<strong>管理人が実際のホールで実戦し、効果を確認したもの</strong>です。</li>
+            <li style="margin-bottom: 6px;">ただし、台の状態（釘調整、ネカセ、ハンドルのバネ等）によって<strong>効果に差が出たり、効果を感じられない場合</strong>がございます。</li>
+            <li style="margin-bottom: 6px;">正確な情報発信に努めておりますが、<strong>攻略効果を保証することはできかねます</strong>。</li>
+            <li>あくまで攻略する際の参考程度にしていただけますと幸いです。</li>
+          </ul>
+        </div>
+      </details>
+    </div>
+
+    <!-- 目次カード（独立） -->
+    <div class="panel" id="toc-container">
+    <h2 class="section-title"><i class="fa-solid fa-file-invoice"></i> 目次</h2>
+      <!-- 目次 -->
+      <div class="toc-panel" id="toc" style="padding: 16px; border-radius: 4px;">
+        <div class="toc-instruction" style="font-size: 0.85rem; color: var(--text-sub); margin-bottom: 12px;"><i class="fa-solid fa-circle-info"></i> ※任意の項目をタップするとその項目まで飛びます</div>
+        <ul class="toc-list">
+          <li><a href="#spec-details">1. スペック解説（基本フローと重要数値）</a></li>
+          <li><a href="#normal-strategy">通常時</a>
+            <ul>
+              <li><a href="#normal-strategy-1">【①:回転率に関わる釘チェックポイント】</a></li>
+              <li><a href="#normal-strategy-2">【②:素早く回る台を発見するテクニック】</a></li>
+              <li><a href="#normal-strategy-3">【③:おすすめMy海カスタム】</a></li>
+              <li><a href="#normal-strategy-4">【④:回転率をUPさせるベストストローク】</a></li>
+              <li><a href="#normal-strategy-5">【⑤:ウリンチャージ発生時 止め打ち攻略】</a></li>
+            </ul>
+          </li>
+          <li><a href="#bonus-strategy">大当り中</a>
+            <ul>
+              <li><a href="#bonus-strategy-1">【①：大当り中の仕組み(初心者向け)】</a></li>
+              <li><a href="#bonus-strategy-2">【②：出玉増を狙えるオーバー入賞誘発手順】</a></li>
+            </ul>
+          </li>
+          <li><a href="#rushtime-strategy">ST時短中</a>
+            <ul>
+              <li><a href="#rushtime-strategy-1">【①：ST/時短中 ベストストローク】</a></li>
+              <li><a href="#rushtime-strategy-2">【②：大当りR終了後 打ち出し開始タイミング】</a></li>
+              <li><a href="#rushtime-strategy-3">【③：非ジンベェタイム中 止め打ち攻略】</a></li>
+              <li><a href="#rushtime-strategy-4">【④：ジンベェタイム中 止め打ち攻略】</a></li>
+            </ul>
+          </li>
+          <!--
+          <li><a href="#other-strategy">5. その他 攻略考察</a>
+            <ul>
+              <li><a href="#other-strategy-1">【①:美らビスカスタムと保留埋め・ストップ判断】</a></li>
+            </ul>
+          </li>
+          <li><a href="#border-expectancy">6. 完全攻略時のボーダーラインと期待時給</a></li>
+          -->
+        </ul>
+      </div>
+    </div>
+
+    <!-- 1. スペック解説 -->
+    <div class="panel" id="spec-details">
+      <h2 class="section-title"><i class="fa-solid fa-list"></i> 1. スペック解説（基本フローと重要数値）</h2>
+      <p>本機を完全攻略する上で、まず頭に入れておくべき基本スペックとゲームフローです。</p>
+
+      <img src="https://images.pachinko-tactics.com/okiumi6-enaco/gemefuro.webp" alt="沖海6甘えねこゲームフロー" class="responsive-img" loading="lazy" decoding="async">
+
+      <h3 class="sub-heading-plain">■スペック表</h3>
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 35%;">項目</th>
+              <th>数値・詳細</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>大当り確率</strong></td>
+              <td>通常時：約1/99.9 <br> 高確率時（ST中）：約1/9.9</td>
+            </tr>
+            <tr>
+              <td><strong>賞球数</strong></td>
+              <td>3（ヘソ） &amp; 1（電チュー） &amp; 5（他入賞口） &amp; 10（大入賞口）</td>
+            </tr>
+            <tr>
+              <td><strong>カウント数</strong></td>
+              <td>大入賞口（アタッカー）：10カウント</td>
+            </tr>
+            <tr>
+              <td><strong>ST突入率</strong></td>
+              <td>100%（大当り後、必ずST5回へ突入）</td>
+            </tr>
+            <tr>
+              <td><strong>電サポ回数割合</strong></td>
+              <td>大当り後：ST5回 + 時短20回（計25回） or 時短45回（計50回） or 時短115回（計120回）</td>
+            </tr>
+            <tr>
+              <td><strong>最大の特徴</strong></td>
+              <td><strong>電サポ降格なし仕様</strong>（一度120回や50回の状態に入れば、以降の当りでもその電サポ回数以上が維持される）</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 class="sub-heading-plain">■ 大当り当選時の振り分け</h3>
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>状態・ラウンド(R)</th>
+              <th style="text-align: center;">電サポ回数</th>
+              <th style="text-align: center;">振り分け内訳</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="background-color: #f9f9f9; font-weight: bold;">
+              <td colspan="3">ヘソ入賞時（特図1）</td>
+            </tr>
+            <tr>
+              <td>10R</td>
+              <td style="text-align: center;">120回</td>
+              <td style="text-align: center;">1%</td>
+            </tr>
+            <tr>
+              <td>6R</td>
+              <td style="text-align: center;">50回</td>
+              <td style="text-align: center;">50%</td>
+            </tr>
+            <tr>
+              <td>4R</td>
+              <td style="text-align: center;">50回</td>
+              <td style="text-align: center;">6%</td>
+            </tr>
+            <tr>
+              <td>4R</td>
+              <td style="text-align: center;">25回</td>
+              <td style="text-align: center;">43%</td>
+            </tr>
+            <tr style="background-color: #f9f9f9; font-weight: bold;">
+              <td colspan="3">電チュー入賞時（特図2）</td>
+            </tr>
+            <tr>
+              <td>10R</td>
+              <td style="text-align: center;">120回</td>
+              <td style="text-align: center;">10%</td>
+            </tr>
+            <tr>
+              <td>6R</td>
+              <td style="text-align: center;">50回</td>
+              <td style="text-align: center;">54%</td>
+            </tr>
+            <tr>
+              <td>4R</td>
+              <td style="text-align: center;">50回</td>
+              <td style="text-align: center;">6%</td>
+            </tr>
+            <tr>
+              <td>4R</td>
+              <td style="text-align: center;">25回</td>
+              <td style="text-align: center;">30%</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="font-size: 0.85rem; color: var(--text-sub); margin-top: -8px; margin-bottom: 20px;">※電サポ回数の降格なし。例：電サポ回数120回中に4Rに当選 → 次回電サポ回数120回が上書き維持されます。</p>
+
+      <div class="procedure-sticky">
+        <h4><i class="fa-solid fa-circle-info"></i> NOTE: スペック・ゲームフロー補足解説</h4>
+        <p style="margin-bottom: 8px;">本機のゲームフローは沖海甘シリーズの伝統を踏襲。大当り後は100%で「ST5回＋時短（20回or45回or120回）」に突入します。</p>
+        <p style="margin-bottom: 8px;">スペック的に注目すべき点は3つあります。</p>
+        <p style="margin-bottom: 8px;"><strong>①：性能が異なる2つの電サポ状態</strong><br>
+        電サポ回数25回or50回の時（非ジンベェタイム中）と比べて、電サポ回数120回の時（ジンベェタイム中）は、電サポ性能が格段にUPします。そのため、いかにジンベェタイム中に連チャンを伸ばせるかが出玉のトリガーとなるでしょう。</p>
+        
+        <p style="margin-bottom: 8px;"><strong>②：非ジンベェタイム中の電サポ性能が大幅に向上</strong><br>
+        親機（ミドル）と比べて、非ジンベェタイム中の電サポ開放時間が延長されています。</p>
+        
+        <div class="table-container" style="margin: 10px 0;">
+          <table>
+            <thead>
+              <tr>
+                <th>開放パターン</th>
+                <th style="text-align: center;">ミドル（親機）</th>
+                <th style="text-align: center;">えなこ（本機）</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>ショート</td>
+                <td style="text-align: center;">1.4秒</td>
+                <td style="text-align: center;"><strong>1.6秒</strong></td>
+              </tr>
+              <tr>
+                <td>ミドル</td>
+                <td style="text-align: center;">1.8秒</td>
+                <td style="text-align: center;"><strong>2.0秒</strong></td>
+              </tr>
+              <tr>
+                <td>ロング</td>
+                <td style="text-align: center;">2.3秒</td>
+                <td style="text-align: center;"><strong>2.6秒</strong></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p style="margin-bottom: 8px;">親機同様、開放パターンはショート/ミドル/ロングの3種類。上記の表から電サポ開放時間が0.2秒～0.3秒伸びているのが分かります。本機では止め打ち（手順は後述）を徹底すれば「ほぼ玉を減らさずに消化できる」優秀な性能であることを実戦で確認しています。</p>
+        
+        <p><strong>③：ジンベェタイムの突入経緯変更</strong><br>
+        親機では主に2R大当りを契機に突入しましたが、本機では10R大当りが契機となっています。親機では契機である2Rの振り分けがヘソ入賞（特図1）の方が多かったため、電サポ中にあえて特図1を消化させてスペック以上に突入させる小技が使えましたが、本機の契機である10Rの振り分けは電チュー入賞（特図2）の方が多いため、スペック以上に突入させる小技は使えません。ST/時短中の特図1での消化はデメリットが大きいため、可能な限り特図2で消化させるようにしてください。</p>
+      </div>
+
+    </div>
+
+    <!-- 2. 通常時 攻略考察 -->
+    <div class="panel" id="normal-strategy">
+      <h2 class="section-title"><i class="fa-solid fa-bullseye"></i> 2. 通常時 攻略考察</h2>
+      <p>勝つ為に最重要となる<b>千円あたりの回転数</b>に関する攻略要素をまとめました。</p>
+
+      <!-- 2-1 -->
+      <h3 class="subset-title" id="normal-strategy-1">①：回転率に関わる釘チェックポイント</h3>
+      
+      <div class="effect-badge"><i class="fa-solid fa-circle-check"></i>時間効率：大（無駄な試し打ちをしないで済む）</div>
+      
+      <h3 class="sub-heading-plain">■1.寄り周り</h3>
+      <img src="https://images.pachinko-tactics.com/okiumi6-enaco/yori.webp" alt="沖海6甘　寄り周りの釘の状態" class="responsive-img" loading="lazy" decoding="async">
+      <div class="procedure-sticky">
+        <h4><i class="fa-solid fa-paste"></i> 寄り周りのプラマイ状態</h4>
+        <p>〇: 黄色で囲んだ箇所の釘が出荷状態に近く、調整されていない<strong>ノーマルな状態</strong></p>
+        <p>✖: 黄色で囲んだ箇所の釘が調整されており、黒で囲んだ箇所の<strong>釘と釘の間が広い</strong>状態</p>
+        <p>※特に<strong>赤で囲んだ箇所</strong>は回転率への影響が大きいため要チェックです。</p>
+      </div>
+      
+      <details>
+        <summary>詳細解説</summary>
+        <div class="details-content">
+          <p>寄り周りは頻繁に調整される箇所ではありませんが、<strong>回転率や出玉に大きな影響</strong>を及ぼします。黄色で囲んだ箇所が盤面側に寄る調整（プラス調整）であれば理想ですが、10店舗以上実戦した中でそのような良好な状態は見られませんでした。そのため、<strong>少しでもいじられている形跡があれば基本はマイナス（悪調整）</strong>と捉えて問題ありません。</p>
+          <p>黒で囲んだエリア内にある<strong>「赤で囲んだ箇所」は実戦前に必ずご確認ください</strong>。ここが大きく開いている（隙間が広い）場合は<strong>回らない可能性が極めて高い</strong>です（※大抵は黄色部分の調整もセットで悪くなっています）。他のエリアの調整が抜群に良い場合を除き、基本的に避けるのが賢明です。</p>
+        </div>
+      </details>
+      
+      <h3 class="sub-heading-plain">2.袴</h3>
+      <img src="https://images.pachinko-tactics.com/okiumi6-enaco/hakama.webp" alt="沖海6甘　袴周りのユーザー側がプラスの釘の状態" class="responsive-img" loading="lazy" decoding="async">
+      <div class="procedure-sticky">
+        <h4><i class="fa-solid fa-paste"></i> 袴のプラマイ状態</h4>
+        <p>〇: 左右ともに<strong>下から3つの釘が盤面方向（内側）に向いており</strong>、右側よりも左側の方が長い状態</p>
+        <p>✖: 左右ともに下から3つの釘が<strong>外方向に向いており</strong>、右側よりも左側の方が短い状態</p>
+        <p>※<strong>特に右側の釘の方向を重視</strong>してください！左側が外向きでも、右側が盤面方向（内向き）なら十分に試す価値があります。</p>
+      </div>
+      
+      <details>
+        <summary>詳細解説</summary>
+        <div class="details-content">
+          <p>袴（はかま）エリアで最も注目すべきなのは、<strong>左右の下から3本の釘</strong>です。全体を少し引いた視点で見たときに、これらの釘がしっかりと道（ステージ側）を向いていないと、<strong>ボーダーを超えるような回転率を維持することは非常に困難</strong>です（※左側の釘は出荷状態でも若干逆方向を向いているため、それを考慮して判断してください）。</p>
+          <p>また、<strong>風車と袴の一番下の釘との間隔</strong>もあわせて確認するのがおすすめです。この間隔が広すぎると、ヘソ方向へ向かう玉の割合が大幅に減ってしまいます。</p>
+        </div>
+      </details>
+      
+      <h3 class="sub-heading-plain">3.上道釘</h3>
+      <img src="https://images.pachinko-tactics.com/okiumi6-enaco/uemiti.webp" alt="沖海6甘 道周りの釘の状態" class="responsive-img" loading="lazy" decoding="async">
+      <div class="procedure-sticky">
+        <h4><i class="fa-solid fa-paste"></i> 上道釘のプラマイ状態</h4>
+        <p>〇: 釘と釘の間隔が狭く、横から見たときに<strong>下方向を向いていない</strong>状態</p>
+        <p>✖: 釘と釘の間隔が広く、横から見たときに<strong>下方向を向いていたり釘並びがガタガタ</strong>している状態</p>
+        <p>※<strong>特にピンクで記した箇所（ヘソ手前の間隔）</strong>は回転率への影響が大きいため、<strong>最優先でチェック</strong>してください！</p>
+      </div>
+      
+      <details>
+        <summary>詳細解説</summary>
+        <div class="details-content">
+          <p>道釘のすき間だけでなく、道釘全体が上下に調整されている場合もあります。しかし、これは台のネカセ（傾斜）によって良くも悪くも作用するため、事前チェックの段階では<strong>あまり神経質に気にしなくても大丈夫</strong>です。</p>
+          <p>この部分は釘の見た目だけで判断するのではなく、実際に打った際の<strong>玉の挙動で判断するのがおすすめ</strong>です。玉が跳ねすぎてしまったり、勢いが死んでしまってヘソの手前で落ちてしまう場合はマイナスの状態と判断できます。</p>
+          <p>ただし、<strong>ピンクで示した箇所（ヘソ直前のすき間）の幅だけは実戦前に必ず確認</strong>してください。ここが広いとヘソ周りに玉が滞留しにくくなり、回転率が大きく低下します。</p>
+        </div>
+      </details>
+      
+      <h3 class="sub-heading-plain">4.ヘソ</h3>
+      <img src="https://images.pachinko-tactics.com/okiumi6-enaco/heso.webp" alt="沖海6甘 実際のホールで撮影したヘソの画像" class="responsive-img" loading="lazy" decoding="async">
+      <div class="procedure-sticky">
+        <h4><i class="fa-solid fa-paste"></i> ヘソのプラマイ状態</h4>
+        <p>〇: 横から見たときに<strong>ヘソ釘が上方向（アゲ調整）</strong>に向いている状態</p>
+        <p>✖: 横から見たときに<strong>ヘソ釘が下方向（サゲ調整）</strong>に向いている状態</p>
+        <p>※<strong>特に右側のヘソ釘の向き</strong>が出玉・回転率に大きく影響します！</p>
+      </div>
+      
+      <details>
+        <summary>詳細解説</summary>
+        <div class="details-content">
+          <p>実戦上、上記のヘソサイズであっても<strong>千円あたり21回転以上</strong>回ることを確認しました。この結果から、本機においては<strong>極端に広いヘソ幅（サイズ）は必ずしも必要ない</strong>と考えられます。</p>
+          <p>むしろ、ヘソが不自然に広い台は<strong>「見せかけ釘（他が悪すぎて結局回らない）」</strong>である可能性が高いため注意が必要です。</p>
+          <p>特定日（イベント日）などに限定して開けられている場合を除き、<strong>通常営業日でヘソサイズだけが異様に広いホールは、寄りや道などの他部分の調整が削られている危険性</strong>が高いと判断できます。</p>
+        </div>
+      </details>
+
+      <!-- 2-2 -->
+      <h3 class="subset-title" id="normal-strategy-2">②：素早く回る台を発見するテクニック</h3>
+      
+      <div class="effect-badge"><i class="fa-solid fa-circle-check"></i>優秀台奪取効果：大</div>
+      
+      <p>朝一の入場時など、じっくり釘を見る時間がない時の台選びに有効なテクニックです。初見のホールで試す価値（または見る価値）があるかどうかを判別する際にも使えます。<br><img src="https://images.pachinko-tactics.com/okiumi6-enaco/hakamatyekku.webp" alt="沖海6甘 素早く回る台を見つけるテクニック" class="responsive-img" loading="lazy" decoding="async"></p>
+      
+      <div class="procedure-sticky">
+        <h4><i class="fa-solid fa-paste"></i> 袴の〇✖判断基準</h4>
+        <p>台を<strong>右側（丸のギミックが付いている側）から斜めに</strong>袴の形を見てください。以下に記載した基準のうち、<strong>✖判定が2つ以上</strong>あった場合は、他の釘にかなり大きなプラス要素がない限り<strong>回らない可能性が極めて高い</strong>です。</p>
+        <p><strong>1. 袴の左側</strong><br>〇：右側より長い<br>✖：右側より短い</p>
+        <p><strong>2. 袴出口の向き</strong><br>〇：道（ステージ）方向を向いている<br>✖：盤面とは逆方向（外側）を向いている</p>
+        <p><strong>3. 袴と風車との距離</strong><br>〇：全体的に平行、または下方向に調整されている<br>✖：全体的に上方向に調整されている<br>※<strong>特に一番下の釘が上方向を向いている場合</strong>は要警戒です。</p>
+      </div>
+
+      <!-- 2-3 -->
+      <h3 class="subset-title" id="normal-strategy-3">③：おすすめMy海カスタム</h3>
+      
+      <div class="effect-badge"><i class="fa-solid fa-circle-check"></i>欠損保留減少効果：小</div>
+      
+      <img src="https://images.pachinko-tactics.com/okiumi6-enaco/myumikasutam.webp" alt="欠相保留を減らして回転率を上げるおすすめなmy海カスタム" class="responsive-img" loading="lazy" decoding="async">
+      
+      <h3 class="sub-heading-plain">■魚群信頼度別各種データ</h3>
+      <div class="table-container">
+        <table class="compare-table">
+          <thead>
+            <tr>
+              <th style="width: 40%;">項目</th>
+              <th style="width: 30%; text-align: center;" class="col-75">魚群信頼度75%</th>
+              <th style="width: 30%; text-align: center;" class="col-100 double-border-left">魚群信頼度100%</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="table-subheader">
+              <td colspan="3" style="font-weight: bold; background-color: var(--bg-hover);">【初当り時の魚群占有率】</td>
+            </tr>
+            <tr>
+              <td class="col-label">総初当り回数</td>
+              <td class="col-75">72回</td>
+              <td class="col-100 double-border-left">16回</td>
+            </tr>
+            <tr>
+              <td class="col-label">魚群発生回数</td>
+              <td class="col-75">29回</td>
+              <td class="col-100 double-border-left">2回</td>
+            </tr>
+            <tr>
+              <td class="col-label">占有率</td>
+              <td class="col-75"><strong>40.3%</strong></td>
+              <td class="col-100 double-border-left"><strong>12.5%</strong></td>
+            </tr>
+            
+            <tr class="table-subheader">
+              <td colspan="3" style="font-weight: bold; background-color: var(--bg-hover);">【初当り時の美らビス揺れ先読み予告占有率】</td>
+            </tr>
+            <tr>
+              <td class="col-label">対象初当り回数</td>
+              <td class="col-75">60回</td>
+              <td class="col-100 double-border-left">13回</td>
+            </tr>
+            <tr>
+              <td class="col-label">先読み回数</td>
+              <td class="col-75">18回</td>
+              <td class="col-100 double-border-left">3回</td>
+            </tr>
+            <tr>
+              <td class="col-label">占有率</td>
+              <td class="col-75"><strong>30.0%</strong></td>
+              <td class="col-100 double-border-left"><strong>23.1%</strong></td>
+            </tr>
+            
+            <tr class="table-subheader">
+              <td colspan="3" style="font-weight: bold; background-color: var(--bg-hover);">【ノーマルリーチ割合】</td>
+            </tr>
+            <tr>
+              <td class="col-label">総初当り回数</td>
+              <td class="col-75">72回</td>
+              <td class="col-100 double-border-left">16回</td>
+            </tr>
+            <tr>
+              <td class="col-label">ノーマルリーチ当り回数</td>
+              <td class="col-75">11回</td>
+              <td class="col-100 double-border-left">10回</td>
+            </tr>
+            <tr>
+              <td class="col-label">割合</td>
+              <td class="col-75"><strong>15.3%</strong></td>
+              <td class="col-100 double-border-left"><strong>62.5%</strong></td>
+            </tr>
+            
+            <tr class="table-subheader">
+              <td colspan="3" style="font-weight: bold; background-color: var(--bg-hover);">【平均保留欠損数】</td>
+            </tr>
+            <tr>
+              <td class="col-label">総欠損数</td>
+              <td class="col-75">84個</td>
+              <td class="col-100 double-border-left">33個</td>
+            </tr>
+            <tr>
+              <td class="col-label">平均保留欠損数</td>
+              <td class="col-75"><strong>1.2個</strong></td>
+              <td class="col-100 double-border-left"><strong>2.1個</strong></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+      <div class="procedure-sticky">
+        <h4><i class="fa-solid fa-paste"></i> 項目別の設定</h4>
+        <p>
+          〇 <strong>魚群期待度</strong>：75%<br>
+          〇 <strong>先バレ魚群</strong>：ON<br>
+          〇 <strong>告知頻度</strong>：指定なし<br>
+          〇 <strong>告知方法</strong>：指定なし<br>
+          〇 <strong>予告頻度</strong>：少なめ<br>
+          〇 <strong>前兆予告</strong>：※先バレ魚群ONのため選択不可<br>
+          〇 <strong>美らビスカスタム</strong>：ON<br>
+          〇 <strong>図柄カスタム</strong>：アクティブ<br>
+          〇 <strong>えなこカスタム</strong>：指定なし
+        </p>
+      </div>
+      
+      <details>
+        <summary>詳細解説 (クリックで開閉)</summary>
+        <div class="details-content">
+          <p>〇 <strong>予告頻度について</strong><br>予告頻度は信頼度にも影響を与えると考えられます（※当該変動だけでなく、先読み予告の信頼度もアップしているように感じられました）。</p>
+          <p>頻度を<strong>「少なめ」</strong>に設定することで、予告が出た際の信頼度をアップさせておき、無駄な止め打ちを減らすようにします。これにより、<strong>欠損保留の減少だけでなく時間効率も向上</strong>します。</p>
+          <p>また、「少なめ」設定時はミドル機と同様、<strong>ウリンチャージのガセ煽りが発生しない</strong>と思われます。こちらも時間効率アップに繋がる大きな要因です。</p>
+          <p>〇 <strong>美らビスカスタムと図柄カスタムについて</strong><br>これらを「ON」および「アクティブ」にすることで固有予告が発生するため、<strong>初当りを察知しやすく</strong>なります。</p>
+          <p><strong>美らビスカスタム「ON」</strong>：花が揺れる予告が発生<br><strong>図柄カスタム「アクティブ」</strong>：図柄変動アクションの種類が追加</p>
+          <p>〇 <strong>魚群信頼度100%×美ら旅モードの可能性について</strong><br>通常時は美ら旅モードで実戦したため、上記表で記載したノーマルリーチ割合は「魚群信頼度〇〇%×美ら旅モード」になります。比較すると、かなりの差が出ているのが分かります。そして、「魚群信頼度100%×美ら旅モード」で実戦した際、ほとんどの初当り獲得時のリーチは「ジンベェSPリーチ」または「ノーマルリーチ」でした。</p>
+          <p>これは、「美ら旅モード中はジンベェ演出が発生しやすい」という法則が関係しているのではないかと推測しました。その為、<strong>「魚群信頼度100%×美ら旅モード」の組み合わせ時はSPリーチでの大当り⇒「ジンベェSPリーチ」が極端に出やすい裏モード的な状態</strong>になるのではないかと考えています。</p>
+          <p>おすすめに記載したカスタム設定時、ノーマルリーチで当たる際は先読みも強めの当該予告も発生しませんでしたが、例えば「先バレ魚群：OFF」「予告頻度：多め」に設定することでノーマルリーチでもそのような予告が発生するのであれば、さらに欠損保留を減らせる可能性があると考えています。</p>
+        </div>
+      </details>
+
+      <!-- 2-4 -->
+      <h3 class="subset-title" id="normal-strategy-4">④：回転率をUPさせるベストストローク</h3>
+      
+      <div class="effect-badge"><i class="fa-solid fa-circle-check"></i>回転率UP効果：中（実戦上、1〜1.5回転アップ）</div>
+      
+      <img src="https://images.pachinko-tactics.com/okiumi6-enaco/bestsutorooku.webp" alt="沖海6Withえなこでより千円あたりの回転率がよくなるストロークを紹介" class="responsive-img" loading="lazy" decoding="async">
+      
+      <div class="procedure-sticky">
+        <h4><i class="fa-solid fa-paste"></i> 試すストロークの順番とNGストローク</h4>
+        <h5>【試すストロークの順番】</h5>
+        <ol class="procedure-steps">
+          <li><strong>弱め打ち</strong>（上記画像の赤で記したルート）</li>
+          <li><strong>やや弱め打ち</strong>（上記画像のピンクで記したルート）</li>
+          <li><strong>やや強め打ち</strong>（屋根手前のプラスチックに当てない程度）</li>
+          <li><strong>強め打ち</strong>（屋根手前のプラスチックに思いきり当てる）</li>
+        </ol>
+        
+        <h5>【NGストローク✖】</h5>
+        <ul>
+          <li style="color: #d32f2f;">射出口近くのプラスチックを超えない弱め打ち<br><span style="color: var(--text-sub); font-size: 0.85rem;">※玉が盤面側に寄りにくくなります。</span></li>
+          <li style="color: #d32f2f;">屋根部分に乗っかるぐらいの強め打ち<br><span style="color: var(--text-sub); font-size: 0.85rem;">※少しでも屋根に乗っかりすぎると、不利なゲージ構成をしている右盤面に飛んでいってしまいます。</span></li>
+        </ul>
+      </div>
+      
+      <details>
+        <summary>【なぜ「弱め打ち」の方が回るのか？】解説 (クリックで開閉)</summary>
+        <div class="details-content">
+          <p>主に<strong>2つの箇所が要因</strong>となり、弱め打ちの方が回ると考えています。</p>
+          
+          <h5 class="sub-heading-plain">■ 1. 寄り</h5>
+          <p>
+            <img src="https://images.pachinko-tactics.com/okiumi6-enaco/tuyomeuti.webp" alt="沖海6で強めに打った時の玉が通るルート" class="responsive-img" loading="lazy" decoding="async">
+            <img src="https://images.pachinko-tactics.com/okiumi6-enaco/yowameuti.webp" alt="沖海6で弱めに打った時の玉が通るルート" class="responsive-img" loading="lazy" decoding="async">
+          </p>
+          <p>ゲージ構成上、玉が盤面の外側へ逃げやすくなっています。強めに打ってしまうとそれが助長されてしまいます。弱めで打って上記画像のように<strong>盤面に寄せる（少しでも寄り釘の間を抜けて内側に寄せる）</strong>形にした方が、結果的に回ると考えています。</p>
+          <p>実際に厳密なデータを取っているわけではありませんが、体感としてどのホールで打っても、<strong>弱め打ちの方がより多くヘソまで到達してくれた</strong>印象です。</p>
+          
+          <h5 class="sub-heading-plain">■ 2. 道部分（袴を抜けた後の箇所）</h5>
+          <p><img src="https://images.pachinko-tactics.com/okiumi6-enaco/tuujyouzi_miti.webp" alt="沖海6で強めに打った時と弱めに打った時の玉の挙動" class="responsive-img" loading="lazy" decoding="async"></p>
+          <p>強めで打つと、どうしても上に飛びすぎてしまい、<strong>ヘソを飛び越えてしまいます</strong>。また、勢いがありすぎて右側まで流れてしまいがちです。</p>
+          <p>右側に流れても戻ってきてヘソ入賞することもありますが、右側は左側よりも角度がついているため、勢いが殺されてそのまま死に玉になってしまいます。</p>
+          <p>逆に弱め打ちにすると、上に飛びすぎず<strong>ヘソ周りで玉が滞留</strong>してくれます。そもそも海物語シリーズは大体の機種に言えることですが、ヘソ周りは甘めの設計になっています。</p>
+          <p>そのため、ヘソ周りで玉がバウンドして最終的にヘソに入るという現象が、強め打ちよりも頻発します。加えて、<strong>右側へ流れる玉も強め打ちより少なくなる</strong>点もプラスです。</p>
+          <p>補足として、強め打ちの方がステージへの乗り上げ率が高くなるのではないか、と思われるかもしれません。</p>
+          <p>確かに上に高く飛び上がる分、若干は乗り上げ率が上がりますが、正直なところ本機は<strong>ステージ性能がそこまで高くない</strong>ため、回転率に大きく影響するほどではありません。</p>
+          <p>また、実戦上でも強め打ちにしたからといって、極端にステージへの乗り上げ率が上がることはありませんでした。ですので、ステージ乗り上げはそこまでプラスには働かないという点も付け加えておきます。</p>
+        </div>
+      </details>
+
+      <!-- 2-5 -->
+      <h3 class="subset-title" id="normal-strategy-5">⑤：ウリンチャージ発生時 止め打ち攻略</h3>
+      
+      <div class="effect-badge"><i class="fa-solid fa-circle-check"></i>無駄玉防止効果＆時間効率UP効果：小</div>
+      
+      <img src="https://images.pachinko-tactics.com/okiumi6-enaco/urintyazi.webp" alt="沖海6甘 ウリンチャージ打ち出し開始タイミング" class="responsive-img" loading="lazy" decoding="async">
+      <h3 class="sub-heading-plain">■実戦上のウリンチャージ発生率</h3>
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 50%;">項目</th>
+              <th>数値・詳細</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>通常時総回転数</strong></td>
+              <td>8,936回転</td>
+            </tr>
+            <tr>
+              <td><strong>発生回数</strong></td>
+              <td>39回</td>
+            </tr>
+            <tr>
+              <td><strong>発生確率</strong></td>
+              <td><strong>1/229.1</strong></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="font-size: 0.85rem; color: var(--text-sub); margin-top: 8px;">※ウリンチャージは特図1（ヘソ）ではなく、小デジ（スルーを通ると抽選開始。最大4個まで保留可能）での抽選なので、あくまで上記の数値は実戦値ベースの参考値です。</p>
+      
+      <div class="procedure-sticky">
+        <h4><i class="fa-solid fa-paste"></i> 止め打ち手順</h4>
+        <ol class="procedure-steps">
+          <li>液晶右下に<strong>ドットのゲームセンターが出現</strong>したら打ち出しを停止</li>
+          <li>演出成功後、<strong>電チューが出現</strong>（上記画像）したら打ち出しを開始（※この際のストロークはより電チューに届きやすいように強め打ちの方が良いです）</li>
+          <li>「ウリンチャージ中だよ！トゥルトゥトゥ〜♪トゥルトゥトゥ〜♪トゥルトゥトゥットゥットゥットゥトゥルトゥトゥ〜♪」⇐これが鳴りやんだタイミングで打ち出しを停止</li>
+          <li><strong>特図2保留をすべて消化</strong>しきったら打ち出しを再開</li>
+        </ol>
+        <p>※補足<br>My海カスタムの予告頻度を「少なめ」に設定している場合、実戦上ドットのゲームセンターが出現した時点でウリンチャージが発生するため、<strong>ガセ演出がありません</strong>。時間効率を少しでも高めたい方は、<strong>必ず「予告頻度：少なめ」に設定</strong>してください。</p>
+      </div>
+      
+      <details>
+        <summary>ミドルよりもウリンチャージ中の大当りが嬉しい！そのワケ(クリックで開閉)</summary>
+        <div class="details-content">
+          <p>ミドルでは特図2で大当りした場合、10R確変の割合が特図1に比べて高くなっていました。当然その分出玉がもらえるので嬉しかったのですが、公表されている情報では、本来特図2で2R確変を引いた場合は「ジンベェタイム」に突入するはずなのに、残念ながら通常時に特図2で2R確変を引いても、ジンベェタイムには突入しませんでした。</p>
+          <p>なぜなら、ミドルでのジンベェタイムの本当の突入契機は、公表されている特図2での2R確変ではなく、<strong>電サポ中（時短中や確変中）に引いた2R確変</strong>だったからです（※つまり、電サポ状態中であれば特図1での2R確変でもジンベェタイムに突入。この仕組みを利用して、確変中にあえて2R確変割合が多い特図1を消化し、ジンベェタイムを誘発させることができました）。</p>
+          <p>そのため、ミドルではウリンチャージ中に大当りをしても、2R確変を引いてしまうと少し損した気分になってしまいました。</p>
+          <p> </p>
+          <p>しかし、<strong>本機（甘デジ）ではこの仕様が変更</strong>されています。特図1・特図2にかかわらず、<strong>10Rを引いたときがジンベェタイムの突入契機</strong>となっています。</p>
+          <p>そのため、ミドルと違って非電サポ状態（通常時）であろうが関係なく、<strong>10Rを射止めればジンベェタイムに突入</strong>することができます。10Rの振り分けが多い特図2の抽選を受けられる<strong>「ウリンチャージ」は非常に重要</strong>であり、大当りした際に素直に喜べる設計になっています。</p>
+        </div>
+      </details>
+    </div>
+    <!-- 3. 大当り中 攻略考察 -->
+
+    <!-- 3. 大当り中 攻略考察 -->
+    <div class="panel" id="bonus-strategy">
+      <h2 class="section-title"><i class="fa-solid fa-coins"></i> 3. 大当り中 攻略考察</h2>
+      <p>大当り中の出玉を最大化し、公表スペック以上の獲得出玉を得るための技術介入です。</p>
+
+            <!-- 3-1 -->
+
+      <h3 class="subset-title" id="bonus-strategy-1">①：大当り中の仕組み(初心者向け)</h3>
+
+      <img src="https://images.pachinko-tactics.com/okiumi6-enaco/ooatariend.webp" alt="パチンコ 大当り中の仕組みを解説" class="responsive-img" loading="lazy" decoding="async">
+
+      <div class="procedure-sticky">
+        <h4><i class="fa-solid fa-paste"></i> ラウンドの終了条件</h4>
+        <p>大当り中の1ラウンド毎の終了条件には、以下の<strong>2つの条件</strong>があります。</p>
+        <ul class="procedure-steps" style="list-style-type: decimal; padding-left: 20px; margin-bottom: 16px;">
+          <li><strong>規定個数の玉がアタッカーに入賞する</strong></li>
+          <li><strong>規定時間に到達する</strong></li>
+        </ul>
+        <p>これら<strong>どちらか一方の条件を満たす</strong>と、自動的にアタッカーが閉じてラウンドが終了する仕組みになっています。</p>
+      </div>
+
+      <div class="procedure-sticky blue">
+        <h4><i class="fa-solid fa-calculator"></i> 規定個数（カウント数）の確認方法</h4>
+        <p>規定個数は機種によって異なりますが、基本的にはパチンコ情報サイトの機種概要やスペック表に掲載されていることが多いです。<br>一般的によく見られる表記としては、賞球数の欄に<strong>「10カウント」</strong>や、数字の後に<strong>「C（カウントの略）」</strong>を付けて記載されています。（※カウント＝個数）</p>
+      </div>
+
+      <div class="procedure-sticky pink">
+        <h4><i class="fa-solid fa-circle-exclamation"></i> 規定の開放時間に関する注意点</h4>
+        <p>一方で、規定の開放時間についてはメディア等に詳しく記載されないことがほとんどです。あまりにも長く規定個数に達しないと<strong>アタッカーが強制的に閉まってしまう（無駄球が発生する）</strong>という点は念頭に置いておきましょう。</p>
+      </div>
+
+      <div class="procedure-sticky green">
+        <h4><i class="fa-solid fa-lightbulb"></i> オーバー入賞とは？</h4>
+        <p>この後詳しく紹介する「オーバー入賞誘発手順」とは、この<strong>規定個数（カウント数）を超えて入賞させること</strong>を指します。</p>
+        <p>例えば、本機のように規定個数が10カウント（10個）の場合に、<strong>11個目、12個目をアタッカーへ入賞させるための具体的な手順</strong>を以下に解説します。</p>
+      </div>
+
+
+      <!-- 3-2 -->
+
+      <h3 class="subset-title" id="bonus-strategy-2">②：出玉増を狙えるオーバー入賞誘発手順</h3>
+
+      <div class="effect-badge"><i class="fa-solid fa-circle-check"></i>出玉上乗せ効果：小～中(+1～2個/1R)</div>
+
+      <h3 class="sub-heading-plain">■大当り中のストローク</h3>
+      <img src="https://images.pachinko-tactics.com/okiumi6-enaco/over.webp" alt="沖海6甘 大当り中の出玉増を狙うストローク" class="responsive-img" loading="lazy" decoding="async">
+
+      <div class="procedure-sticky">
+        <h4><i class="fa-solid fa-paste"></i> 打ち出し手順</h4>
+        <ol class="procedure-steps">
+          <li>アタッカーに<strong>5個入賞するまでやや強め</strong>で打つ（※上記画像の赤ルート）</li>
+          <li>5個入賞を確認した直後、 <strong>2発弱め</strong>に打つ（※上記画像の青ルート）</li>
+          <li>アタッカーへの入賞個数が10個に満たなかった場合、<strong>9個入賞に達するよう強めで打ち、さらに2発弱め</strong>に打つ（例：手順2の段階で7個入賞なら、2発強めに打った後、2発弱めに打つ）</li>
+        </ol>
+      </div>
+
+      
+      <div class="procedure-sticky" style="background-color: #f7f9fa; border-left: 4px solid var(--accent-secondary);">
+        <h4><i class="fa-solid fa-hand"></i> 弱め調整と強め打ちのコツ（ハンドル操作）</h4>
+        <p><strong>【弱めの調整手順】</strong><br>1ラウンド目で弱めの調整を行い、その捻り具合を<strong>人差し指でハンドルの真ん中にある突起</strong>を利用して位置をキープ（ロック）しておくと安定します。</p>
+        <p><strong>【強めの打ち方】</strong><br><strong>ハンドル右端の突起を小指</strong>で押すように動かすと、スムーズに強弱を切り替えられます。</p>
+      </div>
+
+      <details>
+        <summary>最も出玉に関わる釘はココ！ (クリックで開閉)</summary>
+        <div class="details-content">
+          <img src="https://images.pachinko-tactics.com/okiumi6-enaco/sitakugi.webp" alt="沖海6甘 出玉に最も関わる釘の箇所を紹介" class="responsive-img" loading="lazy" decoding="async">
+          <p>出玉に関わる釘は数箇所ありますが、特に<strong>最も大きな影響を与えるのが「下釘」</strong>です。</p>
+          <p>ここの状態がマイナス（釘と釘の間隔が広い、または上下調整が崩れてガタガタ）になっていると、玉が下道から脱落してしまい、<strong>アタッカーへの入賞率が著しく低下</strong>します。</p>
+          <p>また下釘は、大当り中だけでなく<strong>電サポ（ST/時短）中の出玉増減にも直結</strong>する極めて重要な箇所です。下釘からこぼれ落ちた玉は、電サポ（電チュー）まで届くことはありません。</p>
+          <p>電サポに届かなかった玉は、その時点で他入賞口（ポケット）に入らない限り<strong>すべて死に玉（無駄球）</strong>になってしまいます。</p>
+          <p>したがって、実戦前には<strong>下釘の状態を必ずチェック</strong>しておく必要があります。</p>
+        </div>
+      </details>
+    </div>
+
+    <!-- 4. ST/時短中 攻略考察 -->
+    <div class="panel" id="rushtime-strategy">
+      <h2 class="section-title"><i class="fa-solid fa-person-running"></i> 4. ST/時短中 攻略考察</h2>
+      <p>電サポ中の玉減りを抑え現状維持または微増を達成するための状態別の電サポ攻略手順など、ST/時短中の攻略要素をまとめました。</p>
+
+            <!-- 4-1 -->
+
+      <h3 class="subset-title" id="rushtime-strategy-1">①：ST/時短中 ベストストローク</h3>
+
+      <div class="effect-badge"><i class="fa-solid fa-circle-check"></i>スルー通過率向上効果：大</div>
+
+      <img src="https://images.pachinko-tactics.com/okiumi6-enaco/strooku.webp" alt="沖海6甘 ST/時短中 スルーを通しやすくなるストロークを紹介" class="responsive-img" loading="lazy" decoding="async">
+
+      <div class="procedure-sticky">
+        <h4><i class="fa-solid fa-paste"></i> ストロークの目安</h4>
+        <p>屋根手前のプラスチックに<strong>少し当てる、またはギリギリ当てない程度</strong>の強めを意識すると良いです。</p>
+      </div>
+
+      <details>
+        <summary>【やや強めがベストストロークの理由】 (クリックで開閉)</summary>
+        <div class="details-content">
+          <p>通常時のベストストロークで触れた通り、強めで打つと玉が外側へより行きやすくなります。<strong>電サポを開放させるために通す必要があるスルーが外側に配置されている</strong>ため、強めに打った方がスルー通過率は向上すると考えています。</p>
+          <p>ただし、強めに打ちすぎてしまうと玉が暴れてしまい、スルーの手前でスルー上のルートから外れてしまうことがあります。そのため、<strong>「やや強め」に打つ方が実戦上もスルー通過率は上がりました。</strong></p>
+          <p>また、やや強めに打つことで得られる効果がもう一つあります。弱めで打ってしまうと、射出されてから電サポに到達するまでの時間が長くなってしまい、この後記載する「電サポ中の止め打ち手順」通りだと、<strong>電サポの開放に玉が間に合わない</strong>という事態が起こります。</p>
+          <p>したがって、<strong>ある程度勢いをつけて玉のスピードを上げることで、電サポの開放時間内に玉を間に合わせる</strong>というのが、もう一つの大きな効果です。</p>
+        </div>
+      </details>
+
+
+      <!-- 4-2 -->
+
+      <h3 class="subset-title" id="rushtime-strategy-2">②：大当りR終了後 打ち出し開始タイミング</h3>
+
+      <div class="effect-badge"><i class="fa-solid fa-circle-check"></i>無駄玉防止効果：大</div>
+
+      <h3 class="sub-heading-plain">■初当り後</h3>
+      <img src="https://images.pachinko-tactics.com/okiumi6-enaco/hatuatarigo.webp" alt="沖海6甘 初当り後の打ち出しタイミング" class="responsive-img" loading="lazy" decoding="async">
+
+      <div class="procedure-sticky">
+        <h4><i class="fa-solid fa-paste"></i> 打ち出し手順</h4>
+        <ol class="procedure-steps">
+          <li>最終ラウンド終了後から<strong>SANYOロゴ画面表示終了まで</strong>は絶対に打ち出さない。</li>
+          <li><strong>ヘソ保留が消化し始めたら</strong>打ち出しを開始（※この際は特図2保留が4個溜まるまで打ちっぱなしで消化）。</li>
+          <li>4個保留が溜まったら、下記に記載する止め打ち手順を実践。</li>
+        </ol>
+      </div>
+
+      <details>
+        <summary>補足事項 (クリックで開閉)</summary>
+        <div class="details-content">
+          <p>初当たり時は、構造上必ず特図1（ヘソ保留）が1つ消化されてしまいます。これを防ぐことはできませんが、<strong>2個目以降のヘソ保留を無駄に消化してしまうのは大きな損</strong>につながります。</p>
+          <p>そのため、2個目以降の特図1（ヘソ保留）の消化を防ぐために、<strong>大当り終了後は速やかに特図2（電チュー保留）を入賞</strong>させるようにしましょう。</p>
+        </div>
+      </details>
+
+      <h3 class="sub-heading-plain">■2連目以降</h3>
+      <img src="https://images.pachinko-tactics.com/okiumi6-enaco/rentyango.webp" alt="沖海6甘 2連目以降の打ち出しタイミング" class="responsive-img" loading="lazy" decoding="async">
+
+      <div class="procedure-sticky">
+        <h4><i class="fa-solid fa-paste"></i> 打ち出し手順</h4>
+        <ol class="procedure-steps">
+          <li>特図2保留（電チュー保留）が<strong>残り2個になるまで</strong>は打ち出さない。</li>
+          <li>特図2保留が残り1個になったタイミングで、強めの演出が発生していなければ打ち出しを開始。</li>
+          <li>初当り後同様、特図2保留が4個溜まったら、下記に記載する止め打ち手順を実践。</li>
+        </ol>
+      </div>
+
+      <details>
+        <summary>解説 (クリックで開閉)</summary>
+        <div class="details-content">
+          <p>機種によっては小デジ保留（電チューの開放の保留）が、STや時短開始まで抽選されず、保留された状態のまま開始されるものもあります。しかし本機においては、<strong>大当り中に保留をすべて消化してしまう</strong>ため、小デジ保留がゼロの状態でスタートします。</p>
+          <p>したがって、スルーを貯めるまでに無駄玉が出てしまうのを防ぐために、<strong>特図2の保留が残り2個になるまで打ち出さない</strong>方がお得です。</p>
+        </div>
+      </details>
+
+
+      <!-- 4-3 -->
+
+      <h3 class="subset-title" id="rushtime-strategy-3">③：非ジンベェタイム中 止め打ち攻略</h3>
+
+      <div class="effect-badge"><i class="fa-solid fa-circle-check"></i>玉減り防止効果：特大</div>
+
+      <h3 class="sub-heading-plain">■非ジンベェタイム中 点灯ランプ別開放パターン</h3>
+      <img src="https://images.pachinko-tactics.com/okiumi6-enaco/notzinbei.webp" alt="沖海6甘 非ジンベェタイム中 点灯ランプ別開放パターン" class="responsive-img" loading="lazy" decoding="async">
+
+      <div class="procedure-sticky" style="background-color: #f7f9fa; border-left: 4px solid var(--accent-secondary);">
+        <h4><i class="fa-solid fa-circle-info"></i> 小デジランプの仕様と点灯パターン</h4>
+        <p>盤面左下にある小デジランプ（上記画像の青枠箇所）が、電チュー開放の保留数を示唆しています。電チュー開放はスルーを通すことで最大4つまでストックでき、その溜まっている数がランプの点灯パターンで示唆されます。</p>
+        <p><strong>【点灯パターン別の示唆内容】</strong><br>
+        ・<strong>右点滅のみ</strong>：保留1個<br>
+        ・<strong>両方点滅</strong>：保留2個<br>
+        ・<strong>右点灯 左点滅</strong>：保留3個<br>
+        ・<strong>両点灯</strong>：保留4個</p>
+      </div>
+
+      <div class="procedure-sticky">
+        <h4><i class="fa-solid fa-paste"></i> 点灯ランプ別 止め打ち手順</h4>
+        <p>点灯パターンと電チュー開放の保留数に応じて止め打ち手順を変えます。</p>
+        <p><strong>【保留3個以上時】</strong><br>
+        ・<strong>①点灯時</strong>：①が点灯したと同時に打ち出しを開始。<strong>3発</strong>打つ。<br>
+        ・<strong>②点灯時</strong>：②が点灯したと同時に打ち出しを開始。<strong>3発</strong>打つ。<br>
+        ・<strong>③点灯時</strong>：③が点灯してから<strong>1拍おいて</strong>、<strong>3発</strong>打つ。</p>
+        <p><strong>【保留2個時】</strong><br>
+        ・<strong>①点灯時</strong>：①が点灯したと同時に打ち出しを開始。<strong>4発</strong>打つ。<br>
+        ・<strong>②点灯時</strong>：②が点灯したと同時に打ち出しを開始し、次のランプの止めタイミングまで打ちっぱなし（※例: ②のあと①が点灯したらそこから3〜4発打った頃合いで打ち出しヤメ）。<br>
+        ・<strong>③点灯時</strong>：③が点灯してから<strong>1拍おいて</strong>、<strong>4発</strong>打つ。</p>
+        <p><strong>【保留1個以下時】</strong><br>
+        ・保留が3個以上溜まるまで<strong>打ちっぱなし</strong>で消化。</p>
+      </div>
+
+      <div class="procedure-sticky pink">
+        <h4><i class="fa-solid fa-circle-exclamation"></i> 残保留上乗せ手順</h4>
+        <img src="https://images.pachinko-tactics.com/okiumi6-enaco/stzitanend.webp" alt="非ジンベェタイム中のST/時短終了後に残保留を上乗せする方法" class="responsive-img" loading="lazy" decoding="async">
+        <p>非ジンベェタイムの終了後のみ、<strong>特図2の保留を1つ上乗せ（残保留5個目）できる可能性</strong>があります。特図2保留は10Rの振り分けが多いため、1つ上乗せするだけでも非常に効果的です。</p>
+        <p><strong>【上乗せ手順】</strong><br>
+        1. 電サポ残り2〜3回転ぐらいから<strong>4発打ち</strong>、または<strong>打ちっぱなし</strong>にする。<br>
+        2. 時短が終了しても、電サポの開放が行われなくなるまで上記手順を継続する。</p>
+      </div>
+
+      <details>
+        <summary>【非ジンベェタイム中に玉増えは可能なのか】詳細解説 (クリックで開閉)</summary>
+        <div class="details-content">
+          <h5>玉が増える根拠</h5>
+          <img src="https://images.pachinko-tactics.com/okiumi6-enaco/densapotyuusen.webp" alt="沖海6甘 次回点灯ランプ別の抽選時間" class="responsive-img" loading="lazy" decoding="async">
+          <p>ミドル機同様に、次の点灯ランプによって電サポが閉まっている時間（電サポ抽選時間）が異なります。そのため、完璧にタイミングを合わせることは不可能です。</p>
+          <p>しかし、上記で記した<strong>「保留3個以上の手順」を実践すれば、実戦上も玉を増やすことが可能</strong>でした。</p>
+          <p>開放ランプパターン別に説明すると、<strong>①のミドル開放</strong>と<strong>③のロング開放</strong>であれば、電チュー開放されている間に3玉とも到達します。ですので、弾かれさえしなければ、<strong>すべてを入賞させることができます</strong>（タイミングが合っている状態）。</p>
+          <p><strong>②のショート開放</strong>については、事前に3発打っていても、構造上基本的には2発しか入らない形になります。3発目が入るかはランダムです。とはいえ、次の点灯ランプを予想することは不可能なため、ほぼ入らないであろう1発分に関しては、損切りと考えて割り切りましょう。</p>
+          <p>※【やや強めがベストストロークの理由】内で記載した「玉が電チュー開放までに間に合わなくなる」という旨は、ここのことです。弱め打ちだと1玉目は間に合いますが、2玉目以降入賞するかはランダムになってしまいます。</p>
+          
+          <h5>玉が増える構造と玉が減るタイミング</h5>
+          <p>どの開放パターンにも言えることですが、3発打ちであれば<strong>【ヘソ1発または電チュー2発】に入賞すればプラマイゼロ以上</strong>になります。保留を切らさずにこの3発打ちの状態を長く維持できれば、非ジンベェタイム中でも十分に玉増えが期待できます。</p>
+          <p>逆に4発打ちにすると、どうしても無駄になる玉が出やすくなってしまいます。①や③のような長めの開放だったとしても、4発目が電チューに到達して入るか入らないかはランダムになってしまうためです。</p>
+          <p>とはいえ、保留2個以下で4発または打ちっぱなしにしないと、保留が切れてしまう恐れがあります。<strong>最も避けたいのは、電チューの保留が完全になくなり、電チューが開かなくなる（変動が止まる）こと</strong>です。このタイミングが最も玉が減ります。</p>
+          <p>このリスクを避けるために、保留個数が少ないときは4発打つ、あるいは打ちっぱなしにするという手順を踏み、<strong>現状維持ないしは微減に留める</strong>ようにした方がトータルで見てお得になります。</p>
+          
+          <h5>非ジンベェタイム中でも玉が増えるカラクリ</h5>
+          <img src="https://images.pachinko-tactics.com/okiumi6-enaco/densapokaihou.webp" alt="沖海6甘 電サポ開放時間" class="responsive-img" loading="lazy" decoding="async">
+          <p>ミドル機と比較して、本機は点灯ランプ別の<strong>電サポ開放時間が長く設計</strong>されています。</p>
+          <p>具体的には、<strong>ショート開放とミドル開放は0.2秒、ロング開放にいたっては0.3秒</strong>、電サポの開放時間が長くなっています。</p>
+          <p>ミドル機では、先ほど記した「3発打ち」において、ミドルとロングですら3発目がランダムになってしまっていました。しかし本機では開放時間が延長されたことで、<strong>3発目もタイミングが合ってきっちり入る</strong>ようになっています。これが、非ジンベェタイム中でも玉が増える最大のカラクリです。</p>
+        </div>
+      </details>
+
+
+      <!-- 4-4 -->
+
+      <h3 class="subset-title" id="rushtime-strategy-4">④：ジンベェタイム中 止め打ち攻略</h3>
+
+      <div class="effect-badge"><i class="fa-solid fa-circle-check"></i>玉減り防止効果：特大</div>
+
+      <h3 class="sub-heading-plain">■ジンベェタイム中 点灯ランプ別開放パターン</h3>
+      <img src="https://images.pachinko-tactics.com/okiumi6-enaco/zinbei.webp" alt="沖海6甘 ジンベェタイム中 点灯ランプ別開放パターン" class="responsive-img" loading="lazy" decoding="async">
+
+      <div class="procedure-sticky">
+        <h4><i class="fa-solid fa-paste"></i> 点灯ランプ別 止め打ち手順</h4>
+        <p>非ジンベェタイム中と同様、点灯パターンと電チュー開放の保留数に応じて止め打ち手順を変えます（※電チュー開放の保留数を示唆する小デジランプと点灯パターン別の保留示唆内容は非ジンベェタイム中と同様です）。</p>
+        <p><strong>【保留3個以上時】</strong><br>
+        ・<strong>①点灯時</strong>：①が点灯したと同時に打ち出しを開始。<strong>3発</strong>打つ。<br>
+        ・<strong>②点灯時</strong>：②が点灯したと同時に打ち出しを開始。<strong>3発</strong>打つ。<br>
+        ・<strong>③点灯時</strong>：③が点灯してから<strong>半拍おいて</strong>、<strong>3発</strong>打つ。</p>
+        <p><strong>【保留2個時】</strong><br>
+        ・<strong>①点灯時</strong>：①が点灯したと同時に打ち出しを開始. <strong>4発</strong>打つ。<br>
+        ・<strong>②点灯時</strong>：②が点灯したと同時に打ち出しを開始し、次のランプの止めタイミングまで打ちっぱなし（※例: ②のあと①が点灯したらそこから3〜4発打った頃合いで停止）。<br>
+        ・<strong>③点灯時</strong>：③が点灯してから<strong>半拍おいて</strong>、<strong>4発</strong>打つ。</p>
+        <p><strong>【保留1個以下時】</strong><br>
+        ・保留が3個以上溜まるまで<strong>打ちっぱなし</strong>で消化。</p>
+      </div>
+
+      <details>
+        <summary>⚠️ 注意点・検証データ (クリックで開閉)</summary>
+        <div class="details-content">
+          <h3 class="sub-heading-plain">■電サポランプ 点灯振り分け</h3>
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th style="width: 34%;">点灯ランプ</th>
+                  <th style="width: 33%; text-align: center;">非ジンベェタイム<br><small>（サンプル：236件）</small></th>
+                  <th style="width: 33%; text-align: center;">ジンベェタイム<br><small>（サンプル：236件）</small></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="text-align: center;"><strong>1 </strong></td>
+                  <td style="text-align: center;"><strong>47%</strong></td>
+                  <td style="text-align: center;"><strong>44%</strong></td>
+                </tr>
+                <tr>
+                  <td style="text-align: center;"><strong>2 </strong></td>
+                  <td style="text-align: center;">25%</td>
+                  <td style="text-align: center;">28%</td>
+                </tr>
+                <tr>
+                  <td style="text-align: center;"><strong>3 </strong></td>
+                  <td style="text-align: center;">28%</td>
+                  <td style="text-align: center;">28%</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p>電サポの点灯振り分けは、上記の表の通り、<b>非ジンベェタイム中もジンベェタイム中も「1」が多くなっています</b>。</p>
+          <p>非ジンベェタイム中の詳細解説でも触れましたが、電サポの開放時間に準じて電サポの抽選時間（閉じている時間）は変動します。ジンベェタイム中は電サポの抽選時間が非ジンベェタイム中に比べて短くなっているかつ、点灯しやすい「1」がショート開放になるため、全体的に閉じている時間は短くなります。</p>
+          <p>電サポ開放総時間も点灯ランプ毎の開放時間が長くなるため、非ジンベェタイム中よりも長くなるものの、上記の挙動の影響で<strong>電サポの抽選回数自体は非ジンベェタイム中よりも多くなってしまいます</strong>。</p>
+          <p>その結果、非ジンベェタイム中に比べて<strong>ジンベェタイム中の方が小デジ保留が0になりやすくなる</strong>と考えます（実戦上もそのように感じました）。</p>
+          <p>したがって、理想的なのは3発打ちですが、<strong>少しでも保留がきれるようであれば、4発打ち、もしくは打ちっぱなしに切り替えた方</strong>が、電サポ中の玉増減は向上すると思われます。</p>
+        </div>
+      </details>
+    </div>
+
+    <!-- 5. その他 攻略考察 -->
+<div class="panel" id="other-strategy" style="display: none;">
+      <h2 class="section-title"><i class="fa-solid fa-puzzle-piece"></i> 5. その他 攻略考察</h2>
+      <p>My海カスタムの特性と演出の仕様を逆手に取った、時間効率向上と無駄打ち防止の掛け合わせテクニックです。</p>
+
+      <!-- 5-1 -->
+      <h3 class="subset-title" id="other-strategy-1">【①:美らビスカスタムと保留埋め・ストップ判断】</h3>
+      <!-- 効果バッジ：青系に反転 -->
+      <div class="effect-badge"><i class="fa-solid fa-circle-check"></i>ヘソ保留の最適化：大当り1回につき約2個分の保留節約</div>
+
+      <img src="https://pub-cf-r2-placeholder.pachinko-tactics.com/okiumi6enaco_strategy_other1.webp" alt="美らビスの揺れステップと保留数の関係" class="responsive-img" loading="lazy" decoding="async">
+
+      <div class="procedure-sticky">
+        <h4><i class="fa-solid fa-paste"></i> 手順</h4>
+        <ol class="procedure-steps">
+          <li>「My海カスタム」で**美らビスカスタム**を設定する。</li>
+          <li>変動開始時、または保留入賞時にビスカスが「揺れ」を起こした際、その揺れの強さ（強揺れ・美らビス揺れ先発生）を確認する。</li>
+          <li>**弱揺れ（ガセ多め）の場合**：保留が2個以下なら3個まで埋めるが、それ以上は打ち出さない。</li>
+          <li>**強揺れ（先発生・高信頼度）の場合**：即座に打ち出しを停止し、当該変動の結果が出るまで見届ける。</li>
+        </ol>
+      </div>
+
+      <details>
+        <summary>詳細分析考察 (クリックで開閉)</summary>
+        <div class="details-content">
+          <h5>解説・根拠</h5>
+          <p>美らビスカスタムにおける「美らビス揺れ先発生（強揺れ）」は、大当りの変動で発生する割合が極めて高い先読み演出です。これが発生した時点で大当りの期待値が跳ね上がるため、後続の保留を無駄にヘソに放り込む必要がなくなります。特に甘デジは通常時の大当りからすぐに電サポに入るため、大当り時のヘソ保留はできる限り少ない状態を作ることが、実質的な獲得出玉の上乗せに繋がります。</p>
+          
+          <h5>実戦データ（プレースホルダー）</h5>
+          <ul>
+            <li>美らビス揺れ（強）発生時の大当り期待度：約[65]%（実戦値）</li>
+            <li>揺れ発生からの大当り占有率：約[85]%</li>
+          </ul>
+
+          <h5>考えついた経緯</h5>
+          <p>海物語の通常時は演出が静かなため、ついつい打ちっぱなしにして保留を満タンにしてしまいがちですが、美らビスの「物理的なギミックの動き」は液晶演出よりも視認しやすく、直感的に手の筋肉へ「ストップ」の指令を送りやすいことに着目し、反射速度を高めるトリガーとしてパターン化しました。</p>
+
+          <h5>懸念されるポイント（店員注意リスクと対策）</h5>
+          <ul>
+            <li><strong>店員注意リスク：極低</strong>（演出ギミックを見て手を止めるのは極めて一般的な遊技挙動です）</li>
+            <li><strong>対策</strong>：特に対策は不要ですが、ギミックが動いた瞬間にビクッと過剰に反応してハンドルから手を離すと少し不自然なので、リラックスした状態で、自然にストップボタンで処理するのがスマートです。</li>
+          </ul>
+
+          <h5>攻略に関わる計算式</h5>
+          <p>大当り時のヘソ保留削減効果 = $\	ext{大当り変動開始時の平均保留数（通常約3.5個）} \ightarrow \	ext{対策時（平均1.5個）} = \	ext{大当り1回につき約2個分のヘソ保留を電サポ終了後に持ち越せる}$</p>
+        </div>
+      </details>
+    </div>
+
+    <!-- 6. 完全攻略時のボーダーラインと期待時給 -->
+<div class="panel" id="border-expectancy" style="display: none;">
+      <h2 class="section-title"><i class="fa-solid fa-chart-line"></i> 6. 完全攻略時のボーダーラインと期待時給</h2>
+      <p>本記事で提示した各状態別の技術介入（止め打ち・ワンツー打法・カスタム見極め）をすべて完璧に実践した場合の、実質的なボーダーラインと期待時給のシミュレーションです。</p>
+      <p><em>※基本数値の算出にあたっては、信頼性の高い期待値計算シミュレーターである「<a href="https://pachinko-spec.info/" target="_blank">パチンコスペック解析</a>」様の算出ツール（ピーツール）を参考にし、本記事独自の技術介入補正値を加えて算出しています。</em></p>
+
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>換金率 / 交換率</th>
+              <th style="text-align: center;">公表値（打ちっぱなし想定）</th>
+              <th style="text-align: center; color: var(--accent-color);">完全攻略時（技術介入あり想定）</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>等価交換（4.0円）</strong></td>
+              <td style="text-align: center;">約17.4回 / k</td>
+              <td style="text-align: center; color: var(--accent-color); font-weight: 700;">約 15.6 回 / k</td>
+            </tr>
+            <tr>
+              <td><strong>3.57円（28玉）</strong></td>
+              <td style="text-align: center;">約18.2回 / k</td>
+              <td style="text-align: center; color: var(--accent-color); font-weight: 700;">約 16.3 回 / k</td>
+            </tr>
+            <tr>
+              <td><strong>3.0円（33玉）</strong></td>
+              <td style="text-align: center;">約19.5回 / k</td>
+              <td style="text-align: center; color: var(--accent-color); font-weight: 700;">約 17.5 回 / k</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Mermaid期待値グラフ -->
+      <h3 style="font-size: 1rem; font-weight: 700; margin-top: 20px; margin-bottom: 10px; color: var(--text-panel);">
+        ■ 回転数別・1日の期待収支シミュレーション（等価・10時間・通常1500回転）
+      </h3>
+      <div style="background-color: #fff; padding: 15px; border: 1px solid var(--border-color); border-radius: 4px;">
+        <pre class="mermaid">
+        gantt
+            title 期待収支シミュレーション（等価・10時間稼働）
+            dateFormat  X
+            axisFormat %s円
+            
+            section 18回転/k
+            公表値（打ちっぱなし）   : 0, 3000
+            完全攻略（技術介入）     : 0, 12000
+            
+            section 20回転/k
+            公表値（打ちっぱなし）   : 0, 13000
+            完全攻略（技術介入）     : 0, 24000
+            
+            section 22回転/k
+            公表値（打ちっぱなし）   : 0, 25000
+            完全攻略（技術介入）     : 0, 37000
+        </pre>
+      </div>
+
+      <div class="alert-box important">
+        <div class="alert-title"><i class="fa-solid fa-triangle-exclamation"></i> IMPORTANT: 現場のムラを見抜く重要性</div>
+        <p>上記のシミュレーションは「アタッカーや電サポの釘調整が極端に潰されていないこと」が前提です。スルー周辺や一般入賞口（ポケット）のマイナス調整が酷く、どれだけ止め打ちをしても電サポ中に玉が減る（-0.5個/回転以上）ような極悪店では、完全攻略時のボーダーラインも公表値付近まで戻されます。実戦を開始する前に、必ず「盤面状況」を主観で判断してください。</p>
+      </div>
+
+      <div class="alert-box note">
+        <div class="alert-title"><i class="fa-solid fa-circle-info"></i> NOTE: クレジットとリンクについて</div>
+        <p>正確なスペックシミュレーションや、より詳細な釘構成別の分岐ボーダーを確認したい方は、パチンコスペック解析様の「<a href="https://pachinko-spec.info/" target="_blank">パチンコスペック解析（ピーツール）</a>」にて、ご自身の台の獲得出玉を入力して再計算することをおすすめします。本記事の算出根拠となる基本データの多くは、同サイトの精密な計算ロジックに基づいています。</p>
+      </div>
+    </div>
+
+    <div class="panel">
+        <h2 class="section-title"><i class="fa-solid fa-user-astronaut"></i> サイト管理人【ワオ(wow)】のプロフィール</h2>
+        <div style="display:flex; gap:20px; align-items:flex-start; margin-bottom:20px;">
+          <img src="../../index/twitter_icon_themeE.png" alt="管理人アイコン"
+            style="width:80px; height:80px; border-radius:50%; border:2px solid var(--accent-color); flex-shrink:0;">
+          <div>
+            <p style="font-size:0.9rem; margin-bottom:10px;">
+              ハネモノ・海物語・甘デジを主戦場とする歴15年のパチンコ攻略好き。実戦経験を詰め込んだ攻略ツールと、現場のリアルな考察情報を発信中。少しでも皆様の立ち回りの手がかりになれば嬉しいです。</p>
+            <p style="font-size:0.9rem;">皆様からのフィードバックや不具合報告、追加希望機種などは下記Xアカウントまでお寄せください。</p>
+          </div>
+        </div>
+        <a href="https://x.com/wow_pachi_122" target="_blank" class="social-link" rel="noopener">
+          <i class="fa-brands fa-x-twitter"></i> @wow_pachi_122 へ連絡する
+        </a>
+      </div>
+
+    <!-- フッター -->
+    <footer>
+      <p>&copy; 2026 パチンコタクティクス. All Rights Reserved. 現場での健全な遊技にお役立てください。</p>
+    </footer>
+
+  </main>
+
+  <!-- 右下浮遊型目次戻りボタン (赤ピンデザイン) -->
+  <a href="#toc-container" class="back-to-top" id="back-to-top" title="目次へ戻る">
+    <i class="fa-solid fa-list-ol"></i>
+  </a>
+
+  <!-- スクリプト：スクロール検知によるトップ戻りボタンの制御 -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const backToTop = document.getElementById("back-to-top");
+      
+      window.addEventListener("scroll", () => {
+        // 300px以上スクロールされたらボタンを表示
+        if (window.pageYOffset > 300) {
+          backToTop.classList.add("show");
+        } else {
+          backToTop.classList.remove("show");
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>
