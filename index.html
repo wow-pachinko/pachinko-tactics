@@ -660,9 +660,8 @@
         </button>
       </li>
       <li>
-        <span class="coming-soon-badge">Coming soon</span>
-        <button class="tab-btn disabled" data-target="tab-info">
-          <i class="fa-solid fa-lightbulb"></i> 攻略考察
+        <button class="tab-btn" data-target="tab-info">
+          <i class="fa-solid fa-chess-knight"></i> 機種攻略
         </button>
       </li>
       <li>
@@ -683,6 +682,11 @@
         <option value="odatebuta2">ポチっと一発! おだてブタ2</option>
         <option value="pachinko">デジパチ汎用</option>
       </select>
+      <!-- 機種攻略専用フィルター -->
+      <select id="machine-filter-info" class="select-cyber filter-dropdown" style="display: none;">
+        <option value="all">全機種</option>
+        <option value="okiumi6_enaco">PAスーパー海物語IN沖縄6Withえなこ</option>
+      </select>
       <select id="genre-filter" class="select-cyber filter-dropdown" style="display: none;">
         <option value="all">全て</option>
         <option value="mind">マインド</option>
@@ -701,6 +705,13 @@
         <h2 class="section-title"><i class="fa-solid fa-bell"></i> 新着情報</h2>
         <div class="vr-list">
           <!-- 新着情報　追加時はこの下に追記していく  -->
+          <a href="https://pachinko-tactics.com/analysis/okiumi6enaco" class="list-item">
+            <div class="item-content">
+              <span class="badge" style="background:var(--accent-color); color:#fff;">機種攻略公開</span>
+              <div class="item-title">「沖海6えなこ 完全攻略バイブル」を公開しました。実戦データに基づく止め打ちやストローク調整を徹底解説！</div>
+              <div class="item-meta">2026/07/04</div>
+            </div>
+          </a>
           <a href="./tools/famista.html" class="list-item">
             <div class="item-content">
               <span class="badge">攻略ツール更新</span>
@@ -867,43 +878,14 @@
     <!-- 3. INFO SECTION -->
     <section id="tab-info" class="tab-pane">
 
-      <a href="#" class="content-card" data-machine="famista">
-        <div class="card-header">役物確率の暴れと収束値について</div>
+      <a href="https://pachinko-tactics.com/analysis/okiumi6enaco" class="content-card" data-machine="okiumi6_enaco">
+        <div class="card-header">沖海6えなこ 完全攻略バイブル</div>
         <div class="card-body">
-          <div class="card-thumb-container">NO IMAGE</div>
-          <div class="card-desc">
-            実戦データ10万回転から紐解く、役物確率の上振れ・下振れの許容範囲について。ハネモノファミスタにおいて、1日の試行回数では役物確率は大きく荒れます。最低でも1週間単位での収束を見込むメンタルコントロールが必要です。
+          <div class="card-thumb-container">
+            <img src="https://images.pachinko-tactics.com/okiumi6-enaco/encosamune.webp" alt="沖海6えなこ 完全攻略バイブル">
           </div>
-          <div class="card-meta"><span class="badge">公開中</span> ハネモノファミスタ</div>
-        </div>
-      </a>
-
-      <a href="#" class="content-card" data-machine="common">
-        <div class="card-header">止め打ち基礎：無駄玉排除による収支変化</div>
-        <div class="card-body">
-          <div class="card-thumb-container">NO IMAGE</div>
-          <div class="card-desc">1日に100発の無駄玉を削ることが、1ヶ月（20日稼働）で2,000発（約8,000円）の差を生みます。アタッカーのオーバー入賞狙いと、電サポ中の止め打ちは必須スキルです。
-          </div>
-          <div class="card-meta"><span class="badge">公開中</span> 共通スキル</div>
-        </div>
-      </a>
-
-      <a href="#" class="content-card" data-machine="famista">
-        <div class="card-header">特定日における釘読みの優先順位</div>
-        <div class="card-body">
-          <div class="card-thumb-container">NO IMAGE</div>
-          <div class="card-desc">ヘソ・寄り・道釘、限られた時間でどこを見るべきか。ファミスタにおいては、鳴きだけでなく「拾い」に関わる寄り釘のマイナス調整を避けることが何よりも重要です。</div>
-          <div class="card-meta"><span class="badge">公開中</span> ハネモノファミスタ</div>
-        </div>
-      </a>
-
-      <a href="#" class="content-card" data-machine="common">
-        <div class="card-header">ボーダーライン理論の落とし穴</div>
-        <div class="card-body">
-          <div class="card-thumb-container">NO IMAGE</div>
-          <div class="card-desc">出玉削りを考慮しないメーカー発表のボーダー計算が招くリスク。常に実測の出玉（例えば1R=135発ではなく、1R=130発など）を基準にして自分のマイボーダーを算出しましょう。
-          </div>
-          <div class="card-meta"><span class="badge">公開中</span> 共通スキル</div>
+          <div class="card-desc">「PAスーパー海物語IN沖縄6 Withえなこ」の通常回転10000回転超の実戦データを基にした、実戦に必ず役立つ攻略を総まとめ！通常時のストローク調整から、大当り・電サポ（ST/時短）中の詳細な止め打ち手順まで、スペックを最大限活かす具体的な方法を詳しく解説します。</div>
+          <div class="card-meta"><span class="badge">公開中</span> PAスーパー海物語IN沖縄6Withえなこ</div>
         </div>
       </a>
 
@@ -936,6 +918,7 @@
       // --- Filter Elements ---
       const filterWrapper = document.getElementById('filter-wrapper');
       const machineFilter = document.getElementById('machine-filter');
+      const machineFilterInfo = document.getElementById('machine-filter-info');
       const genreFilter = document.getElementById('genre-filter');
 
       // --- Filter Logic (with Fade Animation) ---
@@ -981,6 +964,9 @@
       if (machineFilter) {
         machineFilter.addEventListener('change', () => updateCards(machineFilter, 'data-machine'));
       }
+      if (machineFilterInfo) {
+        machineFilterInfo.addEventListener('change', () => updateCards(machineFilterInfo, 'data-machine'));
+      }
       if (genreFilter) {
         genreFilter.addEventListener('change', () => updateCards(genreFilter, 'data-genre'));
       }
@@ -1012,19 +998,31 @@
             } else if (targetId === 'tab-article') {
               filterWrapper.style.display = 'block';
               if (machineFilter) machineFilter.style.display = 'none';
+              if (machineFilterInfo) machineFilterInfo.style.display = 'none';
               if (genreFilter) {
                 genreFilter.style.display = 'block';
                 genreFilter.value = 'all'; // タブ切り替え時はリセット
                 updateCards(genreFilter, 'data-genre');
               }
-            } else {
-              // 攻略ツール または 攻略考察 タブ
+            } else if (targetId === 'tab-tool') {
+              // 攻略ツール タブ
               filterWrapper.style.display = 'block';
               if (genreFilter) genreFilter.style.display = 'none';
+              if (machineFilterInfo) machineFilterInfo.style.display = 'none';
               if (machineFilter) {
                 machineFilter.style.display = 'block';
                 machineFilter.value = 'all'; // タブ切り替え時はリセット
                 updateCards(machineFilter, 'data-machine');
+              }
+            } else if (targetId === 'tab-info') {
+              // 機種攻略 タブ
+              filterWrapper.style.display = 'block';
+              if (genreFilter) genreFilter.style.display = 'none';
+              if (machineFilter) machineFilter.style.display = 'none';
+              if (machineFilterInfo) {
+                machineFilterInfo.style.display = 'block';
+                machineFilterInfo.value = 'all'; // タブ切り替え時はリセット
+                updateCards(machineFilterInfo, 'data-machine');
               }
             }
           }
@@ -1055,6 +1053,19 @@
           });
         }
       });
+
+      // URLのハッシュに応じて初期アクティブタブを設定する処理 (例: #tab-info)
+      const hash = window.location.hash;
+      if (hash) {
+        const targetTabId = hash.substring(1); // 'tab-info'
+        const targetBtn = document.querySelector(`.tab-btn[data-target="${targetTabId}"]`);
+        if (targetBtn) {
+          // 少し遅延を入れて他の初期化が完了した後に確実にタブ切り替えを発火させる
+          setTimeout(() => {
+            targetBtn.click();
+          }, 100);
+        }
+      }
 
     });
   </script>
