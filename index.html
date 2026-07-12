@@ -15,7 +15,32 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>PACHINKO TACTICS - パチンコは、戦略で面白くなる。</title>
+  <meta name="description"
+    content="パチンコは、戦略で面白くなる。PACHINKO TACTICSは、実戦データに基づく攻略ツールと機種攻略情報で、回転率・期待値・技術介入を可視化する無料パチンコ攻略サイトです。">
+  <meta name="robots" content="index, follow, max-image-preview:large">
   <link rel="canonical" href="https://pachinko-tactics.com/">
+
+  <!-- Open Graph / X Card -->
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="ja_JP">
+  <meta property="og:site_name" content="PACHINKO TACTICS">
+  <meta property="og:title" content="PACHINKO TACTICS - パチンコは、戦略で面白くなる。">
+  <meta property="og:description"
+    content="実戦データに基づく攻略ツールと機種攻略情報で、回転率・期待値・技術介入を可視化する無料パチンコ攻略サイトです。">
+  <meta property="og:url" content="https://pachinko-tactics.com/">
+  <meta property="og:image" content="https://images.pachinko-tactics.com/patitaku.jpg">
+  <meta property="og:image:width" content="1280">
+  <meta property="og:image:height" content="720">
+  <meta property="og:image:alt" content="PACHINKO TACTICS - パチンコは、戦略で面白くなる。">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@wow_pachi_122">
+  <meta name="twitter:creator" content="@wow_pachi_122">
+  <meta name="twitter:title" content="PACHINKO TACTICS - パチンコは、戦略で面白くなる。">
+  <meta name="twitter:description"
+    content="実戦データに基づく攻略ツールと機種攻略情報で、回転率・期待値・技術介入を可視化する無料パチンコ攻略サイトです。">
+  <meta name="twitter:image" content="https://images.pachinko-tactics.com/patitaku.jpg">
+  <meta name="twitter:image:alt" content="PACHINKO TACTICS - パチンコは、戦略で面白くなる。">
+
   <link rel="icon" href="favicon.png">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
 
@@ -29,6 +54,55 @@
 
   <!-- Icons (FontAwesome) -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": "https://pachinko-tactics.com/#website",
+        "url": "https://pachinko-tactics.com/",
+        "name": "PACHINKO TACTICS",
+        "alternateName": "パチタク",
+        "description": "実戦データに基づく攻略ツールと機種攻略情報で、回転率・期待値・技術介入を可視化する無料パチンコ攻略サイトです。",
+        "inLanguage": "ja",
+        "publisher": {
+          "@id": "https://pachinko-tactics.com/#owner"
+        }
+      },
+      {
+        "@type": "WebPage",
+        "@id": "https://pachinko-tactics.com/#webpage",
+        "url": "https://pachinko-tactics.com/",
+        "name": "PACHINKO TACTICS - パチンコは、戦略で面白くなる。",
+        "description": "実戦データに基づく攻略ツールと機種攻略情報で、回転率・期待値・技術介入を可視化する無料パチンコ攻略サイトです。",
+        "isPartOf": {
+          "@id": "https://pachinko-tactics.com/#website"
+        },
+        "about": {
+          "@id": "https://pachinko-tactics.com/#owner"
+        },
+        "primaryImageOfPage": {
+          "@type": "ImageObject",
+          "url": "https://images.pachinko-tactics.com/patitaku.jpg"
+        },
+        "inLanguage": "ja"
+      },
+      {
+        "@type": "Person",
+        "@id": "https://pachinko-tactics.com/#owner",
+        "name": "ワオ(wow)",
+        "url": "https://pachinko-tactics.com/",
+        "image": "https://pachinko-tactics.com/twitter_icon_themeE.png",
+        "sameAs": [
+          "https://x.com/wow_pachi_122"
+        ]
+      }
+    ]
+  }
+  </script>
 
   <style>
     /* =========================================================
@@ -111,6 +185,30 @@
 
     a:hover {
       color: var(--accent-hover);
+    }
+
+    a:focus-visible,
+    button:focus-visible,
+    select:focus-visible {
+      outline: 3px solid #ffffff;
+      outline-offset: 3px;
+      box-shadow: 0 0 0 5px var(--accent-color);
+    }
+
+    .skip-link {
+      position: fixed;
+      top: 8px;
+      left: 8px;
+      z-index: 1000;
+      padding: 10px 16px;
+      background: #ffffff;
+      color: #1a1a1a;
+      font-weight: 700;
+      transform: translateY(-150%);
+    }
+
+    .skip-link:focus {
+      transform: translateY(0);
     }
 
     ul {
@@ -622,6 +720,8 @@
 
 <body>
 
+  <a class="skip-link" href="#main-content">本文へ移動</a>
+
   <!-- SVG Filter for Chalk Texture -->
   <svg style="position: absolute; width: 0; height: 0;">
     <filter id="chalk-filter">
@@ -647,26 +747,30 @@
   </header>
 
   <!-- ================= Navigation Tabs ================= -->
-  <nav class="tab-nav">
-    <ul>
+  <nav class="tab-nav" aria-label="メインコンテンツ">
+    <ul role="tablist" aria-label="コンテンツ切り替え">
       <li>
-        <button class="tab-btn active" data-target="tab-top">
-          <i class="fa-solid fa-home"></i> TOP
+        <button id="tab-button-top" type="button" class="tab-btn active" data-target="tab-top" role="tab"
+          aria-controls="tab-top" aria-selected="true" tabindex="0">
+          <i class="fa-solid fa-home" aria-hidden="true"></i> TOP
         </button>
       </li>
       <li>
-        <button class="tab-btn" data-target="tab-tool">
-          <i class="fa-solid fa-calculator"></i> 攻略ツール
+        <button id="tab-button-tool" type="button" class="tab-btn" data-target="tab-tool" role="tab"
+          aria-controls="tab-tool" aria-selected="false" tabindex="-1">
+          <i class="fa-solid fa-calculator" aria-hidden="true"></i> 攻略ツール
         </button>
       </li>
       <li>
-        <button class="tab-btn" data-target="tab-info">
-          <i class="fa-solid fa-chess-knight"></i> 機種攻略
+        <button id="tab-button-info" type="button" class="tab-btn" data-target="tab-info" role="tab"
+          aria-controls="tab-info" aria-selected="false" tabindex="-1">
+          <i class="fa-solid fa-chess-knight" aria-hidden="true"></i> 機種攻略
         </button>
       </li>
       <li>
-        <button class="tab-btn" data-target="tab-article">
-          <i class="fa-solid fa-pen-nib"></i> 記事
+        <button id="tab-button-article" type="button" class="tab-btn" data-target="tab-article" role="tab"
+          aria-controls="tab-article" aria-selected="false" tabindex="-1">
+          <i class="fa-solid fa-pen-nib" aria-hidden="true"></i> 記事
         </button>
       </li>
     </ul>
@@ -675,7 +779,7 @@
   <!-- ================= Content Filter ================= -->
   <div class="machine-select-wrapper" id="filter-wrapper" style="display: none;">
     <div class="container select-cyber-container">
-      <select id="machine-filter" class="select-cyber filter-dropdown">
+      <select id="machine-filter" class="select-cyber filter-dropdown" aria-label="攻略ツールを機種で絞り込む">
         <option value="all">全機種</option>
         <option value="famista">ハネモノファミスタ</option>
         <option value="fineplay">はねものファインプレー</option>
@@ -683,11 +787,13 @@
         <option value="pachinko">デジパチ汎用</option>
       </select>
       <!-- 機種攻略専用フィルター -->
-      <select id="machine-filter-info" class="select-cyber filter-dropdown" style="display: none;">
+      <select id="machine-filter-info" class="select-cyber filter-dropdown" style="display: none;"
+        aria-label="機種攻略を機種で絞り込む">
         <option value="all">全機種</option>
         <option value="okiumi6_enaco">PAスーパー海物語IN沖縄6Withえなこ</option>
       </select>
-      <select id="genre-filter" class="select-cyber filter-dropdown" style="display: none;">
+      <select id="genre-filter" class="select-cyber filter-dropdown" style="display: none;"
+        aria-label="記事をジャンルで絞り込む">
         <option value="all">全て</option>
         <option value="mind">マインド</option>
         <option value="log">稼働録</option>
@@ -697,10 +803,10 @@
   </div>
 
   <!-- ================= Main Content Area ================= -->
-  <main class="content-area container">
+  <main id="main-content" class="content-area container" tabindex="-1">
 
     <!-- 1. TOP SECITON -->
-    <section id="tab-top" class="tab-pane active">
+    <section id="tab-top" class="tab-pane active" role="tabpanel" aria-labelledby="tab-button-top" tabindex="0">
       <div class="panel">
         <h2 class="section-title"><i class="fa-solid fa-bell"></i> 新着情報</h2>
         <div class="vr-list">
@@ -762,13 +868,13 @@
               <div class="item-meta">2026/04/25</div>
             </div>
           </a>
-          <a href="#" class="list-item">
+          <div class="list-item">
             <div class="item-content">
               <span class="badge" style="background:var(--accent-color); color:#fff;">サイト公開</span>
               <div class="item-title">PACHINKO TACTICS をリリースしました。</div>
               <div class="item-meta">2026/04/25</div>
             </div>
-          </a>
+          </div>
         </div>
       </div>
 
@@ -821,7 +927,7 @@
     </section>
 
     <!-- 2. TOOL SECTION -->
-    <section id="tab-tool" class="tab-pane">
+    <section id="tab-tool" class="tab-pane" role="tabpanel" aria-labelledby="tab-button-tool" tabindex="0" hidden>
       <a href="https://pachinko-tactics.com/tools/pachinko" class="content-card" data-machine="pachinko">
         <div class="card-header">パチンコ実戦ログツール</div>
         <div class="card-body">
@@ -876,7 +982,7 @@
     </section>
 
     <!-- 3. INFO SECTION -->
-    <section id="tab-info" class="tab-pane">
+    <section id="tab-info" class="tab-pane" role="tabpanel" aria-labelledby="tab-button-info" tabindex="0" hidden>
 
       <a href="https://pachinko-tactics.com/analysis/okiumi6enaco" class="content-card" data-machine="okiumi6_enaco">
         <div class="card-header">沖海6えなこ 完全攻略バイブル</div>
@@ -892,7 +998,7 @@
     </section>
 
     <!-- 4. ARTICLE SECTION -->
-    <section id="tab-article" class="tab-pane">
+    <section id="tab-article" class="tab-pane" role="tabpanel" aria-labelledby="tab-button-article" tabindex="0" hidden>
       <!-- ジャンル：稼働ログ -->
       <div class="panel content-card" data-genre="log">
         <h2 class="section-title"><i class="fa-solid fa-pen-nib"></i> 稼働ログ</h2>
@@ -978,16 +1084,26 @@
       tabBtns.forEach(btn => {
         btn.addEventListener('click', () => {
           // Remove active class from all buttons and panes
-          tabBtns.forEach(b => b.classList.remove('active'));
-          tabPanes.forEach(p => p.classList.remove('active'));
+          tabBtns.forEach(b => {
+            b.classList.remove('active');
+            b.setAttribute('aria-selected', 'false');
+            b.tabIndex = -1;
+          });
+          tabPanes.forEach(p => {
+            p.classList.remove('active');
+            p.hidden = true;
+          });
 
           // Add active class to clicked button
           btn.classList.add('active');
+          btn.setAttribute('aria-selected', 'true');
+          btn.tabIndex = 0;
 
           // Show corresponding pane
           const targetId = btn.getAttribute('data-target');
           const targetPane = document.getElementById(targetId);
           if (targetPane) {
+            targetPane.hidden = false;
             targetPane.classList.add('active');
           }
 
@@ -1027,6 +1143,28 @@
             }
           }
         });
+
+        // Arrow keys, Home and End follow the WAI-ARIA tab keyboard pattern.
+        btn.addEventListener('keydown', event => {
+          const currentIndex = Array.from(tabBtns).indexOf(btn);
+          let nextIndex = currentIndex;
+
+          if (event.key === 'ArrowRight') {
+            nextIndex = (currentIndex + 1) % tabBtns.length;
+          } else if (event.key === 'ArrowLeft') {
+            nextIndex = (currentIndex - 1 + tabBtns.length) % tabBtns.length;
+          } else if (event.key === 'Home') {
+            nextIndex = 0;
+          } else if (event.key === 'End') {
+            nextIndex = tabBtns.length - 1;
+          } else {
+            return;
+          }
+
+          event.preventDefault();
+          tabBtns[nextIndex].click();
+          tabBtns[nextIndex].focus();
+        });
       });
 
       // --- List "See More" Logic (Common for News & Articles) ---
@@ -1040,7 +1178,7 @@
           const moreBtnContainer = document.createElement('div');
           moreBtnContainer.className = 'more-btn-container';
           moreBtnContainer.innerHTML = `
-            <button class="more-btn">
+            <button type="button" class="more-btn" aria-expanded="false">
               <span>さらに表示</span>
               <i class="fa-solid fa-chevron-down"></i>
             </button>
