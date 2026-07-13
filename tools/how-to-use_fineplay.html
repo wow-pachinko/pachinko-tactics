@@ -1,4 +1,20 @@
 ﻿<!DOCTYPE html>
+<!--
+開発用プレースホルダー申告
+画像プレースホルダー: なし（実際のツール画面をHTML内で再現する構成）
+要確認一覧（11件・管理人の実戦リアルデータ内）:
+1. 最終更新日
+2. SPルート当選率
+3. SPルート選択個数
+4. SP大当り(V入賞)回数
+5. チャンス吸着時当選率
+6. チャンス吸着個数（左右合計）
+7. チャンス吸着時大当り回数（左右合計）
+8. 実戦上のHR率
+9. 強打回数
+10. HR回数
+11. 公開用の実戦データ
+-->
 <html lang="ja">
 
 <head>
@@ -14,24 +30,23 @@
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pはねものファインプレー(ファインプレー) 期待値計算・攻略ツール【完全無料】｜PACHINKO TACTICS</title>
-    <meta name="description" content="Pはねものファインプレー(ファインプレー)の完全無料攻略ツール。数値入力でボーダーや期待値などの詳細数値を自動算出。実戦ログと区間分析機能で、累計(平均値)と区間(中央値)を見比べながら台の実力判別をサポートします。">
-    <link rel="canonical" href="https://pachinko-tactics.com/tools/fineplay">
-    <!-- OGP Tags -->
-    <meta property="og:title" content="Pはねものファインプレー(ファインプレー) 期待値計算・攻略ツール【完全無料】｜PACHINKO TACTICS">
-    <meta property="og:description" content="Pはねものファインプレー(ファインプレー)の完全無料攻略ツール。数値入力でボーダーや期待値などの詳細数値を自動算出。実戦ログと区間分析機能で、累計(平均値)と区間(中央値)を見比べながら台の実力判別をサポートします。">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://pachinko-tactics.com/tools/fineplay">
-    <meta property="og:image" content="https://images.pachinko-tactics.com/fineplay.tool.jpg">
-    <meta property="og:site_name" content="PACHINKO TACTICS">
-    <meta property="og:locale" content="ja_JP">
-
-    <!-- Twitter Card Tags -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:site" content="@wow_pachi_122">
-    <meta name="twitter:title" content="Pはねものファインプレー(ファインプレー) 期待値計算・攻略ツール【完全無料】｜PACHINKO TACTICS">
-    <meta name="twitter:description" content="Pはねものファインプレー(ファインプレー)の完全無料攻略ツール。数値入力でボーダーや期待値などの詳細数値を自動算出。実戦ログと区間分析機能で、累計(平均値)と区間(中央値)を見比べながら台の実力判別をサポートします。">
-    <meta name="twitter:image" content="https://images.pachinko-tactics.com/fineplay.tool.jpg">
+<title>ファインプレー攻略ツールの使い方・チュートリアル｜PACHINKO TACTICS</title>
+<meta name="description" content="Pはねものファインプレー(ファインプレー)攻略ツールの使い方を解説。数値入力・算出結果・実戦ログ・区間分析の各機能を、初めての方でも順番に試せる構成でまとめています。">
+<link rel="canonical" href="https://pachinko-tactics.com/tools/how-to-use.fineplay">
+<!-- OGP Tags -->
+<meta property="og:title" content="ファインプレー攻略ツールの使い方・チュートリアル｜PACHINKO TACTICS">
+<meta property="og:description" content="Pはねものファインプレー(ファインプレー)攻略ツールの使い方を解説。数値入力・算出結果・実戦ログ・区間分析の各機能を、初めての方でも順番に試せる構成でまとめています。">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://pachinko-tactics.com/tools/how-to-use.fineplay">
+<meta property="og:image" content="https://images.pachinko-tactics.com/fineplay.tool.jpg">
+<meta property="og:site_name" content="PACHINKO TACTICS">
+<meta property="og:locale" content="ja_JP">
+<!-- Twitter Card Tags -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@wow_pachi_122">
+<meta name="twitter:title" content="ファインプレー攻略ツールの使い方・チュートリアル｜PACHINKO TACTICS">
+<meta name="twitter:description" content="Pはねものファインプレー(ファインプレー)攻略ツールの使い方を解説。数値入力・算出結果・実戦ログ・区間分析の各機能を、初めての方でも順番に試せる構成でまとめています。">
+<meta name="twitter:image" content="https://images.pachinko-tactics.com/fineplay.tool.jpg">
     <link rel="icon" href="../favicon.png">
     <link rel="apple-touch-icon" href="../apple-touch-icon.png">
 
@@ -44,6 +59,8 @@
         rel="stylesheet">
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/driver.js@1.3.1/dist/driver.css"/>
+    <script src="https://cdn.jsdelivr.net/npm/driver.js@1.3.1/dist/driver.js.iife.js"></script>
     <style>
         :root {
             /* Theme E variables (Investigation Board) */
@@ -156,29 +173,6 @@
             opacity: 1;
         }
 
-        .strategy-btn {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            z-index: 20;
-            background: #f1c40f;
-            color: #333;
-            border: 1px solid rgba(255, 255, 255, 0.4);
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.2s;
-            font-family: var(--font-main);
-            font-size: 0.7rem;
-            opacity: 0.9;
-        }
-
-        .strategy-btn:hover {
-            background: #f39c12;
-            opacity: 1;
-        }
-
         .reset-btn {
             position: absolute;
             bottom: 8px;
@@ -207,7 +201,7 @@
             bottom: 8px;
             left: 10px;
             z-index: 20;
-            background: var(--accent-secondary);
+            background: #3498db;
             color: #fff;
             border: 1px solid rgba(255, 255, 255, 0.4);
             padding: 4px 8px;
@@ -975,44 +969,100 @@
             background: #2980b9;
             opacity: 1;
         }
+
+        .help-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: #10ac84;
+            color: #fff;
+            font-size: 12px;
+            cursor: pointer;
+            margin-left: 5px;
+            pointer-events: auto !important;
+            vertical-align: middle;
+            font-weight: bold;
+        }
+
+        .help-icon-red {
+            background: #10ac84 !important;
+        }
+
+        .tooltip {
+            position: absolute;
+            background: #2c3e50;
+            color: #fff;
+            padding: 10px 15px;
+            border-radius: 6px;
+            font-size: 13px;
+            z-index: 2500;
+            max-width: 250px;
+            text-align: left;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s;
+            line-height: 1.5;
+            font-family: var(--font-main);
+        }
+
+        #start-tutorial {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            max-width: 400px;
+            z-index: 1500;
+            font-size: 1.1rem;
+            padding: 15px;
+            border-radius: 30px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Driver.jsが非表示タブの位置を取得する際のアニメーション干渉を防ぐ */
+        body.tutorial-active .content-section {
+            animation: none !important;
+            transition: none !important;
+        }
     </style>
-    <!-- 構造化データ (JSON-LD) -->
-    <script type="application/ld+json">
+<!-- 構造化データ (JSON-LD) -->
+<script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@graph": [
     {
-      "@type": "SoftwareApplication",
-      "@id": "https://pachinko-tactics.com/tools/fineplay#app",
-      "name": "ファインプレー 期待値計算・攻略ツール",
-      "url": "https://pachinko-tactics.com/tools/fineplay",
-      "description": "Pはねものファインプレー(ファインプレー)の完全無料攻略ツール。数値入力でボーダーや期待値などの詳細数値を自動算出。",
-      "applicationCategory": "UtilitiesApplication",
-      "operatingSystem": "Web",
-      "image": "https://images.pachinko-tactics.com/fineplay.tool.jpg",
-      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "JPY" },
-      "author": { "@type": "Person", "name": "ワオ" },
-      "publisher": {
-        "@type": "Organization",
+      "@type": "WebPage",
+      "@id": "https://pachinko-tactics.com/tools/how-to-use.fineplay",
+      "url": "https://pachinko-tactics.com/tools/how-to-use.fineplay",
+      "name": "ファインプレー攻略ツールの使い方・チュートリアル｜PACHINKO TACTICS",
+      "description": "Pはねものファインプレー(ファインプレー)攻略ツールの使い方を解説。",
+      "isPartOf": {
+        "@type": "WebSite",
         "name": "PACHINKO TACTICS",
-        "logo": { "@type": "ImageObject", "url": "https://pachinko-tactics.com/twitter_icon_themeE.png" }
-      }
+        "url": "https://pachinko-tactics.com/"
+      },
+      "author": { "@type": "Person", "name": "ワオ" }
     },
     {
       "@type": "BreadcrumbList",
-      "@id": "https://pachinko-tactics.com/tools/fineplay#breadcrumb",
+      "@id": "https://pachinko-tactics.com/tools/how-to-use.fineplay#breadcrumb",
       "itemListElement": [
         { "@type": "ListItem", "position": 1, "name": "TOP", "item": "https://pachinko-tactics.com/" },
         { "@type": "ListItem", "position": 2, "name": "攻略ツール", "item": "https://pachinko-tactics.com/tools" },
-        { "@type": "ListItem", "position": 3, "name": "ファインプレー攻略ツール", "item": "https://pachinko-tactics.com/tools/fineplay" }
+        { "@type": "ListItem", "position": 3, "name": "ファインプレー攻略ツール", "item": "https://pachinko-tactics.com/tools/fineplay" },
+        { "@type": "ListItem", "position": 4, "name": "使い方", "item": "https://pachinko-tactics.com/tools/how-to-use.fineplay" }
       ]
     }
   ]
 }
-    </script>
+</script>
 </head>
 
-<body>
+<body data-how-to-page="true">
 
     <!-- SVG Filter for Chalk Texture -->
     <svg style="position: absolute; width: 0; height: 0;">
@@ -1023,13 +1073,11 @@
     </svg>
 
     <header class="blackboard-header">
-        <a href="/" class="back-to-top">⇐ TOPへ戻る</a>
-        <a href="/tools/how-to-use.fineplay" class="howto-btn">❓ 使い方</a>
-        <button class="strategy-btn" onclick="alert('カミングスーン！')">💡 攻略考察</button>
+        <a href="/tools/fineplay" class="back-to-top">⇐ ツールへ戻る</a>
 
         <div class="header-center chalk-effect">
-            <h1>FINE PLAY TOOL</h1>
-            <div class="subtitle">はねものファインプレー 期待値計算/攻略ツール</div>
+            <h1>HOW TO TOOL</h1>
+            <div class="subtitle">ツールの使い方(ファインプレー版)</div>
         </div>
 
         <button class="settings-btn" onclick="app.openSettings()">⚙ 詳細設定</button>
@@ -1037,28 +1085,17 @@
     </header>
 
     <div class="container">
-        <!-- SEOリード文エリア（アコーディオン化） -->
-        <div class="main-lead-accordion">
-            <button class="main-lead-header" onclick="app.toggleMainLead()">
-                <span class="main-lead-title">【本ツールの概要】</span>
-                <span class="main-lead-arrow">▼ 開く</span>
-            </button>
-            <div class="main-lead-content">
-                <p class="main-lead-body">
-                    本ツールは「Pはねものファインプレー(ファインプレー)」専用の期待値計算ならびに攻略ツールです。稼働データを入力していくことで、期待値やボーダーラインだけでなく、赤橋突破率・強打率・チャンス吸着率など台の実力判別に役立つ詳細な数値をリアルタイムに自動算出します。
-                </p>
-            </div>
-        </div>
         <div class="tabs">
-            <div class="tab tab-group-blue active" onclick="app.showTab('log')">実戦ログ</div>
-            <div class="tab tab-group-blue" onclick="app.showTab('input')">数値入力</div>
-            <div class="tab tab-group-red" onclick="app.showTab('calc')">算出結果</div>
-            <div class="tab tab-group-red" onclick="app.showTab('compare')">区間分析</div>
+            <div class="tab tab-group-blue active" onclick="app.showTab('log')">実戦ログ <span class="help-icon help-icon-red" onclick="event.stopPropagation(); showTooltip('大当り履歴をリアルタイムに記録・分析するタブです。<br>大当りのたびに内容を入力して「記録」ボタンを押すと、回転数や1R出玉、当選契機の振分けなどを自動算出します。打ちながら手元でデータを積み上げることで、その日の実戦推移を正確に把握できます。', this)">？</span></div>
+            <div class="tab tab-group-blue" onclick="app.showTab('input')">数値入力 <span class="help-icon" onclick="event.stopPropagation(); showTooltip('計算の土台となる基礎数値を管理するタブです。<br>期待値計算に必要なヤクモノ確率や台のポテンシャルが分かるデータを算出する為の数値を入力します。なお、1.通常回転数を除いた項目はカチカチ君等で別途計測するようにして下さい。', this)">？</span></div>
+            <div class="tab tab-group-red" onclick="app.showTab('calc')">算出結果 <span class="help-icon" onclick="event.stopPropagation(); showTooltip('現在の入力データに基づいて計算し算出したボーダーや期待値、台の詳細な分析データを確認できるタブです。<br>数値が変更されるたびに即座に再計算が行われます。入力内容が変わるたびにリアルタイムで再計算されます。すべての項目を埋めなくても、必要なデータが揃っていれば、知りたい項目だけを算出させる使い方もできます。（例：「使用玉数」と「通常回転数」のみ入力して「千円あたりの回転数」を確認するなど）', this)">？</span></div>
+            <div class="tab tab-group-red" onclick="app.showTab('compare')">区間分析 <span class="help-icon" onclick="event.stopPropagation(); showTooltip('一定区間ごとに数値を切り出して比較するためのタブです。<br>「算出結果」タブにある「区間データを保存」ボタンを押したタイミングのデータが蓄積されます。区間単位で数値の動きを見ることで、一時的なムラに左右されず、今の台の挙動を客観的に判断する材料になります。', this)">？</span></div>
         </div>
 
         <div id="log" class="content-section active">
+            <div id="log-status-section">
             <div class="section-header" style="display:flex; justify-content: space-between; align-items: center;">
-                <span>■現在の稼働状況</span>
+                <span>■現在の稼働状況 <span class="help-icon help-icon-red" onclick="showTooltip('現在の持ち玉数や投資状況など、リアルタイムの稼働データを管理・入力するタブです。以下の3つが主な入力タイミングです。<br><br>○稼働開始時： 持ち玉がある場合は、必ず現在の玉数を入力してからスタートしてください。<br><br>○大当り時： ※印がついている4項目を入力すると、記録確認のモーダル（ポップアップ）が表示されます。<br><br>○回転数の把握： データを記録していない状態からでも、現在の「持ち玉数」や「追加投資」などその時の状況を入力すれば、使用玉数へ反映されます。数値入力タブの「通常回転数」と合わせることで、千円あたりの回転数を算出できます。', this)">？</span></span>
                 <span style="font-size: 0.9rem;">大当り回数 <span id="jackpot-count-display">0</span>回</span>
             </div>
             <div id="log-fields">
@@ -1096,10 +1133,12 @@
                     <button class="btn-primary" onclick="app.recordLogFromModify()">この修正内容で記録</button>
                 </div>
             </div>
+            </div>
 
+            <div id="log-history-section">
             <div class="section-header"
                 style="margin-top: 30px; display:flex; justify-content: space-between; align-items: center;">
-                <span>■履歴</span>
+                <span>■履歴 <span class="help-icon help-icon-red" onclick="showTooltip('これまでの大当り履歴を表示します。削除モードにチェックを入れれば誤入力を削除できます。', this)">？</span></span>
                 <label
                     style="font-size: 0.8rem; cursor: pointer; display: flex; align-items: center; gap: 4px; font-weight: normal;">
                     <input type="checkbox" id="log-delete-mode" onchange="app.updateLogHistoryView()"> 削除モード
@@ -1110,9 +1149,9 @@
                 <table class="data-table" style="margin-top: 0; border: none;">
                     <thead style="position: sticky; top: 0; z-index: 10;">
                         <tr>
-                            <th style="width: 10%; text-align: center;">No</th>
-                            <th style="width: 25%; text-align: center;">使用玉数</th>
-                            <th style="width: 25%; text-align: center;">獲得出玉</th>
+                            <th style="width: 10%; text-align: center;">No <span class="help-icon" onclick="showTooltip('大当りの連番です。', this)">？</span></th>
+                            <th style="width: 25%; text-align: center;">使用玉数 <span class="help-icon" onclick="showTooltip('前回の大当り（または稼働開始）から、今回の大当りまでに使用した玉数です。表示されている玉数をタップすると、記録した内容を修正できます。', this)">？</span></th>
+                            <th style="width: 25%; text-align: center;">獲得出玉 <span class="help-icon" onclick="showTooltip('この大当りで獲得した出玉です。<br>【計算式】次回当選時の持ち玉 - 今回の残玉', this)">？</span></th>
                             <th style="width: 25%; text-align: center;">当選契機</th>
                             <th style="width: 15%; text-align: center;">R数</th>
                         </tr>
@@ -1124,6 +1163,7 @@
                     </tbody>
                 </table>
             </div>
+            </div>
         </div>
 
         <div id="input" class="content-section">
@@ -1132,33 +1172,33 @@
 
         <div id="calc" class="content-section">
             <div class="result-card">
-                <div style="font-size: 16px; color: var(--text-sub);">総期待値</div>
+                <div style="font-size: 16px; color: var(--text-sub);">総期待値 <span class="help-icon" onclick="showTooltip('現在の稼働における総期待値です。<br>【計算式】1回転あたりの期待値 × 通常回転数', this)">？</span></div>
                 <div id="res-total-exp" class="main-val">±0円</div>
             </div>
 
             <div class="result-card">
-                <div style="font-size: 16px; color: var(--text-sub);">1回転あたりの期待値</div>
+                <div style="font-size: 16px; color: var(--text-sub);">1回転あたりの期待値 <span class="help-icon" onclick="showTooltip('通常1回転を回した際に得られる見込みの金額です。<br>【計算式】(平均出玉 - (1 ÷ 推定確率) × 250 ÷ 回転率) × 換金率', this)">？</span></div>
                 <div id="res-unit-exp" style="font-size: 24px; font-weight: bold; margin: 5px 0;">±0.0円</div>
                 <div id="res-unit-detail" style="font-size: 13px; color: var(--text-sub);">[現金: -円 | 持ち玉: -円]</div>
             </div>
 
             <div class="result-card">
-                <div style="font-size: 16px; color: var(--text-sub);">千円あたりのボーダーライン</div>
+                <div style="font-size: 16px; color: var(--text-sub);">千円あたりのボーダーライン <span class="help-icon" onclick="showTooltip('期待値がプラスマイナスゼロになる千円あたりの回転数です。<br>【計算式】250 ÷ (平均出玉 × 推定確率)', this)">？</span></div>
                 <div id="res-border" style="font-size: 24px; font-weight: bold;">0.0回転</div>
             </div>
 
             <div class="result-card">
-                <div style="font-size: 16px; color: var(--text-sub);">推定確率</div>
+                <div style="font-size: 16px; color: var(--text-sub);">推定確率 <span class="help-icon" onclick="showTooltip('現在の実戦データから逆算された、大当り確率の予測値です。<br><br>○役モノ確率:「拾い個数」に対して、何個に1個がV入賞したかを示します。<br><br>○大当り確率：「通常回転数」に対して、何回転に1回大当りしたかを示します。', this)">？</span></div>
                 <div id="res-probs" style="margin-top: 5px;"></div>
             </div>
 
             <div class="result-card">
-                <div style="font-size: 16px; color: var(--text-sub);">欠損 / 余剰</div>
+                <div style="font-size: 16px; color: var(--text-sub);">欠損 / 余剰 <span class="help-icon" onclick="showTooltip('■平均R数<br>実戦ログに記録された大当りデータから算出された、1回あたりの平均獲得ラウンド数です。<br>【計算式】総獲得ラウンド数 ÷ 大当り回数<br><br>■玉数<br>理論上の期待出玉（大当り回数 × 詳細設定の平均R数 × 1Rトータル確率ベースの出玉など）と、実際に獲得できた総出玉とのギャップ（差分）です。<br>【計算式】実際の総獲得出玉 － 理論上の総期待出玉<br>※プラスの場合は「余剰（引き強）」、マイナスの場合は「欠損（引き弱）」となります。', this)">？</span></div>
                 <div id="res-gap" style="margin-top: 5px;"></div>
             </div>
 
             <div style="margin-top: 20px;">
-                <div style="font-weight: bold; margin-bottom: 10px; color: var(--accent-secondary);">■ 詳細分析データ</div>
+                <div style="font-weight: bold; margin-bottom: 10px; color: var(--accent-secondary);">■ 詳細分析データ <span class="help-icon" onclick="showTooltip('現在の実戦データおよび入力数値に基づいた、より詳細な集計結果を一覧表示します。', this)">？</span></div>
                 <table class="data-table">
                     <tbody id="res-details-table"></tbody>
                 </table>
@@ -1168,7 +1208,7 @@
 
         <div id="compare" class="content-section">
             <div class="section-header" style="display:flex; justify-content: space-between; align-items: center;">
-                <span>■ 区間比較（時系列推移）</span>
+                <span>■ 区間比較（時系列推移） <span class="help-icon help-icon-red" onclick="showTooltip('保存された区間ごとのデータを比較し、数値の推移をグラフや表で確認できます。「削除モード」にチェックを入れると、誤って保存した区間のデータを削除できます。<br>※算出結果タブ下部にある「区間データを保存」ボタンを押すと、それまでの累計データから直前までの保存分を自動的に差し引いた「その区間だけの純粋な数値」が蓄積されます。', this)">？</span></span>
                 <label
                     style="font-size: 0.8rem; cursor: pointer; display: flex; align-items: center; gap: 4px; font-weight: normal;">
                     <input type="checkbox" id="history-delete-mode" onchange="app.updateCompareView()"> 削除モード
@@ -1187,9 +1227,9 @@
                 <table class="data-table" style="table-layout: fixed; text-align: center;">
                     <thead>
                         <tr>
-                            <th style="width: 33.3%; text-align: center;">区間(拾い)</th>
-                            <th style="width: 33.3%; text-align: center;" id="compare-metric-header">数値</th>
-                            <th style="width: 33.3%; text-align: center;">累計との比較</th>
+                            <th style="width: 33.3%; text-align: center;">区間(拾い) <span class="help-icon" onclick="showTooltip('比較する区間（拾い個数ベース）です。', this)">？</span></th>
+                            <th style="width: 33.3%; text-align: center;" id="compare-metric-header">数値 <span class="help-icon" onclick="showTooltip('その区間における該当項目の数値です。', this)">？</span></th>
+                            <th style="width: 33.3%; text-align: center;">累計との比較 <span class="help-icon" onclick="showTooltip('全体累計との差分です。', this)">？</span></th>
                         </tr>
                     </thead>
                     <tbody id="compare-list" style="text-align: center;"></tbody>
@@ -1200,7 +1240,7 @@
                 <canvas id="compareChart"></canvas>
             </div>
 
-            <div class="section-header">■ 区間詳細（特定の区間データ）</div>
+            <div class="section-header">■ 区間詳細（特定の区間データ） <span class="help-icon help-icon-red" onclick="showTooltip('選択した特定の区間の詳細なデータを表示します。', this)">？</span></div>
 
             <div class="custom-select-container" id="interval-detail-custom-container">
                 <div class="custom-select-trigger" id="interval-detail-trigger">
@@ -1212,10 +1252,10 @@
             </div>
 
             <div style="margin-top: 15px;">
-                <div style="font-weight: bold; margin-bottom: 10px; color: var(--accent-secondary);">■ 推定確率・欠損/余剰</div>
+                <div style="font-weight: bold; margin-bottom: 10px; color: var(--accent-secondary);">■ 推定確率・欠損/余剰 <span class="help-icon" onclick="showTooltip('この区間における推定確率や、理論値との差（欠損・余剰）を表示します。', this)">？</span></div>
                 <div id="interval-probs" style="margin-bottom: 20px;"></div>
 
-                <div style="font-weight: bold; margin-bottom: 10px; color: var(--accent-secondary);">■ 詳細分析データ</div>
+                <div style="font-weight: bold; margin-bottom: 10px; color: var(--accent-secondary);">■ 詳細分析データ <span class="help-icon" onclick="showTooltip('この区間の詳細な分析数値を表示します。', this)">？</span></div>
                 <table class="data-table">
                     <tbody id="interval-details-table"></tbody>
                 </table>
@@ -1233,23 +1273,23 @@
 
             <div
                 style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; margin-top: 20px;">
-                <div style="font-weight: bold; color: var(--accent-secondary);">■ 基本設定</div>
+                <div style="font-weight: bold; color: var(--accent-secondary);">■ 基本設定 <span class="help-icon" onclick="showTooltip('当選率、平均ラウンド数、貸玉、換金率など、期待値計算の基礎となる値を設定します。', this)">？</span></div>
                 <button class="reset-defaults-btn" onclick="app.resetBasicSettings()">デフォルトに戻す</button>
             </div>
-            <div class="input-group"><label>SPルート選択時当選率<br>(1/〇)</label><input type="number" id="set-sp-rate"
+            <div class="input-group"><label>SPルート選択時当選率<br>(1/〇) <span class="help-icon" onclick="showTooltip('SPルートを選択した玉のうち、何個に1個が大当りする想定かを設定します。', this)">？</span></label><input type="number" id="set-sp-rate"
                     value="3" onchange="app.calc()"></div>
-            <div class="input-group"><label>チャンス吸着時当選率<br>(%)</label><input type="number" id="set-nm-rate"
+            <div class="input-group"><label>チャンス吸着時当選率<br>(%) <span class="help-icon" onclick="showTooltip('左右のチャンス吸着から大当りした割合の想定値を設定します。台上での厳密な吸着判定基準は分からない。', this)">？</span></label><input type="number" id="set-nm-rate"
                     value="19.1" onchange="app.calc()"></div>
-            <div class="input-group"><label>平均ラウンド数<br>(理論上の振り分け)</label><input type="number" id="set-avg-r"
+            <div class="input-group"><label>平均ラウンド数<br>(理論上の振り分け) <span class="help-icon" onclick="showTooltip('理論上の大当り1回あたり平均ラウンド数です。初期値4.9Rの振り分け内訳は分からない。', this)">？</span></label><input type="number" id="set-avg-r"
                     value="4.9" onchange="app.calc()"></div>
-            <div class="input-group"><label>貸玉<br>(1000円あたりの玉数)</label><input type="number" id="set-kasi" value="250"
+            <div class="input-group"><label>貸玉<br>(1000円あたりの玉数) <span class="help-icon" onclick="showTooltip('1000円で借りられる玉数を設定します。', this)">？</span></label><input type="number" id="set-kasi" value="250"
                     onchange="app.calc()"></div>
-            <div class="input-group"><label>換金率<br>(1玉あたりの換金額)</label><input type="number" id="set-exchange" value="4.0"
+            <div class="input-group"><label>換金率<br>(1玉あたりの換金額) <span class="help-icon" onclick="showTooltip('交換時の1玉あたりの金額を設定します。', this)">？</span></label><input type="number" id="set-exchange" value="4.0"
                     onchange="app.calc()"></div>
 
             <div
                 style="display: flex; justify-content: space-between; align-items: center; margin-top: 25px; margin-bottom: 10px;">
-                <div style="font-weight: bold; color: var(--accent-secondary);">■ 各種項目の基準値設定</div>
+                <div style="font-weight: bold; color: var(--accent-secondary);">■ 各種項目の基準値設定 <span class="help-icon" onclick="showTooltip('区間分析グラフの目標ラインとして使用する基準値を、項目ごとに設定します。', this)">？</span></div>
                 <button class="reset-defaults-btn" onclick="app.resetTargetSettings()">デフォルトに戻す</button>
             </div>
             <div id="settings-targets-container"></div>
@@ -1340,7 +1380,7 @@
             <div class="modal-close" onclick="document.getElementById('reset-modal').style.display='none'">×</div>
             <h3
                 style="margin-top: 0; color: var(--accent-secondary); border-bottom: 2px solid var(--accent-secondary); padding-bottom: 10px;">
-                データのバックアップとリセット</h3>
+                データのバックアップとリセット <span class="help-icon" onclick="showTooltip('現在の実戦データをクリア（初期化）できます。「バックアップしてリセット」を選択すると、初期化と同時に今回記録されたすべてのデータがテキスト形式でクリップボードにコピーされます。コピーされた内容は、スマホやPCの任意のメモ帳アプリ等に貼り付けて保存してください。', this)">？</span></h3>
 
             <div class="input-group">
                 <label>台番</label>
@@ -1348,7 +1388,7 @@
             </div>
 
             <div class="input-group">
-                <label>本日の稼働メモ（台の挙動、ネカセなど）</label>
+                <label>本日の稼働メモ（台の挙動、傾斜など）</label>
                 <textarea id="reset-memo" rows="4" oninput="app.saveDataAndHistory()"
                     style="width:100%; padding:10px; border:1px solid #ccc; border-radius:4px; font-size:16px; font-family:var(--font-main); box-sizing:border-box;"></textarea>
             </div>
@@ -1382,7 +1422,7 @@
     <div id="memo-modal" class="modal-overlay">
         <div class="modal-content memo-modal-content" style="max-width: 500px;">
             <div class="modal-close" onclick="app.closeMemo()">×</div>
-            <h3 class="memo-title" style="margin-top: 0; padding-bottom: 10px;">📝 稼働メモ</h3>
+            <h3 class="memo-title" style="margin-top: 0; padding-bottom: 10px;">📝 稼働メモ <span class="help-icon" onclick="showTooltip('稼働前と稼働中のメモを入力する画面です。', this)">？</span></h3>
             <p style="font-size: 0.85rem; color: var(--text-sub); margin-bottom: 20px;">稼働前や稼働中のメモを自由に入力してください。</p>
 
             <div class="input-group">
@@ -1410,7 +1450,7 @@
         <div class="modal-content" style="max-width: 500px;">
             <div class="modal-close" onclick="app.closeSim()">×</div>
             <h3 style="margin-top: 0; color: #8e44ad; border-bottom: 2px solid #8e44ad; padding-bottom: 10px;">📊
-                期待値シミュレーション</h3>
+                期待値シミュレーション <span class="help-icon" onclick="showTooltip('任意の数値を指定して、通常1回転あたりの期待値、千円あたりのボーダーライン、推定確率などをシミュレーションできる機能です。<br>※すでに実戦ログなどの記録がある場合は、起動した時点の数値が自動的に初期値として入力されますので、変更したい箇所だけを書き換えてご活用ください。', this)">？</span></h3>
             <p style="font-size: 0.85rem; color: var(--text-sub); margin-bottom: 20px;">※この数値は実戦データには保存されません。</p>
 
             <div class="input-group">
@@ -1483,7 +1523,7 @@
         <div class="modal-content" style="max-width: 600px;">
             <div class="modal-close" id="real-data-close-btn">×</div>
             <h3 style="margin-top: 0; color: var(--accent-secondary); border-bottom: 2px solid var(--accent-secondary); padding-bottom: 10px; display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 10px;">
-                <span>💥 管理人の実戦リアルデータ</span>
+                <span>💥 管理人の実戦リアルデータ <span class="help-icon" onclick="showTooltip('管理人がホールで採取したデータを公開しています。立ち回りの参考にしてください。', this)">？</span></span>
                 <span style="font-size: 12px; font-weight: normal; color: var(--text-sub); font-family: var(--font-main); letter-spacing: 0;">最終更新日: 2026年7月14日</span>
             </h3>
 
@@ -1676,28 +1716,17 @@
     </div>
 
     <script>
-        // 旧キー(スペース入りタイポ)からのデータ移行
-        (function() {
-            try {
-                var oldData = localStorage.getItem('pachitaku_fine play_data');
-                if (oldData !== null && localStorage.getItem('pachitaku_fineplay_data') === null) {
-                    localStorage.setItem('pachitaku_fineplay_data', oldData);
-                    localStorage.removeItem('pachitaku_fine play_data');
-                }
-            } catch (e) { /* 移行失敗時は新キーで新規開始 */ }
-        })();
-
         const app = {
             fields: [
-                { id: "total_rot", name: "1. 通常回転数" },
-                { id: "total_pick", name: "2. 拾い個数" },
-                { id: "sp_select", name: "3. SPルート選択個数" },
-                { id: "bridge_pass", name: "4. 赤橋突破個数" },
-                { id: "hr_catch", name: "5. HR吸着個数" },
-                { id: "left_chance_catch", name: "6. 左チャンス吸着個数" },
-                { id: "right_chance_catch", name: "7. 右チャンス吸着個数" },
-                { id: "left_foul", name: "8. 左ファール個数" },
-                { id: "right_foul", name: "9. 右ファール個数" }
+                { id: "total_rot", name: "1. 通常回転数", tooltip: "通常時の総回転数を入力してください。<br>※データランプの数値をそのまま書くのではなく、必ず「自分が回した分の回転数」のみをカウントして入力してください。" },
+                { id: "total_pick", name: "2. 拾い個数", tooltip: "ハネに拾われて、盤面内部（役物内）に進入した玉の個数を入力してください。" },
+                { id: "sp_select", name: "3. SPルート選択個数", tooltip: "役物への進入ルートのうち、大当りへの期待度が高い「SPルート」へ進んだ玉の個数を入力してください。" },
+                { id: "bridge_pass", name: "4. 赤橋突破個数", tooltip: "ノーマルルートを選択した玉のうち、赤橋を突破して皿の上に乗った玉の個数を入力してください。" },
+                { id: "hr_catch", name: "5. HR吸着個数", tooltip: "バットに当たって、回転体中央のホームラン床に吸着した玉の個数を入力してください。" },
+                { id: "left_chance_catch", name: "6. 左チャンス吸着個数", tooltip: "バットに当たって、回転体左側のチャンス床に吸着した玉の個数を入力してください。" },
+                { id: "right_chance_catch", name: "7. 右チャンス吸着個数", tooltip: "バットに当たって、回転体右側のチャンス床に吸着した玉の個数を入力してください。" },
+                { id: "left_foul", name: "8. 左ファール個数", tooltip: "強打後に左側でファールとなった玉の個数を入力します。ファールとして数える厳密な判定基準は分からない。" },
+                { id: "right_foul", name: "9. 右ファール個数", tooltip: "強打後に右側でファールとなった玉の個数を入力します。ファールとして数える厳密な判定基準は分からない。" }
             ],
 
             metricsConfig: [
@@ -1728,7 +1757,7 @@
                 this.fields.forEach(f => {
                     const div = document.createElement('div');
                     div.className = 'input-group';
-                    div.innerHTML = `<label>${f.name}</label><input type="number" id="${f.id}" pattern="\\d*" oninput="app.calc()">`;
+                    div.innerHTML = `<label>${f.name} ${f.tooltip ? `<span class="help-icon" onclick="showTooltip('${f.tooltip}', this)">？</span>` : ''}</label><input type="number" id="${f.id}" pattern="\\d*" oninput="app.calc()">`;
                     container.appendChild(div);
                 });
 
@@ -1854,13 +1883,28 @@
             },
 
             showTab(id) {
-                document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
-                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-                document.getElementById(id).classList.add('active');
+                const targetSection = document.getElementById(id);
+                if (!targetSection) return;
 
-                if (event && event.currentTarget && event.currentTarget.classList.contains('tab')) {
-                    event.currentTarget.classList.add('active');
+                if (targetSection.classList.contains('active')) {
+                    document.querySelectorAll('.tab').forEach(tab => {
+                        const target = tab.getAttribute('data-target') || (tab.getAttribute('onclick') && tab.getAttribute('onclick').match(/'([^']+)'/)?.[1]);
+                        if (target === id) tab.classList.add('active');
+                        else if (target) tab.classList.remove('active');
+                    });
+                    return;
                 }
+
+                document.querySelectorAll('.content-section').forEach(section => {
+                    if (section.id !== id) section.classList.remove('active');
+                });
+                targetSection.classList.add('active');
+
+                document.querySelectorAll('.tab').forEach(tab => {
+                    const target = tab.getAttribute('data-target') || (tab.getAttribute('onclick') && tab.getAttribute('onclick').match(/'([^']+)'/)?.[1]);
+                    if (target === id) tab.classList.add('active');
+                    else if (target) tab.classList.remove('active');
+                });
 
                 if (id === 'compare') this.updateCompareView();
             },
@@ -2312,22 +2356,22 @@
 
                 const m = this.calcMetricsObject(v, s);
                 const details = [
-                    ["千円あたりの回転数", `<span style="font-family:var(--font-eng); font-weight:bold; font-size:18px;">${v.rot_per_k.toFixed(1)} 回転</span>`],
-                    ["持ち玉比率", `<span style="font-family:var(--font-eng); font-weight:bold; font-size:18px;">${v.holding_rate.toFixed(1)} %</span>`],
-                    ["1Rあたりの出玉", `<span style="font-family:var(--font-eng); font-weight:bold; font-size:18px;">${v.r_out.toFixed(1)} 玉</span>`],
-                    ["R別当選回数", `<span style="font-size:13px; font-weight:bold; color:var(--text-main);">2R: ${v2r}回 / 4R: ${v4r}回 / 9R: ${v9r}回</span>`],
-                    ["当選契機別回数", `<span style="font-size:13px; font-weight:bold; color:var(--text-main);">SP: ${sp_v_count}回 / HR: ${hr_hit_count}回 / 左HIT: ${left_hit_count}回 / 右HIT: ${right_hit_count}回</span>`],
-                    ["拾い率", this.formatF(m.pickRate, 'pct')],
-                    ["SPルート選択率", this.formatF(m.spSelectRate, 'pct')],
-                    ["赤橋突破率", this.formatF(m.bridgePassRate, 'pct')],
-                    ["強打率", this.formatF(m.strongHitRate, 'pct')],
-                    ["HR率", this.formatF(m.hrRatio, 'pct')],
-                    ["チャンス吸着率 <span style='font-size:0.7rem; font-weight:normal; color:var(--text-sub);'>※左右合計(左:右)</span>", this.formatF(m.chanceRatio, 'mergedPct')],
-                    ["チャンス吸着時当選率 <span style='font-size:0.7rem; font-weight:normal; color:var(--text-sub);'>※左右合計(左:右)</span>", this.formatF(m.chanceWinRate, 'mergedPct')],
-                    ["ファール率 <span style='font-size:0.7rem; font-weight:normal; color:var(--text-sub);'>※左右合計(左:右)</span>", this.formatF(m.foulRatio, 'mergedPct')],
-                    ["SPルート当選率", this.formatF(m.spWinRate, 'prob')]
+                    ["千円あたりの回転数", `<span style="font-family:var(--font-eng); font-weight:bold; font-size:18px;">${v.rot_per_k.toFixed(1)} 回転</span>`, "千円あたりどのぐらい回ったかの数値です。実戦ログで記録された使用玉数を合算し自動的に算出します。<br>【計算式】<br>通常回転数 ÷ (総使用玉数 ÷ 貸玉数)<br>(※貸玉数は詳細設定の貸玉で設定された数値を使用します。)"],
+                    ["持ち玉比率", `<span style="font-family:var(--font-eng); font-weight:bold; font-size:18px;">${v.holding_rate.toFixed(1)} %</span>`, "総使用玉数のうち、持ち玉（または貯玉再プレイ玉）が占める割合です。この比率が高いほど、換金手数料によるギャップ損失を抑えられます。<br>【計算式】<br>((総使用玉数 - 現金投資による使用玉数) ÷ 総使用玉数) × 100<br>※現金投資による使用玉数 ＝ (現金投資額 ÷ 1000) × 貸玉数"],
+                    ["1Rあたりの出玉", `<span style="font-family:var(--font-eng); font-weight:bold; font-size:18px;">${v.r_out.toFixed(1)} 玉</span>`, "1Rあたり獲得出来た玉の平均数値です。実戦ログで記録された獲得玉数を合算し自動的に算出します。<br>【計算式】<br>総獲得出玉 ÷ 総獲得ラウンド数<br>※総獲得ラウンド数 ＝ (2R大当り回数 × 2) ＋ (4R大当り回数 × 4) ＋ (9R大当り回数 × 9)"],
+                    ["R別当選回数", `<span style="font-size:13px; font-weight:bold; color:var(--text-main);">2R: ${v2r}回 / 4R: ${v4r}回 / 9R: ${v9r}回</span>`, "実戦で当選した際のRの振り分け回数です。<br>【計算式】<br>実戦ログに記録された各大当りの各ラウンド（2R/4R/9R）の合計回数"],
+                    ["当選契機別回数", `<span style="font-size:13px; font-weight:bold; color:var(--text-main);">SP: ${sp_v_count}回 / HR: ${hr_hit_count}回 / 左HIT: ${left_hit_count}回 / 右HIT: ${right_hit_count}回</span>`, "大当りした際の当選契機別の回数です。SP・HR・左HIT・右HITによる当選回数を集計しています。<br>【計算式】<br>実戦ログに記録された大当りの各当選契機（SP/HR/左HIT/右HIT）の合計回数"],
+                    ["拾い率", this.formatF(m.pickRate, 'pct'), "通常回転数に対して、ハネに拾われて盤面内部（役物内）に進入した玉の割合です。<br>【計算式】<br>(拾い個数 ÷ 通常回転数) × 100"],
+                    ["SPルート選択率", this.formatF(m.spSelectRate, 'pct'), "ハネに拾われた玉のうち、大当りへの期待度が高い「SPルート」を選択した玉の割合です。<br>【計算式】<br>(SPルート選択個数 ÷ 拾い個数) × 100"],
+                    ["赤橋突破率", this.formatF(m.bridgePassRate, 'pct'), "ノーマルルートを選択した玉が赤橋を突破する割合です。<br>【計算式】<br>(赤橋突破個数 ÷ ノーマルルート進入個数) × 100<br>※ノーマルルート進入個数 ＝ 拾い個数 - SPルート選択個数"],
+                    ["強打率", this.formatF(m.strongHitRate, 'pct'), "赤橋を突破した玉が、回転体またはファールゾーン（回転体横のOUT）へ進む割合です。<br>【計算式】<br>((HR吸着個数 ＋ 左チャンス吸着個数 ＋ 右チャンス吸着個数 ＋ 左ファール個数 ＋ 右ファール個数) ÷ 赤橋突破個数) × 100"],
+                    ["HR率", this.formatF(m.hrRatio, 'pct'), "赤橋を突破した玉が、回転体中央のHR床に吸着する割合です。<br>【計算式】<br>(HR吸着個数 ÷ 強打個数) × 100<br>※強打個数 ＝ HR吸着個数 ＋ 左チャンス吸着個数 ＋ 右チャンス吸着個数 ＋ 左ファール個数 ＋ 右ファール個数"],
+                    ["チャンス吸着率 <span style='font-size:0.7rem; font-weight:normal; color:var(--text-sub);'>※左右合計(左:右)</span>", this.formatF(m.chanceRatio, 'mergedPct'), "赤橋を突破した玉が、回転体左右のチャンス床に吸着する割合です。<br>【計算式】<br>((左チャンス吸着個数 ＋ 右チャンス吸着個数) ÷ 強打個数) × 100"],
+                    ["チャンス吸着時当選率 <span style='font-size:0.7rem; font-weight:normal; color:var(--text-sub);'>※左右合計(左:右)</span>", this.formatF(m.chanceWinRate, 'mergedPct'), "左右のチャンス床に吸着した玉のうち、左HITまたは右HITで大当りした割合です。<br>【計算式】<br>((左HIT回数 ＋ 右HIT回数) ÷ (左チャンス吸着個数 ＋ 右チャンス吸着個数)) × 100"],
+                    ["ファール率 <span style='font-size:0.7rem; font-weight:normal; color:var(--text-sub);'>※左右合計(左:右)</span>", this.formatF(m.foulRatio, 'mergedPct'), "赤橋を突破した玉が、回転体外側のOUTへ進む割合です。<br>【計算式】<br>((左ファール個数 ＋ 右ファール個数) ÷ 強打個数) × 100"],
+                    ["SPルート当選率", this.formatF(m.spWinRate, 'prob'), "SPルートを選択した玉に対して、何個に1個が大当りしたかを示します。<br>【計算式】<br>SPルート選択個数 ÷ SP当選回数<br>※算出した値を「1 / ○○」形式で表示します。"]
                 ];
-                document.getElementById('res-details-table').innerHTML = details.map(d => `<tr><th style="width:70%;">${d[0]}</th><td style="width:30%; font-family:var(--font-eng); font-weight:bold; font-size:16px;">${d[1]}</td></tr>`).join('');
+                document.getElementById('res-details-table').innerHTML = details.map(d => `<tr><th style="width:70%;">${d[0]}${d[2] ? ` <span class="help-icon" onclick="showTooltip('${d[2]}', this)">？</span>` : ''}</th><td style="width:30%; font-family:var(--font-eng); font-weight:bold; font-size:16px;">${d[1]}</td></tr>`).join('');
 
                 this.lastCalcRes = { totalExpYen, unitExpYen: v.total_rot > 0 ? totalExpYen / v.total_rot : 0, borderHold, borderCash, estYakuProbDenom, estProbDenom, actAvgR, gapJade };
                 this.lastCalcV = { ...v };
@@ -2928,57 +2972,115 @@
                         round: document.getElementById('log-round').value
                     }
                 };
-                localStorage.setItem('pachitaku_fineplay_data', JSON.stringify(saveObj));
+                localStorage.setItem('pachitaku_howtouse_fineplay_v1', JSON.stringify(saveObj));
             },
 
             loadDataAndHistory() {
-                const savedJson = localStorage.getItem('pachitaku_fineplay_data');
-                if (savedJson) {
-                    const saved = JSON.parse(savedJson);
-                    if (saved.data) {
-                        this.fields.forEach(f => {
-                            if (saved.data[f.id] !== undefined) document.getElementById(f.id).value = saved.data[f.id];
-                        });
-                    }
-                    if (saved.settings) {
-                        if (saved.settings.sp) document.getElementById('set-sp-rate').value = saved.settings.sp;
-                        if (saved.settings.nm) document.getElementById('set-nm-rate').value = saved.settings.nm;
-                        if (saved.settings.avgR) document.getElementById('set-avg-r').value = saved.settings.avgR;
-                        if (saved.settings.kasi) document.getElementById('set-kasi').value = saved.settings.kasi;
-                        if (saved.settings.exch) document.getElementById('set-exchange').value = saved.settings.exch;
-                    }
-                    if (saved.targets) {
-                        this.metricsConfig.forEach(m => {
-                            if (saved.targets[m.id] !== undefined) {
-                                const el = document.getElementById(`target-${m.id}`);
-                                if (el) el.value = saved.targets[m.id];
+                // 使い方ページでは、指定されたサンプルデータを常に初期表示する。
+                const saved = {
+                    data: {
+                        total_rot: "100",
+                        total_pick: "50",
+                        sp_select: "2",
+                        bridge_pass: "24",
+                        hr_catch: "5",
+                        left_chance_catch: "2",
+                        right_chance_catch: "6",
+                        left_foul: "2",
+                        right_foul: "4"
+                    },
+                    settings: { sp: "3", nm: "19.1", avgR: "4.9", kasi: "250", exch: "4.0" },
+                    currentInputs: { hold: "1404", remain: "1404", replay: "", invest: "", trigger: "", round: "" },
+                    logHistory: [
+                        { no: 1, usedBalls: 144, trigger: "HR", round: "2R", inputs: { hold: 0, remain: 56, replay: 0, invest: 0 } },
+                        { no: 2, usedBalls: 178, trigger: "HR", round: "4R", inputs: { hold: 280, remain: 102, replay: 0, invest: 0 } },
+                        { no: 3, usedBalls: 350, trigger: "右HIT", round: "9R", inputs: { hold: 550, remain: 200, replay: 0, invest: 0 } },
+                        { no: 4, usedBalls: 808, trigger: "左HIT", round: "9R", inputs: { hold: 1208, remain: 400, replay: 0, invest: 0 } }
+                    ],
+                    jackpotCount: 4,
+                    history: [
+                        {
+                            ts: Date.now() - 3600000,
+                            totalPick: 16,
+                            v: {
+                                total_rot: 35,
+                                total_pick: 16,
+                                sp_select: 1,
+                                bridge_pass: 8,
+                                hr_catch: 2,
+                                left_chance_catch: 1,
+                                right_chance_catch: 1,
+                                left_foul: 0,
+                                right_foul: 1,
+                                v_2r: 1,
+                                v_4r: 1,
+                                v_9r: 0,
+                                hr_hit_count: 2,
+                                right_hit_count: 0,
+                                left_hit_count: 0,
+                                sp_v_count: 0,
+                                totalUsedBalls: 322,
+                                totalInvest: 0,
+                                totalGained: 672
                             }
-                        });
-                    }
-                    this.history = saved.history || [];
-                    this.logHistory = saved.logHistory || [];
-                    this.jackpotCount = saved.jackpotCount || 0;
-                    if (saved.memoBefore !== undefined) document.getElementById('memo-before').value = saved.memoBefore;
-                    if (saved.memoDuring !== undefined) document.getElementById('memo-during').value = saved.memoDuring;
-                    if (document.getElementById('reset-daiban')) document.getElementById('reset-daiban').value = saved.resetDaiban || "";
-                    if (document.getElementById('reset-memo')) document.getElementById('reset-memo').value = saved.resetMemo || "";
-                    if (saved.currentInputs) {
-                        const ci = saved.currentInputs;
-                        if (ci.hold !== undefined) document.getElementById('log-hold').value = ci.hold;
-                        if (ci.remain !== undefined) document.getElementById('log-remain').value = ci.remain;
-                        if (ci.replay !== undefined) document.getElementById('log-replay').value = ci.replay;
-                        if (ci.invest !== undefined) document.getElementById('log-invest').value = ci.invest;
-                        if (ci.trigger !== undefined) {
-                            document.getElementById('log-trigger').value = ci.trigger;
-                            const triggerLabel = { "HR": "HR", "左HIT": "左HIT", "右HIT": "右HIT", "SP": "SP" }[ci.trigger];
-                            if (triggerLabel) document.getElementById('log-trigger-label').innerText = triggerLabel;
+                        },
+                        {
+                            ts: Date.now(),
+                            totalPick: 50,
+                            v: {
+                                total_rot: 100,
+                                total_pick: 50,
+                                sp_select: 2,
+                                bridge_pass: 24,
+                                hr_catch: 5,
+                                left_chance_catch: 2,
+                                right_chance_catch: 6,
+                                left_foul: 2,
+                                right_foul: 4,
+                                v_2r: 1,
+                                v_4r: 1,
+                                v_9r: 2,
+                                hr_hit_count: 2,
+                                right_hit_count: 1,
+                                left_hit_count: 1,
+                                sp_v_count: 0,
+                                totalUsedBalls: 1480,
+                                totalInvest: 0,
+                                totalGained: 2684
+                            }
                         }
-                        if (ci.round !== undefined) {
-                            document.getElementById('log-round').value = ci.round;
-                            document.getElementById('log-round-label').innerText = ci.round;
-                        }
-                    }
-                }
+                    ],
+                    memoBefore: "",
+                    memoDuring: ""
+                };
+
+                this.fields.forEach(field => {
+                    if (saved.data[field.id] !== undefined) document.getElementById(field.id).value = saved.data[field.id];
+                });
+
+                document.getElementById('set-sp-rate').value = saved.settings.sp;
+                document.getElementById('set-nm-rate').value = saved.settings.nm;
+                document.getElementById('set-avg-r').value = saved.settings.avgR;
+                document.getElementById('set-kasi').value = saved.settings.kasi;
+                document.getElementById('set-exchange').value = saved.settings.exch;
+
+                this.history = saved.history;
+                this.logHistory = saved.logHistory;
+                this.jackpotCount = saved.jackpotCount;
+                document.getElementById('memo-before').value = saved.memoBefore;
+                document.getElementById('memo-during').value = saved.memoDuring;
+
+                const ci = saved.currentInputs;
+                document.getElementById('log-hold').value = ci.hold;
+                document.getElementById('log-remain').value = ci.remain;
+                document.getElementById('log-replay').value = ci.replay;
+                document.getElementById('log-invest').value = ci.invest;
+                document.getElementById('log-trigger').value = ci.trigger;
+                document.getElementById('log-round').value = ci.round;
+                document.getElementById('log-trigger-label').innerText = ci.trigger || "未選択";
+                document.getElementById('log-round-label').innerText = ci.round || "未選択";
+
+                localStorage.setItem('pachitaku_howtouse_fineplay_v1', JSON.stringify(saved));
                 this.updateLogHistoryView();
                 this.updateHistoryDropdown();
                 this.calc();
@@ -3145,6 +3247,218 @@
                     tooltipArea.style.display = 'none';
                 }
             });
+        });
+    </script>
+
+    <div id="intro-modal" class="modal-overlay" style="display: flex;">
+        <div class="modal-content">
+            <span class="modal-close" onclick="document.getElementById('intro-modal').style.display='none'">&times;</span>
+            <h2 style="margin-top:0; color:var(--accent-secondary); border-bottom:2px solid var(--accent-secondary); padding-bottom:8px; font-size:1.2rem;">使い方専用ページへようこそ！</h2>
+            <p style="font-size:14px; line-height:1.6;">このページでは、実際のツールと同じ画面を見ながら、各機能の使い方を確認できます。</p>
+            <ul style="line-height:1.6; font-size:14px; padding-left:20px;">
+                <li style="margin-bottom:10px;"><strong>各項目の説明</strong>：項目名の横にある<span class="help-icon" style="position:static; pointer-events:none;">？</span>を押すと解説が表示されます。</li>
+                <li style="margin-bottom:10px;"><strong>タブの解説</strong>：同じタブを2回続けて押すと、そのタブ全体の役割を確認できます。</li>
+                <li><strong>チュートリアル</strong>：画面下部のボタンから、基本的な操作の流れを順番に確認できます。</li>
+            </ul>
+            <button class="btn-primary" style="margin-top:15px;" onclick="document.getElementById('intro-modal').style.display='none'">閉じる</button>
+        </div>
+    </div>
+
+    <button id="start-tutorial" class="btn-primary">チュートリアルを開始する</button>
+
+    <script>
+        // 使い方ページ専用処理
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                const helpTexts = {
+                    'log-hold': '稼働開始前、または大当り終了後の現在の持ち玉数を入力する項目です。',
+                    'log-remain': '大当り開始前など、記録対象区間の終了時点に残っている玉数を入力する項目です。',
+                    'log-replay': '記録対象区間で再プレイした玉数を入力する項目です。',
+                    'log-invest': '記録対象区間で追加した投資額を円単位で入力する項目です。',
+                    'log-trigger': '大当りの当選契機をHR・左HIT・右HIT・SPから選択する項目です。',
+                    'log-round': '大当りのラウンド数を2R・4R・9Rから選択する項目です。',
+                    'total_rot': '実戦中の通常回転数を入力する項目です。',
+                    'total_pick': '役物に拾われた玉の合計個数を入力する項目です。',
+                    'sp_select': 'SPルートを選択した玉の個数を入力する項目です。',
+                    'bridge_pass': 'ノーマルルートで赤橋を突破した玉の個数を入力する項目です。',
+                    'hr_catch': 'HRへ吸着した玉の個数を入力する項目です。',
+                    'left_chance_catch': '左側のチャンスへ吸着した玉の個数を入力する項目です。',
+                    'right_chance_catch': '右側のチャンスへ吸着した玉の個数を入力する項目です。',
+                    'left_foul': '左側でファールとなった玉の個数を入力する項目です。',
+                    'right_foul': '右側でファールとなった玉の個数を入力する項目です。'
+                };
+
+                document.querySelectorAll('.input-group label').forEach(label => {
+                    const group = label.closest('.input-group');
+                    if (!group || label.querySelector('.help-icon')) return;
+                    const input = group.querySelector('input, textarea');
+                    const customSelect = group.querySelector('.custom-select-container');
+                    const id = input ? input.id : (customSelect ? customSelect.id.replace('-custom-container', '') : '');
+                    if (!helpTexts[id]) return;
+
+                    const icon = document.createElement('span');
+                    icon.className = 'help-icon';
+                    icon.textContent = '？';
+                    icon.addEventListener('click', event => {
+                        event.stopPropagation();
+                        showTooltip(helpTexts[id], icon);
+                    });
+                    label.appendChild(icon);
+                });
+
+                const tabHelpTexts = {
+                    log: '■ 実戦ログ\n大当り履歴をリアルタイムに記録・分析するタブです。\n大当りのたびに内容を入力して「記録」ボタンを押すと、回転数や1R出玉、当選契機の振分けなどを自動算出します。打ちながら手元でデータを積み上げることで、その日の実戦推移を正確に把握できます。\n\nなお、「記録」ボタンは(※)がついている項目が全て記入された際、出現します。',
+                    input: '■ 数値入力\n計算の土台となる基礎数値を管理するタブです。\n期待値計算に必要なヤクモノ確率や台のポテンシャルが分かるデータを算出する為の数値を入力します。なお、1.通常回転数を除いた項目はカチカチ君等で別途計測するようにして下さい。',
+                    calc: '■ 算出結果\n入力されたデータに基づいて計算し算出したボーダーや期待値、台の詳細な分析データを確認できるタブです。\n数値が変更されるたびに再計算、即時反映されます。すべての項目を埋めなくても、必要なデータが揃っていれば、知りたい項目だけを算出させる使い方もできます。（例：「使用玉数」と「通常回転数」のみ入力して「千円あたりの回転数」を確認するなど）',
+                    compare: '■ 区間分析\n一定区間ごとに数値を切り出して比較するためのタブです。\n「算出結果」タブにある「区間データを保存」ボタンを押したタイミングのデータが蓄積されます。区間単位で数値の動きを見ることで、一時的なムラに左右されず、今の台の挙動を客観的に判断する材料になります。'
+                };
+
+                document.querySelectorAll('.tab').forEach(tab => {
+                    const onclickText = tab.getAttribute('onclick');
+                    const targetMatch = onclickText && onclickText.match(/'([^']+)'/);
+                    if (!targetMatch) return;
+                    const target = targetMatch[1];
+                    tab.setAttribute('data-target', target);
+                    tab.removeAttribute('onclick');
+
+                    let clickCount = 0;
+                    let timer = null;
+                    tab.addEventListener('click', () => {
+                        clickCount += 1;
+                        if (clickCount === 1) {
+                            eval(onclickText);
+                            showTooltip('💡 もう一度同じタブを押すと、その説明が表示されます。', tab, 'bottom');
+                            timer = setTimeout(() => { clickCount = 0; }, 600);
+                            return;
+                        }
+                        clearTimeout(timer);
+                        clickCount = 0;
+                        showTooltip(tabHelpTexts[target], tab, 'bottom');
+                    });
+                });
+
+                document.querySelectorAll('input, select, .custom-select-trigger, .btn-primary, .reset-defaults-btn').forEach(element => {
+                    if (element.id === 'start-tutorial' || element.closest('#intro-modal')) return;
+                    if (element.closest('#compare') && element.classList.contains('custom-select-trigger')) return;
+                    element.style.pointerEvents = 'none';
+                    if (element.tagName !== 'INPUT' || element.type !== 'checkbox') element.style.opacity = '0.6';
+                });
+
+                const driverObj = window.driver.js.driver({
+                    showProgress: true,
+                    nextBtnText: '次へ',
+                    prevBtnText: '戻る',
+                    doneBtnText: '完了',
+                    onDestroyed: () => document.body.classList.remove('tutorial-active')
+                });
+
+                document.getElementById('start-tutorial').addEventListener('click', () => {
+                    document.body.classList.add('tutorial-active');
+                    app.showTab('log');
+                    driverObj.setSteps([
+                        {
+                            element: '.blackboard-header',
+                            popover: { title: 'チュートリアルへようこそ！', description: 'ファインプレー攻略ツールの主要機能を、実際の画面に沿って順番に確認します。', side: 'bottom', align: 'start' }
+                        },
+                        {
+                            element: '.settings-btn',
+                            popover: { title: '1. 詳細設定', description: 'SPルート選択時当選率、チャンス吸着時当選率、平均ラウンド数、貸玉、換金率と、区間比較の基準値を設定する画面です。', side: 'bottom', align: 'start' }
+                        },
+                        {
+                            element: '#log-status-section',
+                            popover: { title: '2. 稼働状況を入力', description: '稼働開始時は「現在の持ち玉数」を入力します。大当り時は「残玉数」「当選契機」「当選R数」を入力してください。再プレイ玉数や追加投資がある場合は、あわせて入力します。内容確認モーダルが表示されたら、内容に問題がないことを確認し、「記録する」を押すと履歴に追加されます。大当り後は、保留がある場合は消化後に「現在の持ち玉数」を入力してください。この数値をもとに獲得出玉を算出します。', side: 'top', align: 'start' },
+                            onHighlightStarted: () => app.showTab('log')
+                        },
+                        {
+                            element: '#log-history-section',
+                            popover: { title: '3. 大当り履歴を確認', description: '記録された使用玉数、獲得出玉、当選契機、R数を確認します。履歴には修正と削除の機能があります。', side: 'top', align: 'start' },
+                            onHighlightStarted: () => app.showTab('log')
+                        },
+                        {
+                            element: '#fields-container',
+                            popover: { title: '4. 計測値を入力', description: '通常回転数、拾い個数、SPルート選択個数、赤橋突破個数、HR・左右のチャンス吸着・左右のファール個数を入力します。数値を入力すると、拾い率などが自動的に算出され、「算出結果」へ反映されます。', side: 'top', align: 'start' },
+                            onHighlightStarted: () => app.showTab('input')
+                        },
+                        {
+                            element: '#calc',
+                            popover: { title: '5. 算出結果を確認', description: '期待値、ボーダー、推定確率、欠損・余剰、詳細分析データが入力内容に応じて算出されます。ここから区間データを保存できます。', side: 'top', align: 'start' },
+                            onHighlightStarted: () => app.showTab('calc')
+                        },
+                        {
+                            element: '#compare',
+                            popover: { title: '6. 区間を比較', description: '保存した区間について、選択した項目の数値と累計との差を一覧・グラフで確認し、特定区間の詳細も表示できます。', side: 'top', align: 'start' },
+                            onHighlightStarted: () => app.showTab('compare')
+                        },
+                        {
+                            element: '.btn-sim',
+                            popover: { title: '7. 期待値シミュレーション', description: '任意の回転率、出玉、拾い率、各ルートの割合などを入力し、期待値・ボーダー・推定確率を確認する機能です。', side: 'top', align: 'start' }
+                        },
+                        {
+                            element: '.btn-memo',
+                            popover: { title: '8. 稼働メモ', description: '稼働前と稼働中のメモを記録する機能です。', side: 'top', align: 'start' }
+                        },
+                        {
+                            element: '.btn-real-data',
+                            popover: { title: '9. 管理人の実戦リアルデータ', description: '管理人が実際のホールで実戦した優秀台のデータと、世に出ていないスペック値を確認できます。押し引きを判断する際の参考にしてください。', side: 'top', align: 'start' }
+                        },
+                        {
+                            element: '.reset-btn',
+                            popover: { title: '10. バックアップとリセット', description: '稼働データをバックアップしてリセットする方法と、バックアップせずにリセットする方法を選択できます。', side: 'bottom', align: 'start' }
+                        },
+                        {
+                            element: '.back-to-top',
+                            popover: { title: 'ツールへ戻る', description: '確認が終わったら、ファインプレー攻略ツール本体へ戻ります。', side: 'bottom', align: 'start' }
+                        }
+                    ]);
+                    driverObj.drive();
+                });
+            }, 0);
+        });
+
+        let currentTooltip = null;
+
+        function showTooltip(text, targetElement, side = 'bottom') {
+            if (currentTooltip) currentTooltip.remove();
+
+            const tooltip = document.createElement('div');
+            tooltip.className = 'tooltip';
+            tooltip.innerHTML = text.replace(/\n/g, '<br>');
+            document.body.appendChild(tooltip);
+
+            const rect = targetElement.getBoundingClientRect();
+            const scrollY = window.scrollY || window.pageYOffset;
+            const scrollX = window.scrollX || window.pageXOffset;
+            tooltip.style.opacity = '1';
+
+            let top;
+            if (side === 'bottom') {
+                top = rect.bottom + scrollY + 10;
+            } else if (side === 'top') {
+                top = rect.top + scrollY - tooltip.offsetHeight - 10;
+            } else {
+                top = rect.top + scrollY - tooltip.offsetHeight - 10;
+                if (top < scrollY) top = rect.bottom + scrollY + 10;
+            }
+
+            let left = rect.left + scrollX + (rect.width / 2) - (tooltip.offsetWidth / 2);
+            if (left < 10) left = 10;
+            if (left + tooltip.offsetWidth > window.innerWidth - 10) {
+                left = window.innerWidth - tooltip.offsetWidth - 10;
+            }
+
+            tooltip.style.top = top + 'px';
+            tooltip.style.left = left + 'px';
+            currentTooltip = tooltip;
+        }
+
+        document.addEventListener('click', event => {
+            if (currentTooltip && !event.target.closest('.help-icon') && !event.target.closest('.tab')) {
+                currentTooltip.style.opacity = '0';
+                setTimeout(() => {
+                    if (currentTooltip && currentTooltip.parentElement) currentTooltip.remove();
+                    currentTooltip = null;
+                }, 300);
+            }
         });
     </script>
 </body>
