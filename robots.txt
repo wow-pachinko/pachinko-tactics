@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://pachinko-tactics.com/sitemap.xml
