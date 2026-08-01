@@ -2205,6 +2205,13 @@
                 const usedBalls = hold - remain + replay + (invest / 1000) * kasi;
 
                 this.jackpotCount++;
+                if (this.jackpotCount === 1) {
+                    try {
+                        if (typeof gtag === 'function') {
+                            gtag('event', 'tool_input_start', { tool_id: 'famista' });
+                        }
+                    } catch (_) {}
+                }
                 this.logHistory.push({
                     no: this.jackpotCount,
                     usedBalls: usedBalls,
@@ -2556,8 +2563,8 @@
 
                 document.getElementById('res-border').innerHTML = `
                     <div style="display: flex; justify-content: center; gap: 8px; margin-top: 8px; flex-wrap: wrap;">
-                        <div class="box-info">持ち玉<br><span style="font-family:var(--font-eng);">${borderHold.toFixed(1)}<span style="font-size:12px; font-weight:normal; font-family:var(--font-main);"> 回転</span></span></div>
                         <div class="box-info">現金<br><span style="font-family:var(--font-eng);">${borderCash.toFixed(1)}<span style="font-size:12px; font-weight:normal; font-family:var(--font-main);"> 回転</span></span></div>
+                        <div class="box-info">持ち玉<br><span style="font-family:var(--font-eng);">${borderHold.toFixed(1)}<span style="font-size:12px; font-weight:normal; font-family:var(--font-main);"> 回転</span></span></div>
                     </div>
                 `;
 
@@ -2920,6 +2927,13 @@
                     v: v,
                     totalPick: v.total_pick
                 });
+                if (this.history.length === 1) {
+                    try {
+                        if (typeof gtag === 'function') {
+                            gtag('event', 'tool_range_save', { tool_id: 'famista' });
+                        }
+                    } catch (_) {}
+                }
 
                 this.saveDataAndHistory();
                 this.updateCompareView();
