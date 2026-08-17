@@ -1,0 +1,3043 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-7F66S1YKNZ"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-7F66S1YKNZ');
+  </script>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ハネモノの勝ち方・攻略｜勝てる台を見極めるための教科書</title>
+  <meta name="description" content="ハネモノ全機種に共通する勝ち方と攻略の考え方を、基礎から詳しく解説。勝てる台を見極める3元素「鳴き・拾い・役モノ」を軸に、釘・ネカセ・ストローク・玉の挙動の見方、実戦データの取り方、台選びと続行判断までをまとめた教科書です。">
+  <link rel="canonical" href="https://pachinko-tactics.com/analysis/hanemonowin">
+  
+  <!-- OGP Tags -->
+  <meta property="og:title" content="ハネモノの勝ち方・攻略｜勝てる台を見極めるための教科書">
+  <meta property="og:description" content="ハネモノ全機種に共通する勝ち方と攻略の考え方を、基礎から詳しく解説。勝てる台を見極める3元素「鳴き・拾い・役モノ」を軸に、釘・ネカセ・ストローク・玉の挙動の見方、実戦データの取り方、台選びと続行判断までをまとめた教科書です。">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://pachinko-tactics.com/analysis/hanemonowin">
+  <meta property="og:image" content="https://images.pachinko-tactics.com/hanemonowin/hanemonowinsamune2.jpg">
+  <meta property="og:site_name" content="PACHINKO TACTICS">
+  <meta property="og:locale" content="ja_JP">
+
+  <!-- Twitter Card Tags -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@wow_pachi_122">
+  <meta name="twitter:title" content="ハネモノの勝ち方・攻略｜勝てる台を見極めるための教科書">
+  <meta name="twitter:description" content="ハネモノ全機種に共通する勝ち方と攻略の考え方を、基礎から詳しく解説。勝てる台を見極める3元素「鳴き・拾い・役モノ」を軸に、釘・ネカセ・ストローク・玉の挙動の見方、実戦データの取り方、台選びと続行判断までをまとめた教科書です。">
+  <meta name="twitter:image" content="https://images.pachinko-tactics.com/hanemonowin/hanemonowinsamune2.jpg">
+  
+    <!-- Fonts ( JURA & Noto Sans JP ) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Jura:wght@400;600;700;900&family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+  
+  <!-- Icons (FontAwesome) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Mermaid.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: 'neutral',
+      themeVariables: {
+        background: '#ffffff',
+        primaryColor: '#e2e8f0',
+        primaryTextColor: '#333333',
+        lineColor: '#b33939'
+      }
+    });
+  </script>
+  
+  <style>
+    /* =========================================================
+       CSS Variables (Theme: Investigation Board - index.html準拠)
+       ========================================================= */
+    :root {
+      --font-main: 'Noto Sans JP', sans-serif;
+      --font-eng: 'Jura', sans-serif;
+
+      --bg-color: #d4a373;
+      --body-bg-image: url('https://pachinko-tactics.com/corkboard_bg.png');
+
+      --bg-panel: #FFFFFF;
+      --text-main: #333333;
+      --text-panel: #1A1A1A;
+      --text-sub: #555555;
+
+      --accent-color: #b33939; /* えんじ色のピン・マーカー */
+      --accent-hover: #ff5252;
+      --accent-secondary: #227093; /* 青マーカー */
+      --border-color: rgba(0, 0, 0, 0.15);
+
+      --shadow: 0 5px 15px rgba(0, 0, 0, 0.35);
+      --input-bg: rgba(255, 255, 255, 0.95);
+
+      --badge-bg: rgba(179, 57, 57, 0.1);
+      --badge-text: #b33939;
+      
+      --board-bg: #1a2a24;
+      --chalk-white: rgba(255, 255, 255, 0.9);
+    }
+
+    /* =========================================================
+       Global & Smooth Scroll Styles
+       ========================================================= */
+    html {
+      scroll-behavior: smooth; /* スムーススクロール有効化 */
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      background-image: var(--body-bg-image);
+      background-size: auto;
+      background-attachment: fixed;
+      color: var(--text-main);
+      font-family: var(--font-main);
+      line-height: 1.65;
+      padding-bottom: 60px;
+    }
+
+    a {
+      color: var(--accent-color);
+      text-decoration: none;
+      transition: color 0.2s;
+      font-weight: 700;
+    }
+
+    a:hover {
+      color: var(--accent-hover);
+      text-decoration: underline;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 0 15px;
+    }
+
+    /* =========================================================
+       Breadcrumbs (Blackboard style - 黒板色背景・最上段ベタ付け)
+       ========================================================= */
+    .breadcrumbs {
+      background-color: var(--board-bg);
+      background-image:
+        radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.02) 0%, transparent 80%),
+        url('https://www.transparenttextures.com/patterns/dark-matter.png');
+      padding: 8px 0;
+      border-radius: 0;
+      font-size: 0.8rem;
+      margin-bottom: 20px;
+      box-shadow: inset 0 -3px 10px rgba(0, 0, 0, 0.4);
+      border: none;
+      border-bottom: 4px solid #3d2b1f; /* 下部のみ木枠境界線 */
+      width: 100%;
+    }
+
+    .breadcrumbs-inner {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 0 15px;
+    }
+
+    .breadcrumbs ul {
+      display: flex;
+      list-style: none;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      padding-left: 0;
+      margin: 0;
+    }
+
+    .breadcrumbs li {
+      color: rgba(255, 255, 255, 0.6);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .breadcrumbs a {
+      color: var(--chalk-white);
+      font-weight: 700;
+      transition: color 0.2s;
+    }
+
+    .breadcrumbs a:hover {
+      color: var(--accent-hover);
+      text-decoration: underline;
+    }
+
+    /* 区切り文字の制御 */
+    .breadcrumbs li+li::before {
+      content: '\f105'; /* FontAwesome angle-right */
+      font-family: 'Font Awesome 6 Free';
+      font-weight: 900;
+      color: rgba(255, 255, 255, 0.4);
+      font-size: 0.75rem;
+      margin-right: 8px;
+    }
+
+    /* =========================================================
+       Top Navigation Buttons (index.html準拠)
+       ========================================================= */
+    .top-nav-buttons {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .nav-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 18px;
+      background-color: var(--input-bg);
+      color: var(--accent-color);
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      transition: all 0.2s;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+      cursor: pointer;
+    }
+
+    .nav-btn:hover {
+      background-color: var(--accent-color);
+      color: #fff;
+      border-color: var(--accent-color);
+      text-decoration: none;
+    }
+
+    .nav-btn i {
+      font-size: 0.85rem;
+    }
+
+    .top-nav-buttons button.nav-btn {
+      font-family: inherit;
+    }
+
+    .hanemono-tool-dialog {
+      width: min(420px, calc(100vw - 32px));
+      padding: 0;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      background: var(--bg-panel);
+      color: var(--text-panel);
+      box-shadow: var(--shadow);
+    }
+
+    .hanemono-tool-dialog::backdrop {
+      background: rgba(26, 42, 36, 0.72);
+    }
+
+    .hanemono-tool-dialog-inner {
+      padding: 22px;
+    }
+
+    .hanemono-tool-dialog-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .hanemono-tool-dialog-title {
+      color: var(--text-panel);
+      font-size: 1.05rem;
+      font-weight: 900;
+    }
+
+    .hanemono-tool-dialog-close {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
+      flex-shrink: 0;
+      border: 1px solid var(--border-color);
+      border-radius: 50%;
+      background: var(--bg-panel);
+      color: var(--accent-color);
+      cursor: pointer;
+      font: inherit;
+    }
+
+    .hanemono-tool-dialog-close:hover {
+      background: var(--accent-color);
+      color: #fff;
+    }
+
+    .hanemono-tool-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .hanemono-tool-link {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      min-height: 50px;
+      padding: 12px 16px;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      background: var(--input-bg);
+      color: var(--accent-color);
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    }
+
+    .hanemono-tool-link:hover {
+      border-color: var(--accent-color);
+      background: var(--accent-color);
+      color: #fff;
+      text-decoration: none;
+    }
+
+    @media (max-width: 520px) {
+      .hanemono-tool-dialog {
+        width: calc(100vw - 24px);
+      }
+
+      .hanemono-tool-dialog-inner {
+        padding: 18px;
+      }
+
+      .hanemono-tool-link {
+        min-height: 54px;
+      }
+    }
+
+    /* =========================================================
+       Investigation Paper Panels (White sheet pinned on cork)
+       ========================================================= */
+    .panel {
+      background-color: var(--bg-panel);
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      border-radius: 2px;
+      padding: 30px 24px;
+      margin-bottom: 30px;
+      box-shadow: var(--shadow);
+      position: relative;
+      color: var(--text-panel);
+    }
+
+    /* Red Push Pin on top of each paper panel */
+    .panel::before {
+      content: '';
+      position: absolute;
+      top: 8px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%, #ff6b6b, #b33939);
+      box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.4), inset -1px -2px 3px rgba(0, 0, 0, 0.3);
+      z-index: 10;
+    }
+
+    /* Typography inside Paper Panel */
+    h1.article-title {
+      font-size: clamp(1.05rem, 2.5vw, 1.25rem); /* 控えめサイズ */
+      font-weight: 700;
+      color: var(--text-panel);
+      line-height: 1.4;
+      margin-bottom: 14px;
+      text-align: left;
+      font-family: var(--font-main);
+      border-bottom: 1px solid var(--border-color); /* 1px細いグレー線 */
+      padding-bottom: 8px;
+    }
+
+    h2.section-title {
+      font-size: 1.35rem;
+      font-weight: 900;
+      color: var(--text-panel);
+      border-bottom: 2px solid var(--accent-color);
+      padding-bottom: 10px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    h2.section-title i {
+      color: var(--accent-color);
+    }
+
+    /* 攻略小見出し（目次項目）の四角枠デザイン */
+    h3.subset-title {
+      font-size: 1.24rem;
+      font-weight: 900;
+      color: var(--text-panel);
+      border: 1px solid rgba(179, 57, 57, .5);
+      border-left: 6px solid var(--accent-color);
+      background: linear-gradient(90deg, rgba(179, 57, 57, .1), rgba(179, 57, 57, .015));
+      padding: 11px 14px;
+      border-radius: 7px;
+      display: block; /* 横幅いっぱいにする */
+      margin-top: 38px;
+      margin-bottom: 18px;
+      letter-spacing: .015em;
+    }
+
+    /* 目次にない通常の小見出し（装飾なし） */
+    h3.sub-heading-plain {
+      font-size: 1.0rem;
+      font-weight: 700;
+      color: var(--text-panel);
+      margin-top: 24px;
+      margin-bottom: 10px;
+      border: none;
+      background: none;
+      padding: 0;
+      display: block;
+    }
+
+    p {
+      font-size: 0.95rem;
+      color: var(--text-sub);
+      margin-bottom: 16px;
+    }
+
+    /* =========================================================
+       TOC (Table of Contents) Pinned Paper
+       ========================================================= */
+    .toc-panel {
+      background-color: #faf6ee; /* 少し古びた紙の色 */
+      border-left: 3px double var(--accent-color);
+    }
+    .toc-title {
+      font-weight: 900;
+      font-size: 1rem;
+      color: var(--accent-color);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .toc-list {
+      list-style-type: none;
+      padding-left: 0;
+    }
+    .toc-list li {
+      margin-bottom: 8px;
+      font-size: 0.9rem;
+    }
+    .toc-list ul {
+      padding-left: 20px;
+      margin-top: 4px;
+      list-style-type: circle;
+    }
+
+    /* =========================================================
+       攻略手順・ステップ（イエロー付箋・Post-it風）
+       ========================================================= */
+    .procedure-sticky {
+      background-color: #fffde6; /* ポストイット風イエロー */
+      border-left: 4px solid #f5b041;
+      padding: 16px 20px;
+      margin: 20px 0;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+      position: relative;
+    }
+    .procedure-sticky::after {
+      /* テープ留め風の半透明装飾 */
+      content: '';
+      position: absolute;
+      top: -8px;
+      left: 30px;
+      width: 60px;
+      height: 16px;
+      background: rgba(212, 163, 115, 0.35);
+      transform: rotate(-3deg);
+    }
+    .procedure-sticky h4 {
+      font-size: 0.95rem;
+      font-weight: 900;
+      color: #b7950b;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .procedure-steps {
+      padding-left: 18px;
+      font-size: 0.9rem;
+      color: var(--text-panel);
+    }
+    .procedure-steps li {
+      margin-bottom: 6px;
+    }
+
+    .procedure-sticky.blue {
+      background-color: #e6f7ff; /* 淡いブルー */
+      border-left-color: #1890ff; /* 青ボーダー */
+    }
+    .procedure-sticky.blue h4 {
+      color: #096dd9;
+    }
+    .procedure-sticky.blue::after {
+      background: rgba(24, 144, 255, 0.2); /* テープ色も青系に */
+    }
+
+    .procedure-sticky.green {
+      background-color: #f6ffed; /* 淡いグリーン */
+      border-left-color: #52c41a; /* 緑ボーダー */
+    }
+    .procedure-sticky.green h4 {
+      color: #389e0d;
+    }
+    .procedure-sticky.green::after {
+      background: rgba(82, 196, 26, 0.2); /* テープ色も緑系に */
+    }
+
+    .procedure-sticky.pink {
+      background-color: #fff0f6; /* 淡いピンク */
+      border-left-color: #eb2f96; /* ピンクボーダー */
+    }
+    .procedure-sticky.pink h4 {
+      color: #c41d7f;
+    }
+    .procedure-sticky.pink::after {
+      background: rgba(235, 47, 150, 0.2); /* テープ色もピンク系に */
+    }
+
+    /* 効果バッジ：青系に反転 */
+    .effect-badge {
+      display: inline-flex;
+      align-items: center;
+      background-color: rgba(34, 112, 147, 0.08); /* 青系の薄い背景色 */
+      color: var(--accent-secondary); /* 青文字 (#227093) */
+      border: 1px solid rgba(34, 112, 147, 0.3); /* 青ボーダー */
+      padding: 4px 10px;
+      border-radius: 2px;
+      font-weight: 700;
+      font-size: 0.78rem;
+      margin-bottom: 12px;
+    }
+    .effect-badge i {
+      margin-right: 6px;
+    }
+
+    /* =========================================================
+       Details & Summary (アコーディオン - 付箋紙/レポート調)
+       ========================================================= */
+    details {
+      background-color: #fcfcfc;
+      border: 1px solid var(--border-color);
+      border-radius: 4px;
+      margin: 18px 0;
+      overflow: hidden;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+    details[open] {
+      background-color: #fdfdfd;
+      border-color: var(--accent-color);
+    }
+    summary {
+      padding: 12px 18px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--text-panel);
+      cursor: pointer;
+      user-select: none;
+      outline: none;
+      background-color: #f5f5f5;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid transparent;
+      transition: background 0.2s;
+    }
+    summary:hover {
+      background-color: #eaeaea;
+    }
+    details[open] summary {
+      background-color: #fff0f0;
+      color: var(--accent-color);
+      border-bottom-color: rgba(179, 57, 57, 0.15);
+    }
+    summary::after {
+      content: '\f107'; /* FontAwesome angle-down */
+      font-family: 'Font Awesome 6 Free';
+      font-weight: 900;
+      color: var(--text-sub);
+      transition: transform 0.3s;
+    }
+    details[open] summary::after {
+      transform: rotate(-180deg);
+      color: var(--accent-color);
+    }
+    .details-content {
+      padding: 18px;
+      background-color: #ffffff;
+    }
+    .details-content h5 {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--accent-color);
+      margin-top: 16px;
+      margin-bottom: 8px;
+      border-bottom: 1px dashed var(--border-color);
+      padding-bottom: 4px;
+    }
+    .details-content h5:first-child {
+      margin-top: 0;
+    }
+    .details-content ul {
+      list-style-type: square;
+      padding-left: 18px;
+      font-size: 0.85rem;
+      color: var(--text-sub);
+    }
+    .details-content li {
+      margin-bottom: 6px;
+    }
+    .details-content p {
+      font-size: 0.85rem;
+      margin-bottom: 10px;
+    }
+
+    /* =========================================================
+       Tables (White Paper style responsive table)
+       ========================================================= */
+    .table-container {
+      overflow-x: auto;
+      margin: 20px 0;
+      border: 1px solid var(--border-color);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+      background-color: #ffffff;
+    }
+    th, td {
+      padding: 10px 14px;
+      border: 1px solid var(--border-color); /* 格子状のグリッド線を追加 */
+      color: var(--text-panel);
+    }
+    th {
+      background-color: #f7f9fa;
+      color: var(--accent-color);
+      font-weight: 900;
+      border-bottom: 2px solid var(--border-color); /* ヘッダー下部の強調線を維持 */
+    }
+
+    /* =========================================================
+       Alert Cards (Investigation warnings)
+       ========================================================= */
+    .alert-box {
+      border-left: 4px solid var(--accent-color);
+      padding: 16px;
+      margin: 24px 0;
+      background-color: rgba(179, 57, 57, 0.03);
+      border-radius: 0 4px 4px 0;
+    }
+    .alert-box.note {
+      border-left-color: var(--accent-secondary);
+      background-color: rgba(34, 112, 147, 0.03);
+    }
+    .alert-title {
+      font-weight: 900;
+      font-size: 0.85rem;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--accent-color);
+      text-transform: uppercase;
+      font-family: var(--font-eng);
+    }
+    .alert-box.note .alert-title {
+      color: var(--accent-secondary);
+    }
+    .alert-box p {
+      margin: 0;
+      font-size: 0.88rem;
+      color: var(--text-panel);
+    }
+
+    /* 画像のレスポンシブ縮小対応 */
+    img.responsive-img {
+      max-width: 100%;
+      height: auto;
+      display: block;
+      margin: 16px auto;
+      border-radius: 4px;
+      border: 3px solid #f4eedb; outline: 1px solid rgba(0,0,0,0.12); box-shadow: 0 6px 16px rgba(0,0,0,0.15); padding: 2px; background-color: #ffffff; border-radius: 6px;
+    }
+
+    /* =========================================================
+       Back to Top Floating Button (目次戻り仕様)
+       ========================================================= */
+    .back-to-top {
+      position: fixed;
+      bottom: 25px;
+      right: 25px;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%, #ff5252, #b33939);
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+      z-index: 1000;
+      transition: transform 0.2s, opacity 0.2s, visibility 0.2s;
+      opacity: 0;
+      visibility: hidden;
+      cursor: pointer;
+    }
+
+    .back-to-top.show {
+      opacity: 0.85;
+      visibility: visible;
+    }
+
+    .back-to-top:hover {
+      transform: scale(1.1);
+      opacity: 1;
+      color: #ffffff;
+    }
+
+    .back-to-top i {
+      font-size: 1.1rem;
+    }
+
+    /* Footer */
+    footer {
+      margin-top: 40px;
+      padding-top: 20px;
+      border-top: 1px dashed var(--border-color);
+      text-align: center;
+      font-size: 0.78rem;
+      color: var(--text-sub);
+    }
+    /* 鬲夂ｾ､菫｡鬆ｼ蠎ｦ豈碑ｼ・ユ繝ｼ繝悶Ν逕ｨ迚ｹ蛻･繧ｫ繧ｹ繧ｿ繝 */
+    .compare-table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+    .compare-table th, .compare-table td {
+      border: 1px solid var(--border-color);
+      padding: 10px 14px;
+    }
+    .compare-table td.col-label {
+      font-weight: 500;
+      background-color: #fafafa;
+    }
+    .compare-table .col-75 {
+      background-color: rgba(179, 57, 57, 0.04) !important; /* 豺｡縺・ヴ繝ｳ繧ｯ邉ｻ */
+      text-align: center;
+    }
+    .compare-table .col-100 {
+      background-color: rgba(34, 112, 147, 0.04) !important; /* 豺｡縺・ヶ繝ｫ繝ｼ邉ｻ */
+      text-align: center;
+    }
+    .compare-table th.double-border-left,
+    .compare-table td.double-border-left {
+      border-left: 3px double rgba(0, 0, 0, 0.25) !important; /* 邵ｦ縺ｮ莠碁㍾邱・*/
+    }
+    
+
+
+    /* =========================================================
+       ハネモノの勝ち方：文章主体の記事骨格
+       ========================================================= */
+    .article-kicker {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 10px;
+      color: var(--accent-color);
+      font-family: var(--font-eng);
+      font-size: 0.78rem;
+      font-weight: 900;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .draft-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 4px 8px;
+      border: 1px solid rgba(179, 57, 57, 0.35);
+      border-radius: 999px;
+      background: rgba(179, 57, 57, 0.08);
+      color: var(--accent-color);
+      font-family: var(--font-main);
+      font-size: 0.72rem;
+      letter-spacing: 0.04em;
+    }
+
+    .chapter-heading-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 4px;
+    }
+
+    .chapter-heading-row .section-title {
+      flex: 1 1 520px;
+      margin-bottom: 0;
+    }
+
+    .chapter-toc {
+      margin: 14px 0 20px;
+      padding: 14px 16px 15px;
+      border: 1px solid rgba(34, 112, 147, 0.24);
+      border-radius: 6px;
+      background: rgba(34, 112, 147, 0.055);
+    }
+
+    .chapter-toc-title {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      margin-bottom: 9px;
+      color: var(--accent-secondary);
+      font-size: 0.78rem;
+      font-weight: 900;
+      letter-spacing: 0.04em;
+    }
+
+    .chapter-toc ul {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 4px 18px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .chapter-toc li {
+      min-width: 0;
+      margin: 0;
+    }
+
+    .chapter-toc a {
+      display: flex;
+      align-items: flex-start;
+      gap: 7px;
+      padding: 5px 0;
+      color: var(--text-panel);
+      font-size: 0.84rem;
+      font-weight: 700;
+      line-height: 1.45;
+      text-decoration: none;
+    }
+
+    .chapter-toc a::before {
+      content: "›";
+      flex-shrink: 0;
+      color: var(--accent-color);
+      font-family: var(--font-eng);
+      font-weight: 900;
+    }
+
+    .chapter-toc a:hover {
+      color: var(--accent-color);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    .article-draft-block {
+      margin: 12px 0 20px;
+      padding: 15px 16px;
+      border: 1px dashed rgba(34, 112, 147, 0.5);
+      border-radius: 6px;
+      background: rgba(34, 112, 147, 0.045);
+      color: var(--text-sub);
+    }
+
+    .article-draft-block p:last-child {
+      margin-bottom: 0;
+    }
+
+    .article-draft-label {
+      margin-bottom: 6px;
+      color: var(--accent-secondary);
+      font-size: 0.78rem;
+      font-weight: 900;
+      letter-spacing: 0.03em;
+    }
+
+    .machine-slot {
+      margin-top: 12px;
+      border-color: rgba(34, 112, 147, 0.3);
+    }
+
+    .machine-slot summary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      background: rgba(34, 112, 147, 0.08);
+      color: #155b78;
+    }
+
+    .machine-slot summary::after {
+      position: static;
+      margin-left: auto;
+    }
+
+    .section-title,
+    .subset-title,
+    .sub-heading-plain {
+      scroll-margin-top: 18px;
+    }
+
+    .profile-copy p {
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 640px) {
+      .chapter-heading-row {
+        align-items: flex-start;
+      }
+
+      .machine-slot summary {
+        align-items: flex-start;
+      }
+
+      .chapter-toc ul {
+        grid-template-columns: 1fr;
+        gap: 1px;
+      }
+    }
+  
+
+    .machine-fact-table-wrap { margin: 14px 0 24px; overflow-x: auto; }
+    .machine-fact-table { width: 100%; border: 1px solid rgba(34,112,147,.2); border-collapse: separate; border-spacing: 0; border-radius: 10px; background: #fff; overflow: hidden; }
+    .machine-fact-table th,
+    .machine-fact-table td { padding: 13px 14px; border-bottom: 1px solid rgba(34,112,147,.14); text-align: left; vertical-align: middle; line-height: 1.65; }
+    .machine-fact-table tr:last-child th,
+    .machine-fact-table tr:last-child td { border-bottom: 0; }
+    .machine-fact-table th { width: 34%; background: #eef7fa; color: #244f62; font-size: .9rem; font-weight: 900; }
+    .machine-fact-table td { color: #526b76; font-size: .9rem; font-weight: 600; }
+    .article-subhead { margin: 26px 0 12px; padding-bottom: 7px; border-bottom: 1px solid rgba(34,112,147,.25); font-size: 1.05rem; color: #244f62; }
+    .article-minihead { margin: 20px 0 10px; font-size: 1rem; color: #155b78; }
+    .content-subtitle { margin: 28px 0 10px; padding: 16px 0 12px; border-top: 1px dashed rgba(36,79,98,.38); border-bottom: 1px dashed rgba(36,79,98,.38); font-size: 1.1rem; font-weight: 900; color: #244f62; }
+    .article-list-note { margin-top: 26px; }
+    .article-check-block { margin: 18px 0; padding: 14px 16px; border-left: 4px solid #c27a24; background: #fff8e9; color: #684519; }
+    .article-check-label { margin-bottom: 6px; font-size: .8rem; font-weight: 900; letter-spacing: .04em; }
+    .article-check-block p:last-child { margin-bottom: 0; }
+
+    .intro-manifesto {
+      position: relative;
+      overflow: hidden;
+      margin: 26px 0;
+      padding: 30px 26px 28px;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      border-radius: 10px;
+      background:
+        radial-gradient(circle at 92% 18%, rgba(255, 255, 255, 0.13) 0 3px, transparent 4px),
+        radial-gradient(circle at 85% 34%, rgba(255, 255, 255, 0.08) 0 2px, transparent 3px),
+        linear-gradient(135deg, #173340 0%, #214f63 58%, #8f3439 100%);
+      color: #fff;
+      box-shadow: 0 8px 20px rgba(22, 47, 59, 0.24);
+    }
+
+    .intro-manifesto::after {
+      content: '！';
+      position: absolute;
+      right: 14px;
+      bottom: -38px;
+      color: rgba(255, 255, 255, 0.08);
+      font-family: var(--font-eng);
+      font-size: 9rem;
+      font-weight: 900;
+      line-height: 1;
+      transform: rotate(9deg);
+    }
+
+    .intro-manifesto-label {
+      position: relative;
+      z-index: 1;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      margin-bottom: 14px;
+      color: rgba(255, 255, 255, 0.78);
+      font-size: .78rem;
+      font-weight: 900;
+      letter-spacing: .08em;
+    }
+
+    .intro-manifesto-copy {
+      position: relative;
+      z-index: 1;
+      margin: 0;
+      color: #fff !important;
+      line-height: 1.55;
+    }
+
+    .intro-manifesto-copy span { display: block; }
+    .intro-manifesto-copy .intro-manifesto-first { margin-bottom: 8px; color: rgba(255, 255, 255, .88); font-size: 1rem; font-weight: 700; }
+    .intro-manifesto-copy .intro-manifesto-main { color: #fff; font-size: clamp(1.28rem, 4vw, 1.75rem); font-weight: 900; letter-spacing: .015em; }
+
+    .intro-goal-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin: 18px 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .intro-goal-grid li {
+      display: grid;
+      grid-template-columns: 42px 1fr;
+      align-items: center;
+      gap: 11px;
+      min-height: 78px;
+      padding: 13px 14px;
+      border: 1px solid rgba(34, 112, 147, 0.2);
+      border-radius: 8px;
+      background: linear-gradient(145deg, #fff 0%, #f5fafc 100%);
+      box-shadow: 0 3px 9px rgba(31, 75, 94, 0.08);
+      font-weight: 800;
+    }
+
+    .intro-goal-grid i {
+      display: grid;
+      width: 42px;
+      height: 42px;
+      place-items: center;
+      border-radius: 50%;
+      background: rgba(34, 112, 147, 0.11);
+      color: var(--accent-secondary);
+      font-size: 1.05rem;
+    }
+
+    .intro-goal-grid li:nth-child(even) i { background: rgba(179, 57, 57, 0.1); color: var(--accent-color); }
+
+    .intro-audience-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin: 18px 0 24px;
+      padding: 0;
+      list-style: none;
+    }
+
+    .intro-audience-grid li {
+      position: relative;
+      display: flex;
+      min-height: 118px;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: center;
+      gap: 10px;
+      padding: 16px;
+      overflow: hidden;
+      border: 1px solid rgba(34, 112, 147, 0.2);
+      border-radius: 8px;
+      background: linear-gradient(145deg, #fff 0%, #f4fafc 100%);
+      box-shadow: 0 3px 9px rgba(31, 75, 94, 0.08);
+      font-weight: 800;
+    }
+
+    .intro-audience-grid li::after {
+      position: absolute;
+      right: 9px;
+      bottom: -9px;
+      color: rgba(34, 112, 147, 0.07);
+      font-family: var(--font-eng);
+      font-size: 3.5rem;
+      font-weight: 900;
+      line-height: 1;
+    }
+
+    .intro-audience-grid li:nth-child(1)::after { content: '01'; }
+    .intro-audience-grid li:nth-child(2)::after { content: '02'; }
+    .intro-audience-grid li:nth-child(3)::after { content: '03'; }
+
+    .intro-audience-grid i {
+      display: grid;
+      width: 38px;
+      height: 38px;
+      place-items: center;
+      border-radius: 50%;
+      background: rgba(34, 112, 147, 0.11);
+      color: var(--accent-secondary);
+    }
+
+    .intro-audience-grid li:nth-child(2) i { background: rgba(179, 57, 57, 0.1); color: var(--accent-color); }
+    .intro-audience-grid span,
+    .intro-goal-grid span { position: relative; z-index: 1; white-space: normal; overflow-wrap: anywhere; }
+
+    .article-factor-grid strong {
+      display: block;
+      margin-bottom: 3px;
+      color: #294e5e;
+      font-size: .98rem;
+      line-height: 1.45;
+    }
+
+    .article-factor-grid small {
+      display: block;
+      color: #647b86;
+      font-size: .78rem;
+      font-weight: 700;
+      line-height: 1.5;
+    }
+
+    .author-profile { margin: 18px 0 8px; }
+    .author-profile-lead { margin-bottom: 20px; }
+
+    .author-block-title {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      margin: 24px 0 12px;
+      color: #2b596c;
+      font-size: 1rem;
+      font-weight: 900;
+    }
+
+    .author-block-title::after {
+      content: '';
+      height: 1px;
+      flex: 1;
+      background: linear-gradient(90deg, rgba(34,112,147,.32), transparent);
+    }
+
+    .author-block-title i { color: #b33939; }
+
+    .author-timeline {
+      position: relative;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      margin: 22px 0 18px;
+      padding: 22px 0 0;
+      list-style: none;
+    }
+
+    .author-timeline::before {
+      content: '';
+      position: absolute;
+      top: 8px;
+      right: 8%;
+      left: 8%;
+      height: 3px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #227093, #d08a2e 52%, #b33939);
+      opacity: .78;
+    }
+
+    .author-timeline li {
+      position: relative;
+      min-height: 185px;
+      padding: 25px 17px 17px;
+      border: 1px solid rgba(34, 112, 147, .2);
+      border-radius: 15px;
+      background: linear-gradient(150deg, rgba(255,255,255,.98), rgba(240,248,251,.94));
+      box-shadow: 0 5px 14px rgba(31, 75, 94, .08);
+    }
+
+    .author-timeline li::before {
+      content: '';
+      position: absolute;
+      top: -21px;
+      left: 50%;
+      width: 15px;
+      height: 15px;
+      border: 4px solid #fff;
+      border-radius: 50%;
+      background: #227093;
+      box-shadow: 0 0 0 2px rgba(34, 112, 147, .28);
+      transform: translateX(-50%);
+    }
+
+    .author-timeline li:nth-child(2)::before { background: #d08a2e; }
+    .author-timeline li:nth-child(3)::before { background: #b33939; }
+
+    .author-timeline-stage {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 10px;
+      color: #227093;
+      font-size: .78rem;
+      font-weight: 900;
+      letter-spacing: .04em;
+    }
+
+    .author-timeline li:nth-child(2) .author-timeline-stage { color: #a26319; }
+    .author-timeline li:nth-child(3) .author-timeline-stage { color: #a12f2f; }
+    .author-timeline strong { display: block; margin-bottom: 8px; color: #233f4c; font-size: 1.02rem; line-height: 1.55; }
+    .author-timeline p { margin: 0; color: #526b76; font-size: .9rem; line-height: 1.75; }
+
+    .author-qa {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin: 12px 0 0;
+    }
+
+    .author-qa-item {
+      overflow: hidden;
+      border: 1px solid rgba(34, 112, 147, .18);
+      border-radius: 14px;
+      background: #fff;
+      box-shadow: 0 4px 12px rgba(31, 75, 94, .07);
+    }
+
+    .author-qa dt {
+      display: flex;
+      min-height: 72px;
+      align-items: center;
+      gap: 9px;
+      margin: 0;
+      padding: 13px 14px;
+      background: rgba(34, 112, 147, .08);
+      color: #24576c;
+      font-weight: 900;
+      line-height: 1.55;
+    }
+
+    .author-qa dt i { color: #227093; }
+    .author-qa dd { margin: 0; padding: 15px; color: #4d626c; font-size: .9rem; line-height: 1.8; }
+
+    .article-visual-label {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      margin: 18px 0 11px;
+      color: #2b596c;
+      font-size: .92rem;
+      font-weight: 900;
+    }
+
+    .article-visual-label::after {
+      content: '';
+      height: 1px;
+      flex: 1;
+      background: linear-gradient(90deg, rgba(34,112,147,.3), transparent);
+    }
+
+    .article-visual-label i { color: #b33939; }
+
+    .article-info-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin: 12px 0 22px;
+      counter-reset: article-info;
+    }
+
+    .article-info-grid.cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .article-info-grid.cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+
+    .article-info-card {
+      position: relative;
+      overflow: hidden;
+      padding: 17px;
+      border: 1px solid rgba(34,112,147,.18);
+      border-radius: 14px;
+      background: linear-gradient(145deg, #fff, rgba(239,248,251,.88));
+      box-shadow: 0 4px 12px rgba(31,75,94,.07);
+      counter-increment: article-info;
+    }
+
+    .article-info-card::after {
+      content: counter(article-info, decimal-leading-zero);
+      position: absolute;
+      right: 9px;
+      bottom: -10px;
+      color: rgba(34,112,147,.065);
+      font-family: var(--font-eng);
+      font-size: 3.55rem;
+      font-weight: 900;
+      line-height: 1;
+      pointer-events: none;
+    }
+
+    .article-info-card.warm::after { color: rgba(179,57,57,.06); }
+    .article-info-card.green::after { color: rgba(39,139,93,.065); }
+    .article-info-card > * { position: relative; z-index: 1; }
+
+    .article-info-card.warm {
+      border-color: rgba(179,57,57,.18);
+      background: linear-gradient(145deg, #fff, rgba(255,244,238,.9));
+    }
+
+    .article-info-card.green {
+      border-color: rgba(39,139,93,.2);
+      background: linear-gradient(145deg, #fff, rgba(239,250,244,.92));
+    }
+
+    .article-info-icon {
+      display: grid;
+      width: 39px;
+      height: 39px;
+      margin-bottom: 10px;
+      place-items: center;
+      border-radius: 50%;
+      background: rgba(34,112,147,.1);
+      color: #227093;
+    }
+
+    .article-info-card.warm .article-info-icon { background: rgba(179,57,57,.1); color: #b33939; }
+    .article-info-card.green .article-info-icon { background: rgba(39,139,93,.11); color: #278b5d; }
+    .article-info-card strong { display: block; margin-bottom: 7px; color: #294e5e; font-size: .98rem; line-height: 1.55; }
+    .article-info-card p { margin: 0; color: #526b76; font-size: .88rem; line-height: 1.75; }
+
+    .v-route-map {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin: 14px 0 26px;
+      align-items: start;
+    }
+
+    .v-route-card {
+      position: relative;
+      min-height: 96px;
+      padding: 18px 16px;
+      border: 1px solid rgba(34,112,147,.2);
+      border-radius: 13px;
+      background: linear-gradient(145deg, #fff, #f2f9fb);
+      text-align: center;
+      box-shadow: 0 8px 20px rgba(34,112,147,.07);
+    }
+
+    .v-route-card i { display: block; margin-bottom: 8px; color: #227093; font-size: 1.25rem; }
+    .v-route-card strong { display: block; color: #294e5e; font-size: 1rem; line-height: 1.5; }
+    .v-route-card small { display: block; margin-top: 4px; color: #66808b; font-size: .82rem; font-weight: 700; }
+    .v-route-card.sp { border-color: rgba(179,57,57,.24); background: linear-gradient(145deg, #fff, #fff4ee); }
+    .v-route-card.sp i,
+    .v-route-card.sp strong { color: #b33939; }
+
+    .v-route-inline-branches {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 15px;
+      padding-top: 15px;
+      border-top: 1px dashed rgba(34,112,147,.3);
+    }
+
+    .v-route-child {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 62px;
+      padding: 12px 8px;
+      border: 1px solid rgba(34,112,147,.17);
+      border-radius: 11px;
+      background: rgba(255,255,255,.82);
+      color: #456673;
+      text-align: center;
+      font-size: .86rem;
+      font-weight: 800;
+      line-height: 1.6;
+    }
+
+    .v-route-note {
+      margin: 10px 3px 0;
+      color: #66808b;
+      font-size: .78rem;
+      line-height: 1.65;
+      text-align: left;
+    }
+
+    .article-flow {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin: 14px 0 24px;
+      padding: 0;
+      list-style: none;
+      counter-reset: article-step;
+    }
+
+    .article-flow.four-steps { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+
+    .article-flow li {
+      position: relative;
+      min-height: 104px;
+      padding: 17px 12px 17px 50px;
+      border: 1px solid rgba(34,112,147,.19);
+      border-radius: 13px;
+      background: #f8fcfd;
+      color: #315768;
+      text-align: left;
+      font-size: .88rem;
+      font-weight: 800;
+      line-height: 1.65;
+      counter-increment: article-step;
+    }
+
+    .article-flow li::before {
+      content: counter(article-step);
+      position: absolute;
+      top: 50%;
+      left: 13px;
+      display: grid;
+      width: 27px;
+      height: 27px;
+      place-items: center;
+      border-radius: 50%;
+      background: #227093;
+      color: #fff;
+      font-size: .8rem;
+      font-weight: 900;
+      line-height: 1;
+      box-shadow: 0 3px 8px rgba(34,112,147,.18);
+      transform: translateY(-50%);
+    }
+
+    .article-flow li:last-child::before { background: #b33939; }
+    .article-flow i { margin-right: 6px; color: #227093; font-size: 1rem; }
+    .article-flow li:last-child i { color: #b33939; }
+
+    .article-flow.stop-flow {
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .article-flow.stop-flow li {
+      display: flex;
+      min-height: 74px;
+      align-items: center;
+      padding: 13px 12px 13px 49px;
+      font-size: .98rem;
+      line-height: 1.45;
+    }
+
+    .article-flow.data-flow li {
+      display: flex;
+      min-height: 64px;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 10px 12px 10px 46px;
+      text-align: left;
+      font-size: 1.04rem;
+      line-height: 1.4;
+      white-space: nowrap;
+    }
+
+    .article-flow.data-flow i {
+      order: 2;
+      margin: 0 2px 0 auto;
+      padding-left: 8px;
+      font-size: 1.08rem;
+    }
+
+    .article-observation-list {
+      margin: 22px 0;
+      padding-left: 1.5em;
+    }
+
+    .article-observation-list li + li { margin-top: 8px; }
+
+    .article-flow.factor-flow li:nth-child(1) {
+      border-color: rgba(34,112,147,.24);
+      background: linear-gradient(145deg, #fff, rgba(239,248,251,.92));
+    }
+    .article-flow.factor-flow li:nth-child(2) {
+      border-color: rgba(63,130,109,.25);
+      background: linear-gradient(145deg, #fff, rgba(239,249,245,.94));
+    }
+    .article-flow.factor-flow li:nth-child(3) {
+      border-color: rgba(179,57,57,.22);
+      background: linear-gradient(145deg, #fff, rgba(255,244,238,.92));
+    }
+    .article-flow.factor-flow li:nth-child(1)::before { background: #227093; }
+    .article-flow.factor-flow li:nth-child(2)::before { background: #3f826d; }
+    .article-flow.factor-flow li:nth-child(3)::before { background: #b33939; }
+    .article-flow.factor-flow li:nth-child(1) i,
+    .article-flow.factor-flow li:nth-child(1) strong { color: #227093; }
+    .article-flow.factor-flow li:nth-child(2) i,
+    .article-flow.factor-flow li:nth-child(2) strong { color: #3f826d; }
+    .article-flow.factor-flow li:nth-child(3) i,
+    .article-flow.factor-flow li:nth-child(3) strong { color: #b33939; }
+
+    .article-formula {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      margin: 15px 0 22px;
+      padding: 18px;
+      border-radius: 14px;
+      background: #203f4d;
+      color: #fff;
+      box-shadow: 0 5px 14px rgba(25,57,71,.15);
+      font-weight: 900;
+    }
+
+    .article-formula span { padding: 7px 10px; border-radius: 8px; background: rgba(255,255,255,.1); }
+    .article-formula b { color: #f0b85e; font-size: 1.2rem; }
+
+    .article-priority-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      margin: 14px 0 22px;
+    }
+
+    .article-priority-item {
+      padding: 14px 12px;
+      border: 1px solid rgba(34,112,147,.17);
+      border-radius: 12px;
+      background: #fff;
+      text-align: center;
+    }
+
+    .article-priority-item .rank { display: block; margin-bottom: 5px; color: #8a6c59; font-size: .72rem; font-weight: 900; }
+    .article-priority-item strong { display: block; color: #315768; }
+    .article-priority-item.primary { border-color: rgba(179,57,57,.36); background: rgba(179,57,57,.07); }
+    .article-priority-item.primary .rank, .article-priority-item.primary strong { color: #a12f2f; }
+
+    @media (max-width: 600px) {
+      .intro-manifesto { padding: 25px 20px 24px; }
+      .intro-audience-grid { grid-template-columns: 1fr; }
+      .intro-audience-grid li { min-height: 86px; flex-direction: row; align-items: center; justify-content: flex-start; }
+      .intro-goal-grid { grid-template-columns: 1fr; }
+      .intro-goal-grid li { min-height: 70px; }
+      .author-timeline { grid-template-columns: 1fr; gap: 13px; padding: 0 0 0 22px; }
+      .author-timeline::before { top: 18px; right: auto; bottom: 18px; left: 7px; width: 3px; height: auto; }
+      .author-timeline li { min-height: auto; padding: 17px; }
+      .author-timeline li::before { top: 25px; left: -22px; transform: none; }
+      .author-qa { grid-template-columns: 1fr; }
+      .author-qa dt { min-height: auto; }
+      .article-info-grid,
+      .article-info-grid.cols-3,
+      .article-info-grid.cols-4,
+      .article-priority-grid { grid-template-columns: 1fr; }
+      .v-route-map { grid-template-columns: 1fr; }
+      .article-flow,
+      .article-flow.four-steps { grid-template-columns: 1fr; gap: 10px; }
+      .article-flow li { min-height: 78px; padding: 15px 14px 15px 53px; }
+      .article-flow li::before { left: 14px; }
+    }
+
+  </style>
+  <!-- 構造化データ (JSON-LD) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Article",
+        "@id": "https://pachinko-tactics.com/analysis/hanemonowin#article",
+        "isPartOf": {
+          "@type": "WebPage",
+          "@id": "https://pachinko-tactics.com/analysis/hanemonowin",
+          "url": "https://pachinko-tactics.com/analysis/hanemonowin",
+          "name": "ハネモノの勝ち方・攻略｜勝てる台を見極めるための教科書"
+        },
+        "headline": "ハネモノの勝ち方・攻略｜勝てる台を見極めるための教科書",
+        "image": [
+          "https://images.pachinko-tactics.com/hanemonowin/hanemonowinsamune2.jpg"
+        ],
+        "datePublished": "2026-08-17T00:00:00+09:00",
+        "dateModified": "2026-08-17T00:00:00+09:00",
+        "author": {
+          "@type": "Person",
+          "name": "ワオ"
+        },
+        "publisher": {
+          "@type": "Organization",
+          "name": "PACHINKO TACTICS",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "https://pachinko-tactics.com/twitter_icon_themeE.png"
+          }
+        },
+        "mainEntityOfPage": "https://pachinko-tactics.com/analysis/hanemonowin"
+      },
+      {
+        "@type": "BreadcrumbList",
+        "@id": "https://pachinko-tactics.com/analysis/hanemonowin#breadcrumb",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "TOP",
+            "item": "https://pachinko-tactics.com/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "機種攻略",
+            "item": "https://pachinko-tactics.com/#tab-info"
+          },
+          {
+            "@type": "ListItem",
+            "position": 3,
+            "name": "ハネモノの勝ち方",
+            "item": "https://pachinko-tactics.com/analysis/hanemonowin"
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+</head>
+<body>
+
+  <div class="breadcrumbs">
+    <div class="breadcrumbs-inner">
+      <ul>
+        <li><a href="/"><i class="fa-solid fa-house"></i> TOP</a></li>
+        <li><a href="/#tab-info">機種攻略</a></li>
+        <li>ハネモノの勝ち方</li>
+      </ul>
+    </div>
+  </div>
+
+  <main class="container">
+    <div class="top-nav-buttons">
+      <a href="/" class="nav-btn"><i class="fa-solid fa-arrow-left"></i> TOPへ戻る</a>
+      <button type="button" class="nav-btn" id="hanemono-tool-open" aria-haspopup="dialog" aria-controls="hanemono-tool-dialog"><i class="fa-solid fa-calculator"></i> ハネモノ期待値計算／攻略ツール</button>
+    </div>
+
+    <dialog class="hanemono-tool-dialog" id="hanemono-tool-dialog" aria-labelledby="hanemono-tool-dialog-title">
+      <div class="hanemono-tool-dialog-inner">
+        <div class="hanemono-tool-dialog-header">
+          <div class="hanemono-tool-dialog-title" id="hanemono-tool-dialog-title">機種を選択してください</div>
+          <button type="button" class="hanemono-tool-dialog-close" id="hanemono-tool-close" aria-label="閉じる"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="hanemono-tool-list">
+          <a class="hanemono-tool-link" href="https://pachinko-tactics.com/tools/famista"><span>ハネモノファミスタ</span><i class="fa-solid fa-chevron-right"></i></a>
+          <a class="hanemono-tool-link" href="https://pachinko-tactics.com/tools/odatebuta2"><span>おだてブタ2</span><i class="fa-solid fa-chevron-right"></i></a>
+          <a class="hanemono-tool-link" href="https://pachinko-tactics.com/tools/fineplay"><span>ファインプレー</span><i class="fa-solid fa-chevron-right"></i></a>
+        </div>
+      </div>
+    </dialog>
+
+    <!-- HANEMONOWIN:INTRO:START -->
+    <div class="panel">
+      <div class="article-kicker">
+        HANEMONO PLAYBOOK
+      </div>
+      <h1 class="article-title">ハネモノの勝ち方｜知識0から勝てる台を見極める</h1>
+
+      <img src="https://images.pachinko-tactics.com/hanemonowin/hanemonowinsamune2.jpg" alt="ハネモノの勝ち方　サムネ" class="responsive-img" fetchpriority="high" decoding="async">
+
+      <h2 class="section-title"><i class="fa-solid fa-file-invoice"></i> 概要</h2>
+      <div style="font-size: 0.85rem; color: var(--text-sub); margin-bottom: 12px; font-weight: 500;">
+        <span style="margin-right: 15px;">公開日: 2026/08/17</span>
+        <span>最終更新日: 2026/08/17</span>
+      </div>
+<p>ハネモノの勝ち方で最も重要なのは、特別な攻略法や高度な技術を探すことではなく、<strong>勝てる台を見極めることです</strong>。</p>
+<p>この記事では、台の良し悪しを鳴き・拾い・役モノの3元素に分け、釘とネカセ、拾わせるストローク、V入賞につながる玉の挙動を順番に解説します。さらに、実戦で数えるデータ、続行判断、期待値計算／攻略ツールの使い方までまとめました。</p>
+<p>これからハネモノを始める人が、何を見て、何を試し、どうデータを取り、自分で勝てる台を判断するのか。その手順を知識0からたどれる攻略記事です。</p>
+<p>すでにハネモノを打っている人にも、台の見方や判断基準を整理するうえで参考になる内容を含んでいますので、ぜひ読んでいただけるとありがたいです。</p>
+<hr>
+    </div>
+    <!-- HANEMONOWIN:INTRO:END -->
+
+    <div class="panel" id="toc-container">
+      <h2 class="section-title"><i class="fa-solid fa-list-ol"></i> 目次</h2>
+      <div class="toc-panel" id="toc" style="padding: 16px; border-radius: 4px;">
+        <div class="toc-instruction" style="font-size: 0.85rem; color: var(--text-sub); margin-bottom: 12px;"><i class="fa-solid fa-circle-info"></i> ※任意の項目をタップすると、その項目まで移動します</div>
+        <ul class="toc-list">
+          <li><a href="#introduction">はじめに</a></li>
+          <li><a href="#chapter-1">① ハネモノとは（前提知識）</a></li>
+          <li><a href="#chapter-2">② 勝てる台を見分ける3元素（鳴き・拾い・役モノ）</a></li>
+          <li><a href="#chapter-3">③ 鳴きの見方</a></li>
+          <li><a href="#chapter-4">④ 拾いの見方</a></li>
+          <li><a href="#chapter-5">⑤ 役モノの見方</a></li>
+<li><a href="#chapter-6">⑥ 勝てる台を見極めるデータの取り方</a></li>
+<li><a href="#chapter-7">⑦ 市場が広がって今後考えられること</a></li>
+          <li><a href="#chapter-8">⑧ 一番伝えたいこと</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- HANEMONOWIN:INTRODUCTION:START -->
+    <div class="panel">
+      <div class="chapter-heading-row">
+        <h2 class="section-title" id="introduction"><i class="fa-solid fa-door-open"></i> はじめに</h2>
+        
+      </div>
+
+      <h3 class="content-subtitle" id="introduction-for-whom">誰に向けて書いたのか</h3>
+<ul class="intro-audience-grid" aria-label="この記事を届けたい人">
+  <li><i class="fa-solid fa-seedling"></i><span>これからハネモノを始めたい人</span></li>
+  <li><i class="fa-solid fa-circle-plus"></i><span>パチンコで勝つための選択肢に、ハネモノを加えたい人</span></li>
+  <li><i class="fa-solid fa-route"></i><span>すでにハネモノを打っているけど、攻略に悩んでいる人</span></li>
+</ul>
+
+<p>ハネモノって、ちょっととっつきにくいんですよね。</p>
+<p>玄人じゃないと勝てない。誰かに教わらないと、良い台なんて見つけられない。そもそも、何をどう考えればいいのかも分からない。そんなイメージを持っている人も多いと思います。</p>
+<p>自分も最初はまったく同じでした。何か特別な攻略法があるんじゃないか。玄人のような知識や技術がなければ、そもそも勝負の土俵に立てないんじゃないか。たとえ良い台でも、自分が打ってしまうと勝てないのではないか。そこまで思っていました。</p>
+<p>でも、実戦を重ねていくうちに、その思い込みは少しずつ消えていきました。今では、それなりに勝てるようになっています。</p>
+<p>何を見て、どう考え、どう実戦したことで、そこから抜け出せたのか。その過程を、この記事では伝えようと思います。</p>
+<p>ですので、この記事で渡したいものは――</p>
+
+<div class="intro-manifesto" role="note" aria-label="この記事で渡したいもの">
+  <div class="intro-manifesto-label"><i class="fa-solid fa-map"></i> この記事で渡したいもの</div>
+  <p class="intro-manifesto-copy">
+    <span class="intro-manifesto-first">この記事は、ハネモノの「必勝法」を記した記事ではありません。</span>
+    <span class="intro-manifesto-main">自分で答えを出すための<br>考え方を渡す記事です。</span>
+  </p>
+</div>
+
+<p>この記事が、ハネモノ攻略のヒントになったり、自分で始める最初の一歩につながったりすれば幸いです。</p>
+
+      <h3 class="content-subtitle" id="introduction-goal">読むと、何ができるようになるのか</h3>
+<p>この記事を読み終えたとき、次の4つが分かる状態を目指します。</p>
+
+<ul class="intro-goal-grid">
+  <li><i class="fa-solid fa-eye"></i><span>どこを見ればいいのか</span></li>
+  <li><i class="fa-solid fa-flask"></i><span>何を試せばいいのか</span></li>
+  <li><i class="fa-solid fa-chart-column"></i><span>どうやってデータを取るのか</span></li>
+  <li><i class="fa-solid fa-compass"></i><span>そこからどう自分の答えを作るのか</span></li>
+</ul>
+
+<p>もちろん、読んだだけでハネモノに勝てるようになるわけではありません。まだ、自分で打って取ったデータがないからです。</p>
+<p>でも、「結局、何をどう考えればいいの？」という状態からは抜けられます。まず何を見て、何を試すのか。そこから先は、自分の実戦で確かめていけます。</p>
+<div class="intro-manifesto" aria-label="この記事を読むことで目指す到達点">
+  <div class="intro-manifesto-label"><i class="fa-solid fa-flag-checkered"></i> この記事を読むと</div>
+  <p class="intro-manifesto-copy">
+    <span class="intro-manifesto-first">つまり――</span>
+    <span class="intro-manifesto-main">ハネモノの攻略を、<br>自分で始められるようになります。</span>
+  </p>
+</div>
+
+      <h3 class="content-subtitle" id="chapter-1-myth">攻略法神話が崩れたきっかけ</h3>
+<p>自分がハネモノを始めたのは、1日で勝てる平均額をもっと上げたいと考えたためです。</p>
+<p>当時、自分はパチンコで生活していました。できるだけ安定して勝つため、甘海を中心とした甘デジをメインに打っていました。</p>
+<p>ただ、甘デジは時間効率の面で、1日に積める期待値に限界があります。平均すれば1日1万5千円ほど。良い台なら2万5千円、3万円に届くこともありましたが、そう何度も打てるものではありませんでした。</p>
+<p>そこで、台の状態が良ければ安定して勝てるように見えたハネモノに注目しました。</p>
+
+<div class="article-check-block">
+  <div class="article-check-label"><i class="fa-solid fa-clock-rotate-left"></i> ハネモノを始めた頃</div>
+  <p>当時は、CRトキオスペシャルとCRトキオプレミアムがまだホールに残り、その後にPニュートキオが登場する時期でした。トキオシリーズ以外のハネモノはほとんど姿を消しており、いわば衰退期の始まりともいえる状況でした。</p>
+</div>
+<h4 class="article-subhead">勝てない理由を、特殊な技術に求めていた</h4>
+<p>ところが、ハネモノを打ち出してすぐ勝てたかと言われると、そうではありませんでした。</p>
+<p>衰退期の始まりとはいえ、当時はまだハネモノを打つ人が多く、カチカチ君などでデータを取りながら、台を見極めようとする人も少なくありませんでした。</p>
+<p>ハネモノの台数に対して、打ちたい人の方が多い。つまり、まだ競争率が高かったんです。空き台が出ればすぐ埋まり、期待値の低そうな台まで打たれる。そんな状況だったので、勝てる台になかなか座れず、自分も結果を出せませんでした。</p>
+<p>そこで自分の中に生まれたのが、<strong>ハネモノは特殊な技術を持っていないと勝てない</strong>という思い込みでした。</p>
+<p>物理的に玉が動く機種だからこそ、どこかに特別な攻略法があり、それを知っている人だけが良い結果を出せる。勝てる台に座れたとしても、技術がなければ勝てない。自分はそう考えていました。</p>
+<p>その考えに最初に疑問を持ったのは、ほかの打ち手を見ていたときでした。</p>
+<p>自分の目には、特別な技術を使っているようには見えない。それでも結果を出している人がいる。それなら、自分が勝てない理由を「知らない攻略法」のせいにしているだけではないか。そもそも、勝つために特殊な技術は本当に必要なのか。そう考えるようになりました。</p>
+<h4 class="article-subhead">勝てる台を打って、基準ができた</h4>
+<p>その後、少しずつハネモノを打つ人が減り、競争率も下がっていきました。それに伴って、勝てる台に座れる機会も増えていきました。実際に結果が出たことで、特殊な技術がなければ勝てないわけではないと分かりました。</p>
+<p>そうやって勝てる台を継続して打ち、その台の玉の動きを見て仮説を立て、データを取り、自分の感覚とも照らし合わせる。それを繰り返すことで、ようやく「こういう台なら勝てる」という基準が、自分の中にできていきました。</p>
+<p>その基準ができ、特別な技術がなくても結果を出せることが分かると、以前とは周囲の見え方も変わりました。</p>
+<p>そこで初めて、安定して結果を出していた人たちは、何か特別な攻略法で勝っていたのではなく、前日に良かった台の据え置きを狙っていることが多いのだと理解できました。</p>
+<p>ここで重要なのは順序です。</p>
+<p>据え置き狙いを発見したから、特殊な技術は必要ないと分かったのではありません。自分で勝てる台を打ち、実測と言語化を重ねて認識が変わった結果、ほかの打ち手が何をしていたのかも見えるようになりました。</p>
+<p>誰かから答えを教わったのではなく、自分でハネモノの攻略を進め、答えにたどり着けたこと。そこが大事でした。</p>
+<h4 class="article-subhead">特別な技術より、勝てる台を見極める</h4>
+<p>勝てる台は、誰が打ってもそれなりに結果が出ます。反対に、勝てない台は、上手い人が打っても簡単には勝てません。技術で改善できる部分はあっても、それはハネモノの勝敗を決める一番大きな要因ではない。これが、現在の自分の結論です。</p>
+<p>今後も、SNS等でハネモノに関する攻略法を見かけることがあると思います。しかし、そのようなものは、まずは基本的に存在しないものとして考えた方がいいです。</p>
+<p>攻略法を探すことに時間を使うよりも、目の前の台が勝てる台なのか、勝てない台なのかを見極める。その方が、実際の結果には大きく影響します。</p>
+
+<div class="intro-manifesto" role="note" aria-label="ハネモノで勝つために最重要となる考え方">
+  <div class="intro-manifesto-label"><i class="fa-solid fa-crosshairs"></i> ここまでの結論</div>
+  <p class="intro-manifesto-copy">
+    <span class="intro-manifesto-first">ハネモノで勝つには――</span>
+    <span class="intro-manifesto-main">特別な技術はいらない。<br>勝てる台を見極める考え方が最重要。</span>
+  </p>
+</div>
+
+<div class="article-check-block">
+  <div class="article-check-label"><i class="fa-solid fa-shield-halved"></i> ハネモノの「攻略法」について</div>
+  <p>過去のハネモノには、技術によって結果を大きく変えられる攻略法が実際に存在しました。ただ、その中には不正行為、いわゆるゴトに当たるものもあり、そうでなくても実行するのがかなり難しいものが多くあります。</p>
+  <p>また、打ち手が知っている攻略法は、ホール側も知っていると考えた方がいいです。すぐに対策される可能性がありますし、やり方によっては注意を受けたり、出入り禁止になったりするリスクも高まります。</p>
+  <p>簡単に勝てる攻略法がある、という話には飛びつかない。基本的にはないものとして台を見極める。これは、ハネモノを長く打ち続けるためにも大切な考え方だと思っています。</p>
+</div>
+
+<h3 class="content-subtitle" id="introduction-author">この記事を書いている人</h3>
+<div class="author-profile">
+  <p class="author-profile-lead">ここまで読んで、「今はどれくらいハネモノを打っている人なの？」と思った方もいるかもしれません。少しだけ、自分の経歴と現在の実戦について紹介します。</p>
+
+  <h4 class="author-block-title"><i class="fa-solid fa-timeline"></i> これまでの経歴</h4>
+  <ol class="author-timeline" aria-label="経歴">
+    <li>
+      <span class="author-timeline-stage"><i class="fa-solid fa-coins"></i> 実戦期・約3年</span>
+      <strong>パチンコだけで生活</strong>
+      <p>甘デジを軸に実戦していましたが、2021年4月頃からハネモノも取り入れました。</p>
+    </li>
+    <li>
+      <span class="author-timeline-stage"><i class="fa-solid fa-pen-nib"></i> 制作期・約3年</span>
+      <strong>専門メディアで記事制作</strong>
+      <p>パチンコ・パチスロ専門メディアで、ハネモノを中心とした攻略コンテンツの制作を担当しました。</p>
+    </li>
+    <li>
+      <span class="author-timeline-stage"><i class="fa-solid fa-location-dot"></i> 現在</span>
+      <strong>週5日、終日実戦</strong>
+      <p>そのうち週3～4日はハネモノを実戦。10店舗以上を見ながら、現在はハネモノファミスタを主戦機にしています。</p>
+    </li>
+  </ol>
+
+  <h4 class="author-block-title"><i class="fa-solid fa-comments"></i> 現在の実戦Q&amp;A</h4>
+  <dl class="author-qa">
+    <div class="author-qa-item">
+      <dt><i class="fa-solid fa-seedling"></i> どんな状況からハネモノを始めた？</dt>
+      <dd>知識ゼロで、周囲に情報交換できる人もいないところから始めました。今も実戦データとメモを見返しながら、自分の判断基準を更新しています。</dd>
+    </div>
+    <div class="author-qa-item">
+      <dt><i class="fa-solid fa-clipboard-list"></i> 実戦で何を記録している？</dt>
+      <dd>鳴き、拾い、役モノ確率に関わるデータ、台の挙動、収支です。200回以上鳴かせた台は挙動もメモし、夜にその後の結果と照らし合わせています。</dd>
+    </div>
+    <div class="author-qa-item">
+      <dt><i class="fa-solid fa-baseball-bat-ball"></i> なぜハネモノファミスタが中心？</dt>
+      <dd>ゲーム性が好きなのに加えて、設置状況、ホールでの扱い、ライバルの人数のバランスが良く、自分で台を選びやすいからです。</dd>
+    </div>
+    <div class="author-qa-item">
+      <dt><i class="fa-solid fa-circle-question"></i> 台選びを間違えることはない？</dt>
+      <dd>もちろんあります。ファミスタでは判断の精度が上がりましたが、ほかの機種では今でも読み違えます。だからこそ、実戦後の見直しを続けています。</dd>
+    </div>
+  </dl>
+</div>
+
+    </div>
+    <!-- HANEMONOWIN:INTRODUCTION:END -->
+
+    <!-- HANEMONOWIN:CHAPTER-01:START -->
+    <div class="panel">
+      <div class="chapter-heading-row">
+        <h2 class="section-title" id="chapter-1"><i class="fa-solid fa-book-open"></i> ① ハネモノとは（前提知識）</h2>
+        
+      </div>
+
+      <nav class="chapter-toc" aria-label="この章の目次">
+        <div class="chapter-toc-title"><i class="fa-solid fa-location-arrow"></i> この章の目次</div>
+        <ul>
+          <li><a href="#chapter-1-difference">デジパチとの大きな違い</a></li>
+          <li><a href="#chapter-1-atype">パチンコというより“Aタイプ”</a></li>
+          <li><a href="#chapter-1-setting-difference">設定とネカセの大きく異なる点</a></li>
+        </ul>
+      </nav>
+
+      <h3 class="subset-title" id="chapter-1-difference">デジパチとの大きな違い</h3>
+<p>デジパチには、RUSHやLT（ラッキートリガー）のように、一度引けば短期の結果を大きく変えられるきっかけがあります。回らない台でも、その一度で大きく勝つ日はあります。</p>
+
+<div class="article-visual-label"><i class="fa-solid fa-scale-balanced"></i> 勝ち方の違い</div>
+<div class="article-info-grid">
+  <div class="article-info-card warm">
+    <span class="article-info-icon"><i class="fa-solid fa-bolt"></i></span>
+    <strong>デジパチ：強いトリガーがある</strong>
+    <p>RUSHやLTを引けば、その一度が一日の結果を大きく動かすことがあります。</p>
+  </div>
+  <div class="article-info-card">
+    <span class="article-info-icon"><i class="fa-solid fa-layer-group"></i></span>
+    <strong>ハネモノ：一回ずつ積み重ねる</strong>
+    <p>一回のV入賞で得た出玉を、何度も積み上げていくのが基本です。</p>
+  </div>
+</div>
+
+<p>ハネモノには、「ここだけ引けばどうにかなる」というほど強いトリガーが基本的にありません。ハネモノファミスタやファインプレーには続けて当たるように見える場面もありますが、LTのような一撃の契機とは別物です。</p>
+
+      <h3 class="subset-title" id="chapter-1-atype">パチンコというより“Aタイプ”</h3>
+
+<h4 class="content-subtitle">設定≒ネカセ</h4>
+<p>デジパチともう一つ、大きく異なる点があります。それは、<strong>台の状態によって役モノ確率が変わり、その結果として大当たり確率も変わる</strong>ことです。</p>
+<p>役モノ確率とは、役モノへ入った玉が何個に1個V入賞するかを示す確率です。台の傾斜であるネカセが変われば、役モノ内の玉の速度や進路も変わります。するとV入賞のしやすさも変わり、役モノ確率、そして大当たり確率が変わります。</p>
+<p>この役モノ確率を左右するネカセが、パチスロでいう設定に近い働きをします。</p>
+
+<div class="article-formula" aria-label="役モノ確率と拾い率から大当たり確率を考える式">
+  <span>役モノ確率の分母</span><b>÷</b><span>拾い率</span><b>＝</b><span>大当たり確率の分母</span>
+</div>
+<p>たとえば、役モノ確率が1/10で、拾い率が50％なら、計算に使うのは「10」と「0.5」です。<strong>10 ÷ 0.5 ＝ 20</strong>なので、大当たり確率は概算で1/20となります。</p>
+
+<h4 class="content-subtitle">ネカセで変わるもの</h4>
+<div class="article-info-grid">
+  <div class="article-info-card">
+    <span class="article-info-icon"><i class="fa-solid fa-arrows-left-right-to-line"></i></span>
+    <strong>奥行き方向</strong>
+    <p>台が起きているか、寝ているか。玉の速度や滞留時間が変わります。</p>
+  </div>
+  <div class="article-info-card warm">
+    <span class="article-info-icon"><i class="fa-solid fa-left-right"></i></span>
+    <strong>左右方向</strong>
+    <p>左右のどちらが高いか。玉が寄る方向や部品へ触れる位置が変わります。</p>
+  </div>
+</div>
+
+<p>こうした設定に近い条件があり、なおかつ一回の大当たりだけで勝負が決まるのではなく、BIGやREGを何度も重ねるように一回ずつ出玉を積み重ねていく。ハネモノは、同じパチンコのデジパチより、パチスロの純粋なAタイプに近い感覚なんですよね。</p>
+
+<h4 class="content-subtitle">ジャグラーより、ハナビに近い</h4>
+<p>Aタイプの中でも、感覚としてはジャグラーよりハナビ寄りです。理由は、大当たり以外にも台を判断する材料がたくさんあるからです。</p>
+
+<div class="article-info-grid cols-3">
+  <div class="article-info-card">
+    <span class="article-info-icon"><i class="fa-solid fa-route"></i></span>
+    <strong>どのルートを通ったか</strong>
+    <p>V入賞へ向かう途中の進み方を見ます。</p>
+  </div>
+  <div class="article-info-card">
+    <span class="article-info-icon"><i class="fa-solid fa-location-crosshairs"></i></span>
+    <strong>良い位置へ向かったか</strong>
+    <p>当たるために必要な場所へ玉が近づいたかを見ます。</p>
+  </div>
+  <div class="article-info-card warm">
+    <span class="article-info-icon"><i class="fa-solid fa-person-running"></i></span>
+    <strong>途中の壁を越えたか</strong>
+    <p>結果の前にある小さな成功を一つずつ拾います。</p>
+  </div>
+</div>
+
+<p>大当たりだけを見ていると、勝てる台が短期的に当たっていないとき、見切るしかなくなります。でも、途中に良い玉の挙動が何度も出ていれば、「台は悪くない。今は当たっていないだけかもしれない」と考えられます。</p>
+<p><strong>結果だけでなく、その手前の挙動まで見られる。</strong>これが、ハネモノで勝てる台を早く見分けるための大きな武器です。</p>
+
+      <h3 class="subset-title" id="chapter-1-setting-difference">設定とネカセの大きく異なる点</h3>
+<p>ここまで、ネカセはパチスロの設定に近い働きをすると話しました。ただし、設定とネカセは同じものではありません。</p>
+
+<div class="article-info-grid">
+  <div class="article-info-card warm">
+    <span class="article-info-icon"><i class="fa-solid fa-eye"></i></span>
+    <strong>見た目に変化が出る</strong>
+    <p>パチスロの設定は、設定を変えても台の見た目までは変わりません。一方、ネカセは物理的に台の状態が変わるため、目視から前日との差を考えることができます。</p>
+  </div>
+  <div class="article-info-card">
+    <span class="article-info-icon"><i class="fa-solid fa-fingerprint"></i></span>
+    <strong>同じ傾きでも同じとは限らない</strong>
+    <p>汚れや部品の個体差があるため、同じネカセでも役モノ確率まで同一とは限りません。</p>
+  </div>
+</div>
+
+<p>つまり、正確には「設定＝ネカセ」ではなく、<strong>設定≒ネカセ</strong>です。見た目は打つ前のヒントになりますが、それだけで役モノ確率まで断定できるものではありません。</p>
+
+<h4 class="content-subtitle">ネカセ読みだけでは、打ち切れない</h4>
+<p>ネカセは見た目で前日との差を追える可能性があります。だから、自分も必ず参考にします。</p>
+<p>ただ、<strong>玉を打たず、見た目のネカセ読みだけで打ち切る台を決めることはできません。</strong>以前の自分は、経験の長い人なら台を一瞬見ただけでネカセを読み切れると思っていました。でも、実際はそうではありませんでした。</p>
+<p>朝に選ばれなかった台が、その日の一番良い役モノ挙動を見せることもあります。上級者でも、目視だけで即断せず、玉の動きを時間をかけて確認しています。</p>
+
+<div class="article-visual-label"><i class="fa-solid fa-layer-group"></i> 大切な3つの判断材料</div>
+<ol class="intro-audience-grid article-factor-grid" aria-label="大切な3つの判断材料">
+  <li><i class="fa-solid fa-eye"></i><span><strong>見た目のネカセ</strong><small>打つ前に立てる仮説</small></span></li>
+  <li><i class="fa-solid fa-circle-nodes"></i><span><strong>実際の玉の挙動</strong><small>打ちながら確かめる材料</small></span></li>
+  <li><i class="fa-solid fa-chart-line"></i><span><strong>蓄積した実測データ</strong><small>判断を更新する材料</small></span></li>
+</ol>
+
+<h4 class="content-subtitle">見るのは、一発の良い玉ではなく割合</h4>
+<p>自分は、気になる台なら役モノへ10球ほど入れます。時間にすれば10〜20分程度です。その間に鳴き・拾い・役モノを見て、勝てそうか、勝てなさそうかを推測します。</p>
+<p>良いネカセでも、すべての玉が良い動きをするわけではありません。反対に、悪い台でも一時的に良い玉は出ます。違うのは、良い挙動が出るかどうかではなく、<strong>良い挙動が出る割合</strong>です。</p>
+<p>「見た目は変わっていない気がする。でも、玉の挙動は良い」。そんなときに、短期のムラと考えてやめるのか、挙動を信じて続けるのか。この判断がそのまま収支へつながるところも、ハネモノの面白さだと思っています。</p>
+
+<h4 class="content-subtitle">最も異なる点</h4>
+<div class="intro-manifesto" role="note" aria-label="設定とネカセの最も大きな違い">
+  <div class="intro-manifesto-label"><i class="fa-solid fa-scale-balanced"></i> 設定とネカセの最も大きな違い</div>
+  <p class="intro-manifesto-copy">
+    <span class="intro-manifesto-first">設定とネカセの最も大きな違いは――</span>
+    <span class="intro-manifesto-main">ホールがネカセを変えたことを、<br>公の情報として扱えないところ。</span>
+  </p>
+</div>
+<p>台の状態がメンテナンスの範囲で変わることは許容されています。ただ、それをパチスロの設定変更と同じように、「今日は良いネカセです」「全台ネカセを変えました」と告知できるものではありません。</p>
+<p>もちろん、パチスロの設定も、「何番台が設定6でした」と直接公表できるわけではありません。それでも、SNSやLINEを見ていると、高設定だったと受け取れる示唆や振り返りを見かけることはあります。ネカセは、そのように匂わせることすら難しい。仮に全台の大当たり確率が軽かったとしても、「今日は全台系でした」とネカセの変更を認知させるような言い方はできません。</p>
+<p>だから、ネカセで大当たり確率が変わるという情報は表に出てきません。ハネモノを打っている人には暗黙の了解に近い話なのに、初めて触る人が調べても、きちんと説明した情報はほとんど見つからないんですよね。</p>
+<p>正直、ハネモノを少しでも打っている人にとっては、ここまでの話は当たり前かもしれません。それでも、この記事はハネモノをまったく知らない人にも向けて書いています。だからこそ、あえてここまで丁寧に説明しました。<strong>表では教えてもらえないけれど、ハネモノを考えるうえでは最初に知っておきたい前提</strong>だからです。</p>
+<hr>
+    </div>
+    <!-- HANEMONOWIN:CHAPTER-01:END -->
+
+    <!-- HANEMONOWIN:CHAPTER-02:START -->
+    <div class="panel">
+      <div class="chapter-heading-row">
+        <h2 class="section-title" id="chapter-2"><i class="fa-solid fa-diagram-project"></i> ② 勝てる台を見分ける3元素（鳴き・拾い・役モノ）</h2>
+        
+      </div>
+
+      <nav class="chapter-toc" aria-label="この章の目次">
+        <div class="chapter-toc-title"><i class="fa-solid fa-location-arrow"></i> この章の目次</div>
+        <ul>
+          <li><a href="#chapter-2-three-stages">V入賞までの3段階</a></li>
+          <li><a href="#chapter-2-multiplication">3元素は、足し算ではなく掛け算</a></li>
+        </ul>
+      </nav>
+
+<h3 class="subset-title" id="chapter-2-three-stages">V入賞までの3段階</h3>
+<ol class="article-flow factor-flow" aria-label="V入賞までの3段階">
+  <li><i class="fa-solid fa-bell"></i><strong>鳴き</strong><br>羽根を開く機会を作る</li>
+  <li><i class="fa-solid fa-hand"></i><strong>拾い</strong><br>玉を役モノ内へ運ぶ</li>
+  <li><i class="fa-solid fa-bullseye"></i><strong>役モノ</strong><br>拾った玉をVへ近づける</li>
+</ol>
+<p>ハネモノで勝てる台か、勝てない台かを判断するときに見るのは、<strong>「鳴き」「拾い」「役モノ」</strong>です。ハネモノの良し悪しは、この3つに集約されます。まずは、それぞれが何を表すのかを順番に見ていきます。</p>
+
+<h4 class="content-subtitle">① 鳴き――最初の入口</h4>
+<p>鳴きとは、盤面の入賞口へ玉が入り、羽根が開くことです。千円あたりに何回鳴くかという意味では、デジパチの千円あたりの回転数に近い考え方ができます。</p>
+<p>まず鳴かなければ、拾わせる機会そのものが生まれません。</p>
+
+<h4 class="content-subtitle">② 拾い――鳴きをV入賞の機会へ変える</h4>
+<p>羽根が開いても、玉が拾われなければ、V入賞へ向かう物理的な勝負は始まりません。</p>
+<p>デジパチは、ヘソなどへ1個入れば、その時点で1回抽選されます。しかしハネモノは、1回鳴いても、玉を拾わなければV入賞（大当たり）は起こりません。ですので、いかに玉を拾わせるかが大事になります。</p>
+
+<h4 class="content-subtitle">③ 役モノ――拾った玉をどれだけV入賞させるか</h4>
+<p>役モノ内の玉の動きはアナログなので、ネカセによって玉の速度や進路が変われば、V入賞のしやすさも変わります。</p>
+<p>役モノへ入った玉がどれだけV入賞するかを、<strong>役モノ確率</strong>と呼びます。</p>
+
+<h3 class="subset-title" id="chapter-2-multiplication">3元素は、足し算ではなく掛け算</h3>
+<p>この3つは、どれか一つが弱ければ即不合格というものではありません。役モノ確率が重くても、その分よく鳴き、よく拾えば勝てる台になります。</p>
+<p>反対に、役モノへ入れば必ず当たるような極端な台でも、一度も鳴かなければ大当たりは起きません。</p>
+
+<div class="article-formula" aria-label="3元素の掛け算">
+  <span>鳴き</span><b>×</b><span>拾い</span><b>×</b><span>役モノ</span><b>＝</b><span>台の実力</span>
+</div>
+
+<p>ここへ千円あたりの鳴き回数を組み合わせれば、1回当たるまでに平均で何玉使うかを考えられます。その使用玉数が、1回の大当たりで得られる平均出玉を下回れば、理屈上はプラス側です。</p>
+<p>つまり見るのは、「鳴きが何回なら合格」という一本の線ではありません。<strong>3元素を掛け合わせた結果として、平均出玉に対して使用玉数が足りているか。</strong>ここです。</p>
+<p>慣れてくれば、10〜20分ほどで3元素を概算し、この台を継続すべきか、それともほかの台へ移るべきかを判断できるようになります。ここから先は、その判断に必要な見方を一つずつ説明します。</p>
+<hr>
+    </div>
+    <!-- HANEMONOWIN:CHAPTER-02:END -->
+
+    <!-- HANEMONOWIN:CHAPTER-03:START -->
+    <div class="panel">
+      <div class="chapter-heading-row">
+        <h2 class="section-title" id="chapter-3"><i class="fa-solid fa-bell"></i> ③ 鳴きの見方</h2>
+        
+      </div>
+      
+      <nav class="chapter-toc" aria-label="この章の目次">
+        <div class="chapter-toc-title"><i class="fa-solid fa-location-arrow"></i> この章の目次</div>
+        <ul>
+          <li><a href="#chapter-3-nails">鳴きに関わる釘</a></li>
+          <li><a href="#chapter-3-hakama">袴周りの釘読み</a></li>
+          <li><a href="#chapter-3-summary">まとめ</a></li>
+        </ul>
+      </nav>
+      <h3 class="subset-title" id="chapter-3-nails">鳴きに関わる釘</h3>
+<p>鳴きに関する釘は、大きく分けると4か所に分類されます。</p>
+
+<img src="https://images.pachinko-tactics.com/hanemonowin/hanemononakimatome.webp" alt="ハネモノ　鳴きに関わる釘" class="responsive-img" loading="lazy" decoding="async">
+
+<ol>
+<li>風車より上にある<strong>寄り</strong></li>
+<li>袴の左上にある<strong>風車</strong></li>
+<li>鳴き調整の中心になる<strong>袴</strong></li>
+<li>盤面下部にある<strong>2チャッカー周辺</strong></li>
+</ol>
+
+<p class="article-list-note">どの部分も重要ですが、見る優先度は異なります。</p>
+
+<div class="article-visual-label"><i class="fa-solid fa-eye"></i> 見る優先度</div>
+<div class="article-priority-grid">
+  <div class="article-priority-item"><span class="rank">補助材料</span><strong>寄り</strong></div>
+  <div class="article-priority-item"><span class="rank">補助材料</span><strong>風車</strong></div>
+  <div class="article-priority-item primary"><span class="rank">最優先</span><strong>袴</strong></div>
+  <div class="article-priority-item"><span class="rank">優先度低</span><strong>2チャッカー</strong></div>
+</div>
+
+<p>寄り・風車・2チャッカー周辺が袴と比べて見る優先度が低いのは、袴ほど頻繁に変わる箇所ではないと考えているからです。これまで多くのホールを見てきましたが、それほど頻繁に調整の変化を見かけることはありませんでした。</p>
+<p>ただし、この3か所も鳴きに影響する部分であることに変わりはありません。ですので、ここから袴以外の3か所について、それぞれの見方を簡単に解説します。</p>
+
+<h4 class="content-subtitle">袴以外の3か所は、こう見る</h4>
+<h5 class="content-subtitle">寄り</h5>
+
+<img src="https://images.pachinko-tactics.com/hanemonowin/yori.webp" alt="ハネモノ　寄りと呼ばれる箇所" class="responsive-img" loading="lazy" decoding="async">
+<p>基本的には、玉が外側へ逃げるより、風車・袴の方向へ寄る形のほうがプラスです。</p>
+<p>ただ、ハネモノの寄り周辺は釘の配置が複雑で、見た目どおりに玉が流れないことがあります。「袴へ寄りそう」に見えても意外と寄らず、反対に悪そうに見えても寄ることがあります。</p>
+<p>そのため、<strong>寄りだけを見て、鳴きの良し悪しは判断できません。</strong>普段の形を何となく覚え、変化に気づいたときに試し打ちをするサインとして使う程度で十分です。</p>
+<h5 class="content-subtitle">風車</h5>
+
+<img src="https://images.pachinko-tactics.com/hanemonowin/fuusha.webp" alt="ハネモノ　鳴きに関わる風車(下風車)" class="responsive-img" loading="lazy" decoding="async">
+<p>基本的には、正面から見て風車は袴の少し左上にあります。そのため、風車が左向きになっているほど、風車に当たった玉が袴へ落ちやすいプラス方向として見ます。</p>
+<p>ただし、風車で鳴きを調整している店は多くありません。普段はほぼ触らず、ノーマル状態のまま使われていることが多い印象です。</p>
+<p>一方で、<strong>左向きの風車を実際に打ち、ほかの釘がそれほど良く見えないのに、多く鳴いた経験もあります。</strong>この経験から推測するに、風車をプラス方向にすると効きが強く、想定以上に回る可能性があるのではないかと考えています。だからこそ、日々変化する箇所ではないのではないかと推測しています。</p>
+<p>店が明確にハネモノへ力を入れる日などに使われるかもしれませんので、知識として覚えておきたい箇所です。</p>
+<h5 class="content-subtitle">2チャッカー周辺</h5>
+
+<img src="https://images.pachinko-tactics.com/hanemonowin/2tyakka.webp" alt="ハネモノ　2チャッカ―まわりの釘" class="responsive-img" loading="lazy" decoding="async">
+<p>個人的には、4箇所の中で最も見ていません。2チャッカー両脇の釘が広い、真上の釘が上方向を向いている、といった形は理屈上プラスですが、<strong>ここを使って鳴きを調整している店をほとんど見たことがないからです。</strong></p>
+<p>ただし、2チャッカー入賞そのものの価値は高いです。羽根が2回開くだけでなく、機種によっては良いラウンドが選ばれやすくなったり、2開放目に拾われた玉が有利な役モノルートへ進んだりします。</p>
+<p>価値が高いぶん、入賞率を少し上げただけで、店が想定した以上に性能が上がる可能性があります。風車と同じように、調整に使いづらい箇所なのではないかと考えています。</p>
+<p>ゲーム性の上では重要ですが、釘読みの優先度は低い。この二つは分けて考えます。</p>
+
+      <h3 class="subset-title" id="chapter-3-hakama">袴周りの釘読み</h3>
+<img src="https://images.pachinko-tactics.com/hanemonowin/hakama.webp" alt="ハネモノ　袴　最も鳴きに影響する釘" class="responsive-img" loading="lazy" decoding="async">
+
+<div class="article-visual-label"><i class="fa-solid fa-filter-circle-dollar"></i> ①・②・③の役割</div>
+<div class="article-info-grid cols-3">
+  <div class="article-info-card warm">
+    <span class="article-info-icon"><i class="fa-solid fa-1"></i></span>
+    <strong>① 袴へつなぐ</strong>
+    <p>風車を抜けた玉や、少しずれた玉を袴方向へ戻します。</p>
+  </div>
+  <div class="article-info-card green">
+    <span class="article-info-icon"><i class="fa-solid fa-2"></i></span>
+    <strong>② 袴内部へ入れる</strong>
+    <p>①を抜けた玉と、外れかけた玉を袴内部へ運びます。</p>
+  </div>
+  <div class="article-info-card">
+    <span class="article-info-icon"><i class="fa-solid fa-3"></i></span>
+    <strong>③ 最後の入口</strong>
+    <p>目立ちますが、すでに袴内部へ来た玉にしか効きません。</p>
+  </div>
+</div>
+<p>袴周りを見るとき、多くの人が最初に注目しやすいのは、デジパチのヘソに似た③だと思います。</p>
+<p>もちろん③も、状態が良いほど鳴きやすくなります。ただ、自分は①②③の中で、<strong>③が最も鳴きへ与える影響が小さい</strong>と考えています。</p>
+<p>デジパチは、横から来た玉がヘソ釘へ引っかかることで入賞します。ハネモノの袴では、玉が上から落ちてきます。ある程度③が閉じていても、玉が真っすぐ落ちて釘へ当たらなければ、入賞する可能性は高くなります。</p>
+<p>そして何より、③が効くのは、すでに袴内部へ入った玉です。③へ届く前に外へ弾かれてしまえば、どれだけ③だけ開いていても意味がありません。</p>
+<p>そこで、優先して見るのが①と②です。</p>
+<h4 class="content-subtitle">現場では、まず左右の開きを見る</h4>
+<p>どの箇所も、<strong>基本的に左右へ開いているほどプラス</strong>です。</p>
+<p>厳密には上下の向きにも意味があります。しかし、上下の調整には良い面と悪い面があり、「上向きなら必ず良い」と一概には言い切れません。</p>
+<p>実戦上も、上下の向きより、左右の開きで調整している店のほうが多いと感じています。ですので、最初は細かな上下まで追わず、左右へ開いているか、閉じているかで判断するのをおすすめします。</p>
+<h4 class="content-subtitle">①――風車を抜けた玉を袴へつなぐ</h4>
+<p>①は風車のすぐ下にある釘です。ここが閉じていると、風車をきれいに抜けてきた玉も①へぶつかり、袴へ絡まず外へ弾かれます。</p>
+<p>①が開いていれば、真っすぐ来た玉だけでなく、風車を完全には抜けきれず、少し左右へずれた玉まで拾って袴方向へ戻す可能性があります。</p>
+<h4 class="content-subtitle">②――外れかけた玉まで袴内部へ入れる</h4>
+<p>②は、①を通った玉が袴内部へ入るための次の入口です。②が閉じていれば、①を抜けても袴内部へ入れません。</p>
+<p>②が開いていると、①を通過した玉が入りやすくなるだけでなく、風車や①で外れかけた玉が②へ引っかかり、袴内部へ戻されることがあります。</p>
+<p>①と②は、玉が袴内部へ入るまでに越える関門です。真っすぐ来た玉を通すだけでなく、本来なら外れた玉まで拾い直します。だから、③より先に①と②を見る必要があります。</p>
+<h4 class="content-subtitle">③だけ開いた見せ釘に注意する</h4>
+<p>実際に、ファミスタが3台設置された店で、③が全台とも大きく開いている状態を打ったことがあります。</p>
+<p>3台の千円あたりの鳴きは、およそ12回、14回、21回でした。21回は短期的な上振れを含んでいた可能性がありますが、平均しても18回程度以上は回る台だったと推測しています。</p>
+<p>違っていたのは①と②です。よく回った台だけ①②も大きく開き、特に②は、ほかの2台と比べて一目で分かるほど形が違いました。</p>
+<p>③が鳴きへ強く効くのであれば、3台とも同じように回らなければおかしいはずです。しかし、実際の差は大きく開きました。</p>
+<p>③は、デジパチのヘソに似ていて注目されやすく、開いていることも分かりやすい。そのため、実際の回転率を大きく上げず、台を良く見せる見せ釘として使われることがあります。</p>
+<p>ただし、「③の影響が小さい」は「袴を見なくてよい」という意味ではありません。袴は鳴き調整の中心です。その中で、①と②を優先して見るという話です。</p>
+<h3 class="subset-title" id="chapter-3-summary">まとめ</h3>
+<div class="intro-manifesto" role="note" aria-label="鳴きの見方で最終的に見ること">
+  <div class="intro-manifesto-label"><i class="fa-solid fa-crosshairs"></i> 鳴きの見方・まとめ</div>
+  <p class="intro-manifesto-copy">
+    <span class="intro-manifesto-first">結局のところ、最終的に大事なのは――</span>
+    <span class="intro-manifesto-main">袴に絡むかどうか。</span>
+  </p>
+</div>
+<p>結局、鳴きの良し悪しを判断するときに大事になってくるのは、玉が風車までたどり着いたかどうか、そして袴内部へ入ったかどうかです。こうした袴周辺での玉の動きをまとめて、この記事では<strong>「袴に絡む」</strong>と表現します。</p>
+<p>袴にはよく絡んでいるのに思うように鳴かない場合は、現在の回転数が下振れである可能性が高く、その後、上がってくる可能性があります。</p>
+<p>反対に、よく鳴いているのに、袴へ絡む玉がそれほど多くない場合は、現在の回転数が上振れである可能性が高く、その後、下がってくる可能性があります。</p>
+<p>試し打ち中に台の実力を判断する目安として、覚えておいてください。</p>
+<hr>
+    </div>
+    <!-- HANEMONOWIN:CHAPTER-03:END -->
+
+    <!-- HANEMONOWIN:CHAPTER-04:START -->
+    <div class="panel">
+      <div class="chapter-heading-row">
+        <h2 class="section-title" id="chapter-4"><i class="fa-solid fa-hand"></i> ④ 拾いの見方</h2>
+        
+      </div>
+      
+      <nav class="chapter-toc" aria-label="この章の目次">
+        <div class="chapter-toc-title"><i class="fa-solid fa-location-arrow"></i> この章の目次</div>
+        <ul>
+          <li><a href="#chapter-4-importance">拾いが重要な理由</a></li>
+          <li><a href="#chapter-4-stroke">羽根に拾わせやすいストロークの考え方</a></li>
+          <li><a href="#chapter-4-pickup-nails">拾いに関する釘</a></li>
+          <li><a href="#chapter-4-stop">共通の止め打ち手順</a></li>
+        </ul>
+      </nav>
+      <h3 class="subset-title" id="chapter-4-importance">拾いが重要な理由</h3>
+<p>自分は、拾いはほかの二つの元素よりも重要だと考えています。その理由は、大きく二つあります。</p>
+<div class="article-visual-label"><i class="fa-solid fa-layer-group"></i> 拾いが重要な二つの理由</div>
+<div class="article-info-grid">
+  <div class="article-info-card green">
+    <span class="article-info-icon"><i class="fa-solid fa-arrows-split-up-and-left"></i></span>
+    <strong>ほかの元素にも介入する</strong>
+    <p>玉を役モノへ運び、払い出しで玉持ちも改善。役モノと鳴きの両方に関わります。</p>
+  </div>
+  <div class="article-info-card green">
+    <span class="article-info-icon"><i class="fa-solid fa-sliders"></i></span>
+    <strong>自分の技術で引き上げられる</strong>
+    <p>ストロークを調整することで、羽根が玉を拾う確率（拾い率）を上げられます。</p>
+  </div>
+</div>
+
+<h4 class="content-subtitle">ほかの元素にも介入する</h4>
+<p>これまで話してきた通り、羽根が玉を拾わなければ、V入賞、つまり大当たりは起こりません。拾われた玉が役モノへ入り、初めてV入賞の機会が生まれます。</p>
+<p>それだけではありません。玉が羽根に拾われると、機種ごとに決められた数の玉が払い出されます。つまり、拾わせれば拾わせるほど玉持ちが良くなり、同じ千円でも打ち出せる玉が増えます。その結果、千円あたりの鳴き回数も上がりやすくなります。</p>
+<p>役モノへ玉を運び、払い出しを通じて鳴きにも影響する。つまり拾いは、<strong>3元素の中で唯一、ほかの元素にも介入する要素</strong>です。</p>
+<p>拾われた際に払い出される玉数は、機種によって異なります。払い出し個数が多い機種ほど、拾い率を上げたときに玉持ちが良くなりやすく、千円あたりの鳴き回数へ与える影響も大きくなります。</p>
+<p>本稿の執筆時点では、現行機の中で、ハネモノファミスタの払い出し個数が10個と突出して多くなっています。今後登場予定のハネシャカやバスタードも、拾われた際に10個以上の玉が払い出される機種です。</p>
+
+<h4 class="content-subtitle">拾いは、技術で引き上げられる</h4>
+<p>そして拾いは、<strong>3元素の中で、通常時に自分の技術で直接引き上げられる唯一の要素</strong>でもあります。</p>
+<p>具体的にどう引き上げるかというと、ストロークの調整です。</p>
+<p>特に上記のような10個以上払い出される機種では、ストロークで拾い率を上げることにより、玉持ちの面でかなりの効果が得られると考えています。</p>
+<p>ここまでは知識の話を中心にしてきましたが、拾いは実際に自分で試し、微調整していく技術介入の部分です。具体的にどこを狙い、どう調整するのかは、次の「羽根に拾わせやすいストロークの考え方」で詳しくお話しします。</p>
+
+<h4 class="content-subtitle">拾い率をアップさせたことで、勝てない台を勝てる台へ変えた実例</h4>
+<p>ハネモノファミスタで、鳴きに関わる台の状態を長く変えずに使っているホールがありました。データサイトで1週間分のデータを見たところ、どの台も収支はプラスマイナスゼロ付近でした。</p>
+<p>以前から自分は、ハネモノファミスタには、もっと拾わせやすいストロークがあるのではないかと考えていました。そのストロークで拾い率を上げられれば、プラスマイナスゼロの台でも、プラスへ持っていけるのではないか。そう考え、このホールで実際に試してみることにしました。</p>
+<p>結果を言うと、仮説どおり勝つことができました。</p>
+<p>では、なぜ勝てたのか。千円あたりの鳴き回数は、どれくらい変わったのか。データサイトから逆算してみたところ、自分が打った日と、ほかの人が打った日では、千円あたり約2回転以上の差が出ていました。</p>
+<p>さらに、<strong>拾い率を上げたことで大当たり確率が軽くなったことも、もう一つの要因</strong>だと思います。</p>
+
+<p>デジパチも、ストロークによって千円あたりの回転数を変えられることがあります。ただし、ストロークで大当たり確率まで変えられるわけではないため、ボーダーラインそのものは下がりません。</p>
+
+<div class="intro-manifesto" role="note" aria-label="拾い率を技術で上げる二つの効果">
+  <div class="intro-manifesto-label"><i class="fa-solid fa-arrow-trend-up"></i> 拾いを技術で引き上げる意味</div>
+  <p class="intro-manifesto-copy">
+    <span class="intro-manifesto-first">つまり、拾い率を上げられるということは――</span>
+    <span class="intro-manifesto-main">ボーダーラインを下げ、<br>千円あたりの鳴きも上げられる。</span>
+  </p>
+</div>
+<p>デジパチと比べても、ハネモノのストローク調整による技術介入は、勝敗へ与える影響がより大きくなります。だからこそ、自分は3元素の中でも拾いを重要だと考えています。</p>
+
+      <h3 class="subset-title" id="chapter-4-stroke">羽根に拾わせやすいストロークの考え方</h3>
+<h4 class="content-subtitle">羽根に拾われる玉が必ず通る箇所</h4>
+<img src="https://images.pachinko-tactics.com/hanemonowin/hiroi1.webp" alt="ハネモノ　ハネに拾われる際に通る箇所" class="responsive-img" loading="lazy" decoding="async">
+<p>玉が羽根に拾われるには、画像で示した釘と釘の間を、羽根が開いたタイミングに合わせて通過する必要があります。</p>
+<p>ですので、<strong>この箇所（羽根手前の釘群）へ、どれだけ多くの玉を送り込めるか</strong>が重要になります。</p>
+<p>では、具体的に、この箇所へ多くの玉を送り込むために狙う箇所はどこなのか。その話をしていきます。</p>
+
+<h4 class="content-subtitle">狙うゾーン――ターゲットゾーン</h4>
+<img src="https://images.pachinko-tactics.com/hanemonowin/hiroi2.webp" alt="ハネモノ　ハネに拾われるようにする際に狙う箇所　ターゲットゾーン" class="responsive-img" loading="lazy" decoding="async">
+<p>この記事では、ストロークによって狙う画像3の範囲を<strong>「ターゲットゾーン」</strong>と呼びます。</p>
+<p>ターゲットゾーンを通った玉は、基本的に羽根手前の釘群まで進みます。</p>
+<p>とはいえ、狙って打っても、玉がすべてターゲットゾーンを通るわけではありません。途中の釘へ当たり、跳ね返って上風車へ向かう玉もあります。ただ、その玉も上風車から羽根側へ抜ければ、別の入口から拾われる可能性があります。</p>
+
+<div class="article-info-grid">
+  <div class="article-info-card warm">
+    <span class="article-info-icon"><i class="fa-solid fa-arrow-down-long"></i></span>
+    <strong>本命：ターゲットゾーンから</strong>
+    <p>ターゲットゾーンから、羽根手前の釘群へ進みます。</p>
+  </div>
+  <div class="article-info-card">
+    <span class="article-info-icon"><i class="fa-solid fa-rotate-left"></i></span>
+    <strong>保険：上風車から戻す</strong>
+    <p>外れた玉も、上風車を通って羽根側へ抜ければ拾われる可能性があります。</p>
+  </div>
+</div>
+<p><strong>ターゲットゾーンからの玉と、上風車からの玉を拾わせる。</strong></p>
+<p>この二つを同時に狙える位置へストロークを合わせることが、拾わせやすいストロークの基本です。</p>
+
+<h4 class="content-subtitle">基本は「ぶっ込み狙い」</h4>
+<img src="https://images.pachinko-tactics.com/hanemonowin/besutostrooku.webp" alt="ハネモノ　よりハネに拾わせる為のベストストローク2選" class="responsive-img" loading="lazy" decoding="async">
+<p>実戦で使うストロークは、基本的に画像4の二つです。</p>
+
+<div class="article-info-grid">
+  <div class="article-info-card warm">
+    <span class="article-info-icon"><i class="fa-solid fa-bullseye"></i></span>
+    <strong>第一候補：ぶっ込み狙い</strong>
+    <p>上記画像の赤い矢印で示したストロークです。矢印の先にある上下の釘の間を抜き、ターゲットゾーンへ直接送り込みます。</p>
+  </div>
+  <div class="article-info-card">
+    <span class="article-info-icon"><i class="fa-solid fa-arrow-up"></i></span>
+    <strong>代替策：天打ち</strong>
+    <p>上記画像の青い矢印で示したストロークです。ぶっ込みでは拾わないときに試します。ただし、右側へ飛ぶ玉が増えます。</p>
+  </div>
+</div>
+<p>理論上は、上風車側の釘が極端に良いときなど、別の打ち方が有効になる可能性もあります。ただ、経験上、それが有効だったことはありません。ですので、よほど異常な状態でない限り、まずはこの二択で考えて問題ないと思います。</p>
+<p>そして、第一候補は機種を問わず<strong>ぶっ込み狙い</strong>です。</p>
+<div class="article-check-block">
+  <div class="article-check-label"><i class="fa-solid fa-location-dot"></i> ぶっ込みとは</div>
+  <p>上記画像の赤い矢印の先あたりにある箇所のことです。基本的に、どの機種も羽根の左上あたりがぶっ込みの位置となります。</p>
+</div>
+<p>ぶっ込み狙いは、ターゲットゾーンを直接狙えるため、最も有効なストロークだと考えています。</p>
+
+<h4 class="content-subtitle">ぶっ込み狙いのコツ</h4>
+<p>ぶっ込み狙いをする際の理想的な玉の軌道は、<strong>上下の釘へ玉をぶつけず、その間をきれいに抜くこと</strong>です。</p>
+
+<div class="article-visual-label"><i class="fa-solid fa-hand-pointer"></i> きれいに抜くための2つのコツ</div>
+<div class="article-info-grid">
+  <div class="article-info-card warm">
+    <span class="article-info-icon"><i class="fa-solid fa-hand"></i></span>
+    <strong>ハンドルは軽く持つ</strong>
+    <p>わずかな力のズレでも玉が上下の釘へ当たりやすいため、余計な力を入れずに持ちます。</p>
+  </div>
+  <div class="article-info-card warm">
+    <span class="article-info-icon"><i class="fa-solid fa-fingerprint"></i></span>
+    <strong>指先へ神経を集中する</strong>
+    <p>軽く持ちながら、指先で小さく力を伝え、ストロークを微調整します。</p>
+  </div>
+</div>
+<p>ストロークがわずかにずれるだけでも、玉は上下の釘へぶつかります。ハンドル全体へ力を入れすぎず、指先の感覚で少しずつ合わせていくのがコツです。</p>
+<p>ただ、上下の釘の間をきれいに抜く調整は、正直かなり感覚的なものです。自分も、上側の釘の下あたりを狙う、下側の釘の上あたりを狙う、上側の釘をかすめるように狙うなど、そのときの状況によって合わせ方を変えています。</p>
+<p>同じ機種でも、台ごとのバネやネカセなどによって、ちょうど良い位置は変わります。できるだけ、きれいに抜ける玉が多くなるよう、<strong>実戦中も常にストロークを微調整</strong>しています。</p>
+<p>ぶっ込みをきれいに抜けているのに拾い率が上がらない場合は、羽根開放とのタイミングが合っていないか、その先の釘や部品の状態が悪い可能性を考えます。</p>
+<p>どう工夫してもきれいに抜けない場合は、もう一つ、実戦で使えるストロークである天打ちを試します。</p>
+
+<h4 class="content-subtitle">天打ちを試す場面とデメリット</h4>
+<p>もう一つ、現実的に実戦で使うストロークが天打ち（青矢印のストローク）です。ぶっ込み付近の状態があまりにも悪いときに試す代替案だと思ってください。なぜ代替案かというと、天打ちには明確なデメリットがあるからですね。</p>
+<p>それは、状態の悪い右側へ飛ぶ玉が増えてしまうことです。</p>
+<p>右へ飛んだ玉から鳴いたり、拾われたりすることもあるため、すべてが無駄玉になるわけではありません。それでも、基本的には右へ飛ぶ玉が増えるほどマイナスです。</p>
+<p>一方、天打ちで拾い率が大きく上がれば、鳴きが少し落ちても、賞球による玉持ちまで含めて必要な回転率へ届く場合があります。右へ飛ぶから絶対に駄目と決めず、鳴き・拾い・賞球を合わせた結果で判断します。</p>
+
+<h4 class="content-subtitle">機種ごとのベストストローク</h4>
+      <details class="machine-slot" data-machine="ハネモノファミスタ">
+        <summary>
+          <span><i class="fa-solid fa-puzzle-piece"></i> ハネモノファミスタ</span>
+          
+        </summary>
+        <div class="details-content">
+<img src="https://images.pachinko-tactics.com/hanemonowin/famisuta_besuto.webp" alt="ハネモノファミスタ　ベストストローク" class="responsive-img" loading="lazy" decoding="async">
+<p>ファミスタは、とにかくぶっ込みを狙います。</p>
+<p>天打ちやほかの打ち方へ簡単に移るより、ぶっ込みをきれいに抜くため、ストロークを微調整し続けることが重要です。</p>
+        </div>
+      </details>
+
+<h3 class="subset-title" id="chapter-4-pickup-nails">拾いに関する釘</h3>
+<p>拾いに関する釘は、この記事では一つずつ詳しく解説しません。</p>
+<p>理由は、<strong>実戦上、基本的には見なくてよいと考えているから</strong>です。</p>
+<div class="intro-manifesto" aria-label="拾いの良し悪しを判断するときの基本">
+  <div class="intro-manifesto-label"><i class="fa-solid fa-eye"></i> 拾いの良し悪しを判断するときの基本</div>
+  <p class="intro-manifesto-copy">
+    <span class="intro-manifesto-first">釘の状態で判断するより――</span>
+    <span class="intro-manifesto-main">羽根周辺の玉の動きで<br>判断する。</span>
+  </p>
+</div>
+<p>拾い周辺の釘は、ある方向へ曲がることで、一つのルートにはマイナスでも、別のルートにはプラスになることがあります。さらにネカセとの組み合わせでも玉の動きが変わるため、「この釘の状態なら必ず悪い」と一方向に決めることが難しい部分です。</p>
+<p>そこで、自分は釘の状態より<strong>実際の玉の挙動</strong>を見ます。</p>
+<ul class="article-observation-list">
+  <li>ターゲットゾーンをどれだけ玉が通ったか</li>
+  <li>ぶっ込みをどれだけきれいに抜けたか</li>
+</ul>
+<p>抜けている玉が多いのに拾い率が低ければ、今はタイミングが合っていないだけで、今後上がる余地があります。</p>
+<p>反対に、抜けている玉が少ないのに拾い率が高ければ、現時点ではタイミングが重なった上振れかもしれません。</p>
+<p>このように、実際の玉の挙動から判断したほうが、拾いの実力を見抜きやすいと考えています。</p>
+
+      <h3 class="subset-title" id="chapter-4-stop">共通の止め打ち手順</h3>
+<p>通常時に止め打ちをするのは、羽根が開いた直後だけです。</p>
+<p>羽根が玉を拾い、役モノ内に玉が残っている間は、鳴きの入賞口へ玉が入っても羽根は再び開きません。玉を拾わなかった場合にも、羽根が閉じた直後には、次の開放を受け付けない短い時間があります。</p>
+<p>この時間に打ち出された玉は無駄になりやすいため、羽根が開いたら止めます。</p>
+<p>手順は全機種共通です。</p>
+
+<div class="article-visual-label"><i class="fa-solid fa-hand"></i> 全機種共通の止め打ち手順</div>
+<ol class="article-flow four-steps stop-flow">
+  <li><i class="fa-solid fa-door-open"></i>羽根が開いたら止める</li>
+  <li><i class="fa-solid fa-pause"></i>役モノ内に玉がある間は打たない</li>
+  <li><i class="fa-solid fa-play"></i>玉が抜け切ったら再開する</li>
+  <li><i class="fa-solid fa-forward"></i>拾わなければすぐ再開する</li>
+</ol>
+
+<h4 class="content-subtitle">止め打ちは、詰めすぎない</h4>
+<p>理論上は、羽根が開く直前に止めるのが最も無駄玉を減らせます。しかし、その1〜2個まで節約しようとして早く止めすぎると、本来なら羽根に拾われた玉まで打ち出せなくなります。</p>
+<p>自分は、細かな無駄玉よりも、<strong>拾いを1回逃す損失のほうが大きい</strong>と考えています。</p>
+<p>だから、羽根が開いたと分かった瞬間に止める程度で十分です。少しでも玉を節約しようと詰めすぎるより、ターゲットゾーンへ玉を送れるようストロークを微調整し、より拾わせることを優先します。</p>
+<p>自分は、長く打ち続けるために、効果の小さい作業は削るようにしています。あらゆる動作を極限まで詰めようとすると、後半に集中力が落ち、本当に見るべき玉の挙動やストローク調整が雑になってしまうからです。</p>
+<p>理論上の最適解をすべて抱えるのではなく、結果へ大きく影響し、長時間続けられるものを残す。今回紹介した止め打ちも、その考え方で作った手順です。</p>
+<hr>
+    </div>
+    <!-- HANEMONOWIN:CHAPTER-04:END -->
+
+    <!-- HANEMONOWIN:CHAPTER-05:START -->
+    <div class="panel">
+      <div class="chapter-heading-row">
+        <h2 class="section-title" id="chapter-5"><i class="fa-solid fa-bullseye"></i> ⑤ 役モノの見方</h2>
+        
+      </div>
+      
+      <nav class="chapter-toc" aria-label="この章の目次">
+        <div class="chapter-toc-title"><i class="fa-solid fa-location-arrow"></i> この章の目次</div>
+        <ul>
+          <li><a href="#chapter-5-quality">役モノの良し悪しについて</a></li>
+          <li><a href="#chapter-5-thinking">良い玉の挙動の導き出し方</a></li>
+          <li><a href="#chapter-5-route-thinking">V入賞ルート別の考え方</a></li>
+        </ul>
+      </nav>
+      <h3 class="subset-title" id="chapter-5-quality">役モノの良し悪しについて</h3>
+<p>役モノの良し悪しとは、いかにV入賞しやすいか。つまり、<strong>役モノ確率（拾われた玉に対するV入賞確率）</strong>が良いかどうかということです。</p>
+<p>「勝てる台を見分ける3元素」でも触れた通り、ネカセによってV入賞のしやすさが変わります。</p>
+<div class="article-info-grid">
+  <div class="article-info-card">
+    <span class="article-info-icon"><i class="fa-solid fa-arrows-left-right-to-line"></i></span>
+    <strong>奥行き方向</strong>
+    <p>台が起きているか、寝ているか。玉の速度や滞留時間が変わります。</p>
+  </div>
+  <div class="article-info-card warm">
+    <span class="article-info-icon"><i class="fa-solid fa-left-right"></i></span>
+    <strong>左右方向</strong>
+    <p>左右のどちらが高いか。玉が寄る方向や部品へ触れる位置が変わります。</p>
+  </div>
+</div>
+<p>一般的にネカセというと、主に台の奥行き方向の傾きを指します。その傾きの違いを「起きている」「寝ている」と表現します。</p>
+<p>ただし、「起きている」といっても、台が打ち手側へ傾いているわけではありません。どちらも後ろへ傾いている中で、相対的に起きているか、より寝ているかという違いです。</p>
+<p>つまり、一般的なメンテナンスの範囲内で調整できる幅は、<strong>それほど大きくありません</strong>。著しくネカセを変えている台を実戦したこともありますが、かなり珍しいケースです。</p>
+<p>ですので、ネカセの見た目は参考程度にしかならないと考えています。しかし、そのわずかな傾きの違いだけで、役モノ内の玉の挙動は大きく変わります。</p>
+<p>さらに、ネカセは奥行きだけでなく、左右のどちらが高いかという方向にも変化します。これは意図的に調整しているホールもあれば、店舗自体の傾きや、島全体の傾きが影響する場合もあります。</p>
+<p>左右方向も奥行きと同様に、見た目はあくまで参考です。<strong>実際の玉の挙動</strong>と<strong>蓄積した実戦データ</strong>を合わせて判断することをおすすめします。</p>
+<p>どのようなネカセが良いかは、機種ごとの役モノ内にあるギミックなどによって異なります。</p>
+
+      <h3 class="subset-title" id="chapter-5-thinking">良い玉の挙動の導き出し方</h3>
+<h4 class="content-subtitle">最初に立てる問いを絞る</h4>
+<p>役モノ内の玉の挙動が、どうなったら良いのか、どうなったら悪いのか。それを考えるために、最初に立てる問いは一つです。</p>
+<div class="intro-manifesto" aria-label="役モノ攻略で最初に考える問い">
+  <div class="intro-manifesto-label"><i class="fa-solid fa-circle-question"></i> 最初に考えること</div>
+  <p class="intro-manifesto-copy">
+    <span class="intro-manifesto-first">玉の挙動の判断基準は――</span>
+    <span class="intro-manifesto-main">この機種はどうなったら<br>V入賞するのか。</span>
+  </p>
+</div>
+<p>まずは、「この機種はどうなればV入賞するのか」と考えてください。最初から100％の答えを出す必要はありません。仮説でも構いません。</p>
+<p>その仮説として出した回答を起点に、実戦しながらV入賞へつながる動きを観察し、回答をアップデートしていきます。そうすれば、<strong>最終的に「良い玉の挙動」を定義できるようになります</strong>。</p>
+
+<h4 class="content-subtitle">V入賞ルートごとに考える</h4>
+<p>どの機種にも、複数のV入賞ルートがあります。</p>
+<div class="article-visual-label"><i class="fa-solid fa-route"></i> 基本的なV入賞ルート</div>
+<div class="v-route-map" aria-label="SPルートとノーマルルートの基本構造">
+  <div class="v-route-card sp">
+    <i class="fa-solid fa-star"></i>
+    <strong>SPルート</strong>
+    <small>当選率の高い強ルート</small>
+  </div>
+  <div class="v-route-normal-column">
+    <div class="v-route-card normal">
+      <i class="fa-solid fa-road"></i>
+      <strong>ノーマルルート</strong>
+      <small>当選率の低い弱ルート</small>
+      <div class="v-route-inline-branches" aria-label="ノーマルルート内の分岐">
+        <div class="v-route-child">強ノーマルルート</div>
+        <div class="v-route-child">弱ノーマルルート</div>
+      </div>
+      <p class="v-route-note">※機種によっては、ノーマルルートの中でもさらに分岐があります。</p>
+    </div>
+  </div>
+</div>
+<p>まずは、その機種にどのようなV入賞ルートがあるのかを把握します。次に、SPルートならどうなればV入賞するのか、ノーマルルートならどうなればV入賞するのかを、それぞれ分けて考えます。</p>
+<p>V入賞ルートによって、通過するギミックや乗り越える条件は異なります。そのため、「良い玉の挙動」も当然異なります。まずは、ルートごとにどうなったらV入賞するのか、玉の動きを想像してください。</p>
+
+<h4 class="content-subtitle">大当たりの中心になるV入賞ルート</h4>
+<p>V入賞ルートごとの当たり方を考えた後は、どのV入賞ルートが大当たりの中心になるのかを考えます。</p>
+<p>中心となるV入賞ルートを見極めるには、ある程度の実戦が必要です。初めて打つ段階で正確に見極めるのは難しいと思いますが、実戦を重ねるうちに中心となるV入賞ルートが見え、判断の精度も上がっていきます。</p>
+
+<div class="article-check-block">
+  <div class="article-check-label"><i class="fa-solid fa-layer-group"></i> 機種ごとに中心となるV入賞ルートは異なる</div>
+  <p>大当たりの中心となるV入賞ルートは、機種ごとに異なります。両方を同じ重さで見るのではなく、大当たりに占める割合が大きいV入賞ルートを中心に、「そこから当たるには、どうなればいいのか」を紐解きます。</p>
+  <p>たとえばファインプレーは、SPルートの選択率自体が低く、ネカセによってSP選択率が受ける影響も小さい機種です。そのため、ファインプレーではSPよりもノーマルルートを中心に考えます。</p>
+</div>
+<h4 class="content-subtitle">真面目に考えた結果、オカルトへ滑る</h4>
+<div class="intro-manifesto" aria-label="考え出してはいけない結論への注意">
+  <div class="intro-manifesto-label"><i class="fa-solid fa-triangle-exclamation"></i> 注意</div>
+  <p class="intro-manifesto-copy">
+    <span class="intro-manifesto-first">考え出してはいけない結論は――</span>
+    <span class="intro-manifesto-main">「この台は特別な動きをする」<br>などの個体差による結論。</span>
+  </p>
+</div>
+<p>役モノはさまざまな部品で構成されています。そのため、製造上の個体差があるのではないか、台ごとに特別な特徴があるのではないか、と考えたくなります。</p>
+<p>もちろん、物理的な違いがまったくないと断定することはできません。しかし、自分の実戦では、<strong>それが勝敗を決めるほど大きな差だと強く感じたことはありません</strong>。</p>
+<p>仮に台ごとに違う動きが見えても、それが個体差なのか、短期的なムラなのかを切り分けることはできません。データが増えるうちに、見えていた差が小さくなる可能性もあります。</p>
+<p>そのため、自分は個体差を測ろうとはしません。実戦では個体差をないものとして扱い、目の前の玉の動きと蓄積したデータから判断します。</p>
+<p>それでも答えが出ない状態で仮説だけを増やしていくと、「この台だけは特別な動きをする」といった説明へ寄っていきます。物理法則から考えていたはずが、いつの間にか法則から外れた説明になってしまう。</p>
+<p>オカルトは、何も考えていないから生まれるとは限りません。分からないことを真面目に考え続け、複雑な答えを求めた結果として着地することがあります。</p>
+<p>だからこそ、最初の問いである「この<strong>機種</strong>はどうなったらV入賞するのか」に絞る必要があります。</p>
+<h4 class="content-subtitle">ネカセは一方向にだけ働かない</h4>
+<p>導き出した回答から、どのようなネカセの状態が良いのかを考える必要があります。ただし、起きているからといってすべてが良くなる、寝ているからといってすべてが良くなる、というわけではありません。</p>
+<p>Pニュートキオを例にすると、台が起きている場合はSPルートの選択率が上がります。一方で、皿から玉が落ちるときの速度も上がり、回転体へ引っかかりにくくなるため、SPルートへ向かった後の当選率は下がります。</p>
+<p>つまり、SPルートへ向かいやすくなる良い面と、向かった後に当たりにくくなる悪い面が同時に存在します。</p>
+<div class="article-info-grid">
+  <div class="article-info-card green">
+    <span class="article-info-icon"><i class="fa-solid fa-arrow-trend-up"></i></span>
+    <strong>良い面――SPへ向かいやすくなる</strong>
+    <p>台が起きていると、SPルートの選択率が上がります。</p>
+  </div>
+  <div class="article-info-card warm">
+    <span class="article-info-icon"><i class="fa-solid fa-triangle-exclamation"></i></span>
+    <strong>悪い面――向かった後に当たりにくくなる</strong>
+    <p>回転体に引っかかりにくくなるため、SPの当選率は下がります。</p>
+  </div>
+</div>
+<p>これはノーマルルートにも、トキオ以外の機種にも共通する考え方です。ネカセによって良くなる動きがあれば、その反対側で悪くなる動きもないかを見る必要があります。</p>
+<p>物理から仮説を立てることはできます。しかし、<strong>複数の影響を合算した結果、役モノ確率が良くなるのか悪くなるのかは、実際に打たなければ分かりません</strong>。</p>
+<p>問いの立て方はシンプルでも、答えまで単純とは限らない。分からない部分を知識だけで埋めようとせず、実測へつなげることが重要です。</p>
+<h4 class="content-subtitle">決着はデータで付ける</h4>
+<p>物理的な動きから仮説を立てたら、その決着はデータで付けます。</p>
+
+<ol class="article-flow four-steps data-flow">
+  <li><i class="fa-solid fa-circle-question"></i>問いを一つに絞る</li>
+  <li><i class="fa-solid fa-sitemap"></i>ルートと条件へ分ける</li>
+  <li><i class="fa-solid fa-lightbulb"></i>玉の動きから仮説を立てる</li>
+  <li><i class="fa-solid fa-chart-line"></i>実測して更新する</li>
+</ol>
+<p>この手順を進めるには、<strong>勝てる台（良い台）をより多く打つことが重要です</strong>。</p>
+<p>なぜなら、悪い台の玉の動きから「逆の動きなら良いのではないか」と仮説を立てることはできても、それが本当にV入賞につながる良い動きなのかは、確かめられないからです。</p>
+<p>実際に勝てる台を打ち、その台でどのような玉の動きが起きているのかをデータと合わせて見ます。勝てる台で繰り返し見られる動きが分かれば、それを「良い玉の挙動」の基準にできます。</p>
+<p>その基準ができれば、そこから外れる動きを悪い挙動として整理できます。仮説と実測を照らし合わせることで、自分なりの判断基準が少しずつできてきます。一致しなければ、仮説を捨てて考え直します。</p>
+
+<h4 class="content-subtitle">攻略法へのたどり着き方</h4>
+<p>その繰り返しによって機種への理解が深まり、そこで初めて「もっとこう打てば、プラスの要素を生み出せるのではないか」という攻略法へたどり着きます。</p>
+<p>攻略法は、台を理解する前に探す入口ではありません。仕組みを理解し、データで確かめた後に見つかる出口です。</p>
+<p><a href="#chapter-1">①「ハネモノとは（前提知識）」</a>で「絶対的な攻略法を探さないほうがいい」と書いたのは、攻略できる部分が一切ないという意味ではありません。土台を理解せず、手順だけで勝とうとすると、台の良し悪しを見失うということです。</p>
+<p>誰かの手順を覚えることではなく、目の前の動きから自分で仮説を立て、検証し、必要なら自分で攻略法を作れる状態になる。そこまで来れば、勝ちにもつながり、ハネモノを打つこともより面白くなってくると思います。</p>
+
+      <h3 class="subset-title" id="chapter-5-route-thinking">V入賞ルート別の考え方</h3>
+<p>ここからは、V入賞ルート別の考え方についてお話ししていきます。</p>
+
+<div class="article-visual-label"><i class="fa-solid fa-code-branch"></i> SPルートとノーマルルートの基本的な違い</div>
+<div class="article-info-grid">
+  <div class="article-info-card warm">
+    <span class="article-info-icon"><i class="fa-solid fa-star"></i></span>
+    <strong>SPルート</strong>
+    <p>越えるギミックが少なく、V入賞へ近い強ルート。選択後のV入賞率まで見る機種もあります。</p>
+  </div>
+  <div class="article-info-card">
+    <span class="article-info-icon"><i class="fa-solid fa-road"></i></span>
+    <strong>ノーマルルート</strong>
+    <p>越えるギミックが多く、V入賞率は低め。そのぶん玉の動きとネカセの影響を受けやすい。</p>
+  </div>
+</div>
+
+<h4 class="content-subtitle" id="chapter-5-sp">SPルート</h4>
+<p>SPルートは、選択されたときのV入賞率が高いルートです。なぜなら、V入賞までに越えるギミックが少なく、機種によっては途中のギミックがほとんどないからです。</p>
+<p>たとえば、おだてブタ2やファミスタのように、SPルートを選ぶと回転体まで直接進み、あとは回転体の何分の一かでV入賞するという、比較的シンプルな構造の機種もあります。</p>
+<p>ただ一方で、ニュートキオのように、SPルートを選べば何分の一で当たるというタイプではない機種もあります。そのような機種では、SPルートを選んだ後の玉の動きによって、SPからのV入賞率自体も変わります。</p>
+<p>そこでSPルートを見るときは、次の二つを分けます。</p>
+<div class="article-info-grid">
+  <div class="article-info-card">
+    <span class="article-info-icon"><i class="fa-solid fa-arrow-right-to-bracket"></i></span>
+    <strong>選択率</strong>
+    <p>拾われた玉が、どれだけSPルートへ進むか。</p>
+  </div>
+  <div class="article-info-card warm">
+    <span class="article-info-icon"><i class="fa-solid fa-bullseye"></i></span>
+    <strong>V入賞率</strong>
+    <p>SPへ進んだ玉が、そこからどれだけV入賞するか。</p>
+  </div>
+</div>
+<p>SPルート内にギミックがほとんどなく、選択後のV入賞率が大きく動かない機種なら、選択率の比重が高くなります。SPへ進んだ後にもギミックがあり、玉の動きによって結果が変わる機種なら、V入賞率まで見る必要があります。</p>
+<p>選択率だけを見ればよいのか、選択後の当選率まで見るのか。その機種のSPルートが、どのような仕組みでV入賞へ進むのかを見て判断します。</p>
+
+<div class="article-visual-label"><i class="fa-solid fa-puzzle-piece"></i> 機種別のSPルートの考え方</div>
+      
+      <details class="machine-slot" data-machine="ハネモノファミスタ">
+        <summary>
+          <span><i class="fa-solid fa-puzzle-piece"></i> ハネモノファミスタ</span>
+          
+        </summary>
+        <div class="details-content">
+<img src="https://images.pachinko-tactics.com/hanemonowin/famisuta_sp.webp" alt="ハネモノファミスタ　SPルート" class="responsive-img" loading="lazy" decoding="async">
+
+<h5 class="content-subtitle">SPルートの基本情報</h5>
+<div class="machine-fact-table-wrap">
+  <table class="machine-fact-table">
+    <tbody>
+      <tr>
+        <th scope="row">V入賞率</th>
+        <td>自分の実戦値では約1/3.1です。</td>
+      </tr>
+      <tr>
+        <th scope="row">選択後の流れ</th>
+        <td>SPを選べば回転体へ直行。途中で越えるギミックはありません。</td>
+      </tr>
+      <tr>
+        <th scope="row">最優先で見る数字</th>
+        <td>SP選択率</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<h5 class="content-subtitle">SP選択率の目安</h5>
+<div class="article-info-grid cols-3">
+  <div class="article-info-card warm">
+    <span class="article-info-icon"><i class="fa-solid fa-triangle-exclamation"></i></span>
+    <strong>10％未満</strong>
+    <p>継続して下回るようなら危険信号です。</p>
+  </div>
+  <div class="article-info-card">
+    <span class="article-info-icon"><i class="fa-solid fa-gauge-high"></i></span>
+    <strong>10％以上</strong>
+    <p>まず超えてほしい、ひとつの基準です。</p>
+  </div>
+  <div class="article-info-card green">
+    <span class="article-info-icon"><i class="fa-solid fa-arrow-trend-up"></i></span>
+    <strong>13％前後</strong>
+    <p>自分の実戦上では、かなり良い側の数値です。</p>
+  </div>
+</div>
+
+<h5 class="content-subtitle">SP選択率の考え方</h5>
+<p>ファミスタのSPルート選択率は、実戦上の幅がそれほど広くありません（8％～13％前後）。</p>
+<p>ただ、<strong>SP選択率が1％変わるだけでも、価値は大きい</strong>と考えています。</p>
+<p>なぜなら、ノーマルルートからの回転体突入率もそれほど幅がなく、さらに、ノーマルルートから回転体へ突入したときのV入賞率は約1/4だからです。</p>
+<p>SP選択率が10％を下回ると、そのノーマルルートからのV入賞にかなり頼らなければなりません。だからこそ、SP選択率は10％以上をひとつの目安として見ています。</p>
+        </div>
+      </details>
+
+<h4 class="content-subtitle" id="chapter-5-normal">ノーマルルート</h4>
+<p>ノーマルルートは、選択されたときのV入賞率が低いルートです。なぜなら、V入賞までに複数のギミックを越える必要があるからです。</p>
+<p>一方で、通る工程が多く、玉が役モノ内を動く時間も長くなります。そのため、玉の速度や進路を変えるネカセの影響を受けやすい部分でもあります。</p>
+<p>SPの比重が大きい機種でも、ノーマルからの当たりがなくなるわけではありません。台の良し悪しを見分けるうえで、<strong>ノーマルルートはどの機種でも重要な観察対象です</strong>。</p>
+
+<div class="article-visual-label"><i class="fa-solid fa-puzzle-piece"></i> 機種別のノーマルルートの考え方</div>
+      
+      <details class="machine-slot" data-machine="ハネモノファミスタ">
+        <summary>
+          <span><i class="fa-solid fa-puzzle-piece"></i> ハネモノファミスタ</span>
+          
+        </summary>
+        <div class="details-content">
+<img src="https://images.pachinko-tactics.com/hanemonowin/famisuta_nomaru.webp" alt="ハネモノファミスタ　ノーマルルート" class="responsive-img" loading="lazy" decoding="async">
+
+<h5 class="content-subtitle">ノーマルルートの基本情報</h5>
+<div class="machine-fact-table-wrap">
+  <table class="machine-fact-table">
+    <tbody>
+      <tr>
+        <th scope="row">V入賞率</th>
+        <td>自分の実戦値では約1/4.1です。</td>
+      </tr>
+      <tr>
+        <th scope="row">選択後の流れ</th>
+        <td>必ずバットに当たるストレートコース（強ノーマルルート）と、バットに当たるか分からない変化球コース（弱ノーマルルート）に分かれます。バットに打たれた玉が守備役モノを越えると、回転体へ進みます。</td>
+      </tr>
+      <tr>
+        <th scope="row">特殊なV入賞</th>
+        <td>まれに、10ラウンド確定となるホームランVへ入賞します。</td>
+      </tr>
+      <tr>
+        <th scope="row">優先して見る数字</th>
+        <td>ストレートコースは選択率、変化球コースは回転体突入率。最後にノーマルルート全体の回転体突入率を確認します。</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<h5 class="content-subtitle">ストレートコース選択率の目安</h5>
+<p>自分の実戦上では、おおむね20％～30％の範囲です。</p>
+<div class="article-info-grid cols-3">
+  <div class="article-info-card warm">
+    <span class="article-info-icon"><i class="fa-solid fa-triangle-exclamation"></i></span>
+    <strong>22％未満</strong>
+    <p>選択率が低いと考える危険ラインです。</p>
+  </div>
+  <div class="article-info-card">
+    <span class="article-info-icon"><i class="fa-solid fa-gauge-high"></i></span>
+    <strong>25％前後</strong>
+    <p>まず欲しい、ひとつの目安です。</p>
+  </div>
+  <div class="article-info-card green">
+    <span class="article-info-icon"><i class="fa-solid fa-arrow-trend-up"></i></span>
+    <strong>27％以上</strong>
+    <p>実戦上、かなり良い選択率です。</p>
+  </div>
+</div>
+
+<h5 class="content-subtitle">変化球コースの回転体突入率の目安</h5>
+<p>実戦値の幅は約33％～56％ですが、33％はかなり下振れた数値です。現実的には40％前後を下限として見ています。</p>
+<div class="article-info-grid cols-3">
+  <div class="article-info-card warm">
+    <span class="article-info-icon"><i class="fa-solid fa-triangle-exclamation"></i></span>
+    <strong>42％未満</strong>
+    <p>回転体へ進む玉が少ない危険ラインです。</p>
+  </div>
+  <div class="article-info-card">
+    <span class="article-info-icon"><i class="fa-solid fa-gauge-high"></i></span>
+    <strong>45％前後</strong>
+    <p>判断するときの中心となる目安です。</p>
+  </div>
+  <div class="article-info-card green">
+    <span class="article-info-icon"><i class="fa-solid fa-arrow-trend-up"></i></span>
+    <strong>48％以上</strong>
+    <p>良い側と考える回転体突入率です。</p>
+  </div>
+</div>
+
+<h5 class="content-subtitle">ノーマルルート全体の回転体突入率</h5>
+<p>ストレートと変化球を分けて見たうえで、最終的に確認するのは<strong>ノーマルルート全体の回転体突入率</strong>です。実戦上の幅は、おおむね15％～19％です。</p>
+<div class="article-info-grid cols-3">
+  <div class="article-info-card warm">
+    <span class="article-info-icon"><i class="fa-solid fa-triangle-exclamation"></i></span>
+    <strong>15.5％未満</strong>
+    <p>ノーマルからのV入賞が厳しくなる危険ラインです。</p>
+  </div>
+  <div class="article-info-card">
+    <span class="article-info-icon"><i class="fa-solid fa-gauge-high"></i></span>
+    <strong>17％前後</strong>
+    <p>目指したい、ひとつの基準です。</p>
+  </div>
+  <div class="article-info-card green">
+    <span class="article-info-icon"><i class="fa-solid fa-arrow-trend-up"></i></span>
+    <strong>18％以上</strong>
+    <p>実戦上、かなり良い数値です。</p>
+  </div>
+</div>
+
+<h5 class="content-subtitle">ノーマルルートの考え方</h5>
+<p>ノーマルルートで重要なのは、バットに当たったかどうかだけではありません。バットに打たれた玉が、<strong>守備役モノを越えて回転体まで進める強さを持っていたか</strong>が重要です。</p>
+<p>ストレートコースは、台が起きている場合でも寝ている場合でも、最低限の強さを持った玉が出やすく、コース選択後の回転体突入率には大きな差がないと感じています。そのため、ストレートコースでは<strong>選択率</strong>を優先して見ます。</p>
+<p>一方、変化球コースは、ネカセの状態によって玉の強さが変わります。バットに当たりやすくても、打ち返された玉が弱ければ、守備役モノに引っかかって回転体まで進みません。</p>
+<p>そのため、変化球コースではバットへの接触率ではなく、<strong>最終的に回転体まで進んだ割合</strong>を優先して見ます。</p>
+        </div>
+      </details>
+
+</div>
+    <!-- HANEMONOWIN:CHAPTER-05:END -->
+
+<!-- HANEMONOWIN:CHAPTER-06:START -->
+    <div class="panel">
+      <div class="chapter-heading-row">
+        <h2 class="section-title" id="chapter-6"><i class="fa-solid fa-database"></i> ⑥ 勝てる台を見極めるデータの取り方</h2>
+        
+      </div>
+      
+      <nav class="chapter-toc" aria-label="この章の目次">
+        <div class="chapter-toc-title"><i class="fa-solid fa-location-arrow"></i> この章の目次</div>
+        <ul>
+          <li><a href="#chapter-6-purpose">何のためにデータを取るのか</a></li>
+          <li><a href="#chapter-6-count">実戦で何を数えるのか</a></li>
+          <li><a href="#chapter-6-items">実戦を支える4つのアイテム</a></li>
+          <li><a href="#chapter-6-calculator">期待値計算／攻略ツール</a></li>
+        </ul>
+      </nav>
+
+      <h3 class="subset-title" id="chapter-6-purpose">何のためにデータを取るのか</h3>
+      <p>ハネモノの台を選び、実際に打つとき、自分は二つのことを繰り返し考えています。</p>
+
+      <div class="intro-manifesto" role="note" aria-label="台選びと続行判断で常に考えること">
+        <div class="intro-manifesto-label"><i class="fa-solid fa-magnifying-glass-chart"></i> 台選びと続行判断で常に考えること</div>
+        <p class="intro-manifesto-copy">
+          <span class="intro-manifesto-main">可能性を感じるか。</span>
+          <span class="intro-manifesto-main">根拠を持って、<br>打ち続けられるか。</span>
+        </p>
+      </div>
+
+      <p>最初から勝てる台だと断定するのではなく、まず可能性のある台を探します。そして実際に打ちながら、その可能性が正しかったのかを確認し、打ち続ける根拠を作っていきます。</p>
+
+      <h4 class="content-subtitle">可能性とは何か</h4>
+      <p>可能性を探す場面は、実戦前と実戦中の二つに分かれます。</p>
+
+      <div class="article-visual-label"><i class="fa-solid fa-magnifying-glass"></i> 可能性を探す二つの場面</div>
+      <div class="article-info-grid">
+        <div class="article-info-card">
+          <span class="article-info-icon"><i class="fa-solid fa-scale-balanced"></i></span>
+          <strong>実戦前――比較して候補を探す</strong>
+          <p>同じ台を前日までの状態と比べる縦比較と、同じ機種同士を比べる横比較を使います。</p>
+        </div>
+        <div class="article-info-card warm">
+          <span class="article-info-icon"><i class="fa-solid fa-eye"></i></span>
+          <strong>実戦中――可能性を確かめる</strong>
+          <p>事前には分からなかった拾いを見ながら、鳴きやネカセから感じた可能性が正しかったのかを確認します。</p>
+        </div>
+      </div>
+
+      <p>縦比較や横比較でほかと異なる台を見つけたら、可能性のある候補として残します。ただし、<strong>ほかと違うだけで良い台だと判断するわけではありません。</strong></p>
+      <p><a href="#chapter-3">③「鳴きの見方」</a>や<a href="#chapter-5-quality">⑤「役モノの良し悪しについて」</a>で触れた理想的な鳴き・ネカセに近いかを確認し、可能性が高いと思う台から優先して試します。</p>
+      <p>実戦中は、玉が袴へどれだけ絡んでいるか、ターゲットゾーンを通った玉が実際に拾われているか、その機種のV入賞につながる重要な動きが起きているかを見ます。拾いの詳しい見方は、<a href="#chapter-4-stroke">④「羽根に拾わせやすいストロークの考え方」</a>で説明した通りです。</p>
+      <p>ここで見ているものを、すべて細かく数える必要はありません。袴へ入った玉数などは、ほかの観察がおろそかにならない範囲で意識して見ます。実戦を重ねながら、「この程度入れば、これくらい鳴く」という感覚を機種ごとに作っていきます。</p>
+
+      <h4 class="content-subtitle">根拠とは何か</h4>
+      <p>打ち続ける根拠は、鳴き・拾い・役モノのすべてが良いことではありません。一部が弱くても、ほかの要素が補い、<strong>自分の基準を満たす期待値が出ていれば、打ち続ける根拠になります。</strong></p>
+      <p>自分の場合、ハネモノでは<strong>持ち玉での1鳴きあたりの期待値が12～13円ほど</strong>あれば、妥協して打てる一つの目安としています。ハネモノは持ち玉比率が高いため、再プレイがない場合でも、持ち玉単価を重視しています。</p>
+      <p>ただし、現在の計算結果だけで決めるわけではありません。数値が良くても、玉の挙動を見ると今後下がりそうだと感じることがあります。反対に、数値が少し足りなくても、玉の挙動に可能性が残っていれば、下振れを疑って少し続けることもあります。</p>
+
+      <div class="article-visual-label"><i class="fa-solid fa-list-check"></i> 自分が判断するときの目安</div>
+      <ol class="article-flow four-steps">
+        <li><strong>最初の千円</strong><br>袴への絡み、拾い、役モノ内の挙動を体感で確認する</li>
+        <li><strong>20～50個拾い</strong><br>怪しいと感じた時点で、数値と期待値を確認する</li>
+        <li><strong>100個拾い</strong><br>玉の挙動、実測値、期待値を合わせて判断する</li>
+        <li><strong>以降100個単位</strong><br>途中でも違和感が出たら、その時点ですぐ再計算する</li>
+      </ol>
+
+      <p>良い台を打てたときも、勝てているからと安心して眺めるだけでは終わりません。なぜ袴へ入りやすいのか、なぜ拾われやすいのか、なぜ役モノ内で良い動きが起きているのかを、自分なりの言葉にします。</p>
+      <p>ここまで紹介してきた見方も、自分が実戦の中で「なぜ良いのか」「なぜ悪いのか」を考え、言葉にしてきた結果です。<strong>この記事自体も、その言語化の一例です。</strong></p>
+
+      <div class="intro-manifesto" role="note" aria-label="出玉を根拠にするときの注意">
+        <div class="intro-manifesto-label"><i class="fa-solid fa-triangle-exclamation"></i> 続行判断でよくある間違い</div>
+        <p class="intro-manifesto-copy">
+          <span class="intro-manifesto-first">出玉は根拠の一つ。</span>
+          <span class="intro-manifesto-main">ただし、出玉だけで<br>続行を決めない。</span>
+        </p>
+      </div>
+
+      <p>据え置き狙いで打ち始め、内容は前日ほど良くないのに、出玉が増えているから据え置きだと考えて続けてしまう。これは、ハネモノでよくある負け方です。</p>
+      <p>ラウンド振り分けやV入賞が上振れていれば、台の実力が足りなくても出玉は増えます。出玉も判断材料にはなりますが、鳴き・拾い・役モノの数値と、実際の玉の挙動を合わせて判断します。</p>
+
+      <h3 class="subset-title" id="chapter-6-count">実戦で何を数えるのか</h3>
+      <p>実戦で記録するものは、③～⑤章と同じく、鳴き・拾い・役モノの順に整理できます。さらに、大当たり後のラウンド数と実際の獲得出玉も記録します。</p>
+
+      <h4 class="content-subtitle">鳴きで数えるもの</h4>
+      <p>鳴きでは、データランプの通常回転数と使用玉数を記録し、千円あたりの鳴き回数を出します。</p>
+      <p>最初に目安とするのは、自分が目標としている期待値へ届くために必要な鳴き回数です。仮に千円あたり15回必要なら、千円ごとの鳴き回数と累計を頭の中で確認します。</p>
+
+      <div class="article-info-grid">
+        <div class="article-info-card">
+          <span class="article-info-icon"><i class="fa-solid fa-brain"></i></span>
+          <strong>実戦中は概算する</strong>
+          <p>千円ごとに必要な鳴きへ届いたか、足りなかった区間をその後の鳴きで補えているかを確認します。</p>
+        </div>
+        <div class="article-info-card warm">
+          <span class="article-info-icon"><i class="fa-solid fa-calculator"></i></span>
+          <strong>正確な数値は計算する</strong>
+          <p>総鳴き回数と使用玉数から、実際の千円あたりの鳴き回数を算出します。</p>
+        </div>
+      </div>
+
+      <p>一般的な4円パチンコである、千円あたり250玉を例にすると、計算は次の通りです。</p>
+      <div class="article-formula" aria-label="総鳴き回数 ÷（使用玉数 ÷ 250玉）＝ 千円あたりの鳴き回数">
+        <span>総鳴き回数</span><b>÷</b><span>（使用玉数 ÷ 250玉）</span><b>＝</b><span>千円あたりの鳴き回数</span>
+      </div>
+      <p>たとえば1,250玉を使用して75回鳴いた場合は、75回÷5千円分で、千円あたり15回です。</p>
+      <p>使用玉数は、遊技開始時の持ち玉に、途中で追加した貸し玉・再プレイ玉を加え、V入賞時点の持ち玉を引いて求めます。拾いやチャッカーから払い出された玉は、使用玉数へ直接加えません。</p>
+
+      <h4 class="content-subtitle">拾いで数えるもの</h4>
+      <p>拾いでは、羽根に拾われた玉の個数を数えます。1回の開放で2個拾われた場合は、2個として数えます。</p>
+      <div class="article-formula" aria-label="拾い率の計算式">
+        <span>拾われた玉数</span><b>÷</b><span>鳴き回数</span><b>× 100</b><span>＝ 拾い率</span>
+      </div>
+
+      <h4 class="content-subtitle">役モノで数えるもの</h4>
+      <p>役モノでは、その機種の良し悪しを判断するために必要な、<strong>各機種固有の数値</strong>を数えます。</p>
+      <p>たとえばSPルート選択数は、多くの機種で使いやすい判断材料です。ハネモノファミスタでは、SPルート選択数に加えて、ストレートコース選択数や、各コースから回転体へ進んだ玉数なども記録します。</p>
+      <p>最後に、ゴールとなるV入賞数も記録します。数えた個数を割合へ変換し、過去の実戦データと比べることで、現在の役モノが良いのか、悪いのかを判断します。</p>
+
+      <h4 class="content-subtitle">大当たり後に記録するもの</h4>
+      <p>大当たり後は、ラウンド振り分けと、打ち出した玉を差し引いた実際の獲得玉数を記録します。</p>
+      <div class="article-formula" aria-label="平均1ラウンド出玉の計算式">
+        <span>実際の獲得玉数</span><b>÷</b><span>消化したラウンド数</span><b>＝</b><span>平均1ラウンド出玉</span>
+      </div>
+
+      <h3 class="subset-title" id="chapter-6-items">実戦を支える4つのアイテム</h3>
+      <p>実戦データを取りながら、長時間の遊技を続けるために使っているアイテムは、次の4つです。</p>
+
+      <div class="article-info-grid cols-4">
+        <div class="article-info-card">
+          <span class="article-info-icon"><i class="fa-solid fa-hand-pointer"></i></span>
+          <strong>カチカチ君</strong>
+          <p>拾い個数や各機種固有の数値を数えます。他人が打った後なら、自分が打ち始めた通常回転数の記録にも使います。</p>
+        </div>
+        <div class="article-info-card green">
+          <span class="article-info-icon"><i class="fa-solid fa-mobile-screen-button"></i></span>
+          <strong>スマホ</strong>
+          <p>期待値計算／攻略ツールを開き、数えた個数の入力、期待値の確認、稼働メモの記録に使います。</p>
+        </div>
+        <div class="article-info-card warm">
+          <span class="article-info-icon"><i class="fa-solid fa-headphones"></i></span>
+          <strong>ノイズキャンセリングイヤホン</strong>
+          <p>ホールの騒音による負担を減らします。長時間打たなければ大きく勝てないハネモノでは、実戦を続けやすくする大切な道具です。</p>
+        </div>
+        <div class="article-info-card">
+          <span class="article-info-icon"><i class="fa-solid fa-mobile-retro"></i></span>
+          <strong>2台目のスマホ</strong>
+          <p>一方で動画などを流し、もう一方でツールやメモを操作します。画面を切り替える煩わしさがなくなります。</p>
+        </div>
+      </div>
+
+      <p>現在販売されているカチカチ君は、1台で8項目ほど数えられます。最初は数えたい項目が増えがちですが、実戦を重ねると、判断に必要な項目は8個以内に収まっています。</p>
+      <p>カチカチ君とツールで必要な数値を出し、その数値を玉の挙動や過去の経験と照らして判断します。</p>
+
+      <div class="article-check-block article-list-note">
+        <div class="article-check-label"><i class="fa-solid fa-bag-shopping"></i> 一緒に持っていくもの</div>
+        <p>長時間玉の挙動を見るための目薬、充電用のUSBケーブル、USB端子がない・反応しないホールに備えるモバイルバッテリーも持っていきます。</p>
+      </div>
+
+      <h3 class="subset-title" id="chapter-6-calculator">期待値計算／攻略ツール</h3>
+      <p>現在、パチンコタクティクスでは、ハネモノファミスタ、<a href="https://pachinko-tactics.com/tools/odatebuta2">おだてブタ2</a>、<a href="https://pachinko-tactics.com/tools/fineplay">ファインプレー</a>の3機種について、機種別の期待値計算／攻略ツールを公開しています。</p>
+      <p>ここでは、その中から<a href="https://pachinko-tactics.com/tools/famista"><strong>ハネモノファミスタ期待値計算／攻略ツール</strong></a>を使い、具体的な使い方を説明します。</p>
+      <p>カチカチ君で数えた数字は、そのままでは単なる個数です。拾い率やSPルート選択率へ変換し、最終的に期待値が足りているのかを判断するために、ツールへ入力します。</p>
+
+      <div class="article-visual-label"><i class="fa-solid fa-laptop-code"></i> ファミスタツールで使う4つの画面</div>
+      <ol class="article-flow four-steps">
+        <li><strong>実戦ログ</strong><br>使用玉数、実際の獲得出玉、ラウンドなどを記録する</li>
+        <li><strong>数値入力</strong><br>カチカチ君で数えた個数を入力する</li>
+        <li><strong>算出結果</strong><br>期待値、ボーダー、各割合を確認する</li>
+        <li><strong>区間分析</strong><br>保存した区間と累計の変化を比較する</li>
+      </ol>
+
+      <h4 class="content-subtitle">実戦ログ</h4>
+      <p>大当たりするたびに、現在の持ち玉数、V入賞時点の残玉数、再プレイ玉数、追加投資、当選したルート、ラウンド数を記録します。</p>
+      <p>記録を重ねることで、使用玉数、実際の獲得出玉、1ラウンドあたりの出玉などを自動で計算できます。</p>
+      <img src="https://images.pachinko-tactics.com/hanemonowin/zissenrogu.webp" alt="ハネモノ期待値計算/攻略ツール　実戦ログ画面" class="responsive-img" loading="lazy" decoding="async">
+
+      <h4 class="content-subtitle">数値入力</h4>
+      <p>ハネモノファミスタでは、通常回転数、拾い個数、SPルート選択個数、ストレートコース選択個数、ストレート選択時回転体突入個数、変化球選択時強打個数、変化球強打時回転体突入個数の7項目を入力します。</p>
+      <p>数える項目は機種によって異なります。機種ごとのツールには、その機種で必要となる項目をあらかじめ用意しています。</p>
+      <img src="https://images.pachinko-tactics.com/hanemonowin/suurinyuuryoku.webp" alt="ハネモノ期待値計算/攻略ツール　数値入力画面" class="responsive-img" loading="lazy" decoding="async">
+
+      <h4 class="content-subtitle">算出結果</h4>
+      <p>実戦ログと数値入力をもとに、総期待値、1鳴きあたりの期待値、千円あたりのボーダーライン、千円あたりの鳴き回数、1ラウンドあたりの出玉、拾い率、SPルート選択率、各コースの選択率・回転体突入率、推定役モノ確率、推定大当たり確率などが自動で算出されます。</p>
+      <p>1鳴きあたりの期待値は、現金遊技と持ち玉遊技に分けて確認できます。ここで、自分が目標としている期待値へ届いているのかを確認します。</p>
+      <img src="https://images.pachinko-tactics.com/hanemonowin/rizaruto.webp" alt="ハネモノ期待値計算/攻略ツール　算出結果画面" class="responsive-img" loading="lazy" decoding="async">
+
+      <h4 class="content-subtitle">区間分析</h4>
+      <img src="https://images.pachinko-tactics.com/hanemonowin/kukanbunnseki.webp" alt="ハネモノ期待値計算/攻略ツール　区間分析画面" class="responsive-img" loading="lazy" decoding="async">
+      <p>実戦データは、拾い個数ごとに区切って保存できます。たとえば50個、100個拾った時点で保存しておけば、各数値がどのように変化したのかを比較できます。</p>
+      <p>累計値だけでは、序盤の上振れや下振れによって変化を見落とすことがあります。区間ごとに見ることで、現在の数値が上がっているのか、下がっているのかを確認しやすくなります。</p>
+
+      <p>ツールには、このほかにも、稼働前・稼働中のメモ、期待値シミュレーション、目標値との比較、管理人の実戦リアルデータ、実戦データのバックアップ機能があります。</p>
+      <p>ただし、ツールが行うのは入力されたデータの計算です。<strong>算出された数値が今後も続きそうなのかは、実際の玉の挙動や過去の実戦経験と照らして判断します。</strong></p>
+    </div>
+    <!-- HANEMONOWIN:CHAPTER-06:END -->
+
+<!-- HANEMONOWIN:CHAPTER-07:START -->
+    <div class="panel">
+      <div class="chapter-heading-row">
+        <h2 class="section-title" id="chapter-7"><i class="fa-solid fa-binoculars"></i> ⑦ 市場が広がって今後考えられること</h2>
+        
+      </div>
+
+      <nav class="chapter-toc" aria-label="この章の目次">
+        <div class="chapter-toc-title"><i class="fa-solid fa-location-arrow"></i> この章の目次</div>
+        <ul>
+          <li><a href="#chapter-7-market-change">いま起きている市場の変化</a></li>
+          <li><a href="#chapter-7-new-players">戻ってくる人より、新しく始める人が増えるかもしれない</a></li>
+          <li><a href="#chapter-7-regional-limits">ハネモノだけでは成立しない地域もある</a></li>
+          <li><a href="#chapter-7-dont-play">打たない判断も、勝つための判断</a></li>
+        </ul>
+      </nav>
+
+<h3 class="subset-title" id="chapter-7-market-change">いま起きている市場の変化</h3>
+<p>おだてブタ2やファミスタが登場し、ハネモノを新設する店や、継続して力を入れる店も見られるようになりました。</p>
+<p>さらに2026年後半へ向けて、新しいハネモノの発表、検定通過、導入の噂が続いています。現時点でも状況は短い間隔で変わっており、市場がどこまで、どの速さで広がるかによって、ここから先の見方も変わる可能性があります。</p>
+<p>だから、この章は一度書いて終わりではありません。2回目、3回目の更新時に市場の状況を見直し、その時点の観測に合わせて文章も更新します。</p>
+
+<h3 class="subset-title" id="chapter-7-new-players">戻ってくる人より、新しく始める人が増えるかもしれない</h3>
+<p>自分は当初、市場が再び盛り上がれば、以前ハネモノを打っていた層も戻ってくると考えていました。しかし、実際には大きく戻ってきませんでした。</p>
+<p>ここから先は推測です。</p>
+<p>ここまで環境が変わっても戻らないのであれば、今後さらに市場が広がったとしても、増えるのは過去の打ち手より新しく始める人たちかもしれません。</p>
+<p>そうなれば、これからハネモノを覚える人同士が、同じスタートラインから学んでいく市場になります。</p>
+
+<ol class="article-flow">
+  <li><i class="fa-solid fa-store"></i>設置機種・設置店が<br>増える</li>
+  <li><i class="fa-solid fa-user-plus"></i>新しく始める人が<br>入ってくる</li>
+  <li><i class="fa-solid fa-stopwatch"></i>判断の速さと検証量で<br>差が付く</li>
+</ol>
+
+<p>もちろん、参入時期が同じでも差が付かないわけではありません。勝敗を分けるのは、知識をどれだけ多く持っているかだけではなく、目の前の台をどれだけ早く判断できるかです。</p>
+<p>据え置きではないと早く見切れる人が増えれば、現在ある優位は小さくなります。だからこそ、特定の攻略法を暗記するより、自分で問いを立て、データで確かめる習慣が重要になります。</p>
+
+<h3 class="subset-title" id="chapter-7-regional-limits">ハネモノだけでは成立しない地域もある</h3>
+<p>一方で、ハネモノの立ち回りが、どの地域でも成立するわけではありません。</p>
+<p>たとえば、生活圏にハネモノの設置店が1店舗しかない場合、その店へ打てる人が集中します。店をローテーションすることも、ほかの候補へ移ることもできません。</p>
+<p>その環境で、ハネモノだけを中心に立ち回り続けるのは現実的ではありません。打てる台がなければ、工夫だけで期待値を作ることはできないからです。</p>
+<p>その場合は、デジパチやスロットなど、別のジャンルへ移るべきだと考えています。</p>
+
+<h3 class="subset-title" id="chapter-7-dont-play">打たない判断も、勝つための判断</h3>
+<p>「知識0からでも勝てる」という言葉は、知識さえ付ければどんな環境でも勝てるという意味ではありません。仕組みを理解し、良い台を見分ける道筋は、知識0からでもたどれます。しかし、その判断を使える台と店が存在することは前提です。</p>
+<p>勝てない環境で無理に答えを作らず、打てないと判断することも、勝つための判断に含まれます。</p>
+</div>
+    <!-- HANEMONOWIN:CHAPTER-07:END -->
+
+    <!-- HANEMONOWIN:CHAPTER-08:START -->
+    <div class="panel">
+      <div class="chapter-heading-row">
+        <h2 class="section-title" id="chapter-8"><i class="fa-solid fa-flag-checkered"></i> ⑧ 一番伝えたいこと</h2>
+        
+      </div>
+
+      <nav class="chapter-toc" aria-label="この章の目次">
+        <div class="chapter-toc-title"><i class="fa-solid fa-location-arrow"></i> この章の目次</div>
+        <ul>
+          <li><a href="#chapter-8-not-all">全機種を攻略しなくていい</a></li>
+          <li><a href="#chapter-8-enjoy">勝ちたいからこそ、楽しめる台を選ぶ</a></li>
+        </ul>
+      </nav>
+
+      <h3 class="subset-title" id="chapter-8-not-all">全機種を攻略しなくていい</h3>
+<p>これはあくまで自分が実戦してきて感じていることで、人によって考え方は違うと思います。</p>
+<p>そのうえで言うと、この記事に書いた考え方を使って、最初からすべての機種を攻略しようとするのは、あまり現実的ではありません。</p>
+
+<h4 class="content-subtitle">攻略は、台と店があって初めて始まる</h4>
+<p>ここまで読んでもらえれば分かるように、ハネモノは台と店の環境があってこそ成立します。</p>
+<p>自分の地域にほとんど設置されていない機種や、良い状態で使われることがない機種では、勝てる台を打つ機会そのものが作れません。勝てる台を打てなければ、「どんな玉の挙動が良いのか」「何が勝てる台の基準なのか」を知るための材料も集まりません。</p>
+
+<ol class="article-flow four-steps">
+  <li><i class="fa-solid fa-store"></i>地域に<br>設置がある</li>
+  <li><i class="fa-solid fa-chair"></i>勝てる台を<br>実際に打てる</li>
+  <li><i class="fa-solid fa-clipboard-list"></i>挙動とデータを<br>残せる</li>
+  <li><i class="fa-solid fa-compass"></i>自分の判断基準が<br>できる</li>
+</ol>
+
+<p>だから、まず見るべきなのは、自分の地域で設置が多く、実際に打つ機会を作りやすい機種です。当たり前に聞こえるかもしれませんが、攻略を続けるうえでは、この現実的な入口がかなり大事です。</p>
+
+      <h3 class="subset-title" id="chapter-8-enjoy">勝ちたいからこそ、楽しめる台を選ぶ</h3>
+<p>ハネモノを取り入れたい人にとって、一番の目的はおそらく勝つことだと思います。自分も同じです。</p>
+<p>でも、勝つことだけに固執しすぎると、だんだん打つことが楽しくなくなります。長時間の実戦がただの作業になり、玉を見る目やストロークの調整も少しずつ雑になっていきます。</p>
+
+<div class="article-info-grid">
+  <div class="article-info-card warm">
+    <span class="article-info-icon"><i class="fa-solid fa-gauge-high"></i></span>
+    <strong>勝つことだけに集中する</strong>
+    <p>気持ちに余裕がなくなり、長時間になるほど判断や操作が雑になりやすい。</p>
+  </div>
+  <div class="article-info-card">
+    <span class="article-info-icon"><i class="fa-solid fa-face-smile"></i></span>
+    <strong>楽しめる台を打ち込む</strong>
+    <p>長く観察を続けやすく、挙動やデータの小さな違いにも気づきやすい。</p>
+  </div>
+</div>
+
+<p>パチンコで勝つには、良い台を長く打つことが基本です。だからこそ、自分が楽しめることは勝つことと反対ではなく、長く丁寧に打つための条件にもなると思っています。</p>
+
+<h4 class="content-subtitle">まず、得意機種を一つ作る</h4>
+<p>自分が理屈を理解しやすい台でも、何時間打っても飽きない台でも構いません。まず一機種、自分の得意機種を作ることをおすすめします。</p>
+<p>自分自身も、全機種を攻略できているわけではありません。得意なハネモノファミスタでは台選びの精度が上がりましたが、ほかの機種では今でも読み違えます。</p>
+<p>周囲に情報交換できる人がいれば、複数機種を早く覚えられることもあるでしょう。でも、一人ですべてを理解しようと無理をする必要はありません。</p>
+<p>「これだけは誰にも負けない」と思える台でも、「この台ならずっと打っていても飽きない」と思える台でもいい。一機種を深く打ち込めば、玉の挙動、データの取り方、仮説の立て方が自分の中に残ります。その経験は、別の機種を考えるときの土台にもなります。</p>
+
+<div class="intro-manifesto" aria-label="得意機種について一番伝えたいこと">
+  <div class="intro-manifesto-label"><i class="fa-solid fa-flag-checkered"></i> 一番伝えたいこと</div>
+  <p class="intro-manifesto-copy">
+    <span class="intro-manifesto-first">全部を覚えなくていい。</span>
+    <span class="intro-manifesto-main">得意機種は、<br>一機種でいい。</span>
+  </p>
+</div>
+<p>全部を覚えることより、自分が理解できて、楽しみながら長く打てる一台を見つける。個人的には、それがハネモノ攻略を始める一番現実的な方法だと思っています。</p>
+    </div>
+    <!-- HANEMONOWIN:CHAPTER-08:END -->
+
+    <div class="panel">
+      <h2 class="section-title"><i class="fa-solid fa-user-astronaut"></i> サイト管理人【ワオ（wow）】のプロフィール</h2>
+      <div style="display:flex; gap:20px; align-items:flex-start; margin-bottom:20px;">
+        <img src="https://pachinko-tactics.com/twitter_icon_themeE.png" alt="管理人ワオのアイコン"
+          style="width:80px; height:80px; border-radius:50%; border:2px solid var(--accent-color); flex-shrink:0;">
+        <div class="profile-copy">
+          <p>ハネモノ・海物語・甘デジを主戦場とする、歴15年のパチンコ攻略好き。実戦経験を詰め込んだ攻略ツールと、現場のリアルな考察情報を発信中です。</p>
+          <p>感想、フィードバック、不具合報告、追加希望機種などは下記Xアカウントまでお寄せください。</p>
+        </div>
+      </div>
+      <a href="https://x.com/wow_pachi_122" target="_blank" class="social-link" rel="noopener">
+        <i class="fa-brands fa-x-twitter"></i> @wow_pachi_122 へ連絡する
+      </a>
+    </div>
+
+    <footer>
+      <p>&copy; 2026 パチンコタクティクス. All Rights Reserved. 現場での健全な遊技にお役立てください。</p>
+    </footer>
+  </main>
+
+  <a href="#toc-container" class="back-to-top" id="back-to-top" title="目次へ戻る" aria-label="目次へ戻る">
+    <i class="fa-solid fa-list-ol"></i>
+  </a>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const backToTop = document.getElementById("back-to-top");
+      window.addEventListener("scroll", () => {
+        backToTop.classList.toggle("show", window.pageYOffset > 300);
+      }, { passive: true });
+
+      const toolDialog = document.getElementById("hanemono-tool-dialog");
+      const toolOpen = document.getElementById("hanemono-tool-open");
+      const toolClose = document.getElementById("hanemono-tool-close");
+
+      if (toolDialog && toolOpen && toolClose) {
+        toolOpen.addEventListener("click", () => {
+          toolDialog.showModal();
+        });
+
+        toolClose.addEventListener("click", () => {
+          toolDialog.close();
+        });
+
+        toolDialog.addEventListener("click", (event) => {
+          if (event.target === toolDialog) {
+            toolDialog.close();
+          }
+        });
+      }
+    });
+  </script>
+
+</body>
+</html>
